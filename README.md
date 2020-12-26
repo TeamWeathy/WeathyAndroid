@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-blue.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-웨디의 안드로이드 저장소 ⭐️ 힘차게 ㄱㄱ 🚀
+
 
 ## 기여자들 ✨
 
