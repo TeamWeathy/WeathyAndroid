@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 웨디의 안드로이드 저장소 ⭐️ 힘차게 ㄱㄱ 🚀
 
-## Contributors ✨
+## 기여자들 ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
