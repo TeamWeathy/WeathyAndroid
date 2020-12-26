@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "kmebin",
+      "name": "kmebin",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/72112845?v=4",
+      "profile": "https://github.com/kmebin",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "WeathyAndroid",
+  "projectOwner": "TeamWeathy",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
