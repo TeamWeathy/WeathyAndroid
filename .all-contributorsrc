@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "dingding-21",
+      "name": "dingding-21",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/63945197?v=4",
+      "profile": "https://github.com/dingding-21",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "WeathyAndroid",
+  "projectOwner": "TeamWeathy",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
