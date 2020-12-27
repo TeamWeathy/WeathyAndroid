@@ -13,21 +13,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-#      - name: Gradle cache
-#        uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
-#      - name: Build debug
-#        run: ./gradlew assembleDebug
-#      - name: Archive artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          path: app/build/outputs
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build debug
+        run: ./gradlew assembleDebug
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: app/build/outputs
       - name: Notify KakaoWork channel
         run: |
           curl -X POST https://api.kakaowork.com/v1/messages.send \
