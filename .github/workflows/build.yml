@@ -30,3 +30,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: app/build/outputs
+      - name: Notify KakaoWork channel
+        run: |
+          curl -X POST https://api.kakaowork.com/v1/messages.send
+          -H "Authorization: Bearer {YOUR_APP_KEY}"
+          -H "Content-Type: application/json"
+          -d "{ \"conversation_id\": \"695726\", \"text\": \"안드로이드 디버그 빌드 성공 깃허브에서 apk를 다운로드 받으세요\" }"
+
