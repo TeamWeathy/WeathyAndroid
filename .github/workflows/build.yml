@@ -31,4 +31,8 @@ jobs:
         with:
           path: app/build/outputs
       - name: Notify KakaoWork channel
-        run: curl -X POST https://api.kakaowork.com/v1/messages.send -H "Authorization: Bearer 6416d234.9f1917530fd34a659315d64e3264b77c" -H "Content-Type: application/json" -d "{ \"conversation_id\": \"695726\", \"text\": \"안드로이드 디버그 빌드 성공 깃허브에서 apk를 다운로드 받으세요\" }"
+        run: |
+          curl -X POST https://api.kakaowork.com/v1/messages.send \
+          -H "Authorization: Bearer 6416d234.9f1917530fd34a659315d64e3264b77c" \
+          -H "Content-Type: application/json" \
+          -d "{ \"conversation_id\": \"695726\", \"text\": \"안드로이드 디버그 빌드 성공 깃허브에서 apk를 다운로드 받으세요\" }"
