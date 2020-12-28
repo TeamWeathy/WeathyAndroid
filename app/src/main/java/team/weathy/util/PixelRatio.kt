@@ -1,4 +1,4 @@
-package team.weathy
+package team.weathy.util
 
 import android.app.Application
 import androidx.annotation.Px

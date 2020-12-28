@@ -1,6 +1,7 @@
 package team.weathy
 
 import android.app.Application
+import team.weathy.util.PixelRatio
 
 class MainApplication : Application() {
     override fun onCreate() {
