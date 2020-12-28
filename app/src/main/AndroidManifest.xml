@@ -23,6 +23,7 @@
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.nicknamechange.NicknameChangeActivity" />
         <activity android:name=".ui.developerinfo.DeveloperInfoActivity" />
+        <activity android:name=".ui.weatherrecord.WeatherRecordActivity" />
     </application>
 
 </manifest>
