@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: build debug
-    if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && contains(github.ref, 'master')"
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && !startsWith(github.ref, 'refs/tags/')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
