@@ -36,7 +36,13 @@
             android:name=".ui.developerinfo.DeveloperInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.weatherrecord.WeatherRecordActivity"
+            android:name=".ui.record.RecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.landing.LandingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.nicknameset.NicknameSetActivity"
             android:screenOrientation="portrait" />
     </application>
 
