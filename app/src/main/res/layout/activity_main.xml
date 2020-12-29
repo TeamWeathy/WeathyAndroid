@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
+
     <team.weathy.view.WeathyCardView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -23,6 +24,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
+
+
+    <Button
+        style="@style/RoundButton.Mint"
+        android:layout_width="match_parent"
+        android:text="RoundButton.Mint"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/RoundButton.Red"
+        android:layout_width="match_parent"
+        android:layout_marginTop="120dp"
+        android:text="RoundButton.Red"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/RoundButton.Cancel"
+        android:layout_width="match_parent"
+        android:layout_marginTop="240dp"
+        android:text="RoundButton.Cancel"
         app:layout_constraintTop_toTopOf="parent" />
 
 
