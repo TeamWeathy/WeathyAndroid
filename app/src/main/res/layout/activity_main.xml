@@ -7,52 +7,18 @@
     tools:context=".ui.main.MainActivity">
 
 
-    <team.weathy.view.WeathyCardView
-        android:id="@+id/weathyCardView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:weathy_shadow_color="@color/main_mint_shadow" />
-
-
-    <team.weathy.view.WeathyCardView
-        android:id="@+id/weathyCardView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
-
-
-    <Button
-        android:id="@+id/button"
-        style="@style/RoundButton.Mint"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:text="RoundButton.Mint"
-        app:layout_constraintBottom_toTopOf="@+id/weathyCardView"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <Button
-        android:id="@+id/button2"
-        style="@style/RoundButton.Red"
-        android:layout_width="match_parent"
-        android:text="RoundButton.Red"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/weathyCardView" />
-
-    <Button
-        android:id="@+id/button3"
-        style="@style/RoundButton.Cancel"
-        android:layout_width="match_parent"
-        android:text="RoundButton.Cancel"
-        app:layout_constraintBottom_toTopOf="@+id/weathyCardView2"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-
+        <team.weathy.view.RecordFab
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
