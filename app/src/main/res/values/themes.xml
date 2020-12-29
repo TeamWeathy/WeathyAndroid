@@ -4,5 +4,9 @@
         <item name="android:statusBarColor">@color/white</item>
 
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:fontFamily">@font/notosans_regular</item>
+
+        <item name="android:includeFontPadding">false</item>
     </style>
 </resources>
