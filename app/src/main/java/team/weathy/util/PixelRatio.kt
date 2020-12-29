@@ -2,6 +2,7 @@ package team.weathy.util
 
 import android.app.Application
 import androidx.annotation.Px
+import team.weathy.MainApplication
 import kotlin.math.roundToInt
 
 class PixelRatio(private val app: Application) {
@@ -19,3 +20,15 @@ class PixelRatio(private val app: Application) {
 
     fun toDP(@Px pixel: Int) = (pixel / displayMetrics.density).roundToInt()
 }
+
+val Number.pixel: Int
+    @Px get() = MainApplication.pixelRatio.toPixel(this.toInt())
+
+val Number.dp: Int
+    get() = MainApplication.pixelRatio.toDP(this.toInt())
+
+val Number.pixelFloat: Float
+    @Px get() = MainApplication.pixelRatio.toPixel(this.toInt()).toFloat()
+
+val Number.dpFloat: Float
+    get() = MainApplication.pixelRatio.toDP(this.toInt()).toFloat()
