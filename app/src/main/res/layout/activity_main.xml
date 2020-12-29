@@ -8,43 +8,51 @@
 
 
     <team.weathy.view.WeathyCardView
+        android:id="@+id/weathyCardView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
         app:weathy_shadow_color="@color/main_mint_shadow" />
 
 
     <team.weathy.view.WeathyCardView
+        android:id="@+id/weathyCardView2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
 
     <Button
+        android:id="@+id/button"
         style="@style/RoundButton.Mint"
         android:layout_width="match_parent"
         android:text="RoundButton.Mint"
+        app:layout_constraintBottom_toTopOf="@+id/weathyCardView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/button2"
         style="@style/RoundButton.Red"
         android:layout_width="match_parent"
-        android:layout_marginTop="120dp"
         android:text="RoundButton.Red"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/weathyCardView" />
 
     <Button
+        android:id="@+id/button3"
         style="@style/RoundButton.Cancel"
         android:layout_width="match_parent"
-        android:layout_marginTop="240dp"
         android:text="RoundButton.Cancel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/weathyCardView2"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
