@@ -6,14 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="48sp"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+
+    <Button
+        style="@style/RoundButton.Mint"
+        android:layout_width="match_parent"
+        android:text="RoundButton.Mint"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/RoundButton.Red"
+        android:layout_width="match_parent"
+        android:layout_marginTop="120dp"
+        android:text="RoundButton.Red"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/RoundButton.Cancel"
+        android:layout_width="match_parent"
+        android:layout_marginTop="240dp"
+        android:text="RoundButton.Cancel"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
