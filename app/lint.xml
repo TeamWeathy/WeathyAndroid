@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="UnusedResources" severity="ignore" />
+    <issue id="HardcodedText" severity="ignore" />
+    <issue id="ClickableViewAccessibility" severity="ignore" />
+    <issue id="ContentDescription" severity="ignore" />
+    <issue id="IconXmlAndPng" severity="ignore" />
+</lint>
