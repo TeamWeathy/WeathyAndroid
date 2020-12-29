@@ -4,6 +4,7 @@
     package="team.weathy">
 
     <application
+        android:resizeableActivity="false"
         android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,19 +12,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Weathy"
-        tools:ignore="AllowBackup">
-        <activity android:name=".ui.splash.SplashActivity">
+        tools:ignore="AllowBackup"
+        tools:targetApi="n">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.setting.SettingActivity" />
-        <activity android:name=".ui.nicknamechange.NicknameChangeActivity" />
-        <activity android:name=".ui.developerinfo.DeveloperInfoActivity" />
-        <activity android:name=".ui.weatherrecord.WeatherRecordActivity" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.nicknamechange.NicknameChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.developerinfo.DeveloperInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.weatherrecord.WeatherRecordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
