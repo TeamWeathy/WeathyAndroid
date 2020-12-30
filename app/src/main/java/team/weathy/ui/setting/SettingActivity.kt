@@ -25,7 +25,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     fun go_nicknameChange(){
-        binding.changeNicknameBtn.setOnDebounceClickListener {
+        binding.changeNicknameClick.setOnDebounceClickListener {
             val intent = Intent(this, NicknameChangeActivity::class.java)
             startActivity(intent)
             finish()
@@ -33,7 +33,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     fun go_inquire(){
-        binding.inquireBtn.setOnDebounceClickListener {
+        binding.inquireClick.setOnDebounceClickListener {
             val intent = Intent(this, InquireActivity::class.java)
             startActivity(intent)
             finish()
@@ -41,7 +41,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     fun go_developerInfo(){
-        binding.developerInfoBtn.setOnDebounceClickListener {
+        binding.developerInfoClick.setOnDebounceClickListener {
             val intent = Intent(this, DeveloperInfoActivity::class.java)
             startActivity(intent)
             finish()
