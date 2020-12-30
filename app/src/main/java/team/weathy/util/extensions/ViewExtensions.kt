@@ -16,6 +16,8 @@ fun View.setShadowColorIfAvailable(color: Int) {
 }
 
 @Px
-fun View.toPixel(dp: Int) = (dp * resources.displayMetrics.density).roundToInt()
-
-fun View.toDP(@Px pixel: Int) = (pixel / resources.displayMetrics.density).roundToInt()
+fun View.px(dp: Int) = (dp * resources.displayMetrics.density).roundToInt()
+fun View.pxFloat(dp: Int) = (dp * resources.displayMetrics.density)
+fun View.spPx(dp: Int) = (dp * resources.displayMetrics.scaledDensity)
+val View.screenHeight: Int
+    get() = resources.displayMetrics.heightPixels
