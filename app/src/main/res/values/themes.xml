@@ -41,4 +41,9 @@
         <item name="rippleColor">@color/btn_cancel_gray</item>
     </style>
 
+    <style name="RoundButton.Grey">
+        <item name="backgroundTint">@color/sub_grey_3</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>
