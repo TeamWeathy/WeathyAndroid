@@ -41,4 +41,12 @@
         <item name="rippleColor">@color/btn_cancel_gray</item>
     </style>
 
+    <style name="RoundButton.Change">
+        <item name="cornerRadius">18dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="backgroundTint">@color/sub_grey_5</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>
