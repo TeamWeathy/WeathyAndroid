@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.1.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
 }
 
 dependencies {
