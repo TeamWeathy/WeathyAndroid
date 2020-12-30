@@ -21,13 +21,15 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.math.MathUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.dynamicanimation.animation.SpringForce.STIFFNESS_LOW
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -40,6 +42,11 @@ import team.weathy.util.extensions.screenHeight
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
+
+    private val collapsed
+        get() = px(MIN_HEIGHT_DP)
+    private val expanded
+        get() = screenHeight - px(EXPAND_MARGIN_BOTTOM_DP)
 
     private val paddingHorizontal = px(24)
 
@@ -112,10 +119,22 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         color = getColor(R.color.main_mint)
     }
 
+    private val animValue = MutableLiveData(0f)
+
     init {
         initContainer()
         addViews()
         configureTouch()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        registerAnimValueObserver()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        unregisterAnimValueObserver()
     }
 
     private fun initContainer() {
@@ -237,8 +256,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         computeCurrentVelocity(1000)
                     }
 
-                    movedY = event.y - offsetY
-                    animY()
+                    //                    movedY = event.y - offsetY
+                    val curHeight = event.y
+                    // collapse ~ expand
+                    // 0 ~ 1
+                    animValue.value =
+                        androidx.core.math.MathUtils.clamp((curHeight - collapsed) / (expanded - collapsed), 0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP -> {
                     startFromCollasped = if (velocityTracker!!.yVelocity > 0) {
@@ -256,42 +279,47 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun animY() {
-        val collapsed = px(MIN_HEIGHT_DP)
-        val expanded = screenHeight - px(EXPAND_MARGIN_BOTTOM_DP)
 
+    private val animValueObserver = Observer<Float> {
+        val height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), it)
+        updateHeight(height)
+    }
+
+    private fun registerAnimValueObserver() {
+        animValue.observeForever(animValueObserver)
+    }
+
+    private fun unregisterAnimValueObserver() {
+        animValue.removeObserver(animValueObserver)
+    }
+
+    private fun updateHeight(value: Float) {
         updateLayoutParams<ViewGroup.LayoutParams> {
-
-            height =
-                MathUtils.clamp((if (startFromCollasped) collapsed else expanded) + movedY.toInt(), collapsed, expanded)
+            height = value.toInt()
         }
     }
 
     private fun collapse() {
         SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(height.toFloat())
-            setMinValue(pxFloat(MIN_HEIGHT_DP))
-            spring = SpringForce(pxFloat(MIN_HEIGHT_DP)).apply {
+            setStartValue(animValue.value!! * 500f)
+            setMinValue(0f)
+            spring = SpringForce(0f).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = value.toInt()
-                }
+                animValue.value = value / 500f
             }
         }.start()
     }
 
     private fun expand() {
         SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(height.toFloat())
-            spring = SpringForce(screenHeight - pxFloat(EXPAND_MARGIN_BOTTOM_DP)).apply {
+            setStartValue(animValue.value!! * 500f)
+            spring = SpringForce(500f).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = value.toInt()
-                }
+                animValue.value = value / 500f
             }
         }.start()
     }
