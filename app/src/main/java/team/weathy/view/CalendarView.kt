@@ -97,22 +97,21 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setBackgroundColor(Color.TRANSPARENT)
         }
     }
-    private val calendarItemGenerator: (viewGroup: ViewGroup, index: Int) -> ViewCalendarItemBinding =
-        { viewGroup, index ->
-            ViewCalendarItemBinding.bind(
-                LayoutInflater.from(context).inflate(R.layout.view_calendar_item, viewGroup, false)
-            ).apply {
-                day.setTextColor(
-                    getColor(
-                        when (index) {
-                            5 -> R.color.blue_temp
-                            6 -> R.color.red_temp
-                            else -> R.color.main_grey
-                        }
-                    )
+
+    private val calendarItems = (1..35).map {
+        ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
+            day.setTextColor(
+                getColor(
+                    when ((it - 1) % 7) {
+                        5 -> R.color.blue_temp
+                        6 -> R.color.red_temp
+                        else -> R.color.main_grey
+                    }
                 )
-            }
+            )
+            day.text = it.toString()
         }
+    }
 
 
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -146,7 +145,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         ).apply {
             fillColor = ColorStateList.valueOf(getColor(R.color.white))
         }
-        elevation = px(8).toFloat()
+        elevation = px(4).toFloat()
     }
 
     private fun addViews() {
@@ -201,8 +200,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             )
             outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(104), 0f))
 
-            repeat(7) {
-                inner.addView(calendarItemGenerator(inner, it).root)
+            calendarItems.subList(index * 7, index * 7 + 7).forEach {
+                inner.addView(it.root, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f))
             }
         }
     }
@@ -256,10 +255,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         computeCurrentVelocity(1000)
                     }
 
-                    //                    movedY = event.y - offsetY
                     val curHeight = event.y
-                    // collapse ~ expand
-                    // 0 ~ 1
                     animValue.value =
                         androidx.core.math.MathUtils.clamp((curHeight - collapsed) / (expanded - collapsed), 0f, 1.2f)
                 }
@@ -283,6 +279,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val animValueObserver = Observer<Float> {
         val height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), it)
         updateHeight(height)
+        updateCalendarItems()
     }
 
     private fun registerAnimValueObserver() {
@@ -296,6 +293,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun updateHeight(value: Float) {
         updateLayoutParams<ViewGroup.LayoutParams> {
             height = value.toInt()
+        }
+    }
+
+    private fun updateCalendarItems() {
+        val value = animValue.value!!
+        val animItems = calendarItems.subList(7, calendarItems.size)
+
+        animItems.forEachIndexed { index, binding ->
+            binding.root.alpha = value
+            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, value)
         }
     }
 

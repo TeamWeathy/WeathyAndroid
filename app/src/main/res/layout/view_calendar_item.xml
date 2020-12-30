@@ -27,7 +27,7 @@
         android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="-16dp"
         android:fontFamily="@font/roboto_regular"
         android:text="-4°"
         android:textColor="@color/sub_grey_6"
