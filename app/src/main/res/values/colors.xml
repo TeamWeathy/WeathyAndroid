@@ -2,10 +2,17 @@
 <resources>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="main_mint">#B1E2D2</color>
+    <color name="main_mint">#81E2D2</color>
     <color name="main_mint_shadow">#4bdeae</color>
     <color name="transparent">#00000000</color>
     <color name="btn_unselected">#DADADA</color>
     <color name="btn_cancel_gray">#939393</color>
     <color name="text_high_temp">#D18C8B</color>
+    <color name="main_grey">#3D3D3D</color>
+    <color name="sub_grey_3">#DADADA</color>
+    <color name="sub_grey_5">#F1F1F1</color>
+    <color name="sub_grey_6">#939393</color>
+    <color name="sub_grey_7">#E1E1E1</color>
+    <color name="sub_grey_8">#AFAFAF</color>
+    <color name="cursor">#B3C4C4C4</color>
 </resources>
