@@ -13,6 +13,7 @@ import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.setShadowColorIfAvailable
+import team.weathy.util.extensions.toPixel
 
 class WeathyCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -24,13 +25,21 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
     private var shadowColor by OnChangeProp(defaultShadowColor) {
         updateUI()
     }
+    private var disableShadow by OnChangeProp(false) {
+        updateUI()
+    }
+    private var strokeColor by OnChangeProp(Color.TRANSPARENT) {
+        updateUI()
+    }
+    private var strokeWidth by OnChangeProp(0f) {
+        updateUI()
+    }
 
     init {
         if (attrs != null) {
             getStyleableAttrs(attrs)
         }
 
-        initUI()
         updateUI()
     }
 
@@ -38,18 +47,22 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         context.theme.obtainStyledAttributes(attr, R.styleable.WeathyCardView, 0, 0).use { arr ->
             radius = arr.getDimension(R.styleable.WeathyCardView_weathy_radius, 35.dpFloat)
             shadowColor = arr.getColor(R.styleable.WeathyCardView_weathy_shadow_color, defaultShadowColor)
+            disableShadow = arr.getBoolean(R.styleable.WeathyCardView_weathy_disable_shadow, false)
+            strokeColor = arr.getColor(R.styleable.WeathyCardView_weathy_stroke_color, Color.TRANSPARENT)
+            strokeWidth = arr.getDimension(R.styleable.WeathyCardView_weathy_stroke_width, 0f)
         }
-    }
-
-    private fun initUI() {
-        elevation = 8f
     }
 
     private fun updateUI() {
         background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(radius)).apply {
             fillColor = ColorStateList.valueOf(getColor(R.color.white))
+            strokeWidth = this@WeathyCardView.strokeWidth
+            strokeColor = ColorStateList.valueOf(this@WeathyCardView.strokeColor)
         }
         setShadowColorIfAvailable(shadowColor)
+
+        elevation = if (disableShadow) 0f else toPixel(8).toFloat()
+
 
         invalidate()
     }

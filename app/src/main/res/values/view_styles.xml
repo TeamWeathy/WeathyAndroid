@@ -3,5 +3,8 @@
     <declare-styleable name="WeathyCardView">
         <attr name="weathy_radius" format="dimension" />
         <attr name="weathy_shadow_color" format="color" />
+        <attr name="weathy_stroke_width" format="dimension" />
+        <attr name="weathy_stroke_color" format="color" />
+        <attr name="weathy_disable_shadow" format="boolean" />
     </declare-styleable>
 </resources>
