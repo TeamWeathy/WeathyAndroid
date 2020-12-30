@@ -31,7 +31,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.nicknamechange.NicknameChangeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.developerinfo.DeveloperInfoActivity"
             android:screenOrientation="portrait" />
