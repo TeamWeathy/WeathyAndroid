@@ -13,7 +13,7 @@ import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.setShadowColorIfAvailable
-import team.weathy.util.extensions.toPixel
+import team.weathy.util.extensions.px
 
 class WeathyCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -61,7 +61,7 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
         setShadowColorIfAvailable(shadowColor)
 
-        elevation = if (disableShadow) 0f else toPixel(8).toFloat()
+        elevation = if (disableShadow) 0f else px(8).toFloat()
 
 
         invalidate()
