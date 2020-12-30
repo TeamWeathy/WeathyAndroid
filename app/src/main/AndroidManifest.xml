@@ -44,6 +44,9 @@
         <activity
             android:name=".ui.nicknameset.NicknameSetActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.inquire.InquireActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
