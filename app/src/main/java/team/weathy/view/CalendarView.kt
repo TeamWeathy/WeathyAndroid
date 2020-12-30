@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -31,6 +32,7 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
+import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
@@ -54,6 +56,21 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setBackgroundColor(getColor(R.color.sub_grey_5))
         }
     }
+    private val weekTextGenerator: (text: String) -> View = { text ->
+        TextView(context).apply {
+            id = ViewCompat.generateViewId()
+            textSize = 13f
+            setTextColor(
+                when (text) {
+                    "토" -> getColor(R.color.blue_temp)
+                    "일" -> getColor(R.color.red_temp)
+                    else -> getColor(R.color.main_grey)
+                }
+            )
+            setText(text)
+            gravity = Gravity.CENTER
+        }
+    }
     private val scrollView = ScrollView(context).apply {
         id = ViewCompat.generateViewId()
         overScrollMode = ScrollView.OVER_SCROLL_NEVER
@@ -73,6 +90,22 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setBackgroundColor(Color.TRANSPARENT)
         }
     }
+    private val calendarItemGenerator: (viewGroup: ViewGroup, index: Int) -> ViewCalendarItemBinding =
+        { viewGroup, index ->
+            ViewCalendarItemBinding.bind(
+                LayoutInflater.from(context).inflate(R.layout.view_calendar_item, viewGroup, false)
+            ).apply {
+                day.setTextColor(
+                    getColor(
+                        when (index) {
+                            5 -> R.color.blue_temp
+                            6 -> R.color.red_temp
+                            else -> R.color.main_grey
+                        }
+                    )
+                )
+            }
+        }
 
 
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -106,30 +139,51 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topMargin = px(16)
         }
 
+        val topDivider = dividerGenerator().also {
+            addView(it, LayoutParams(MATCH_PARENT, px(1)))
+            it.updateLayoutParams<LayoutParams> {
+                topToBottom = dateText.id
+                topMargin = px(16)
+            }
+        }
+
+        val weekLinearLayout = LinearLayout(context).apply {
+            id = ViewCompat.generateViewId()
+            orientation = LinearLayout.HORIZONTAL
+            weightSum = 7f
+        }
+        addView(weekLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        weekLinearLayout.updateLayoutParams<LayoutParams> {
+            topToBottom = topDivider.id
+            topMargin = px(19)
+        }
+        listOf("월", "화", "수", "목", "금", "토", "일").forEach {
+            weekLinearLayout.addView(
+                weekTextGenerator(it), LinearLayout.LayoutParams(
+                    MATCH_PARENT, WRAP_CONTENT, 1f
+                )
+            )
+        }
+
         addView(scrollView, LayoutParams(MATCH_PARENT, 0))
         scrollView.updateLayoutParams<LayoutParams> {
-            topToBottom = dateText.id
-            topMargin = px(16)
+            topToBottom = weekLinearLayout.id
             bottomToBottom = parentId
             bottomMargin = px(64)
         }
 
+
         scrollView.addView(outerLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
-//        addView(outerLinearLayout, LayoutParams(MATCH_PARENT, 0))
-//        outerLinearLayout.updateLayoutParams<LayoutParams> {
-//            topToBottom = dateText.id
-//            topMargin = px(16)
-//            bottomToBottom = parentId
-//            bottomMargin = px(64)
-//        }
 
-        innerLinearLayout.forEach { inner ->
-            outerLinearLayout.addView(dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f))
-            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(100), 0f))
+        innerLinearLayout.forEachIndexed { index, inner ->
+            if (index != 0) outerLinearLayout.addView(
+                dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f)
+            )
+            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(104), 0f))
 
-            (1..7).map {
-                LayoutInflater.from(context).inflate(R.layout.view_calendar_item, inner as ViewGroup, true)
+            repeat(7) {
+                inner.addView(calendarItemGenerator(inner, it).root)
             }
         }
     }
@@ -203,8 +257,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun animY() {
-        val collapsed = px(240)
-        val expanded = screenHeight - px(120)
+        val collapsed = px(MIN_HEIGHT_DP)
+        val expanded = screenHeight - px(EXPAND_MARGIN_BOTTOM_DP)
 
         updateLayoutParams<ViewGroup.LayoutParams> {
 
@@ -216,8 +270,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun collapse() {
         SpringAnimation(FloatValueHolder()).apply {
             setStartValue(height.toFloat())
-            setMinValue(pxFloat(240))
-            spring = SpringForce(pxFloat(240)).apply {
+            setMinValue(pxFloat(MIN_HEIGHT_DP))
+            spring = SpringForce(pxFloat(MIN_HEIGHT_DP)).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
@@ -231,7 +285,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun expand() {
         SpringAnimation(FloatValueHolder()).apply {
             setStartValue(height.toFloat())
-            spring = SpringForce(screenHeight - pxFloat(120)).apply {
+            spring = SpringForce(screenHeight - pxFloat(EXPAND_MARGIN_BOTTOM_DP)).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
@@ -244,5 +298,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
+        private const val MIN_HEIGHT_DP = 220
+        private const val EXPAND_MARGIN_BOTTOM_DP = 120
     }
 }
