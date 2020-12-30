@@ -17,6 +17,15 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
  * @see android.Manifest.permission
  */
 object PermissionUtil {
+    fun requestLocationPermissions(activity: Activity, listener: PermissionListener) {
+        requestPermissions(
+            activity, listOf(
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+            ), listener
+        )
+    }
+
     /**
      * 권한들이 허용되었는지 검사를 요청하는 함수
      *
@@ -24,7 +33,7 @@ object PermissionUtil {
      * @param listener 권한들에 대한 검사가 완료되었을 때 콜백을 처리할 리스너
      * @param permissions 요청하는 권한 목록 [android.Manifest.permission]
      */
-    fun requestPermissions(activity: Activity, permissions: Collection<String>, listener: PermissionListener) {
+    private fun requestPermissions(activity: Activity, permissions: Collection<String>, listener: PermissionListener) {
 
         val callbackListener: MultiplePermissionsListener = object : BaseMultiplePermissionsListener() {
 
@@ -57,6 +66,7 @@ object PermissionUtil {
          */
         Dexter.withActivity(activity).withPermissions(permissions).withListener(callbackListener).check()
     }
+
 
     fun openPermissionSettings(context: Context) {
         context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {

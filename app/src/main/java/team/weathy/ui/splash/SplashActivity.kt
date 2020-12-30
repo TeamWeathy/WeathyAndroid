@@ -21,10 +21,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun requestLocationPermissions() {
-        PermissionUtil.requestPermissions(this, listOf(
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-        ), object : PermissionUtil.PermissionListener {
+        PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
             override fun onPermissionGranted() {
                 startMainActivityAndFinish()
             }
