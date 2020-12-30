@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.main.MainActivity
+import team.weathy.util.PermissionUtil
+import team.weathy.util.extensions.showToast
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
@@ -15,7 +17,34 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startMainActivityAndFinish()
+        requestLocationPermissions()
+    }
+
+    private fun requestLocationPermissions() {
+        PermissionUtil.requestPermissions(this, listOf(
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+        ), object : PermissionUtil.PermissionListener {
+            override fun onPermissionGranted() {
+                startMainActivityAndFinish()
+            }
+
+            override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {
+                showToast("권한 허용이 안되어있습니다 $deniedPermissions")
+                openLocationSettings()
+            }
+
+            override fun onAnyPermissionsPermanentlyDeined(
+                deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
+            ) {
+                showToast("권한 허용이 영구적으로 거부되었습니다 $permanentDeniedPermissions")
+                openLocationSettings()
+            }
+        })
+    }
+
+    private fun openLocationSettings() {
+        PermissionUtil.openPermissionSettings(this)
     }
 
     private fun startMainActivityAndFinish() {
