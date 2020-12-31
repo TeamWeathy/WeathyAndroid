@@ -4,7 +4,6 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.weathy.BuildConfig
@@ -20,9 +19,7 @@ object API {
     }
 
     private fun configureOkHttpClient() {
-        val builder = OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor().apply {
-            this.level = HttpLoggingInterceptor.Level.BODY
-        }).addInterceptor {
+        val builder = OkHttpClient.Builder().addInterceptor {
             val headerAddedRequest = it.request().newBuilder().addHeader("Authorization", "JWT 123" /*TODO*/).build()
 
             it.proceed(headerAddedRequest)
