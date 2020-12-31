@@ -20,7 +20,7 @@ import team.weathy.R
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.setShadowColorIfAvailable
-import team.weathy.util.extensions.toPixel
+import team.weathy.util.extensions.px
 import kotlin.math.roundToInt
 
 
@@ -71,29 +71,29 @@ class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.mtrl_btn_state_list_anim)
         setShadowColorIfAvailable(getColor(R.color.main_mint_shadow))
-        elevation = toPixel(16).toFloat()
+        elevation = px(16).toFloat()
     }
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawCircle(width / 2f, height / 2f, width / 2f - 1.dpFloat, strokePaint)
 
         canvas.drawRoundRect(
-            width / 2f - toPixel(10),
-            height / 2f - toPixel(2),
-            width / 2f + toPixel(10),
-            height / 2f + toPixel(2),
-            toPixel(10).toFloat(),
-            toPixel(10).toFloat(),
+            width / 2f - px(10),
+            height / 2f - px(2),
+            width / 2f + px(10),
+            height / 2f + px(2),
+            px(10).toFloat(),
+            px(10).toFloat(),
             crossPaint
         )
 
         canvas.drawRoundRect(
-            width / 2f - toPixel(2),
-            height / 2f - toPixel(10),
-            width / 2f + toPixel(2),
-            height / 2f + toPixel(10),
-            toPixel(10).toFloat(),
-            toPixel(10).toFloat(),
+            width / 2f - px(2),
+            height / 2f - px(10),
+            width / 2f + px(2),
+            height / 2f + px(10),
+            px(10).toFloat(),
+            px(10).toFloat(),
             crossPaint
         )
     }
