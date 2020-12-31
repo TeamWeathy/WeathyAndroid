@@ -30,7 +30,7 @@ jobs:
           path: app/build/outputs
       - name: Upload APK
         run: |
-          curl -X POST
+          curl -X POST \
           -F file=@app/build/outputs/apk/debug/app-debug.apk \
           -F channels=${{secrets.SLACK_CHANNEL_ID}} \
           -H "Authorization: Bearer ${{secrets.SLACK_BOT_API_TOKEN}}" \
