@@ -29,7 +29,12 @@ jobs:
         with:
           path: app/build/outputs
       - name: Upload APK
-        run: curl -XPOST -F file=@app/build/outputs/apk/debug/app-debug.apk -F channels=${{secrets.SLACK_CHANNEL_ID}} -H "Authorization: Bearer ${{secrets.SLACK_BOT_API_TOKEN}}" https://slack.com/api/files.upload
+        run: |
+          curl -X POST
+          -F file=@app/build/outputs/apk/debug/app-debug.apk \
+          -F channels=${{secrets.SLACK_CHANNEL_ID}} \
+          -H "Authorization: Bearer ${{secrets.SLACK_BOT_API_TOKEN}}" \
+          https://slack.com/api/files.upload
       - name: On success, Notify with Slack
         if: ${{ success() && (contains(github.ref, 'release') || contains(github.ref, 'master')) }}
         uses: rtCamp/action-slack-notify@master
