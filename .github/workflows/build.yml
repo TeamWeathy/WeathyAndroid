@@ -48,7 +48,7 @@ jobs:
           MSG_MINIMAL: true
           SLACK_MESSAGE: 'apk가 생성되었습니다'
       - name: On fail, Notify with Slack
-        if: ${{ fail() }}
+        if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
