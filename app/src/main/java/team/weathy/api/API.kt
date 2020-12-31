@@ -7,20 +7,35 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import team.weathy.BuildConfig
 
 object API {
+    val flipperNetworkPlugin = NetworkFlipperPlugin()
+
     private val gson = GsonBuilder().create()
-    private val okHttpClient = OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor().apply {
-        this.level = HttpLoggingInterceptor.Level.BODY
-    }).addNetworkInterceptor(FlipperOkhttpInterceptor(NetworkFlipperPlugin())).addInterceptor {
-        val headerAddedRequest = it.request().newBuilder().addHeader("token", "/*Header*/" /*TODO*/).build()
+    private lateinit var okHttpClient: OkHttpClient
 
-        it.proceed(headerAddedRequest)
-    }.build()
+    init {
+        configureOkHttpClient()
+    }
 
-    private val apiRetrofit =
-        Retrofit.Builder().baseUrl("/*BaseURL*/" /*TODO*/).addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient).build()
+    private fun configureOkHttpClient() {
+        val builder = OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor().apply {
+            this.level = HttpLoggingInterceptor.Level.BODY
+        }).addInterceptor {
+            val headerAddedRequest = it.request().newBuilder().addHeader("Authorization", "JWT 123" /*TODO*/).build()
+
+            it.proceed(headerAddedRequest)
+        }
+        okHttpClient = if (BuildConfig.DEBUG) {
+            builder.addNetworkInterceptor(FlipperOkhttpInterceptor(flipperNetworkPlugin))
+        } else {
+            builder
+        }.build()
+    }
+
+    private val apiRetrofit = Retrofit.Builder().baseUrl("https://api-dev.iammathking.com")
+        .addConverterFactory(GsonConverterFactory.create(gson)).client(okHttpClient).build()
 
     val sample = apiRetrofit.create(SampleAPI::class.java)
 }
