@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
 import team.weathy.ui.inquire.InquireActivity
+import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.util.setOnDebounceClickListener
 
@@ -25,37 +26,44 @@ class SettingActivity : AppCompatActivity() {
         goInquire()
         goDeveloperInfo()
         pushNotifSwitchAct()
+        exitSetting()
     }
 
-    fun goNicknameChange() {
+    private fun goNicknameChange() {
         binding.changeNicknameClick.setOnDebounceClickListener {
-            Log.d("ddd", "0")
             val intent = Intent(this, NicknameChangeActivity::class.java)
             startActivity(intent)
         }
     }
 
-    fun goInquire() {
+    private fun goInquire() {
         binding.inquireClick.setOnDebounceClickListener {
             val intent = Intent(this, InquireActivity::class.java)
             startActivity(intent)
         }
     }
 
-    fun goDeveloperInfo() {
+    private fun goDeveloperInfo() {
         binding.developerInfoClick.setOnDebounceClickListener {
             val intent = Intent(this, DeveloperInfoActivity::class.java)
             startActivity(intent)
         }
     }
 
-    fun pushNotifSwitchAct() {
+    private fun pushNotifSwitchAct() {
         binding.pushNotifSwitch.setOnCheckedChangeListener { _, onSwitch ->
             if (onSwitch) {
                 Toast.makeText(this, "On", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Off", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun exitSetting() {
+        binding.exitSettingBtn.setOnDebounceClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }
