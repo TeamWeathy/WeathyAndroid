@@ -28,9 +28,31 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: app/build/outputs
-#      - name: Notify KakaoWork channel
-#        run: |
-#          curl -X POST https://api.kakaowork.com/v1/messages.send \
-#          -H "Authorization: Bearer 6416d234.9f1917530fd34a659315d64e3264b77c" \
-#          -H "Content-Type: application/json" \
-#          -d "{ \"conversation_id\": \"695731\", \"text\": \"안드로이드 디버그 빌드 성공 깃허브에서 apk를 다운로드 받으세요\" }"
+      - name: Update apk name
+        run: |
+          mv app/build/outputs/apk/debug/app-debug.apk 웨디-디버그.apk
+          echo 'apk=웨디-디버그.apk' >> $GITHUB_ENV
+      - name: Upload APK
+        run: |
+          curl -X POST \
+          -F file=@$apk \
+          -F channels=${{secrets.SLACK_CHANNEL_ID}} \
+          -H "Authorization: Bearer ${{secrets.SLACK_BOT_API_TOKEN}}" \
+          https://slack.com/api/files.upload
+      - name: On success, Notify with Slack
+        if: ${{ success() && (contains(github.ref, 'release') || contains(github.ref, 'main')) }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
+          SLACK_TITLE: '안드로이드 디버그 빌드 성공 ✅'
+          MSG_MINIMAL: true
+          SLACK_MESSAGE: 'apk가 생성되었습니다'
+      - name: On fail, Notify with Slack
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
+          SLACK_TITLE: '안드로이드 디버그 빌드 실패 ❌'
+          MSG_MINIMAL: false
+          SLACK_MESSAGE: '에러를 확인해주세요'
+
