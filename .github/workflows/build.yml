@@ -30,7 +30,7 @@ jobs:
           path: app/build/outputs
       - name: Update apk name
         run: |
-          mv app/release/app-release.apk 웨디-릴리즈.apk
+          mv app/build/outputs/apk/release/app-release.apk 웨디-릴리즈.apk
           echo 'apk=웨디-릴리즈.apk' >> $GITHUB_ENV
       - name: Upload APK
         if: ${{ success() && contains(github.ref, 'main') }}
