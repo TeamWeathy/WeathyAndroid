@@ -1,15 +1,19 @@
 package team.weathy.ui.nicknamechange
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
+import team.weathy.ui.inquire.InquireActivity
+import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -22,7 +26,8 @@ class NicknameChangeActivity : AppCompatActivity() {
         binding = ActivityNicknameChangeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.nicknameEdit.addTextChangedListener((textWatcher))
+        binding.nicknameEdit.addTextChangedListener(textWatcher)
+        exitNicknameChange()
     }
 
     private val textWatcher = object : TextWatcher {
@@ -38,15 +43,20 @@ class NicknameChangeActivity : AppCompatActivity() {
 
             if (length > 0) {
                 binding.changeNicknameBtn.isEnabled = true
+                binding.deleteNicknameBtn.isEnabled = true
                 binding.numOfCharacters1.setTextColor(numOfCharactersColorMint)
                 binding.changeNicknameBtn.setBackgroundColor(nicknameChangeBtnActive)
                 binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border_active)
+                binding.deleteNicknameBtn.visibility = View.VISIBLE
+                deleteNickname()
                 changeNicknameBtnClick()
             } else {
                 binding.changeNicknameBtn.isEnabled = false
+                binding.deleteNicknameBtn.isEnabled = false
                 binding.numOfCharacters1.setTextColor(numOfCharactersColorGrey)
                 binding.changeNicknameBtn.setBackgroundColor(nicknameChangeBtnInactive)
                 binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border)
+                binding.deleteNicknameBtn.visibility = View.INVISIBLE
             }
         }
 
@@ -72,6 +82,19 @@ class NicknameChangeActivity : AppCompatActivity() {
     private fun changeNicknameBtnClick() {
         binding.changeNicknameBtn.setOnDebounceClickListener {
             Toast.makeText(this, "변경되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun deleteNickname() {
+        binding.deleteNicknameBtn.setOnDebounceClickListener {
+            binding.nicknameEdit.setText("")
+        }
+    }
+
+    private fun exitNicknameChange() {
+        binding.exitNicknameChangeBtn.setOnDebounceClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 }

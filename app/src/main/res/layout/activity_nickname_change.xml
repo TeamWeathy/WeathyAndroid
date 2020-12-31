@@ -86,4 +86,28 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nickname_edit" />
+
+    <ImageButton
+        android:id="@+id/exit_nickname_change_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/abc_vector_test"
+        app:layout_constraintStart_toStartOf="@id/change_nickname_txt2"
+        app:layout_constraintBottom_toTopOf="@id/change_nickname_txt2"
+        android:layout_marginBottom="31.5dp"/>
+
+    <ImageButton
+        android:id="@+id/delete_nickname_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/abc_ic_clear_material"
+        app:layout_constraintTop_toTopOf="@id/nickname_edit"
+        app:layout_constraintEnd_toEndOf="@id/nickname_edit"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="10dp"
+        android:enabled="false"
+        android:visibility="invisible"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
