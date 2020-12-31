@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -20,17 +21,20 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.math.MathUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.dynamicanimation.animation.SpringForce.STIFFNESS_LOW
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
+import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
@@ -38,6 +42,11 @@ import team.weathy.util.extensions.screenHeight
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
+
+    private val collapsed
+        get() = px(MIN_HEIGHT_DP)
+    private val expanded
+        get() = screenHeight - px(EXPAND_MARGIN_BOTTOM_DP)
 
     private val paddingHorizontal = px(24)
 
@@ -52,6 +61,21 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         View(context).apply {
             id = ViewCompat.generateViewId()
             setBackgroundColor(getColor(R.color.sub_grey_5))
+        }
+    }
+    private val weekTextGenerator: (text: String) -> View = { text ->
+        TextView(context).apply {
+            id = ViewCompat.generateViewId()
+            textSize = 13f
+            setTextColor(
+                when (text) {
+                    "토" -> getColor(R.color.blue_temp)
+                    "일" -> getColor(R.color.red_temp)
+                    else -> getColor(R.color.main_grey)
+                }
+            )
+            setText(text)
+            gravity = Gravity.CENTER
         }
     }
     private val scrollView = ScrollView(context).apply {
@@ -74,15 +98,42 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
+    private val calendarItems = (1..35).map {
+        ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
+            day.setTextColor(
+                getColor(
+                    when ((it - 1) % 7) {
+                        5 -> R.color.blue_temp
+                        6 -> R.color.red_temp
+                        else -> R.color.main_grey
+                    }
+                )
+            )
+            day.text = it.toString()
+        }
+    }
+
 
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
     }
 
+    private val animValue = MutableLiveData(0f)
+
     init {
         initContainer()
         addViews()
         configureTouch()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        registerAnimValueObserver()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        unregisterAnimValueObserver()
     }
 
     private fun initContainer() {
@@ -94,7 +145,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         ).apply {
             fillColor = ColorStateList.valueOf(getColor(R.color.white))
         }
-        elevation = px(8).toFloat()
+        elevation = px(4).toFloat()
     }
 
     private fun addViews() {
@@ -106,30 +157,51 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topMargin = px(16)
         }
 
+        val topDivider = dividerGenerator().also {
+            addView(it, LayoutParams(MATCH_PARENT, px(1)))
+            it.updateLayoutParams<LayoutParams> {
+                topToBottom = dateText.id
+                topMargin = px(16)
+            }
+        }
+
+        val weekLinearLayout = LinearLayout(context).apply {
+            id = ViewCompat.generateViewId()
+            orientation = LinearLayout.HORIZONTAL
+            weightSum = 7f
+        }
+        addView(weekLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        weekLinearLayout.updateLayoutParams<LayoutParams> {
+            topToBottom = topDivider.id
+            topMargin = px(19)
+        }
+        listOf("월", "화", "수", "목", "금", "토", "일").forEach {
+            weekLinearLayout.addView(
+                weekTextGenerator(it), LinearLayout.LayoutParams(
+                    MATCH_PARENT, WRAP_CONTENT, 1f
+                )
+            )
+        }
+
         addView(scrollView, LayoutParams(MATCH_PARENT, 0))
         scrollView.updateLayoutParams<LayoutParams> {
-            topToBottom = dateText.id
-            topMargin = px(16)
+            topToBottom = weekLinearLayout.id
             bottomToBottom = parentId
             bottomMargin = px(64)
         }
 
+
         scrollView.addView(outerLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
-//        addView(outerLinearLayout, LayoutParams(MATCH_PARENT, 0))
-//        outerLinearLayout.updateLayoutParams<LayoutParams> {
-//            topToBottom = dateText.id
-//            topMargin = px(16)
-//            bottomToBottom = parentId
-//            bottomMargin = px(64)
-//        }
 
-        innerLinearLayout.forEach { inner ->
-            outerLinearLayout.addView(dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f))
-            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(100), 0f))
+        innerLinearLayout.forEachIndexed { index, inner ->
+            if (index != 0) outerLinearLayout.addView(
+                dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f)
+            )
+            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(104), 0f))
 
-            (1..7).map {
-                LayoutInflater.from(context).inflate(R.layout.view_calendar_item, inner as ViewGroup, true)
+            calendarItems.subList(index * 7, index * 7 + 7).forEach {
+                inner.addView(it.root, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f))
             }
         }
     }
@@ -183,8 +255,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         computeCurrentVelocity(1000)
                     }
 
-                    movedY = event.y - offsetY
-                    animY()
+                    val curHeight = event.y
+                    animValue.value =
+                        androidx.core.math.MathUtils.clamp((curHeight - collapsed) / (expanded - collapsed), 0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP -> {
                     startFromCollasped = if (velocityTracker!!.yVelocity > 0) {
@@ -202,47 +275,65 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun animY() {
-        val collapsed = px(240)
-        val expanded = screenHeight - px(120)
 
+    private val animValueObserver = Observer<Float> {
+        val height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), it)
+        updateHeight(height)
+        updateCalendarItems()
+    }
+
+    private fun registerAnimValueObserver() {
+        animValue.observeForever(animValueObserver)
+    }
+
+    private fun unregisterAnimValueObserver() {
+        animValue.removeObserver(animValueObserver)
+    }
+
+    private fun updateHeight(value: Float) {
         updateLayoutParams<ViewGroup.LayoutParams> {
+            height = value.toInt()
+        }
+    }
 
-            height =
-                MathUtils.clamp((if (startFromCollasped) collapsed else expanded) + movedY.toInt(), collapsed, expanded)
+    private fun updateCalendarItems() {
+        val value = animValue.value!!
+        val animItems = calendarItems.subList(7, calendarItems.size)
+
+        animItems.forEachIndexed { index, binding ->
+            binding.root.alpha = value
+            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, value)
         }
     }
 
     private fun collapse() {
         SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(height.toFloat())
-            setMinValue(pxFloat(240))
-            spring = SpringForce(pxFloat(240)).apply {
+            setStartValue(animValue.value!! * 500f)
+            setMinValue(0f)
+            spring = SpringForce(0f).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = value.toInt()
-                }
+                animValue.value = value / 500f
             }
         }.start()
     }
 
     private fun expand() {
         SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(height.toFloat())
-            spring = SpringForce(screenHeight - pxFloat(120)).apply {
+            setStartValue(animValue.value!! * 500f)
+            spring = SpringForce(500f).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
-                updateLayoutParams<ViewGroup.LayoutParams> {
-                    height = value.toInt()
-                }
+                animValue.value = value / 500f
             }
         }.start()
     }
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
+        private const val MIN_HEIGHT_DP = 220
+        private const val EXPAND_MARGIN_BOTTOM_DP = 120
     }
 }

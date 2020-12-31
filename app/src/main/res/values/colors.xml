@@ -11,4 +11,6 @@
     <color name="text_high_temp">#D18C8B</color>
     <color name="sub_grey_5">#F1F1F1</color>
     <color name="sub_grey_6">#939393</color>
+    <color name="blue_temp">#88AFD1</color>
+    <color name="red_temp">#D18C8B</color>
 </resources>
