@@ -100,6 +100,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val calendarItems = (1..35).map {
         ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
+            root.id = ViewCompat.generateViewId()
             day.setTextColor(
                 getColor(
                     when ((it - 1) % 7) {
@@ -117,8 +118,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
     }
-
-    private val animValue = MutableLiveData(0f)
 
     init {
         initContainer()
@@ -149,6 +148,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun addViews() {
+        addDateText()
+        addScrollView(addWeekLayout(addTopDivider()))
+        addCalendarItems()
+    }
+
+    private fun addDateText() {
         addView(dateText, LayoutParams(0, WRAP_CONTENT))
         dateText.updateLayoutParams<LayoutParams> {
             topToTop = parentId
@@ -156,43 +161,46 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             rightToRight = parentId
             topMargin = px(16)
         }
+    }
 
-        val topDivider = dividerGenerator().also {
-            addView(it, LayoutParams(MATCH_PARENT, px(1)))
-            it.updateLayoutParams<LayoutParams> {
-                topToBottom = dateText.id
-                topMargin = px(16)
-            }
+    private fun addTopDivider() = dividerGenerator().also {
+        addView(it, LayoutParams(MATCH_PARENT, px(1)))
+        it.updateLayoutParams<LayoutParams> {
+            topToBottom = dateText.id
+            topMargin = px(16)
         }
+    }
 
-        val weekLinearLayout = LinearLayout(context).apply {
-            id = ViewCompat.generateViewId()
-            orientation = LinearLayout.HORIZONTAL
-            weightSum = 7f
-        }
-        addView(weekLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-        weekLinearLayout.updateLayoutParams<LayoutParams> {
+    private fun addWeekLayout(topDivider: View) = LinearLayout(context).also { layout ->
+        layout.id = ViewCompat.generateViewId()
+        layout.orientation = LinearLayout.HORIZONTAL
+        layout.weightSum = 7f
+        addView(layout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+
+        layout.updateLayoutParams<LayoutParams> {
             topToBottom = topDivider.id
             topMargin = px(19)
         }
         listOf("월", "화", "수", "목", "금", "토", "일").forEach {
-            weekLinearLayout.addView(
+            layout.addView(
                 weekTextGenerator(it), LinearLayout.LayoutParams(
                     MATCH_PARENT, WRAP_CONTENT, 1f
                 )
             )
         }
+    }
 
+    private fun addScrollView(weekLayout: View) {
         addView(scrollView, LayoutParams(MATCH_PARENT, 0))
         scrollView.updateLayoutParams<LayoutParams> {
-            topToBottom = weekLinearLayout.id
+            topToBottom = weekLayout.id
             bottomToBottom = parentId
             bottomMargin = px(64)
         }
+    }
 
-
+    private fun addCalendarItems() {
         scrollView.addView(outerLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-
 
         innerLinearLayout.forEachIndexed { index, inner ->
             if (index != 0) outerLinearLayout.addView(
@@ -206,6 +214,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
+
     override fun onDraw(canvas: Canvas) {
         canvas.drawRoundRect(
             width / 2f - px(30),
@@ -216,19 +225,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             pxFloat(10),
             notchPaint
         )
-
-//        val columnWidth = (width - paddingHorizontal * 2) / 7f
-
-//        canvas.drawRoundRect(
-//            paddingHorizontal.toFloat(),
-//            pxFloat(70),
-//            paddingHorizontal.toFloat() + columnWidth,
-//            pxFloat(170),
-//            columnWidth / 2,
-//            columnWidth / 2,
-//            notchPaint
-//        )
     }
+
+    private val animValue = MutableLiveData(0f)
 
     private var velocityTracker: VelocityTracker? = null
     private var startFromCollasped = true
@@ -279,7 +278,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val animValueObserver = Observer<Float> {
         val height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), it)
         updateHeight(height)
-        updateCalendarItems()
+        adjustCalendarItemsWithAnimValue(it)
     }
 
     private fun registerAnimValueObserver() {
@@ -296,37 +295,26 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun updateCalendarItems() {
-        val value = animValue.value!!
-        val animItems = calendarItems.subList(7, calendarItems.size)
+    private fun adjustCalendarItemsWithAnimValue(value: Float) {
+        val itemsShouldBeAnimated = calendarItems.subList(7, calendarItems.size)
 
-        animItems.forEachIndexed { index, binding ->
+        itemsShouldBeAnimated.forEachIndexed { index, binding ->
             binding.root.alpha = value
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, value)
         }
     }
 
-    private fun collapse() {
-        SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(animValue.value!! * 500f)
-            setMinValue(0f)
-            spring = SpringForce(0f).apply {
-                stiffness = STIFFNESS_LOW
-            }
-            addUpdateListener { _, value, _ ->
-                animValue.value = value / 500f
-            }
-        }.start()
-    }
+    private fun collapse() = runSpringAnimation(animValue.value!!, 0f)
+    private fun expand() = runSpringAnimation(animValue.value!!, 1f)
 
-    private fun expand() {
+    private fun runSpringAnimation(startValue: Float, finalValue: Float, multiplier: Float = 500f) {
         SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(animValue.value!! * 500f)
-            spring = SpringForce(500f).apply {
+            setStartValue(startValue * multiplier)
+            spring = SpringForce(finalValue * multiplier).apply {
                 stiffness = STIFFNESS_LOW
             }
             addUpdateListener { _, value, _ ->
-                animValue.value = value / 500f
+                animValue.value = value / multiplier
             }
         }.start()
     }
