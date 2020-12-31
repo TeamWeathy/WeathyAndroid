@@ -35,21 +35,19 @@
         android:id="@+id/nickname_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_nickname_to_change"
         android:layout_marginStart="34dp"
         android:layout_marginTop="50sp"
         android:layout_marginEnd="34dp"
         android:background="@drawable/nickname_edit_border"
         android:hint="부메랑"
-        android:textColor="@color/black"
         android:maxLength="6"
         android:paddingStart="22dp"
         android:paddingTop="15dp"
         android:paddingBottom="14dp"
+        android:textColor="@color/black"
         android:textSize="16sp"
-/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enter_nickname_to_change" />
 
     <Button
         android:id="@+id/change_nickname_btn"
@@ -67,11 +65,25 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/num_of_characters"
+        android:id="@+id/num_of_characters1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/sub_grey_6"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/num_of_characters2"
+        app:layout_constraintEnd_toStartOf="@id/num_of_characters2"
+        app:layout_constraintTop_toTopOf="@id/num_of_characters2" />
+
+    <TextView
+        android:id="@+id/num_of_characters2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="33dp"
+        android:text="/6"
+        android:textColor="@color/sub_grey_6"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nickname_edit" />
 </androidx.constraintlayout.widget.ConstraintLayout>
