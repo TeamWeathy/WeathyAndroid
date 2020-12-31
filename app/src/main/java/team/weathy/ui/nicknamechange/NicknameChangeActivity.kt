@@ -14,15 +14,18 @@ class NicknameChangeActivity : AppCompatActivity() {
     private val textWatcher = object : TextWatcher{
         override fun afterTextChanged(s: Editable?) {
             val length = s.toString().length
-            binding.numOfCharacters.text = "$length / 6"
+            binding.numOfCharacters.text = "$length/6"
 
             if(length > 0){
                 val nickname_change_btn_active  = resources.getColor(R.color.main_mint)
                 binding.changeNicknameBtn.setBackgroundColor(nickname_change_btn_active)
+                binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border_active)
+
             }
             else{
                 val nickname_change_btn_inactive  = resources.getColor(R.color.sub_grey_3)
                 binding.changeNicknameBtn.setBackgroundColor(nickname_change_btn_inactive)
+                binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border)
             }
         }
 
