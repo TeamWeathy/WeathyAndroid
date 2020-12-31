@@ -1,5 +1,7 @@
 package team.weathy.api
 
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,7 +12,7 @@ object API {
     private val gson = GsonBuilder().create()
     private val okHttpClient = OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
-    }).addInterceptor {
+    }).addNetworkInterceptor(FlipperOkhttpInterceptor(NetworkFlipperPlugin())).addInterceptor {
         val headerAddedRequest = it.request().newBuilder().addHeader("token", "/*Header*/" /*TODO*/).build()
 
         it.proceed(headerAddedRequest)

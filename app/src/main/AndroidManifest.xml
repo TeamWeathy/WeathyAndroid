@@ -48,6 +48,11 @@
         <activity
             android:name=".ui.nicknameset.NicknameSetActivity"
             android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
