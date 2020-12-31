@@ -45,7 +45,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
-          SLACK_TITLE: '안드로이드 디버그 빌드 성공 ✅'
+          SLACK_TITLE: '안드로이드 릴리즈 빌드 성공 ✅'
           MSG_MINIMAL: true
           SLACK_MESSAGE: 'apk가 생성되었습니다'
       - name: On fail, Notify with Slack
@@ -53,7 +53,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
-          SLACK_TITLE: '안드로이드 디버그 빌드 실패 ❌'
+          SLACK_TITLE: '안드로이드 릴리즈 빌드 실패 ❌'
           MSG_MINIMAL: false
           SLACK_MESSAGE: '에러를 확인해주세요'
 
