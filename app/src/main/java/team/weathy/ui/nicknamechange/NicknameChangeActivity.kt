@@ -59,7 +59,16 @@ class NicknameChangeActivity : AppCompatActivity() {
         }
 
     }
-    
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        if (currentFocus != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     private fun changeNicknameBtnClick() {
         binding.changeNicknameBtn.setOnDebounceClickListener {
             Toast.makeText(this, "변경되었습니다.", Toast.LENGTH_SHORT).show()
