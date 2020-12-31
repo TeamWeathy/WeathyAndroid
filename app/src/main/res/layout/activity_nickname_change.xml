@@ -42,7 +42,7 @@
         android:layout_marginEnd="34dp"
         android:background="@drawable/nickname_edit_border"
         android:hint="부메랑"
-        android:textColor="@color/sub_grey_8"
+        android:textColor="@color/black"
         android:maxLength="6"
         android:paddingStart="22dp"
         android:paddingTop="15dp"
