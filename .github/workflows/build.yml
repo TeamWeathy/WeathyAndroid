@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: build debug
-    if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && !startsWith(github.ref, 'refs/tags/')"
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && !startsWith(github.ref, 'refs/tags/') && contains(github.ref, 'main')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
           -H "Authorization: Bearer ${{secrets.SLACK_BOT_API_TOKEN}}" \
           https://slack.com/api/files.upload
       - name: On success, Notify with Slack
-        if: ${{ success() && (contains(github.ref, 'release') || contains(github.ref, 'main')) }}
+        if: ${{ success() }}
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
