@@ -15,4 +15,6 @@
     <color name="sub_grey_7">#E1E1E1</color>
     <color name="sub_grey_8">#AFAFAF</color>
     <color name="cursor">#B3C4C4C4</color>
+    <color name="blue_temp">#88AFD1</color>
+    <color name="red_temp">#D18C8B</color>
 </resources>

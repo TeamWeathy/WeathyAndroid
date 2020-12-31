@@ -6,7 +6,7 @@
 
     <team.weathy.view.CalendarView
         android:id="@+id/calendarView"
-        android:layout_height="240dp"
+        android:layout_height="220dp"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent" />
 
