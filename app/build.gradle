@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -81,6 +82,8 @@ dependencies {
 }
 
 dependencies {
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+
     debugImplementation 'com.facebook.flipper:flipper:0.69.0'
     debugImplementation 'com.facebook.soloader:soloader:0.9.0'
     debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.69.0'
