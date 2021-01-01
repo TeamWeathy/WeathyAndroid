@@ -9,6 +9,8 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordReviewBinding
+import team.weathy.ui.record.RecordActivity
+import team.weathy.ui.record.detail.RecordDetailFragment
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
@@ -24,6 +26,10 @@ class RecordReviewFragment : Fragment() {
 
         for (i in cvReview.indices)
             setReviewClickListener(cvReview, i, binding.btnCheck)
+
+        binding.btnCheck setOnDebounceClickListener {
+            (activity as RecordActivity).replaceFragment(RecordDetailFragment())
+        }
     }
 
     private fun setReviewClickListener(cvReview: kotlin.Array<WeathyCardView>, position: Int, button: Button) {
@@ -45,7 +51,7 @@ class RecordReviewFragment : Fragment() {
     @SuppressLint("ResourceType")
     private fun setButtonEnableListener(button: Button) {
         button.setBackgroundColor(resources.getColor(R.color.main_mint))
-        button.isEnabled
+        button.isEnabled = true
     }
 
     private fun setBackgroundDisableListener(cvReview: WeathyCardView) {
