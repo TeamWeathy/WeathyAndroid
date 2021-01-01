@@ -3,6 +3,7 @@ package team.weathy.util.extensions
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 
 fun AppCompatActivity.replaceFragment(containerView: FragmentContainerView, clazz: Class<out Fragment>) {
@@ -24,5 +25,14 @@ fun AppCompatActivity.addFragment(containerView: FragmentContainerView, clazz: C
     supportFragmentManager.commit {
         add(containerView.id, clazz, null, tagName)
         addToBackStack(tagName)
+    }
+}
+
+fun AppCompatActivity.popFragmentIfExist(clazz: Class<out Fragment>) {
+    val tagName = clazz.simpleName
+    val exists = supportFragmentManager.findFragmentByTag(tagName)
+
+    if (exists != null) {
+        supportFragmentManager.popBackStack(tagName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }

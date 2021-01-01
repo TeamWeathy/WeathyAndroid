@@ -5,7 +5,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.CALENDAR
 import team.weathy.ui.main.MainMenu.HOME
@@ -13,9 +14,12 @@ import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.HomeFragment
 import team.weathy.ui.main.search.SearchFragment
-import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.ui.setting.SettingActivity
+import team.weathy.util.AnimUtil
+import team.weathy.util.StatusBarUtil
+import team.weathy.util.dpFloat
 import team.weathy.util.extensions.addFragment
+import team.weathy.util.extensions.popFragmentIfExist
 import team.weathy.util.extensions.replaceFragment
 import team.weathy.util.setOnDebounceClickListener
 
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
+
+        StatusBarUtil.collapseStatusBar(this)
     }
 
     private fun attachFragments(savedInstanceState: Bundle?) {
@@ -45,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun configureToolbar() {
         binding.search setOnDebounceClickListener {
-            navigateSearch()
+            viewModel.changeMenu(SEARCH)
         }
         binding.setting setOnDebounceClickListener {
             goToSetting()
@@ -61,30 +67,72 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.run {
-            menu.observe(this@MainActivity) { menu ->
-                menu ?: return@observe
-                when (menu) {
-                    HOME -> navigateHome()
-                    CALENDAR -> navigateCalendar()
-                    SEARCH -> navigateSearch()
-                }
+    private fun observeViewModel() = viewModel.let { vm ->
+        vm.menu.observe(this@MainActivity) { menu ->
+            menu ?: return@observe
+            when (menu) {
+                HOME -> navigateHome()
+                CALENDAR -> navigateCalendar()
+                SEARCH -> navigateSearch()
             }
+            adjustBottomNavigationBarWithMenu(menu)
         }
     }
 
-    private fun navigateHome() = replaceFragment(binding.fragmentContainer, HomeFragment::class.java)
+    private fun adjustBottomNavigationBarWithMenu(menu: MainMenu) {
+        val curTranslateY = binding.fab.translationY
+        if (menu == SEARCH) {
+            hideBottomNavSequentely(curTranslateY)
+        } else {
+            showBottomNavSequently(curTranslateY)
+        }
+    }
 
-    private fun navigateCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
+    private fun hideBottomNavSequentely(startMargin: Float) = lifecycleScope.launchWhenStarted {
+        AnimUtil.runSpringAnimation(startMargin, 100.dpFloat, 100f) {
+            binding.fab.translationY = it
+        }
+        delay(100)
+        AnimUtil.runSpringAnimation(startMargin, 100.dpFloat, 100f) {
+            binding.home.translationY = it
+        }
+        delay(100)
+        AnimUtil.runSpringAnimation(startMargin, 100.dpFloat, 100f) {
+            binding.calendar.translationY = it
+        }
+    }
+
+    private fun showBottomNavSequently(startMargin: Float) = lifecycleScope.launchWhenStarted {
+        AnimUtil.runSpringAnimation(startMargin, 0f, 100f) {
+            binding.fab.translationY = it
+        }
+        delay(100)
+        AnimUtil.runSpringAnimation(startMargin, 0f, 100f) {
+            binding.home.translationY = it
+        }
+        delay(100)
+        AnimUtil.runSpringAnimation(startMargin, 0f, 100f) {
+            binding.calendar.translationY = it
+        }
+    }
+
+    private fun navigateHome() {
+        popFragmentIfExist(SearchFragment::class.java)
+        replaceFragment(binding.fragmentContainer, HomeFragment::class.java)
+    }
+
+    private fun navigateCalendar() {
+        popFragmentIfExist(SearchFragment::class.java)
+        replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
+    }
 
     private fun navigateSearch() = addFragment(binding.fragmentContainer, SearchFragment::class.java)
 
     override fun onBackPressed() {
-        if (viewModel.menu.value == HOME) {
-            super.onBackPressed()
-        } else {
-            viewModel.changeMenu(HOME)
+        when (viewModel.menu.value) {
+            HOME -> super.onBackPressed()
+            CALENDAR -> viewModel.changeMenu(HOME)
+            else -> viewModel.changeMenu(viewModel.menuBeforeNavigateSearch.value!!)
         }
     }
 
