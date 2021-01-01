@@ -129,10 +129,9 @@ class MainActivity : AppCompatActivity() {
     private fun navigateSearch() = addFragment(binding.fragmentContainer, SearchFragment::class.java)
 
     override fun onBackPressed() {
-        if (viewModel.menu.value == HOME) {
-            super.onBackPressed()
-        } else {
-            viewModel.changeMenu(HOME)
+        when (viewModel.menu.value) {
+            HOME -> super.onBackPressed()
+            else -> viewModel.changeMenu(HOME)
         }
     }
 
