@@ -19,4 +19,5 @@
     <color name="blue_temp">#88AFD1</color>
     <color name="red_temp">#D18C8B</color>
     <color name="imoji_verycold_text">#967FD4</color>
+    <color name="imoji_verycold">#C5C5FF</color>
 </resources>

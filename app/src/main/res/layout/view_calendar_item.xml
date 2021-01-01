@@ -6,36 +6,74 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@color/transparent"
-    tools:layout_width="match_parent">
+    tools:layout_height="104dp"
+    tools:layout_width="80dp">
 
 
     <TextView
+        android:layout_marginTop="5dp"
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:fontFamily="@font/roboto_medium"
         android:text="21"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:textColor="@color/main_grey"
+        android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/temperature"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
-        android:id="@+id/temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-16dp"
+        android:id="@+id/temp_high"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="6dp"
+        android:alpha="0"
+        android:background="@drawable/round_corner_5dp"
+        android:backgroundTint="#ECB9B8"
         android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:paddingVertical="2dp"
         android:text="-4°"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/temp_low"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_percent="0.7"
+        tools:alpha="0.7" />
+
+    <TextView
+        android:id="@+id/temp_low"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="9dp"
+        android:alpha="0"
+        android:background="@drawable/round_corner_5dp"
+        android:backgroundTint="#B3CEE7"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:paddingVertical="2dp"
+        android:text="-4°"
+        android:textColor="@color/white"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/day"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintWidth_percent="0.7"
+        tools:alpha="0.7" />
+
+    <View
+        android:id="@+id/circle"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/imoji_verycold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/day" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
