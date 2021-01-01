@@ -2,14 +2,11 @@ package team.weathy.ui.setting
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
 import team.weathy.ui.inquire.InquireActivity
-import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.util.setOnDebounceClickListener
 
@@ -62,8 +59,7 @@ class SettingActivity : AppCompatActivity() {
 
     private fun exitSetting() {
         binding.exitSettingBtn.setOnDebounceClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 }

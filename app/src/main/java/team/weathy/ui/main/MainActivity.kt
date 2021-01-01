@@ -8,9 +8,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
-import team.weathy.ui.main.MainMenu.CALENDAR
-import team.weathy.ui.main.MainMenu.HOME
-import team.weathy.ui.main.MainMenu.SEARCH
+import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.HomeFragment
 import team.weathy.ui.main.search.SearchFragment
@@ -54,7 +52,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeMenu(SEARCH)
         }
         binding.setting setOnDebounceClickListener {
-            goToSetting()
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -133,13 +132,6 @@ class MainActivity : AppCompatActivity() {
             HOME -> super.onBackPressed()
             CALENDAR -> viewModel.changeMenu(HOME)
             else -> viewModel.changeMenu(viewModel.menuBeforeNavigateSearch.value!!)
-        }
-    }
-
-    private fun goToSetting(){
-        binding.setting.setOnDebounceClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
-            startActivity(intent)
         }
     }
 }

@@ -20,10 +20,13 @@
 
     <ImageButton
         android:id="@+id/exit_inquire_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="31.5dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
         android:src="@drawable/abc_vector_test"
+        android:tint="?attr/colorControlNormal"
         app:layout_constraintBottom_toTopOf="@id/inquire_txt2"
         app:layout_constraintStart_toStartOf="@id/inquire_txt2" />
 
