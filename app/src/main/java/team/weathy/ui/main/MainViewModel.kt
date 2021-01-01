@@ -6,13 +6,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
 class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    private val _menuIndex: MutableLiveData<Int> = MutableLiveData(0)
-    val menuIndex: LiveData<Int> = _menuIndex
+    private val _menu: MutableLiveData<MainMenu> = MutableLiveData(MainMenu.HOME)
+    val menu: LiveData<MainMenu> = _menu
 
-    fun changeMenu(index: Int) {
-        _menuIndex.value = index
+    fun changeMenu(menu: MainMenu) {
+        if (_menu.value != menu) _menu.value = menu
     }
 
     private val _loadingCalendar = MutableLiveData(false)
-    val loadingCalendar : LiveData<Boolean> = _loadingCalendar
+    val loadingCalendar: LiveData<Boolean> = _loadingCalendar
 }
