@@ -76,6 +76,8 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 dependencies {

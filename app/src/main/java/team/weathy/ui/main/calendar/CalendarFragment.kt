@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
+import kotlin.random.Random
 
 class CalendarFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
@@ -19,6 +20,10 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = mainViewModel
-//        binding.container.startLayoutAnimation()
+        //        binding.container.startLayoutAnimation()
+
+        binding.date.setOnClickListener {
+            binding.calendarView.today = Random.nextInt(1, 35)
+        }
     }
 }

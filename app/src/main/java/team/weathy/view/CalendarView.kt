@@ -35,6 +35,7 @@ import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
+import team.weathy.util.debugE
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -45,9 +46,11 @@ import team.weathy.util.extensions.screenHeight
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
 
-    private val today by OnChangeProp(10) {
+    var today by OnChangeProp(1) {
+        lineIndexIncludesToday = (it - 1) / 7
         updateUIWithToday()
     }
+    private var lineIndexIncludesToday = 0
 
     private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
     private var animValue by OnChangeProp(0f) {
@@ -112,6 +115,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val calendarItems = (0..34).map {
         ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.id = ViewCompat.generateViewId()
+
             day.text = (it + 1).toString()
         }
     }
@@ -129,6 +133,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addViews()
         configureTouch()
         updateUIWithToday()
+        isSaveEnabled = true
     }
 
     private fun initContainer() {
@@ -218,8 +223,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val isToday = idx + 1 == today
             binding.circleSmall.isVisible = isToday
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
+            binding.dayFirstLine.setTextColor(getDayTextColor(idx % 7, isIncludedInTodayWeek(idx)))
+            binding.dayFirstLine.text = (idx % 7 + 1 + lineIndexIncludesToday * 7).toString()
         }
     }
+
 
     private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, includeToday: Boolean = false): Int {
         val weekColor = getColorFromWeek(week)
@@ -342,10 +350,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             binding.tempLow.alpha = animValue
             binding.circle.alpha = 1 - animValue
 
-            binding.day.setTextSize(TypedValue.COMPLEX_UNIT_DIP, MathUtils.lerp(18f, 16f, animValue))
-            binding.day.updateLayoutParams<LayoutParams> {
-                topMargin = MathUtils.lerp(5.dpFloat, 18.dpFloat, animValue).toInt()
+            listOf(binding.day, binding.dayFirstLine).forEach {
+                it.setTextSize(TypedValue.COMPLEX_UNIT_DIP, MathUtils.lerp(18f, 16f, animValue))
+                it.updateLayoutParams<LayoutParams> {
+                    topMargin = MathUtils.lerp(5.dpFloat, 18.dpFloat, animValue).toInt()
+                }
             }
+
+            binding.day.alpha = animValue
+            binding.dayFirstLine.alpha = 1 - animValue
         }
 
         val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
@@ -354,9 +367,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
 
+        debugE(today)
         val itemToday = calendarItems[today - 1]
         itemToday.run {
             circleSmall.alpha = animValue
+            circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
+            circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
         }
     }
 
