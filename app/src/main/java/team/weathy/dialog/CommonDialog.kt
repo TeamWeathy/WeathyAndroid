@@ -36,7 +36,7 @@ class CommonDialog : DialogFragment() {
     private val showCancel: Boolean
         get() = arguments?.getBoolean("showCancel") ?: false
     private val clickListener: ClickListener?
-        get() = (parentFragment as? ClickListener) ?: (activity as? ClickListener)
+        get() = if (parentFragment == null) (activity as? ClickListener) else (parentFragment as? ClickListener)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         DialogCommonBinding.inflate(inflater, container, false).also {
