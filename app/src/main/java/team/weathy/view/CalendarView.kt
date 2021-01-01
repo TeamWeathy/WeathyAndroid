@@ -19,10 +19,13 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
@@ -33,6 +36,7 @@ import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
+import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
@@ -40,6 +44,16 @@ import team.weathy.util.extensions.screenHeight
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
+
+    private val today by OnChangeProp(10) {
+        updateUIWithToday()
+    }
+
+    private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
+    private var animValue by OnChangeProp(0f) {
+        adjustUIsWithAnimValue()
+    }
+
 
     private val collapsed
         get() = px(MIN_HEIGHT_DP)
@@ -67,18 +81,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         orientation = LinearLayout.HORIZONTAL
         weightSum = 7f
     }
-    private val weekTextGenerator: (text: String) -> View = { text ->
+    private val weekTexts = (0..6).map {
         TextView(context).apply {
             id = ViewCompat.generateViewId()
             textSize = 13f
-            setTextColor(
-                when (text) {
-                    "토" -> getColor(R.color.blue_temp)
-                    "일" -> getColor(R.color.red_temp)
-                    else -> getColor(R.color.main_grey)
-                }
-            )
-            setText(text)
+            text = listOf("월", "화", "수", "목", "금", "토", "일")[it]
             gravity = Gravity.CENTER
         }
     }
@@ -102,31 +109,26 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private val calendarItems = (1..35).map {
+    private val calendarItems = (0..34).map {
         ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.id = ViewCompat.generateViewId()
-            day.setTextColor(
-                getColor(
-                    when ((it - 1) % 7) {
-                        5 -> R.color.blue_temp
-                        6 -> R.color.red_temp
-                        else -> R.color.main_grey
-                    }
-                )
-            )
-            day.text = it.toString()
+            day.text = (it + 1).toString()
         }
     }
 
-
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
+    }
+    private val weekCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.main_mint)
+        setShadowLayer(12f, 0f, 0f, getColor(R.color.main_mint))
     }
 
     init {
         initContainer()
         addViews()
         configureTouch()
+        updateUIWithToday()
     }
 
     private fun initContainer() {
@@ -173,9 +175,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToBottom = topDivider.id
             topMargin = px(20)
         }
-        listOf("월", "화", "수", "목", "금", "토", "일").forEach {
+
+        weekTexts.forEach {
             addView(
-                weekTextGenerator(it), LinearLayout.LayoutParams(
+                it, LinearLayout.LayoutParams(
                     MATCH_PARENT, WRAP_CONTENT, 1f
                 )
             )
@@ -206,6 +209,39 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
+    private fun updateUIWithToday() {
+        weekTexts.forEachIndexed { idx, textView ->
+            textView.setTextColor(getWeekTextColor(idx, isIncludedInTodayWeek(idx)))
+        }
+
+        calendarItems.forEachIndexed { idx, binding ->
+            val isToday = idx + 1 == today
+            binding.circleSmall.isVisible = isToday
+            binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
+        }
+    }
+
+    private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, includeToday: Boolean = false): Int {
+        val weekColor = getColorFromWeek(week)
+        if (!includeToday) return weekColor
+
+        return ColorUtils.blendARGB(Color.WHITE, weekColor, animValue.clamp(0f, 1f))
+    }
+
+    private fun getDayTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
+        if (isToday) return Color.WHITE
+
+        return getColorFromWeek(week)
+    }
+
+    private fun getColorFromWeek(@IntRange(from = 0L, to = 6L) week: Int) = getColor(
+        when (week % 7) {
+            5 -> R.color.blue_temp
+            6 -> R.color.red_temp
+            else -> R.color.main_grey
+        }
+    )
+
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawRoundRect(
@@ -215,11 +251,30 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             height - pxFloat(11),
             pxFloat(10),
             pxFloat(10),
-            notchPaint
+            notchPaint,
+        )
+
+        val widthWithoutPadding = width - paddingHorizontal * 2f
+        val rawWidth = widthWithoutPadding / 7f
+        val maxWidth = pxFloat(42)
+        val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
+        val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
+        val capsuleHeight = pxFloat(64)
+        val capsuleLeft = paddingHorizontal + capsuleLeftPadding + ((today - 1) % 7) * rawWidth
+        val capsuleWidthRadius = capsuleWidth / 2f
+
+        canvas.drawRoundRect(
+            capsuleLeft,
+            pxFloat(72),
+            capsuleLeft + capsuleWidth,
+            pxFloat(72) + capsuleHeight,
+            capsuleWidthRadius,
+            capsuleWidthRadius,
+            weekCapsulePaint,
         )
     }
 
-    private var animValue by OnChangeProp(0f, this::applyAnimsWithAnimValue)
+
 
     private var velocityTracker: VelocityTracker? = null
     private var startFromCollasped = true
@@ -247,8 +302,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     }
 
                     val curHeight = event.y
-                    animValue =
-                        androidx.core.math.MathUtils.clamp((curHeight - collapsed) / (expanded - collapsed), 0f, 1.2f)
+                    animValue = ((curHeight - collapsed) / (expanded - collapsed)).clamp(0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP -> {
                     startFromCollasped = if (velocityTracker!!.yVelocity > 0) {
@@ -265,20 +319,28 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun applyAnimsWithAnimValue(animValue: Float) {
-        updateHeight(animValue)
-        adjustCalendarItemsWithAnimValue(animValue)
+    private fun adjustUIsWithAnimValue() {
+        adjustHeight()
+        adjustWeekTexts()
+        adjustCalendarItems()
+        adjustWeekCapsulePaintOpacity()
     }
 
-    private fun updateHeight(animValue: Float) = updateLayoutParams<ViewGroup.LayoutParams> {
+    private fun adjustHeight() = updateLayoutParams<ViewGroup.LayoutParams> {
         height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), animValue).toInt()
     }
 
-    private fun adjustCalendarItemsWithAnimValue(value: Float) {
+    private fun adjustWeekTexts() {
+        weekTexts.forEachIndexed { idx, textView ->
+            textView.setTextColor(getWeekTextColor(idx, isIncludedInTodayWeek(idx)))
+        }
+    }
+
+    private fun adjustCalendarItems() {
         calendarItems.forEach { binding ->
-            binding.tempHigh.alpha = value
-            binding.tempLow.alpha = value
-            binding.circle.alpha = 1 - value
+            binding.tempHigh.alpha = animValue
+            binding.tempLow.alpha = animValue
+            binding.circle.alpha = 1 - animValue
 
             binding.day.setTextSize(TypedValue.COMPLEX_UNIT_DIP, MathUtils.lerp(18f, 16f, animValue))
             binding.day.updateLayoutParams<LayoutParams> {
@@ -288,9 +350,18 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
         itemsExceptFirstLine.forEachIndexed { index, binding ->
-            binding.root.alpha = value
-            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, value)
+            binding.root.alpha = animValue
+            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
+
+        val itemToday = calendarItems[today - 1]
+        itemToday.run {
+            circleSmall.alpha = animValue
+        }
+    }
+
+    private fun adjustWeekCapsulePaintOpacity() {
+        weekCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
 
     private fun collapse() {

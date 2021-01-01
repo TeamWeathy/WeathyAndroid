@@ -9,6 +9,18 @@
     tools:layout_height="104dp"
     tools:layout_width="80dp">
 
+    <View
+        android:id="@+id/circle_small"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:alpha="0"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
+        app:layout_constraintBottom_toBottomOf="@id/day"
+        app:layout_constraintLeft_toLeftOf="@id/day"
+        app:layout_constraintRight_toRightOf="@id/day"
+        app:layout_constraintTop_toTopOf="@id/day"
+        tools:alpha="0.5" />
 
     <TextView
         android:layout_marginTop="5dp"
