@@ -25,6 +25,7 @@ class RecordDetailFragment : Fragment() {
 
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
+            binding.etDetail.clearFocus()
         }
     }
 
