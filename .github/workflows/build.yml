@@ -22,13 +22,21 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Build Release
+        if: ${{ contains(github.ref, 'main') }}
         run: ./gradlew assembleRelease
+
+      - name: Build Debug
+        if: ${{ !contains(github.ref, 'main') }}
+        run: ./gradlew assembleDebug
+
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           path: app/build/outputs
-      - name: Update apk name
+      - name: Update Release apk name
+        if: ${{ success() && contains(github.ref, 'main') }}
         run: |
           mv app/build/outputs/apk/release/app-release.apk 웨디-릴리즈.apk
           echo 'apk=웨디-릴리즈.apk' >> $GITHUB_ENV
@@ -53,7 +61,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ANDROID }}
-          SLACK_TITLE: '안드로이드 릴리즈 빌드 실패 ❌'
+          SLACK_TITLE: '안드로이드 빌드 실패 ❌'
           MSG_MINIMAL: false
           SLACK_MESSAGE: '에러를 확인해주세요'
 
