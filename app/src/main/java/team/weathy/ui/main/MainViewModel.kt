@@ -12,4 +12,7 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun changeMenu(index: Int) {
         _menuIndex.value = index
     }
+
+    private val _loadingCalendar = MutableLiveData(false)
+    val loadingCalendar : LiveData<Boolean> = _loadingCalendar
 }

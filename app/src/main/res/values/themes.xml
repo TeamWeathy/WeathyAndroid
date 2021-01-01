@@ -65,4 +65,12 @@
         <item name="android:textColor">@color/sub_grey_6</item>
     </style>
 
+    <style name="ImageButton">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
 </resources>
