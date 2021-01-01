@@ -1,12 +1,17 @@
 package team.weathy.ui.record.review
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import team.weathy.R
 import team.weathy.databinding.FragmentRecordReviewBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.setOnDebounceClickListener
+import team.weathy.view.WeathyCardView
 
 class RecordReviewFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordReviewBinding>()
@@ -15,6 +20,36 @@ class RecordReviewFragment : Fragment() {
         FragmentRecordReviewBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val cvReview = arrayOf(binding.cvReview, binding.cvReview2, binding.cvReview3, binding.cvReview4, binding.cvReview5)
 
+        for (i in cvReview.indices)
+            setReviewClickListener(cvReview, i, binding.btnCheck)
+    }
+
+    private fun setReviewClickListener(cvReview: kotlin.Array<WeathyCardView>, position: Int, button: Button) {
+        cvReview[position] setOnDebounceClickListener {
+            setBackgroundEnableListener(cvReview[position])
+            setButtonEnableListener(button)
+            for (i in cvReview.indices)
+                if (i != position)
+                    setBackgroundDisableListener(cvReview[i])
+        }
+    }
+
+    private fun setBackgroundEnableListener(cvReview:WeathyCardView ) {
+        cvReview.disableShadow = false
+        cvReview.shadowColor = resources.getColor(R.color.main_mint_shadow)
+        cvReview.strokeColor = resources.getColor(R.color.main_mint)
+    }
+
+    @SuppressLint("ResourceType")
+    private fun setButtonEnableListener(button: Button) {
+        button.setBackgroundColor(resources.getColor(R.color.main_mint))
+        button.isEnabled
+    }
+
+    private fun setBackgroundDisableListener(cvReview: WeathyCardView) {
+        cvReview.disableShadow = true
+        cvReview.strokeColor = resources.getColor(R.color.sub_grey_7)
     }
 }
