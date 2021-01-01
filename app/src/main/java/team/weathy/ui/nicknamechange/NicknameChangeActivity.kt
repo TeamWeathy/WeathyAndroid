@@ -1,7 +1,6 @@
 package team.weathy.ui.nicknamechange
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,8 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
-import team.weathy.ui.inquire.InquireActivity
-import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -93,8 +90,7 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun exitNicknameChange() {
         binding.exitNicknameChangeBtn.setOnDebounceClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 }
