@@ -6,6 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
+
+    <ImageButton
+        android:id="@+id/setting"
+        style="@style/ImageButton"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp"
+        android:src="@drawable/logo512"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/search"
+        style="@style/ImageButton"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/logo512"
+        app:layout_constraintBottom_toBottomOf="@id/setting"
+        app:layout_constraintRight_toLeftOf="@id/setting"
+        app:layout_constraintTop_toTopOf="@id/setting" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
