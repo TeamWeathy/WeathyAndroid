@@ -35,7 +35,6 @@ import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.debugE
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -367,7 +366,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
 
-        debugE(today)
         val itemToday = calendarItems[today - 1]
         itemToday.run {
             circleSmall.alpha = animValue
