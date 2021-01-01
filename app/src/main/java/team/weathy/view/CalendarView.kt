@@ -34,6 +34,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
+import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
@@ -298,19 +299,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun collapse() = runSpringAnimation(animValue, 0f)
-    private fun expand() = runSpringAnimation(animValue, 1f)
+    private fun collapse() = AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
+        animValue = it
+    }
 
-    private fun runSpringAnimation(startValue: Float, finalValue: Float, multiplier: Float = 500f) {
-        SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(startValue * multiplier)
-            spring = SpringForce(finalValue * multiplier).apply {
-                stiffness = STIFFNESS_LOW
-            }
-            addUpdateListener { _, value, _ ->
-                animValue = value / multiplier
-            }
-        }.start()
+    private fun expand() = AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
+        animValue = it
     }
 
     companion object {
