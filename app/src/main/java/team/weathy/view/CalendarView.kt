@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.buildSpannedString
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.dynamicanimation.animation.FloatValueHolder
