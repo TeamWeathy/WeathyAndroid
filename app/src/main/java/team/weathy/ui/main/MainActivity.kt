@@ -131,7 +131,8 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         when (viewModel.menu.value) {
             HOME -> super.onBackPressed()
-            else -> viewModel.changeMenu(HOME)
+            CALENDAR -> viewModel.changeMenu(HOME)
+            else -> viewModel.changeMenu(viewModel.menuBeforeNavigateSearch.value!!)
         }
     }
 
