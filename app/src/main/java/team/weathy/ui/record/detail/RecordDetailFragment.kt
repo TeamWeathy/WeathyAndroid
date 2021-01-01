@@ -21,7 +21,7 @@ class RecordDetailFragment : Fragment() {
         FragmentRecordDetailBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.etDetail.addTextChangedListener((textWatcher))
+        binding.etDetail.addTextChangedListener(textWatcher)
 
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
