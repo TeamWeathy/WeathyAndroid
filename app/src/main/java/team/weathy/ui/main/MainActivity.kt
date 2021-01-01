@@ -7,13 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.observe
 import team.weathy.databinding.ActivityMainBinding
-import team.weathy.ui.main.MainMenu.CALENDAR
-import team.weathy.ui.main.MainMenu.HOME
-import team.weathy.ui.main.MainMenu.SEARCH
+import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.HomeFragment
 import team.weathy.ui.main.search.SearchFragment
-import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.extensions.addFragment
 import team.weathy.util.extensions.replaceFragment
@@ -48,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             navigateSearch()
         }
         binding.setting setOnDebounceClickListener {
-            goToSetting()
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -85,13 +83,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         } else {
             viewModel.changeMenu(HOME)
-        }
-    }
-
-    private fun goToSetting(){
-        binding.setting.setOnDebounceClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
-            startActivity(intent)
         }
     }
 }
