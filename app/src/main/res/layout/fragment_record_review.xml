@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingHorizontal="33dp"
+    android:clipToPadding="false">
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:text="날씨"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="는 어땠나요?"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintStart_toEndOf="@id/tv_title"/>
+
+    <TextView
+        style="@style/RecordSubText"
+        android:id="@+id/tv_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="오늘 옷차림에 대한 느낌을 선택해주세요."
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="@id/tv_title"/>
+
+    <ListView
+        android:id="@+id/list_review"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:divider="#00000000"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub"
+        app:layout_constraintBottom_toTopOf="@id/btn_check"
+        tools:listitem="@layout/item_record_review"/>
+
+    <Button
+        style="@style/RoundButton"
+        android:id="@+id/btn_check"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="38dp"
+        android:text="다음"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
