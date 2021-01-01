@@ -24,10 +24,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
-import androidx.dynamicanimation.animation.FloatValueHolder
-import androidx.dynamicanimation.animation.SpringAnimation
-import androidx.dynamicanimation.animation.SpringForce
-import androidx.dynamicanimation.animation.SpringForce.STIFFNESS_LOW
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -263,13 +259,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         true
                     }
                     movedY = 0f
-
                 }
             }
             true
         }
     }
-
 
     private fun applyAnimsWithAnimValue(animValue: Float) {
         updateHeight(animValue)
@@ -299,12 +293,32 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun collapse() = AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
-        animValue = it
+    private fun collapse() {
+        disableScroll()
+        scrollToTop()
+        AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
+            animValue = it
+        }
     }
 
-    private fun expand() = AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
-        animValue = it
+    private fun expand() {
+        enableScroll()
+        scrollToTop()
+        AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
+            animValue = it
+        }
+    }
+
+    private fun disableScroll() {
+        scrollView.setOnTouchListener { _, _ -> true }
+    }
+
+    private fun enableScroll() {
+        scrollView.setOnTouchListener(null)
+    }
+
+    private fun scrollToTop() {
+        scrollView.smoothScrollTo(0, 0)
     }
 
     companion object {
