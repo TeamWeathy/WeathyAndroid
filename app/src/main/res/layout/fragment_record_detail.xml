@@ -1,6 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="33dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:text="등록이 완료"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="되었어요!"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintStart_toEndOf="@id/tv_title"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="더 추가할 내용이 있나요?"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="@id/tv_title"/>
+
+    <TextView
+        style="@style/RecordSubText"
+        android:id="@+id/tv_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:text="무엇을 적든, 웨디는 다시 돌아와요."
+        app:layout_constraintTop_toBottomOf="@id/tv_title3"
+        app:layout_constraintStart_toStartOf="@id/tv_title3"/>
+
+    <EditText
+        android:id="@+id/et_detail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="63dp"
+        app:layout_constraintDimensionRatio="309:131"
+        android:paddingHorizontal="22dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="21dp"
+        android:includeFontPadding="false"
+        android:background="@drawable/et_record_detail"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:hint="예 : 오늘은 바람이 많이 불었어."
+        android:maxLength="100"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_text_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="/100"
+        android:textColor="@color/sub_grey_6"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/et_detail"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_text_length2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/sub_grey_6"
+        android:textSize="13sp"
+        app:layout_constraintTop_toTopOf="@id/tv_text_length"
+        app:layout_constraintEnd_toStartOf="@id/tv_text_length"/>
+
+    <Button
+        style="@style/RoundButton.Mint"
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="38dp"
+        android:text="완료"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

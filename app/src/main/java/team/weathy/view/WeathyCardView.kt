@@ -19,19 +19,19 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
     FrameLayout(context, attrs) {
     private val defaultShadowColor = Color.BLACK
 
-    private var radius by OnChangeProp(35.dpFloat) {
+    var radius by OnChangeProp(35.dpFloat) {
         updateUI()
     }
-    private var shadowColor by OnChangeProp(defaultShadowColor) {
+    var shadowColor by OnChangeProp(defaultShadowColor) {
         updateUI()
     }
-    private var disableShadow by OnChangeProp(false) {
+    var disableShadow by OnChangeProp(false) {
         updateUI()
     }
-    private var strokeColor by OnChangeProp(Color.TRANSPARENT) {
+    var strokeColor by OnChangeProp(Color.TRANSPARENT) {
         updateUI()
     }
-    private var strokeWidth by OnChangeProp(0f) {
+    var strokeWidth by OnChangeProp(0f) {
         updateUI()
     }
 
@@ -43,7 +43,7 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         updateUI()
     }
 
-    private fun getStyleableAttrs(attr: AttributeSet) {
+    fun getStyleableAttrs(attr: AttributeSet) {
         context.theme.obtainStyledAttributes(attr, R.styleable.WeathyCardView, 0, 0).use { arr ->
             radius = arr.getDimension(R.styleable.WeathyCardView_weathy_radius, 35.dpFloat)
             shadowColor = arr.getColor(R.styleable.WeathyCardView_weathy_shadow_color, defaultShadowColor)

@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="33dp"
+    android:clipToPadding="false"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:text="오늘의 "
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="웨디"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintStart_toEndOf="@id/tv_title"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="를"
+        app:layout_constraintTop_toTopOf="@id/tv_title2"
+        app:layout_constraintStart_toEndOf="@id/tv_title2"/>
+
+    <TextView
+        style="@style/RecordTitleText"
+        android:id="@+id/tv_title4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="기록해 볼까요?"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="@id/tv_title"/>
+
+    <TextView
+        style="@style/RecordSubText"
+        android:id="@+id/tv_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:text="기록할 위치와 날씨를 확인해 주세요."
+        app:layout_constraintTop_toBottomOf="@id/tv_title4"
+        app:layout_constraintStart_toStartOf="@id/tv_title4"/>
+
+    <team.weathy.view.WeathyCardView
+        android:id="@+id/cv_record"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        android:layout_marginTop="63dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub"
+        app:weathy_disable_shadow="true"
+        app:weathy_stroke_width="1dp"
+        app:weathy_stroke_color="#E6E6E6">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginStart="25dp"
+                android:text="00월 00일 일요일"
+                android:textSize="15sp"
+                android:textColor="@color/sub_grey_1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오후 0시"
+                android:textColor="@color/sub_grey_1"
+                android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="@id/tv_date"
+                app:layout_constraintStart_toEndOf="@id/tv_date"/>
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="서울 서초구"
+                android:textSize="17sp"
+                android:textColor="@color/main_grey"
+                app:layout_constraintTop_toBottomOf="@id/tv_date"
+                app:layout_constraintStart_toStartOf="@id/tv_date"/>
+
+            <TextView
+                android:id="@+id/tv_current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="64dp"
+                android:layout_marginTop="78dp"
+                android:layout_marginEnd="88dp"
+                android:text="-2"
+                android:textSize="60sp"
+                android:textColor="@color/sub_grey_1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_high_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="27dp"
+                android:layout_marginStart="10dp"
+                android:text="4"
+                android:textSize="25sp"
+                android:textColor="@color/red_temp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_current_temp"
+                app:layout_constraintStart_toEndOf="@id/tv_current_temp"/>
+
+            <TextView
+                android:id="@+id/tv_low_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="27dp"
+                android:layout_marginStart="10dp"
+                android:text="-4"
+                android:textSize="25sp"
+                android:textColor="@color/blue_temp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_high_temp"
+                app:layout_constraintStart_toEndOf="@id/tv_high_temp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </team.weathy.view.WeathyCardView>
+
+    <Button
+        style="@style/RoundButton.Change"
+        android:id="@+id/btn_change"
+        android:layout_width="79dp"
+        android:layout_marginTop="16dp"
+        android:text="변경하기"
+        app:layout_constraintTop_toBottomOf="@id/cv_record"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        style="@style/RoundButton.Mint"
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="38dp"
+        android:text="기록 시작하기"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

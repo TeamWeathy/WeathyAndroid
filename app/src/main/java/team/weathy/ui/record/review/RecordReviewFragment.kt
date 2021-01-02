@@ -1,4 +1,4 @@
-package team.weathy.ui.record.review
+package team.weathy.ui.record.weatherrating
 
 import android.os.Bundle
 import android.view.LayoutInflater
