@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivityRecordBinding
+import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
 import team.weathy.ui.record.detail.RecordDetailFragment
 import team.weathy.ui.record.locationchange.RecordLocationChangeFragment
 import team.weathy.ui.record.start.RecordStartFragment
+import team.weathy.ui.record.weatherrating.RecordWeatherRatingFragment
 import team.weathy.util.extensions.addFragment
 import team.weathy.util.extensions.replaceFragment
 
@@ -29,6 +31,10 @@ class RecordActivity : AppCompatActivity() {
         addFragment(binding.fragmentContainer, RecordLocationChangeFragment::class.java)
 
     fun navigateStartToClothesSelect() = addFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java)
+
+    fun navigateClothesSelectToClothesDelete() = addFragment(binding.fragmentContainer, RecordClothesDeleteFragment::class.java)
+
+    fun navigateClothesSelectToWeatherRating() = addFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java)
 
     fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
 }
