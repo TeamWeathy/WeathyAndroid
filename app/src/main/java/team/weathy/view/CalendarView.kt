@@ -87,7 +87,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         TextView(context).apply {
             id = ViewCompat.generateViewId()
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13f)
-            text = listOf("월", "화", "수", "목", "금", "토", "일")[it]
+            text = listOf("일", "월", "화", "수", "목", "금", "토")[it]
             gravity = Gravity.CENTER
         }
     }
@@ -243,8 +243,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun getColorFromWeek(@IntRange(from = 0L, to = 6L) week: Int) = getColor(
         when (week % 7) {
-            5 -> R.color.blue_temp
-            6 -> R.color.red_temp
+            6 -> R.color.blue_temp
+            0 -> R.color.red_temp
             else -> R.color.main_grey
         }
     )
