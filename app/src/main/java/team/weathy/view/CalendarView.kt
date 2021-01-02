@@ -92,11 +92,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             gravity = Gravity.CENTER
         }
     }
-    private val scrollView = ScrollView(context).apply {
-        id = ViewCompat.generateViewId()
-        overScrollMode = ScrollView.OVER_SCROLL_NEVER
-        isVerticalScrollBarEnabled = false
-    }
+    private val scrollView = MonthlyView(context)
     private val outerLinearLayout = LinearLayout(context).apply {
         id = ViewCompat.generateViewId()
         orientation = LinearLayout.VERTICAL
