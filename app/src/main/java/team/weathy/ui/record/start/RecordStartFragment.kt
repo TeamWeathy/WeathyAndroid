@@ -19,10 +19,10 @@ class RecordStartFragment : Fragment() {
         FragmentRecordStartBinding.inflate(layoutInflater, container, false).also {
             binding = it
             it.btnChange setOnDebounceClickListener {
-                (activity as RecordActivity).replaceFragment(RecordLocationChangeFragment())
+                (activity as? RecordActivity)?.navigateStartToLocationChange()
             }
             it.btnStart setOnDebounceClickListener {
-                (activity as RecordActivity).replaceFragment(RecordClothesSelectFragment())
+                (activity as? RecordActivity)?.navigateStartToClothesSelect()
             }
         }.root
 

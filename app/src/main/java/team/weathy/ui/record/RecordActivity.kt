@@ -2,10 +2,13 @@ package team.weathy.ui.record
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import team.weathy.databinding.ActivityRecordBinding
+import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
+import team.weathy.ui.record.detail.RecordDetailFragment
+import team.weathy.ui.record.locationchange.RecordLocationChangeFragment
 import team.weathy.ui.record.start.RecordStartFragment
+import team.weathy.util.extensions.addFragment
+import team.weathy.util.extensions.replaceFragment
 
 class RecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecordBinding
@@ -16,19 +19,13 @@ class RecordActivity : AppCompatActivity() {
         binding = ActivityRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction.replace(binding.root.id, RecordStartFragment(), "record").commit()
+        replaceFragment(binding.fragmentContainer, RecordStartFragment::class.java)
     }
 
-    fun replaceFragment(fragment : Fragment){
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.replace(binding.root.id, fragment, "record").commit()
-    }
+    fun navigateStartToLocationChange() =
+        addFragment(binding.fragmentContainer, RecordLocationChangeFragment::class.java)
 
-    fun finishFragment(fragment : Fragment){
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction.remove(fragment).commit()
-        supportFragmentManager.popBackStack()
-    }
+    fun navigateStartToClothesSelect() = addFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java)
+
+    fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
 }

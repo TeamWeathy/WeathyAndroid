@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
 import team.weathy.ui.record.RecordActivity
-import team.weathy.ui.record.detail.RecordDetailFragment
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
@@ -28,7 +27,7 @@ class RecordWeatherRatingFragment : Fragment() {
             setReviewClickListener(cvReview, i, binding.btnCheck)
 
         binding.btnCheck setOnDebounceClickListener {
-            (activity as RecordActivity).replaceFragment(RecordDetailFragment())
+            (activity as? RecordActivity)?.navigateWeatherRatingToDetail()
         }
     }
 
