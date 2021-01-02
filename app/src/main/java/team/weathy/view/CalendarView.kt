@@ -9,7 +9,6 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
@@ -17,7 +16,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,18 +23,14 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.dynamicanimation.animation.SpringAnimation
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
-import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -47,16 +41,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     ConstraintLayout(context, attrs) {
 
     var today by OnChangeProp(1) {
-        lineIndexIncludesToday = (it - 1) / 7
         updateUIWithToday()
+        monthlyView.today = it
     }
-    private var lineIndexIncludesToday = 0
 
     private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
     private var animValue by OnChangeProp(0f) {
         adjustUIsWithAnimValue()
+        monthlyView.animValue = it
     }
-
 
     private val collapsed
         get() = px(MIN_HEIGHT_DP)
@@ -92,29 +85,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             gravity = Gravity.CENTER
         }
     }
-    private val scrollView = MonthlyView(context)
-    private val outerLinearLayout = LinearLayout(context).apply {
-        id = ViewCompat.generateViewId()
-        orientation = LinearLayout.VERTICAL
-        weightSum = 5f
-        setBackgroundColor(Color.TRANSPARENT)
-    }
-    private val innerLinearLayout = (1..5).map {
-        LinearLayout(context).apply {
-            id = ViewCompat.generateViewId()
-            orientation = LinearLayout.HORIZONTAL
-            weightSum = 7f
-            setBackgroundColor(Color.TRANSPARENT)
-        }
-    }
-
-    private val calendarItems = (0..34).map {
-        ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
-            root.id = ViewCompat.generateViewId()
-
-            day.text = (it + 1).toString()
-        }
-    }
+    private val monthlyView = MonthlyView(context)
 
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
@@ -128,9 +99,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         initContainer()
         addViews()
         configureExpandGestureHandling()
-        configureFlingGestureHandling()
         updateUIWithToday()
-        isSaveEnabled = true
     }
 
     private fun initContainer() {
@@ -149,7 +118,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addDateText()
         addWeekLayoutAndWeekTexts(addTopDivider())
         addScrollView(weekTextLayout)
-        addCalendarItems()
     }
 
     private fun addDateText() {
@@ -188,40 +156,17 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun addScrollView(weekLayout: View) {
-        addView(scrollView, LayoutParams(MATCH_PARENT, 0))
-        scrollView.updateLayoutParams<LayoutParams> {
+        addView(monthlyView, LayoutParams(MATCH_PARENT, 0))
+        monthlyView.updateLayoutParams<LayoutParams> {
             topToBottom = weekLayout.id
             bottomToBottom = parentId
             bottomMargin = px(32)
         }
     }
 
-    private fun addCalendarItems() {
-        scrollView.addView(outerLinearLayout, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-
-        innerLinearLayout.forEachIndexed { index, inner ->
-            if (index != 0) outerLinearLayout.addView(
-                dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f)
-            )
-            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(102), 0f))
-
-            calendarItems.subList(index * 7, index * 7 + 7).forEach {
-                inner.addView(it.root, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT, 1f))
-            }
-        }
-    }
-
     private fun updateUIWithToday() {
         weekTexts.forEachIndexed { idx, textView ->
             textView.setTextColor(getWeekTextColor(idx, isIncludedInTodayWeek(idx)))
-        }
-
-        calendarItems.forEachIndexed { idx, binding ->
-            val isToday = idx + 1 == today
-            binding.circleSmall.isVisible = isToday
-            binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
-            binding.dayFirstLine.setTextColor(getDayTextColor(idx % 7, isIncludedInTodayWeek(idx)))
-            binding.dayFirstLine.text = (idx % 7 + 1 + lineIndexIncludesToday * 7).toString()
         }
     }
 
@@ -233,12 +178,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         return ColorUtils.blendARGB(Color.WHITE, weekColor, animValue.clamp(0f, 1f))
     }
 
-    private fun getDayTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
-        if (isToday) return Color.WHITE
-
-        return getColorFromWeek(week)
-    }
-
     private fun getColorFromWeek(@IntRange(from = 0L, to = 6L) week: Int) = getColor(
         when (week % 7) {
             6 -> R.color.blue_temp
@@ -246,7 +185,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             else -> R.color.main_grey
         }
     )
-
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawRoundRect(
@@ -321,54 +259,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private var offsetX = 0f
-    private var flingAnimation: SpringAnimation? = null
-
-    @SuppressLint("Recycle")
-    private fun configureFlingGestureHandling() {
-        outerLinearLayout.setOnTouchListener { v, event ->
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    flingAnimation?.cancel()
-
-                    offsetX = event.x
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val nextTranslationX = outerLinearLayout.translationX + (event.x - offsetX) / 3
-
-                    outerLinearLayout.translationX = nextTranslationX.clamp(
-                        -pxFloat(MAX_FLING_X_DP), pxFloat(
-                            MAX_FLING_X_DP
-                        )
-                    )
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    endFling()
-                    if (outerLinearLayout.translationX > pxFloat(MAX_FLING_X_DP) * 0.7) {
-                        changeMonthWithFling(true)
-                    } else if (outerLinearLayout.translationX < pxFloat(MAX_FLING_X_DP) * 0.7) {
-                        changeMonthWithFling(false)
-                    }
-                }
-            }
-            true
-        }
-    }
-
-    private fun changeMonthWithFling(toPrev: Boolean) {
-        //        debugE(toPrev)
-    }
-
-    private fun endFling() {
-        flingAnimation = AnimUtil.runSpringAnimation(outerLinearLayout.translationX, 0f, 1f) {
-            outerLinearLayout.translationX = it
-        }
-    }
-
     private fun adjustUIsWithAnimValue() {
         adjustHeight()
         adjustWeekTexts()
-        adjustCalendarItems()
         adjustWeekCapsulePaintOpacity()
     }
 
@@ -382,35 +275,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun adjustCalendarItems() {
-        calendarItems.forEach { binding ->
-            binding.tempHigh.alpha = animValue
-            binding.tempLow.alpha = animValue
-            binding.circle.alpha = 1 - animValue
 
-            listOf(binding.day, binding.dayFirstLine).forEach {
-                it.updateLayoutParams<LayoutParams> {
-                    topMargin = MathUtils.lerp(5.dpFloat, 15.dpFloat, animValue).toInt()
-                }
-            }
-
-            binding.day.alpha = animValue
-            binding.dayFirstLine.alpha = 1 - animValue
-        }
-
-        val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
-        itemsExceptFirstLine.forEachIndexed { index, binding ->
-            binding.root.alpha = animValue
-            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
-        }
-
-        val itemToday = calendarItems[today - 1]
-        itemToday.run {
-            circleSmall.alpha = animValue
-            circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
-            circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
-        }
-    }
 
     private fun adjustWeekCapsulePaintOpacity() {
         weekCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
@@ -433,15 +298,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun disableScroll() {
-        scrollView.setOnTouchListener { _, _ -> true }
+        monthlyView.setOnTouchListener { _, _ -> true }
     }
 
     private fun enableScroll() {
-        scrollView.setOnTouchListener(null)
+        monthlyView.setOnTouchListener(null)
     }
 
     private fun scrollToTop() {
-        scrollView.smoothScrollTo(0, 0)
+        monthlyView.smoothScrollTo(0, 0)
     }
 
     companion object {
