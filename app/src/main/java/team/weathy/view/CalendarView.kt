@@ -86,7 +86,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val weekTexts = (0..6).map {
         TextView(context).apply {
             id = ViewCompat.generateViewId()
-            textSize = 13f
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13f)
             text = listOf("월", "화", "수", "목", "금", "토", "일")[it]
             gravity = Gravity.CENTER
         }
@@ -350,7 +350,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             binding.circle.alpha = 1 - animValue
 
             listOf(binding.day, binding.dayFirstLine).forEach {
-                it.setTextSize(TypedValue.COMPLEX_UNIT_DIP, MathUtils.lerp(18f, 16f, animValue))
                 it.updateLayoutParams<LayoutParams> {
                     topMargin = MathUtils.lerp(5.dpFloat, 18.dpFloat, animValue).toInt()
                 }
