@@ -27,6 +27,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.dynamicanimation.animation.SpringAnimation
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -35,6 +36,7 @@ import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
+import team.weathy.util.debugE
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -130,7 +132,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     init {
         initContainer()
         addViews()
-        configureTouch()
+        configureExpandGestureHandling()
+        configureFlingGestureHandling()
         updateUIWithToday()
         isSaveEnabled = true
     }
@@ -282,47 +285,92 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
 
-
-    private var velocityTracker: VelocityTracker? = null
+    private var expandVelocityTracker: VelocityTracker? = null
     private var startFromCollasped = true
     private var offsetY = 0f
-    private var movedY = 0f
 
     @SuppressLint("Recycle")
-    private fun configureTouch() {
+    private fun configureExpandGestureHandling() {
         setOnTouchListener { view, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (event.y > view.height - px(30)) {
-                        velocityTracker?.clear()
-                        velocityTracker = velocityTracker ?: VelocityTracker.obtain()
-                        velocityTracker?.addMovement(event)
-                        offsetY = event.y
-                    } else {
+                    if (event.y <= view.height - px(30)) {
                         return@setOnTouchListener false
                     }
+
+                    expandVelocityTracker?.clear()
+                    expandVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
+                    expandVelocityTracker?.addMovement(event)
+
+                    offsetY = event.y
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    velocityTracker?.apply {
+                    expandVelocityTracker?.apply {
                         addMovement(event)
                         computeCurrentVelocity(1000)
                     }
 
-                    val curHeight = event.y
-                    animValue = ((curHeight - collapsed) / (expanded - collapsed)).clamp(0f, 1.2f)
+                    animValue = ((event.y - collapsed) / (expanded - collapsed)).clamp(0f, 1.2f)
                 }
-                MotionEvent.ACTION_UP -> {
-                    startFromCollasped = if (velocityTracker!!.yVelocity > 0) {
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    startFromCollasped = if (expandVelocityTracker!!.yVelocity > 0) {
                         expand()
                         false
                     } else {
                         collapse()
                         true
                     }
-                    movedY = 0f
                 }
             }
             true
+        }
+    }
+
+    private var flingVelocityTracker: VelocityTracker? = null
+    private var offsetX = 0f
+    private var flingAnimation: SpringAnimation? = null
+
+    @SuppressLint("Recycle")
+    private fun configureFlingGestureHandling() {
+        outerLinearLayout.setOnTouchListener { v, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    flingAnimation?.cancel()
+
+                    flingVelocityTracker?.clear()
+                    flingVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
+                    flingVelocityTracker?.addMovement(event)
+
+                    offsetX = event.x
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    flingVelocityTracker?.apply {
+                        addMovement(event)
+                        computeCurrentVelocity(1000)
+                    }
+
+                    outerLinearLayout.translationX += (event.x - offsetX) / 10
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    endFling()
+                    if (flingVelocityTracker!!.xVelocity > 100) {
+                        changeMonthWithFling(true)
+                    } else if (flingVelocityTracker!!.xVelocity < -100) {
+                        changeMonthWithFling(false)
+                    }
+                }
+            }
+            true
+        }
+    }
+
+    private fun changeMonthWithFling(toPrev: Boolean) {
+        debugE(toPrev)
+    }
+
+    private fun endFling() {
+        flingAnimation = AnimUtil.runSpringAnimation(outerLinearLayout.translationX, 0f, 1f) {
+            outerLinearLayout.translationX = it
         }
     }
 
