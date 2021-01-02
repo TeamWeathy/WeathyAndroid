@@ -66,16 +66,25 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
     }
-    private val dividerGenerator = {
-        View(context).apply {
-            id = ViewCompat.generateViewId()
-            setBackgroundColor(getColor(R.color.sub_grey_5))
+    private val topDivider = View(context).apply {
+        id = ViewCompat.generateViewId()
+        setBackgroundColor(getColor(R.color.sub_grey_5))
+
+        layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
+            topToBottom = dateText.id
+            topMargin = px(16)
         }
     }
+
     private val weekTextLayout = LinearLayout(context).apply {
         id = ViewCompat.generateViewId()
         orientation = LinearLayout.HORIZONTAL
         weightSum = 7f
+
+        layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+            topToBottom = topDivider.id
+            topMargin = px(20)
+        }
     }
     private val weekTexts = (0..6).map {
         TextView(context).apply {
@@ -83,16 +92,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13f)
             text = listOf("일", "월", "화", "수", "목", "금", "토")[it]
             gravity = Gravity.CENTER
+
+            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f)
         }
     }
-    private val monthlyView = MonthlyView(context)
-
-    private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = getColor(R.color.main_mint)
-    }
-    private val weekCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = getColor(R.color.main_mint)
-        setShadowLayer(12f, 0f, 0f, getColor(R.color.main_mint))
+    private val monthlyView = MonthlyView(context).apply {
+        layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+            topToBottom = weekTextLayout.id
+            bottomToBottom = parentId
+            bottomMargin = px(32)
+        }
     }
 
     init {
@@ -116,8 +125,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun addViews() {
         addDateText()
-        addWeekLayoutAndWeekTexts(addTopDivider())
-        addScrollView(weekTextLayout)
+        addTopDivider()
+        addWeekLayoutAndWeekTexts()
+        addMonthlyView()
     }
 
     private fun addDateText() {
@@ -130,46 +140,20 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun addTopDivider() = dividerGenerator().also {
-        addView(it, LayoutParams(MATCH_PARENT, px(1)))
-        it.updateLayoutParams<LayoutParams> {
-            topToBottom = dateText.id
-            topMargin = px(16)
-        }
+    private fun addTopDivider() = addView(topDivider)
+
+    private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
+        addView(layout)
+        weekTexts.forEach(layout::addView)
     }
 
-    private fun addWeekLayoutAndWeekTexts(topDivider: View) = weekTextLayout.run {
-        this@CalendarView.addView(this, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-
-        updateLayoutParams<LayoutParams> {
-            topToBottom = topDivider.id
-            topMargin = px(20)
-        }
-
-        weekTexts.forEach {
-            addView(
-                it, LinearLayout.LayoutParams(
-                    MATCH_PARENT, WRAP_CONTENT, 1f
-                )
-            )
-        }
-    }
-
-    private fun addScrollView(weekLayout: View) {
-        addView(monthlyView, LayoutParams(MATCH_PARENT, 0))
-        monthlyView.updateLayoutParams<LayoutParams> {
-            topToBottom = weekLayout.id
-            bottomToBottom = parentId
-            bottomMargin = px(32)
-        }
-    }
+    private fun addMonthlyView() = addView(monthlyView)
 
     private fun updateUIWithToday() {
         weekTexts.forEachIndexed { idx, textView ->
             textView.setTextColor(getWeekTextColor(idx, isIncludedInTodayWeek(idx)))
         }
     }
-
 
     private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, includeToday: Boolean = false): Int {
         val weekColor = getColorFromWeek(week)
@@ -186,6 +170,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     )
 
+
+    private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.main_mint)
+    }
+    private val weekCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.main_mint)
+        setShadowLayer(12f, 0f, 0f, getColor(R.color.main_mint))
+    }
     override fun onDraw(canvas: Canvas) {
         canvas.drawRoundRect(
             width / 2f - px(30),
@@ -275,8 +267,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-
     private fun adjustWeekCapsulePaintOpacity() {
         weekCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
@@ -313,6 +303,5 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 220
         private const val EXPAND_MARGIN_BOTTOM_DP = 120
-        private const val MAX_FLING_X_DP = 100
     }
 }
