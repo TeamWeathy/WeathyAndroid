@@ -9,15 +9,20 @@
     <color name="btn_unselected">#DADADA</color>
     <color name="btn_cancel_gray">#939393</color>
     <color name="text_high_temp">#D18C8B</color>
+    <color name="red_temp">#D18C8B</color>
+    <color name="blue_temp">#3B9BD1</color>
     <color name="sub_grey_1">#555555</color>
     <color name="sub_grey_3">#DADADA</color>
+    <color name="sub_grey_4">#CDCDCD</color>
     <color name="sub_grey_5">#F1F1F1</color>
     <color name="sub_grey_6">#939393</color>
     <color name="sub_grey_7">#E1E1E1</color>
     <color name="sub_grey_8">#AFAFAF</color>
     <color name="cursor">#B3C4C4C4</color>
-    <color name="blue_temp">#88AFD1</color>
-    <color name="red_temp">#D18C8B</color>
+    <color name="imoji_veryhot_text">#D26A63</color>
+    <color name="imoji_hot_text">#FF9C54</color>
+    <color name="imoji_good_text">#3AA391</color>
+    <color name="imoji_cold_text">#00A3FF</color>
     <color name="imoji_verycold_text">#967FD4</color>
-    <color name="imoji_verycold">#C5C5FF</color>
+    <color name="imoji_verycold">#967FD4</color>
 </resources>
