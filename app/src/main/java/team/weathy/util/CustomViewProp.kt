@@ -1,6 +1,8 @@
 package team.weathy.util
 
 import android.view.View
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlin.reflect.KProperty
 
 class OnChangeProp<T>(private var field: T, private val callback: (value: T) -> Unit) {
@@ -11,6 +13,22 @@ class OnChangeProp<T>(private var field: T, private val callback: (value: T) -> 
 
     operator fun getValue(thisRef: Any?, p: KProperty<*>): T {
         return field
+    }
+}
+
+class OnLiveDataProp<T>(initialValue: T, liveDataCallback: (liveData: LiveData<T>) -> Unit) {
+    private val liveData = MutableLiveData(initialValue)
+
+    init {
+        liveDataCallback(liveData)
+    }
+
+    operator fun setValue(thisRef: Any?, p: KProperty<*>, v: T) {
+        liveData.value = v
+    }
+
+    operator fun getValue(thisRef: Any?, p: KProperty<*>): T {
+        return liveData.value!!
     }
 }
 

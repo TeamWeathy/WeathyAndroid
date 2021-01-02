@@ -12,13 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.OnChangeProp
+import team.weathy.util.Once
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -36,12 +36,34 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     lateinit var animLiveData: LiveData<Float>
     private val animValue
         get() = animLiveData.value!!
+    lateinit var scrollEnabled: LiveData<Boolean>
+    lateinit var onScrollToTop: LiveData<Once<Unit>>
+
+    private val animValueObserver = Observer<Float> {
+        adjustUIsWithAnimValue()
+    }
+    private val scrollEnabledObserver = Observer<Boolean> {
+        if (it) enableScroll()
+        else disableScroll()
+    }
+    private val onScrollToTopObserver = Observer<Once<Unit>> {
+        scrollToTop()
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        animLiveData.observe(findFragment<Fragment>().viewLifecycleOwner) {
-            adjustUIsWithAnimValue()
-        }
+
+        animLiveData.observeForever(animValueObserver)
+        scrollEnabled.observeForever(scrollEnabledObserver)
+        onScrollToTop.observeForever(onScrollToTopObserver)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
+        animLiveData.removeObserver(animValueObserver)
+        scrollEnabled.removeObserver(scrollEnabledObserver)
+        onScrollToTop.removeObserver(onScrollToTopObserver)
     }
 
 
@@ -174,5 +196,17 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
             circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
         }
+    }
+
+    private fun disableScroll() {
+        setOnTouchListener { _, _ -> true }
+    }
+
+    private fun enableScroll() {
+        setOnTouchListener(null)
+    }
+
+    private fun scrollToTop() {
+        smoothScrollTo(0, 0)
     }
 }

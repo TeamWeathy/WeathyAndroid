@@ -7,12 +7,19 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import team.weathy.util.Once
 import team.weathy.view.calendar.MonthlyAdapter.MonthlyHolder
 
-class MonthlyAdapter(private val animLiveData: LiveData<Float>) : ListAdapter<Any, MonthlyHolder>(DIFF) {
+class MonthlyAdapter(
+    private val animLiveData: LiveData<Float>,
+    private val scrollEnabled: LiveData<Boolean>,
+    private val onScrollToTop: LiveData<Once<Unit>>
+) : ListAdapter<Any, MonthlyHolder>(DIFF) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthlyHolder {
         return MonthlyHolder(MonthlyView(parent.context).apply {
             animLiveData = this@MonthlyAdapter.animLiveData
+            scrollEnabled = this@MonthlyAdapter.scrollEnabled
+            onScrollToTop = this@MonthlyAdapter.onScrollToTop
             layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
         })
     }

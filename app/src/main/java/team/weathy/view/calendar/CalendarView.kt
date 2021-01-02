@@ -24,9 +24,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
@@ -35,6 +35,8 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
+import team.weathy.util.OnLiveDataProp
+import team.weathy.util.Once
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -49,12 +51,17 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
-    private val animLiveData = MutableLiveData(0f)
-    private var animValue
-        get() = animLiveData.value!!
-        set(v) {
-            animLiveData.value = v
-        }
+
+    private lateinit var animLiveData: LiveData<Float>
+    private var animValue by OnLiveDataProp(0f) {
+        animLiveData = it
+    }
+    private val animValueObserver = Observer<Float> {
+        adjustUIsWithAnimValue()
+    }
+
+    private val scrollEnabled = MutableLiveData(false)
+    private val onScrollToTop = MutableLiveData<Once<Unit>>()
 
     private val collapsed
         get() = px(MIN_HEIGHT_DP)
@@ -108,8 +115,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             bottomMargin = px(32)
         }
 
-        adapter = MonthlyAdapter(animLiveData).apply {
+        adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop).apply {
             submitList(listOf(1, 2, 3, 4, 5))
+        }
+
+        setPageTransformer { page, position ->
+            page.pivotX = if (position < 0) page.width.toFloat() else 0f
+            page.pivotY = page.height * 0.5f
+            page.rotationY = 50f * position
         }
     }
 
@@ -122,9 +135,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        animLiveData.observe(findFragment<Fragment>().viewLifecycleOwner) {
-            adjustUIsWithAnimValue()
-        }
+        animLiveData.observeForever(animValueObserver)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animLiveData.removeObserver(animValueObserver)
     }
 
     private fun initContainer() {
@@ -304,15 +320,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun disableScroll() {
-        //        monthlyView.setOnTouchListener { _, _ -> true }
+        scrollEnabled.value = false
     }
 
     private fun enableScroll() {
-        //        monthlyView.setOnTouchListener(null)
+        scrollEnabled.value = true
     }
 
     private fun scrollToTop() {
-        //        monthlyView.smoothScrollTo(0, 0)
+        onScrollToTop.value = Once(Unit)
     }
 
     companion object {
