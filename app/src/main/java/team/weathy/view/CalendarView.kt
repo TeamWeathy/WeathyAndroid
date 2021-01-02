@@ -36,7 +36,6 @@ import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.debugE
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -326,7 +325,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private var flingVelocityTracker: VelocityTracker? = null
     private var offsetX = 0f
     private var flingAnimation: SpringAnimation? = null
 
@@ -337,25 +335,22 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 MotionEvent.ACTION_DOWN -> {
                     flingAnimation?.cancel()
 
-                    flingVelocityTracker?.clear()
-                    flingVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
-                    flingVelocityTracker?.addMovement(event)
-
                     offsetX = event.x
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    flingVelocityTracker?.apply {
-                        addMovement(event)
-                        computeCurrentVelocity(1000)
-                    }
+                    val nextTranslationX = outerLinearLayout.translationX + (event.x - offsetX) / 3
 
-                    outerLinearLayout.translationX += (event.x - offsetX) / 10
+                    outerLinearLayout.translationX = nextTranslationX.clamp(
+                        -pxFloat(MAX_FLING_X_DP), pxFloat(
+                            MAX_FLING_X_DP
+                        )
+                    )
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     endFling()
-                    if (flingVelocityTracker!!.xVelocity > 100) {
+                    if (outerLinearLayout.translationX > pxFloat(MAX_FLING_X_DP) * 0.7) {
                         changeMonthWithFling(true)
-                    } else if (flingVelocityTracker!!.xVelocity < -100) {
+                    } else if (outerLinearLayout.translationX < pxFloat(MAX_FLING_X_DP) * 0.7) {
                         changeMonthWithFling(false)
                     }
                 }
@@ -365,7 +360,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun changeMonthWithFling(toPrev: Boolean) {
-        debugE(toPrev)
+        //        debugE(toPrev)
     }
 
     private fun endFling() {
@@ -457,5 +452,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 220
         private const val EXPAND_MARGIN_BOTTOM_DP = 120
+        private const val MAX_FLING_X_DP = 100
     }
 }
