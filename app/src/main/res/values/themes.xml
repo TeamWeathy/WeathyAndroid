@@ -1,21 +1,18 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Weathy" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/white</item>
-
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:fontFamily">@font/notosans_regular</item>
-
         <item name="android:includeFontPadding">false</item>
-
         <item name="android:letterSpacing">-0.05</item>
     </style>
 
 
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">
         <item name="textAllCaps">false</item>
-        <item name="cornerRadius">27.5dp</item>
+        <item name="cornerRadius">30dp</item>
         <item name="android:layout_height">55dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
@@ -41,6 +38,12 @@
         <item name="rippleColor">@color/btn_cancel_gray</item>
     </style>
 
+
+    <style name="RoundButton.Grey">
+        <item name="backgroundTint">@color/sub_grey_3</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="RoundButton.Change">
         <item name="cornerRadius">18dp</item>
         <item name="android:layout_height">35dp</item>
@@ -57,6 +60,14 @@
     <style name="RecordSubText">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/sub_grey_6</item>
+    </style>
+
+    <style name="ImageButton">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:scaleType">fitCenter</item>
     </style>
 
 </resources>

@@ -15,6 +15,12 @@ class PixelRatio(private val app: Application) {
     val screenHeight
         get() = displayMetrics.heightPixels
 
+    val screenShort
+        get() = screenWidth.coerceAtMost(screenHeight)
+
+    val screenLong
+        get() = screenWidth.coerceAtLeast(screenHeight)
+
     @Px
     fun toPixel(dp: Int) = (dp * displayMetrics.density).roundToInt()
 

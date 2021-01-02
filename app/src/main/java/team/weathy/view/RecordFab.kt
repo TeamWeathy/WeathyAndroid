@@ -8,10 +8,6 @@ import android.graphics.LinearGradient
 import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.Shader
-import android.graphics.Shader.TileMode.CLAMP
-import android.graphics.drawable.PaintDrawable
-import android.graphics.drawable.ShapeDrawable.ShaderFactory
-import android.graphics.drawable.shapes.OvalShape
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -19,21 +15,21 @@ import android.widget.FrameLayout
 import team.weathy.R
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.setShadowColorIfAvailable
 import team.weathy.util.extensions.px
+import team.weathy.util.extensions.setShadowColorIfAvailable
 import kotlin.math.roundToInt
 
 
 class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
-    private val bgPaint = PaintDrawable()
+    private val whitePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.white)
+    }
+    private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        this.color = Color.argb((255 * 0.8f).roundToInt(), 129, 226, 210)
+        color = Color.argb((255 * 0.8f).roundToInt(), 129, 226, 210)
         style = Paint.Style.STROKE
         strokeWidth = 1f
-    }
-    private val crossPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = getColor(R.color.white)
     }
 
     init {
@@ -44,25 +40,18 @@ class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             }
         }
 
-        val shaderFactory: ShaderFactory = object : ShaderFactory() {
-            override fun resize(width: Int, height: Int): Shader {
-                return LinearGradient(
-                    0f, 0f, 0f, height.toFloat(), intArrayOf(
-                        Color.argb(0, 129, 226, 210),
-                        Color.argb((0.39f * 255).roundToInt(), 129, 226, 210),
-                        Color.argb((0.95f * 255).roundToInt(), 129, 226, 210),
-                        Color.argb((0.68f * 255).roundToInt(), 129, 226, 210),
-                        Color.argb((0.28f * 255).roundToInt(), 129, 226, 210),
-                    ), floatArrayOf(
-                        0.06f, 0.29f, 0.51f, 0.76f, 1.0f
-                    ), CLAMP
-                )
-            }
-        }
-        bgPaint.shape = OvalShape()
-        bgPaint.shaderFactory = shaderFactory
-
-        background = bgPaint
+        gradientPaint.shader = LinearGradient(
+            0f, 0f, 0f, 53.dpFloat, intArrayOf(
+                Color.argb(0, 129, 226, 210),
+                Color.argb((0.39f * 255).roundToInt(), 129, 226, 210),
+                Color.argb((0.95f * 255).roundToInt(), 129, 226, 210),
+                Color.argb((0.68f * 255).roundToInt(), 129, 226, 210),
+                Color.argb((0.28f * 255).roundToInt(), 129, 226, 210),
+            ), floatArrayOf(
+                0.06f, 0.29f, 0.51f, 0.76f, 1.0f
+            ), Shader.TileMode.CLAMP
+        )
+        gradientPaint.isDither = true
 
 
         isEnabled = true
@@ -71,11 +60,14 @@ class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.mtrl_btn_state_list_anim)
         setShadowColorIfAvailable(getColor(R.color.main_mint_shadow))
-        elevation = px(16).toFloat()
+        elevation = 16.dpFloat
+        setWillNotDraw(false)
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawCircle(width / 2f, height / 2f, width / 2f - 1.dpFloat, strokePaint)
+        canvas.drawCircle(width / 2f, height / 2f, width / 2f, whitePaint)
+        canvas.drawCircle(width / 2f, height / 2f, width / 2f, gradientPaint)
+        canvas.drawCircle(width / 2f, height / 2f, width / 2f, strokePaint)
 
         canvas.drawRoundRect(
             width / 2f - px(10),
@@ -84,7 +76,7 @@ class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             height / 2f + px(2),
             px(10).toFloat(),
             px(10).toFloat(),
-            crossPaint
+            whitePaint
         )
 
         canvas.drawRoundRect(
@@ -94,7 +86,7 @@ class RecordFab @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             height / 2f + px(10),
             px(10).toFloat(),
             px(10).toFloat(),
-            crossPaint
+            whitePaint
         )
     }
 

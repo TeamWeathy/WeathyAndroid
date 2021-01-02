@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.setting.SettingActivity">
+
+    <TextView
+        android:id="@+id/setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="109dp"
+        android:layout_marginEnd="299dp"
+        android:fontFamily="@font/notosans_bold"
+        android:text="설정"
+        android:textColor="@color/main_grey"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/change_nickname_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:fontFamily="@font/notosans_regular"
+        android:text="닉네임 변경"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/setting" />
+
+    <TextView
+        android:id="@+id/push_notif_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:fontFamily="@font/notosans_regular"
+        android:text="푸시 알림"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/change_nickname_txt" />
+
+
+    <TextView
+        android:id="@+id/inquire_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/notosans_regular"
+        android:text="문의하기"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/push_notif_txt" />
+
+
+    <TextView
+        android:id="@+id/developer_info_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:fontFamily="@font/notosans_regular"
+        android:text="개발자 정보"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/inquire_txt" />
+
+    <TextView
+        android:id="@+id/change_nickname_click"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:layout_marginTop="21dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/setting" />
+
+    <TextView
+        android:id="@+id/setting_div_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/change_nickname_click" />
+
+    <TextView
+        android:id="@+id/push_notif_click"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/setting_div_1" />
+
+    <TextView
+        android:id="@+id/setting_div_2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/push_notif_click" />
+
+    <TextView
+        android:id="@+id/inquire_click"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/setting_div_2" />
+
+    <TextView
+        android:id="@+id/setting_div_3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inquire_click" />
+
+    <TextView
+        android:id="@+id/developer_info_click"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/setting_div_3" />
+
+    <Switch
+        android:id="@+id/push_notif_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="53dp"
+        android:thumb="@drawable/switch_thumb"
+        android:track="@drawable/switch_track_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_div_1" />
+
+    <ImageButton
+        android:id="@+id/exit_setting_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="31.5dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:src="@drawable/abc_ic_clear_material"
+        app:layout_constraintBottom_toTopOf="@id/setting"
+        app:layout_constraintStart_toStartOf="@id/setting" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

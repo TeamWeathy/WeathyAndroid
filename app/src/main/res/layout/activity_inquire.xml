@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.inquire.InquireActivity">
+
+    <TextView
+        android:id="@+id/inquire_txt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="109dp"
+        android:text="문의하기 페이지"
+        android:textColor="@color/main_grey"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/exit_inquire_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="31.5dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:src="@drawable/abc_vector_test"
+        android:tint="?attr/colorControlNormal"
+        app:layout_constraintBottom_toTopOf="@id/inquire_txt2"
+        app:layout_constraintStart_toStartOf="@id/inquire_txt2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,12 @@
 package team.weathy.api
 
-import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
-import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import team.weathy.BuildConfig
+import team.weathy.util.FlipperUtil
 
 object API {
-    val flipperNetworkPlugin = NetworkFlipperPlugin()
-
     private val gson = GsonBuilder().create()
     private lateinit var okHttpClient: OkHttpClient
 
@@ -24,11 +20,7 @@ object API {
 
             it.proceed(headerAddedRequest)
         }
-        okHttpClient = if (BuildConfig.DEBUG) {
-            builder.addNetworkInterceptor(FlipperOkhttpInterceptor(flipperNetworkPlugin))
-        } else {
-            builder
-        }.build()
+        okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
 
     private val apiRetrofit = Retrofit.Builder().baseUrl("https://api-dev.iammathking.com")
