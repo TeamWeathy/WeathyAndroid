@@ -205,7 +205,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (index != 0) outerLinearLayout.addView(
                 dividerGenerator(), LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f)
             )
-            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(104), 0f))
+            outerLinearLayout.addView(inner, LinearLayout.LayoutParams(MATCH_PARENT, px(102), 0f))
 
             calendarItems.subList(index * 7, index * 7 + 7).forEach {
                 inner.addView(it.root, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT, 1f))
@@ -351,7 +351,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
             listOf(binding.day, binding.dayFirstLine).forEach {
                 it.updateLayoutParams<LayoutParams> {
-                    topMargin = MathUtils.lerp(5.dpFloat, 18.dpFloat, animValue).toInt()
+                    topMargin = MathUtils.lerp(5.dpFloat, 15.dpFloat, animValue).toInt()
                 }
             }
 

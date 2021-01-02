@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@color/transparent"
-    tools:layout_height="104dp"
+    tools:layout_height="102dp"
     tools:layout_width="80dp">
 
     <View
@@ -53,18 +53,17 @@
 
     <TextView
         android:id="@+id/temp_high"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="6dp"
+        android:layout_width="37dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="2dp"
         android:alpha="0"
-        android:background="@drawable/round_corner_5dp"
-        android:backgroundTint="#ECB9B8"
+        android:background="@drawable/ic_calendar_high"
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:paddingVertical="2dp"
         android:text="-4°"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/temp_low"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -73,22 +72,20 @@
 
     <TextView
         android:id="@+id/temp_low"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="9dp"
+        android:layout_width="37dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="6dp"
         android:alpha="0"
-        android:background="@drawable/round_corner_5dp"
-        android:backgroundTint="#B3CEE7"
+        android:background="@drawable/ic_calendar_low"
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:paddingVertical="2dp"
         android:text="-4°"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_percent="0.7"
         tools:alpha="0.7" />
 
     <View
