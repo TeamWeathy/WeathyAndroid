@@ -12,6 +12,7 @@ import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.HomeFragment
 import team.weathy.ui.main.search.SearchFragment
+import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
 import team.weathy.util.StatusBarUtil
@@ -63,6 +64,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.calendar setOnDebounceClickListener {
             viewModel.changeMenu(CALENDAR)
+        }
+        binding.fab setOnDebounceClickListener {
+            startActivity(Intent(this, RecordActivity::class.java))
         }
     }
 
