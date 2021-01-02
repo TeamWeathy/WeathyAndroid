@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    android:paddingHorizontal="32dp"
-    >
+    android:paddingHorizontal="32dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +25,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -50,5 +51,38 @@
             android:textColorHint="@color/sub_grey_8"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/recentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/notosans_bold"
+        android:text="최근 검색한 위치"
+        android:textColor="@color/main_grey"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="31dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="9dp"
+        android:background="@color/sub_grey_7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recentLabel" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        tools:listitem="@layout/item_location" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
