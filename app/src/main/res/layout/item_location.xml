@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="team.weathy.model.entity.Location" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="163dp"
+        tools:layout_height="163dp"
+        tools:layout_width="309dp">
+
+        <team.weathy.view.WeathyCardView
+            android:id="@+id/delete_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#80F1F1F1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:weathy_disable_shadow="true"
+            app:weathy_radius="15dp"
+            app:weathy_stroke_color="#E1E1E1"
+            app:weathy_stroke_width="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/notosans_bold"
+                android:text="삭제"
+                android:textColor="@color/sub_grey_6"
+                android:textSize="16sp" />
+        </team.weathy.view.WeathyCardView>
+
+        <team.weathy.view.WeathyCardView
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:weathy_disable_shadow="true"
+            app:weathy_radius="15dp"
+            app:weathy_stroke_color="#E1E1E1"
+            app:weathy_stroke_width="1dp"
+            tools:alpha="0.5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/datetime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginTop="23dp"
+                    android:maxLines="1"
+                    android:text="12월 20일 일요일 오후 4시"
+                    android:textColor="@color/sub_grey_1"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/notosans_bold"
+                    android:maxLines="1"
+                    android:text="서울 서초구"
+                    android:textSize="17sp"
+                    app:layout_constraintTop_toBottomOf="@id/datetime" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </team.weathy.view.WeathyCardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

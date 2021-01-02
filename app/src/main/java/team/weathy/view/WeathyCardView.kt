@@ -12,8 +12,8 @@ import team.weathy.R
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.setShadowColorIfAvailable
 import team.weathy.util.extensions.px
+import team.weathy.util.extensions.setShadowColorIfAvailable
 
 class WeathyCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
