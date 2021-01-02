@@ -1,4 +1,4 @@
-package team.weathy.view
+package team.weathy.view.calendar
 
 import android.content.Context
 import android.graphics.Color
@@ -12,6 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.LiveData
 import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
@@ -30,9 +33,17 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private var lineIndexIncludesToday = 0
 
     private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
-    var animValue by OnChangeProp(0f) {
-        adjustUIsWithAnimValue()
+    lateinit var animLiveData: LiveData<Float>
+    private val animValue
+        get() = animLiveData.value!!
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        animLiveData.observe(findFragment<Fragment>().viewLifecycleOwner) {
+            adjustUIsWithAnimValue()
+        }
     }
+
 
     private val outerLinearLayout = LinearLayout(context).apply {
         id = ViewCompat.generateViewId()
@@ -130,7 +141,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             else -> R.color.main_grey
         }
     )
-
 
     private fun adjustUIsWithAnimValue() {
         adjustCalendarItems()

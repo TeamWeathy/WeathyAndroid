@@ -1,4 +1,4 @@
-package team.weathy.view
+package team.weathy.view.calendar
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -24,6 +24,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.MutableLiveData
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -42,14 +46,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     var today by OnChangeProp(1) {
         updateUIWithToday()
-        monthlyView.today = it
     }
 
     private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
-    private var animValue by OnChangeProp(0f) {
-        adjustUIsWithAnimValue()
-        monthlyView.animValue = it
-    }
+    private val animLiveData = MutableLiveData(0f)
+    private var animValue
+        get() = animLiveData.value!!
+        set(v) {
+            animLiveData.value = v
+        }
 
     private val collapsed
         get() = px(MIN_HEIGHT_DP)
@@ -96,11 +101,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f)
         }
     }
-    private val monthlyView = MonthlyView(context).apply {
+    private val viewPager = ViewPager2(context).apply {
         layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
             topToBottom = weekTextLayout.id
             bottomToBottom = parentId
             bottomMargin = px(32)
+        }
+
+        adapter = MonthlyAdapter(animLiveData).apply {
+            submitList(listOf(1, 2, 3, 4, 5))
         }
     }
 
@@ -109,6 +118,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addViews()
         configureExpandGestureHandling()
         updateUIWithToday()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        animLiveData.observe(findFragment<Fragment>().viewLifecycleOwner) {
+            adjustUIsWithAnimValue()
+        }
     }
 
     private fun initContainer() {
@@ -127,7 +143,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addDateText()
         addTopDivider()
         addWeekLayoutAndWeekTexts()
-        addMonthlyView()
+        addViewPager()
     }
 
     private fun addDateText() {
@@ -147,7 +163,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         weekTexts.forEach(layout::addView)
     }
 
-    private fun addMonthlyView() = addView(monthlyView)
+    private fun addViewPager() = addView(viewPager)
 
     private fun updateUIWithToday() {
         weekTexts.forEachIndexed { idx, textView ->
@@ -288,15 +304,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun disableScroll() {
-        monthlyView.setOnTouchListener { _, _ -> true }
+        //        monthlyView.setOnTouchListener { _, _ -> true }
     }
 
     private fun enableScroll() {
-        monthlyView.setOnTouchListener(null)
+        //        monthlyView.setOnTouchListener(null)
     }
 
     private fun scrollToTop() {
-        monthlyView.smoothScrollTo(0, 0)
+        //        monthlyView.smoothScrollTo(0, 0)
     }
 
     companion object {
