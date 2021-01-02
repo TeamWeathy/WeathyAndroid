@@ -1,6 +1,7 @@
 package team.weathy.ui.record
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivityRecordBinding
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
@@ -12,6 +13,8 @@ import team.weathy.util.extensions.replaceFragment
 
 class RecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecordBinding
+
+    private val viewModel by viewModels<RecordViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

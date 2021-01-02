@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import team.weathy.databinding.FragmentRecordStartBinding
 import team.weathy.ui.record.RecordActivity
-import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
-import team.weathy.ui.record.locationchange.RecordLocationChangeFragment
+import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 
 class RecordStartFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordStartBinding>()
+
+    private val viewModel by activityViewModels<RecordViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordStartBinding.inflate(layoutInflater, container, false).also {
@@ -27,6 +29,5 @@ class RecordStartFragment : Fragment() {
         }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
     }
 }
