@@ -9,20 +9,12 @@ data class DateTime(
     val hour: Int = 0,
     val minute: Int = 0,
 ) {
-    private val calendar = getSeoulTimeZoneCalendarInstance().apply {
+    private val calendar = getCalendarInstance().apply {
         set(Calendar.YEAR, year)
         set(Calendar.MONTH, month - 1)
         set(Calendar.DAY_OF_MONTH, day)
-        set(Calendar.HOUR, hour)
+        set(Calendar.HOUR_OF_DAY, hour)
         set(Calendar.MINUTE, minute)
-    }
-
-
-    /**
-     * 1 - 7 (SUN - MON)
-     */
-    fun dayOfWeek(): Int {
-        return calendar[Calendar.DAY_OF_WEEK]
     }
 
     fun weekOfMonth(): Int {
@@ -30,18 +22,26 @@ data class DateTime(
     }
 
     companion object {
-        fun now(): DateTime {
-            return getSeoulTimeZoneCalendarInstance().let { calendar ->
-                DateTime(
-                    calendar[Calendar.YEAR],
-                    calendar[Calendar.MONTH] + 1,
-                    calendar[Calendar.DAY_OF_MONTH],
-                    calendar[Calendar.HOUR],
-                    calendar[Calendar.MINUTE],
-                )
-            }
+        fun now() = newInstance(getCalendarInstance())
+        fun nowJoda(): org.joda.time.DateTime {
+            val now = now()
+            return org.joda.time.DateTime(
+                now.year,
+                now.month,
+                now.day,
+                now.hour,
+                now.minute,
+            )
         }
 
-        private fun getSeoulTimeZoneCalendarInstance() =Calendar.getInstance(TimeZone.getTimeZone("Asia/seoul"))
+        private fun newInstance(calendar: Calendar) = DateTime(
+            calendar[Calendar.YEAR],
+            calendar[Calendar.MONTH] + 1,
+            calendar[Calendar.DAY_OF_MONTH],
+            calendar[Calendar.HOUR_OF_DAY],
+            calendar[Calendar.MINUTE],
+        )
+
+        fun getCalendarInstance(): Calendar = Calendar.getInstance()
     }
 }

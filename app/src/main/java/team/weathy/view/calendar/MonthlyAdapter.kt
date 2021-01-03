@@ -4,10 +4,9 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.util.Once
+import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertMonthlyIndexToDate
 import team.weathy.view.calendar.MonthlyAdapter.MonthlyHolder
 
 class MonthlyAdapter(
@@ -25,29 +24,20 @@ class MonthlyAdapter(
     }
 
     override fun getItemCount(): Int {
-        return Int.MAX_VALUE
+        return MAX_ITEM_COUNT
     }
 
-    override fun onBindViewHolder(holder: MonthlyHolder, position: Int){
-
+    override fun onBindViewHolder(holder: MonthlyHolder, position: Int) {
+        holder.bind(position)
     }
 
-    inner class MonthlyHolder(private val root: MonthlyView) : RecyclerView.ViewHolder(root) {
-        fun bind(item: Any) {
-            //            binding.item = item
-            //            binding.executePendingBindings()
+    inner class MonthlyHolder(private val view: MonthlyView) : RecyclerView.ViewHolder(view) {
+        fun bind(position: Int) {
+            view.curDate = convertMonthlyIndexToDate(position)
         }
     }
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-                return false
-            }
-
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-                return false
-            }
-        }
+        const val MAX_ITEM_COUNT = Int.MAX_VALUE
     }
 }

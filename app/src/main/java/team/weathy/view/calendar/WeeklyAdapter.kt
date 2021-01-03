@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertWeeklyIndexToDate
 import team.weathy.view.calendar.WeeklyAdapter.WeeklyHolder
 
 class WeeklyAdapter(
@@ -19,26 +19,20 @@ class WeeklyAdapter(
     }
 
     override fun getItemCount(): Int {
-        return Int.MAX_VALUE
+        return MAX_ITEM_COUNT
     }
 
-    override fun onBindViewHolder(holder: WeeklyHolder, position: Int) {}
+    override fun onBindViewHolder(holder: WeeklyHolder, position: Int) {
+        holder.bind(position)
+    }
 
-    inner class WeeklyHolder(private val root: WeeklyView) : RecyclerView.ViewHolder(root) {
-        init {
-
+    inner class WeeklyHolder(private val view: WeeklyView) : RecyclerView.ViewHolder(view) {
+        fun bind(position: Int) {
+            view.date = convertWeeklyIndexToDate(position)
         }
     }
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-                return false
-            }
-
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-                return false
-            }
-        }
+        const val MAX_ITEM_COUNT = Int.MAX_VALUE
     }
 }

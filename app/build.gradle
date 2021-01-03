@@ -79,6 +79,7 @@ dependencies {
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'net.danlew:android.joda:2.10.9'
 }
 
 dependencies {

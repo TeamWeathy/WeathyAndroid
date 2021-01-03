@@ -1,5 +1,6 @@
 package team.weathy.util
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -42,3 +43,8 @@ fun ShapeableImageView.useCircleOutlineWithRadius(radius: Float) {
 fun View.setVisibilityBinding(isVisible: Boolean) {
     this.isVisible = isVisible
 }
+
+//@BindingAdapter("android:tint")
+//fun ImageView.setTint(color: Int){
+//    imageTintList = ColorStateList.valueOf(color)
+//}

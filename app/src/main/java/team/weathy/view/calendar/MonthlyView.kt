@@ -18,18 +18,24 @@ import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.DateTime
+import team.weathy.util.OnChangeProp
 import team.weathy.util.Once
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
+import team.weathy.view.calendar.CalendarView.CalendarDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ScrollView(context, attrs) {
-    var week = DateTime.now()
+
     private val today = DateTime.now()
+    var curDate by OnChangeProp(CalendarDate.now()) {
+        updateUIWithDate()
+    }
+
     private val isTodayInCurrentMonth
-        get() = week.year == today.year && week.month == today.month
+        get() = curDate.year == today.year && curDate.month == today.month
 
     lateinit var animLiveData: LiveData<Float>
     private val animValue
@@ -96,7 +102,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     init {
         configureContainer()
         addViews()
-        updateUIWithToday()
+        updateUIWithDate()
     }
 
     private fun configureContainer() {
@@ -137,7 +143,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-    private fun updateUIWithToday() {
+    private fun updateUIWithDate() {
         calendarItems.forEachIndexed { idx, binding ->
             val isToday = isTodayInCurrentMonth && idx + 1 == today.day
             binding.circleSmall.isVisible = isToday
