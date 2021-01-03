@@ -16,22 +16,6 @@ class OnChangeProp<T>(private var field: T, private val callback: (value: T) -> 
     }
 }
 
-class OnLiveDataProp<T>(initialValue: T, liveDataCallback: (liveData: LiveData<T>) -> Unit) {
-    private val liveData = MutableLiveData(initialValue)
-
-    init {
-        liveDataCallback(liveData)
-    }
-
-    operator fun setValue(thisRef: Any?, p: KProperty<*>, v: T) {
-        liveData.value = v
-    }
-
-    operator fun getValue(thisRef: Any?, p: KProperty<*>): T {
-        return liveData.value!!
-    }
-}
-
 class OnValidateProp<T>(private var field: T) {
     operator fun setValue(thisRef: View?, p: KProperty<*>, v: T) {
         field = v

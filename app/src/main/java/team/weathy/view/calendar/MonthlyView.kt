@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
-import team.weathy.util.OnChangeProp
+import team.weathy.util.DateTime
 import team.weathy.util.Once
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
@@ -26,11 +26,10 @@ import team.weathy.util.extensions.px
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ScrollView(context, attrs) {
-    var today by OnChangeProp(1) {
-        lineIndexIncludesToday = (it - 1) / 7
-        updateUIWithToday()
-    }
-    private var lineIndexIncludesToday = 0
+    var week = DateTime.now()
+    private val today = DateTime.now()
+    private val isTodayInCurrentMonth
+        get() = week.year == today.year && week.month == today.month
 
     lateinit var animLiveData: LiveData<Float>
     private val animValue
@@ -140,7 +139,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private fun updateUIWithToday() {
         calendarItems.forEachIndexed { idx, binding ->
-            val isToday = idx + 1 == today
+            val isToday = isTodayInCurrentMonth && idx + 1 == today.day
             binding.circleSmall.isVisible = isToday
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
         }
@@ -177,10 +176,12 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
 
-        val itemToday = calendarItems[today - 1]
-        itemToday.run {
-            circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
-            circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
+        if (isTodayInCurrentMonth) {
+            val itemToday = calendarItems[today.day - 1]
+            itemToday.run {
+                circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
+                circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
+            }
         }
     }
 

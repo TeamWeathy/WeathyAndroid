@@ -5,23 +5,28 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.view.calendar.WeeklyAdapter.WeeklyHolder
 
-class WeeklyAdapter() : ListAdapter<Any, WeeklyHolder>(DIFF) {
+class WeeklyAdapter(
+    private val animLiveData: LiveData<Float>,
+) : RecyclerView.Adapter<WeeklyHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyHolder {
         return WeeklyHolder(WeeklyView(parent.context).apply {
             layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            animLiveData = this@WeeklyAdapter.animLiveData
         })
     }
 
-    override fun onBindViewHolder(holder: WeeklyHolder, position: Int) = holder.bind(getItem(position))
+    override fun getItemCount(): Int {
+        return Int.MAX_VALUE
+    }
+
+    override fun onBindViewHolder(holder: WeeklyHolder, position: Int) {}
 
     inner class WeeklyHolder(private val root: WeeklyView) : RecyclerView.ViewHolder(root) {
-        fun bind(item: Any) {
-            //            binding.item = item
-            //            binding.executePendingBindings()
+        init {
+
         }
     }
 

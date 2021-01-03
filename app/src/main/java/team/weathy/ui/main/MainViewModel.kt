@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
-class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+class MainViewModel : ViewModel() {
     private val _menu: MutableLiveData<MainMenu> = MutableLiveData(MainMenu.HOME)
     val menu: LiveData<MainMenu> = _menu
 

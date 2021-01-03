@@ -25,9 +25,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
@@ -36,11 +34,8 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
 import team.weathy.util.AnimUtil
 import team.weathy.util.DateTime
-import team.weathy.util.DateUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.OnLiveDataProp
 import team.weathy.util.Once
-import team.weathy.util.debugE
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -50,24 +45,20 @@ import team.weathy.util.extensions.screenHeight
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
 
-    var week by OnChangeProp(DateUtil.now()) {
+    var curWeek by OnChangeProp(DateTime.now()) {
         updateUIWithWeek()
     }
-    var today by OnChangeProp(DateUtil.now()) {
-        updateUIWithToday()
-    }
+    private val today = DateTime.now()
 
     private val isTodayInCurrentMonth
-        get() = week.year == today.year && week.month == today.month
+        get() = curWeek.year == today.year && curWeek.month == today.month
 
     private fun isIncludedInTodayWeek(idx: Int) = isTodayInCurrentMonth && (today.day - 1) % 7 == idx % 7
 
-    private lateinit var animLiveData: LiveData<Float>
-    private var animValue by OnLiveDataProp(0f) {
-        animLiveData = it
-    }
-    private val animValueObserver = Observer<Float> {
+    private val animLiveData = MutableLiveData(0f)
+    private var animValue by OnChangeProp(0f) {
         adjustUIsWithAnimValue()
+        animLiveData.value = it
     }
 
     private val scrollEnabled = MutableLiveData(false)
@@ -124,9 +115,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             bottomMargin = px(32)
         }
 
-        adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop).apply {
-            submitList(listOf(1, 2, 3, 4, 5))
-        }
+        adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+        alpha = 0f
     }
 
     private val weeklyViewPager = ViewPager2(context).apply {
@@ -136,9 +126,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             bottomMargin = px(32)
         }
 
-        adapter = WeeklyAdapter().apply {
-            submitList(listOf(1, 2, 3, 4, 5))
-        }
+        adapter = WeeklyAdapter(animLiveData)
 
         setPageTransformer { page, position ->
             page.pivotX = if (position < 0) page.width.toFloat() else 0f
@@ -154,16 +142,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         updateUIWithWeek()
         updateUIWithToday()
         enableTouchWeeklyPagerOnly()
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        animLiveData.observeForever(animValueObserver)
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        animLiveData.removeObserver(animValueObserver)
     }
 
     private fun initContainer() {
@@ -208,7 +186,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun updateUIWithWeek() {
-        dateText.text = "${week.year} .${week.month.toString().padStart(2, '0')}"
+        dateText.text = "${curWeek.year} .${curWeek.month.toString().padStart(2, '0')}"
     }
 
     private fun updateUIWithToday() {
@@ -281,11 +259,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         setOnTouchListener { view, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    debugE(1)
                     if (event.y <= view.height - px(30)) {
                         return@setOnTouchListener false
                     }
-                    debugE(2)
 
                     expandVelocityTracker?.clear()
                     expandVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
@@ -388,8 +364,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 }
 
-@BindingAdapter("calendar_today", "calendar_week", requireAll = true)
-fun CalendarView.setToday(today: DateTime, week: DateTime) {
-    this.today = today
-    this.week = week
+@BindingAdapter("calendar_week")
+fun CalendarView.setWeek(week: DateTime) {
+    this.curWeek = week
 }

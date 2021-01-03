@@ -7,18 +7,20 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarWeeklyItemBinding
-import team.weathy.util.OnChangeProp
+import team.weathy.util.DateTime
 import team.weathy.util.extensions.getColor
 
 class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
-    var today by OnChangeProp(1) {
-        lineIndexIncludesToday = (it - 1) / 7
-        updateUIWithToday()
-    }
-    private var lineIndexIncludesToday = 0
+    var week = DateTime.now()
+    private val today = DateTime.now()
+
+    private val isTodayInCurrentWeek
+        get() = week.year == today.year && week.month == today.month && week.weekOfMonth() == today.weekOfMonth()
 
     private val calendarItems = (0..6).map {
         ViewCalendarWeeklyItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
@@ -28,10 +30,32 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
     }
 
+    lateinit var animLiveData: LiveData<Float>
+    private val animValue
+        get() = animLiveData.value!!
+    private val animValueObserver = Observer<Float> { animValue ->
+        calendarItems.forEach {
+            it.circle.scaleX = 1 - animValue
+            it.circle.scaleY = 1 - animValue
+        }
+    }
+
     init {
         configureContainer()
         addCalendarItems()
         updateUIWithToday()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        animLiveData.observeForever(animValueObserver)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
+        animLiveData.removeObserver(animValueObserver)
     }
 
     private fun configureContainer() {
@@ -55,7 +79,7 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private fun updateUIWithToday() {
         calendarItems.forEachIndexed { idx, binding ->
-            val isToday = idx + 1 == today
+            val isToday = isTodayInCurrentWeek && today.day == idx + 1
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
         }
     }

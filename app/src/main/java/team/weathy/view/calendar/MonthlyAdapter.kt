@@ -14,7 +14,7 @@ class MonthlyAdapter(
     private val animLiveData: LiveData<Float>,
     private val scrollEnabled: LiveData<Boolean>,
     private val onScrollToTop: LiveData<Once<Unit>>
-) : ListAdapter<Any, MonthlyHolder>(DIFF) {
+) : RecyclerView.Adapter<MonthlyHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthlyHolder {
         return MonthlyHolder(MonthlyView(parent.context).apply {
             animLiveData = this@MonthlyAdapter.animLiveData
@@ -24,7 +24,13 @@ class MonthlyAdapter(
         })
     }
 
-    override fun onBindViewHolder(holder: MonthlyHolder, position: Int) = holder.bind(getItem(position))
+    override fun getItemCount(): Int {
+        return Int.MAX_VALUE
+    }
+
+    override fun onBindViewHolder(holder: MonthlyHolder, position: Int){
+
+    }
 
     inner class MonthlyHolder(private val root: MonthlyView) : RecyclerView.ViewHolder(root) {
         fun bind(item: Any) {
