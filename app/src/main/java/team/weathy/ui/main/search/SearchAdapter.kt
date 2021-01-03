@@ -41,7 +41,6 @@ class SearchAdapter : Adapter<Holder>() {
         }
 
         override fun onTranslateXChanged(x: Float) {
-            debugE(x)
             binding.contentContainer.translationX = x
         }
 

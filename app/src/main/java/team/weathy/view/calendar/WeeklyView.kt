@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -16,6 +17,8 @@ import team.weathy.databinding.ViewCalendarWeeklyItemBinding
 import team.weathy.util.OnChangeProp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.pxFloat
+import team.weathy.util.getWeekTexts
+import team.weathy.util.transformDayOfWeek
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -86,11 +89,17 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun updateUIWithDate() {
+        val texts = getWeekTexts(date)
         calendarItems.forEachIndexed { idx, binding ->
-            val isToday = isTodayInCurrentWeek && today.dayOfWeek.value == idx + 1
+            val isFuture = isTodayInCurrentWeek && texts[idx] > today.dayOfMonth
+
+            binding.root.alpha = if (isFuture) .3f else 1f
+            binding.circle.isVisible = !isFuture
+
+            val isToday = isTodayInCurrentWeek && transformDayOfWeek(today.dayOfWeek) - 1 == idx
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
 
-            binding.day.text = "hi"
+            binding.day.text = texts[idx].toString()
         }
     }
 

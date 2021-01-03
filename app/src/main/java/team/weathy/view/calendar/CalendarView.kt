@@ -47,6 +47,7 @@ import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
+import team.weathy.util.transformDayOfWeek
 import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
@@ -60,6 +61,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithCurDate()
         onDateChangeListener?.onChange(it)
+        scrollToTop()
         invalidate()
     }
     var onDateChangeListener: OnDateChangeListener? = null
@@ -69,8 +71,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val isTodayInCurrentWeek
         get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
 
-    private fun isIncludedInTodayWeek(idx: Int) =
-        isTodayInCurrentMonth && isTodayInCurrentWeek && (today.dayOfWeek.value - 1) == idx % 7
 
     private var isExpanded by OnChangeProp(false) { expanded ->
         if (expanded) {
@@ -267,13 +267,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addView(weeklyViewPager)
     }
 
-    private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, includeToday: Boolean = false): Int {
-        val weekColor = getColor(CalendarUtil.getColorFromWeek(week))
-        if (!includeToday) return weekColor
-
-        return ColorUtils.blendARGB(Color.WHITE, weekColor, animValue.clamp(0f, 1f))
-    }
-
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
     }
@@ -299,7 +292,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
             val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
             val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + (today.dayOfWeek.value - 1) * rawWidth
+            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + (transformDayOfWeek(today.dayOfWeek) - 1) * rawWidth
             val capsuleWidthRadius = capsuleWidth / 2f
 
             canvas.drawRoundRect(
@@ -362,8 +355,20 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun adjustWeekTextColors() {
         weekTexts.forEachIndexed { idx, textView ->
-            textView.setTextColor(getWeekTextColor(idx, isIncludedInTodayWeek(idx)))
+            textView.setTextColor(
+                getWeekTextColor(
+                    idx,
+                    isTodayInCurrentMonth && isTodayInCurrentWeek && (transformDayOfWeek(today.dayOfWeek) - 1) == idx % 7
+                )
+            )
         }
+    }
+
+    private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
+        val weekColor = getColor(CalendarUtil.getColorFromWeek(week))
+        if (!isToday) return weekColor
+
+        return ColorUtils.blendARGB(Color.WHITE, weekColor, animValue.clamp(0f, 1f))
     }
 
     private fun adjustWeekCapsulePaintOpacity() {

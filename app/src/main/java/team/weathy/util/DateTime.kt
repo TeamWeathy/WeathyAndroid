@@ -26,7 +26,15 @@ fun convertWeeklyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
-    return cur.minusWeeks(diffWeek.toLong())
+    val subtracted = cur.minusWeeks(diffWeek.toLong())
+
+    return subtracted
+
+    //    return if (subtracted.lengthOfMonth() - subtracted.dayOfMonth < 6) {
+    //        subtracted.plusMonths(1).withDayOfMonth(1)
+    //    } else {
+    //        subtracted
+    //    }
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
@@ -61,25 +69,30 @@ fun calculateRequiredRow(date: LocalDate): Int {
     return (dayCount + previousMonthDayCount) / 7 + 1
 }
 
-fun getMonthTexts(date: LocalDate): List<String> {
-    val result = MutableList(42) { "" }
+fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
+    val result = MutableList(42) { 0 }
 
-    date.lengthOfMonth()
+    val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
 
     // 1 ~ 7 (MON ~ SUN)
-    var startDay = transformDayOfWeek(date.withDayOfMonth(1).dayOfWeek)
-    when (startDay) {
-        8 -> {
-            startDay = 1
-        }
+    val startDayIndex = transformDayOfWeek(date.withDayOfMonth(1).dayOfWeek) - 1
+    val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
+
+    for (i in 0 until startDayIndex) {
+        result[i] = previousMonthEndDay - (startDayIndex - i) + 1
     }
-    for (i in 1..date.lengthOfMonth()) {
-        result[startDay + i - 2] = i.toString()
+    for (i in startDayIndex..endDayIndex) {
+        result[i] = i - startDayIndex + 1
+    }
+    for (i in (endDayIndex + 1)..41) {
+        result[i] = i - endDayIndex
     }
 
-    return result
+    return Triple(result, startDayIndex, endDayIndex)
 }
 
-fun getWeekTexts(date: LocalDate): List<String> {
-    return listOf()
+fun getWeekTexts(date: LocalDate): List<Int> {
+    val (_result) = getMonthTexts(date)
+
+    return _result.subList(date.weekOfMonth * 7, date.weekOfMonth * 7 + 7)
 }

@@ -32,12 +32,13 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     ScrollView(context, attrs) {
 
     private val today = LocalDate.now()
-    var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
+    private var todayIndex = 0
+    var date: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithDate()
     }
 
     private val isTodayInCurrentMonth
-        get() = curDate.year == today.year && curDate.month == today.month
+        get() = date.year == today.year && date.month == today.month
 
     lateinit var animLiveData: LiveData<Float>
     private val animValue
@@ -122,14 +123,15 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         addView(outerLinearLayout)
     }
 
-    private fun attachLayouts() {
-        val texts = getMonthTexts(curDate)
+    private fun updateUIWithDate() {
+        val (texts, startDayIndex, endDayIndex) = getMonthTexts(date)
+        todayIndex = if (isTodayInCurrentMonth) today.dayOfMonth + (7 - startDayIndex) + 2 else -1
 
         innerLinearLayouts.forEach {
             it.removeAllViews()
         }
         outerLinearLayout.removeAllViews()
-        val requiredRow = calculateRequiredRow(curDate)
+        val requiredRow = calculateRequiredRow(date)
 
         repeat(requiredRow) { row ->
             val innerLinearLayout = innerLinearLayouts[row]
@@ -140,23 +142,27 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             repeat(7) { column ->
                 val idx = row * 7 + column
 
-                calendarItems[idx].day.text = texts[idx]
+                val item = calendarItems[idx]
+
+                item.day.text = texts[idx].toString()
+
+                val isInCurrentMonthRange = !(idx < startDayIndex || idx > endDayIndex)
+                val isFuture = isTodayInCurrentMonth && texts[idx] > today.dayOfMonth
+                val shouldBeDisabled = !isInCurrentMonthRange || isFuture
+
+                item.root.alpha = if (shouldBeDisabled) .3f else 1f
+                item.tempHigh.isVisible = !shouldBeDisabled
+                item.tempLow.isVisible = !shouldBeDisabled
+
+                item.circleSmall.isVisible = idx == todayIndex
+                item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndex))
 
                 innerLinearLayout.addView(
-                    calendarItems[idx].root, LinearLayout.LayoutParams(
+                    item.root, LinearLayout.LayoutParams(
                         MATCH_PARENT, MATCH_PARENT, 1f
                     )
                 )
             }
-        }
-    }
-
-    private fun updateUIWithDate() {
-        attachLayouts()
-        calendarItems.forEachIndexed { idx, binding ->
-            val isToday = isTodayInCurrentMonth && idx + 1 == today.dayOfMonth
-            binding.circleSmall.isVisible = isToday
-            binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
         }
     }
 
@@ -191,9 +197,8 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
 
-        if (isTodayInCurrentMonth) {
-            val itemToday = calendarItems[today.dayOfMonth - 1]
-            itemToday.run {
+        if (todayIndex != -1) {
+            calendarItems[todayIndex].run {
                 circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
                 circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
             }
