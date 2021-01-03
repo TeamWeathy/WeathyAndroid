@@ -1,47 +1,48 @@
 package team.weathy.util
 
+import team.weathy.view.calendar.MonthlyAdapter
+import team.weathy.view.calendar.WeeklyAdapter
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.*
 
-data class DateTime(
-    val year: Int = 0,
-    val month: Int = 0,
-    val day: Int = 0,
-    val hour: Int = 0,
-    val minute: Int = 0,
-) {
-    private val calendar = getCalendarInstance().apply {
-        set(Calendar.YEAR, year)
-        set(Calendar.MONTH, month - 1)
-        set(Calendar.DAY_OF_MONTH, day)
-        set(Calendar.HOUR_OF_DAY, hour)
-        set(Calendar.MINUTE, minute)
+
+val LocalDate.weekOfMonth: Int
+    get() {
+        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
+        return gc[Calendar.WEEK_OF_MONTH]
     }
 
-    fun weekOfMonth(): Int {
-        return calendar[Calendar.WEEK_OF_MONTH]
-    }
+fun convertMonthlyIndexToDate(index: Int): LocalDate {
+    val cur = LocalDate.now()
 
-    companion object {
-        fun now() = newInstance(getCalendarInstance())
-        fun nowJoda(): org.joda.time.DateTime {
-            val now = now()
-            return org.joda.time.DateTime(
-                now.year,
-                now.month,
-                now.day,
-                now.hour,
-                now.minute,
-            )
-        }
+    val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
 
-        private fun newInstance(calendar: Calendar) = DateTime(
-            calendar[Calendar.YEAR],
-            calendar[Calendar.MONTH] + 1,
-            calendar[Calendar.DAY_OF_MONTH],
-            calendar[Calendar.HOUR_OF_DAY],
-            calendar[Calendar.MINUTE],
-        )
+    return cur.minusMonths(diffMonth.toLong())
+}
 
-        fun getCalendarInstance(): Calendar = Calendar.getInstance()
-    }
+fun convertWeeklyIndexToDate(index: Int): LocalDate {
+    val cur = LocalDate.now()
+
+    val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
+
+    return cur.minusWeeks(diffWeek.toLong())
+}
+
+fun convertDateToMonthlyIndex(date: LocalDate): Int {
+    val now = LocalDate.now()
+
+    val yearDiff = now.year - date.year
+    val diffIndex = now.monthValue - date.monthValue + yearDiff * 12
+
+    return MonthlyAdapter.MAX_ITEM_COUNT - diffIndex - 1
+}
+
+fun convertDateToWeeklyIndex(date: LocalDate): Int {
+    val now = LocalDate.now()
+
+    val diffIndex = ChronoUnit.WEEKS.between(now, date).toInt()
+
+    return WeeklyAdapter.MAX_ITEM_COUNT - diffIndex - 1
 }

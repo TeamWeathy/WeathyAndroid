@@ -6,7 +6,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.util.Once
-import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertMonthlyIndexToDate
+import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.view.calendar.MonthlyAdapter.MonthlyHolder
 
 class MonthlyAdapter(

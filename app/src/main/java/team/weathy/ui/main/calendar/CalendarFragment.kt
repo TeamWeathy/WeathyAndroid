@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.debugE
 
 class CalendarFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
@@ -21,9 +22,11 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
+        binding.mainVm = mainViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.date.setOnClickListener {
-//            binding.calendarView.today = Random.nextInt(1, 35)
+        viewModel.curDate.observe(viewLifecycleOwner) {
+            debugE(it)
         }
     }
 }

@@ -34,29 +34,30 @@ import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import org.joda.time.Weeks
 import team.weathy.R
 import team.weathy.util.AnimUtil
-import team.weathy.util.DateTime
 import team.weathy.util.OnChangeProp
 import team.weathy.util.Once
+import team.weathy.util.convertDateToMonthlyIndex
+import team.weathy.util.convertDateToWeeklyIndex
+import team.weathy.util.convertMonthlyIndexToDate
+import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
-import team.weathy.view.calendar.CalendarView.CalendarDate
-import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertMonthlyIndexToDate
-import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertWeeklyIndexToDate
+import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
+import java.time.LocalDate
 import java.util.*
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ConstraintLayout(context, attrs) {
 
-    private val today = DateTime.now()
+    private val today = LocalDate.now()
 
-    var curDate by OnChangeProp(CalendarDate.now()) {
+    var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithCurDate()
         onDateChangeListener?.onChange(it)
         invalidate()
@@ -66,27 +67,24 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
     private val isTodayInCurrentWeek
-        get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth()
+        get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
 
     private fun isIncludedInTodayWeek(idx: Int) =
-        isTodayInCurrentMonth && isTodayInCurrentWeek && (today.day - 1) % 7 == idx % 7
+        isTodayInCurrentMonth && isTodayInCurrentWeek && (today.dayOfWeek.value - 1) == idx % 7
 
-    private var isExpanded by OnChangeProp(false) {
-        if (it) {
+    private var isExpanded by OnChangeProp(false) { expanded ->
+        if (expanded) {
             enableScroll()
             enableTouchMonthlyPagerOnly()
-            scrollToTop()
-            AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
-                animValue = it
-            }
         } else {
             disableScroll()
             enableTouchWeeklyPagerOnly()
-            scrollToTop()
-            AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
-                animValue = it
-            }
         }
+        AnimUtil.runSpringAnimation(animValue, if (expanded) 1f else 0f, 500f) {
+            animValue = it
+        }
+
+        scrollToTop()
         invalidate()
     }
 
@@ -165,7 +163,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 val newDate = convertMonthlyIndexToDate(position)
                 if (curDate != newDate) {
                     curDate = newDate
-                    onDateChangeListener?.onChange(newDate)
                 }
             }
         })
@@ -189,7 +186,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 val newDate = convertWeeklyIndexToDate(position)
                 if (curDate != newDate) {
                     curDate = newDate
-                    onDateChangeListener?.onChange(newDate)
                 }
             }
         })
@@ -210,13 +206,21 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         dateText.text = "${curDate.year} .${curDate.month.toString().padStart(2, '0')}"
 
         if (!isExpanded) {
-            monthlyViewPager.setCurrentItem(
-                CalendarDate.convertDateToMonthlyIndex(curDate), false
-            )
+            val nextIdx = convertDateToMonthlyIndex(curDate)
+
+            if (monthlyViewPager.currentItem != nextIdx) {
+                monthlyViewPager.setCurrentItem(
+                    nextIdx, false
+                )
+            }
         } else {
-            weeklyViewPager.setCurrentItem(
-                CalendarDate.convertDateToWeeklyIndex(curDate), false
-            )
+            val nextIdx = convertDateToWeeklyIndex(curDate)
+
+            if (weeklyViewPager.currentItem != nextIdx) {
+                weeklyViewPager.setCurrentItem(
+                    nextIdx, false
+                )
+            }
         }
 
         adjustWeekTextColors()
@@ -295,7 +299,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
             val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
             val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + ((today.day - 1) % 7) * rawWidth
+            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + (today.dayOfWeek.value - 1) * rawWidth
             val capsuleWidthRadius = capsuleWidth / 2f
 
             canvas.drawRoundRect(
@@ -393,66 +397,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         monthlyViewPager.isUserInputEnabled = true
     }
 
-    data class CalendarDate(
-        val year: Int, val month: Int, val weekOfMonth: Int, val timeMillis: Long
-    ) {
-        companion object {
-            fun now(): CalendarDate {
-                val now = DateTime.now()
-                return CalendarDate(
-                    now.year, now.month, now.weekOfMonth(), DateTime.getCalendarInstance().timeInMillis
-                )
-            }
-
-            fun convertMonthlyIndexToDate(index: Int): CalendarDate {
-                val cur = DateTime.nowJoda()
-
-                val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
-                val dest = cur.minusMonths(diffMonth)
-
-                return CalendarDate(
-                    year = dest.year,
-                    month = dest.monthOfYear,
-                    weekOfMonth = dest.toCalendar(null)[Calendar.WEEK_OF_MONTH],
-                    dest.millis
-                )
-            }
-
-            fun convertWeeklyIndexToDate(index: Int): CalendarDate {
-                val cur = DateTime.nowJoda()
-
-                val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
-                val dest = cur.minusWeeks(diffWeek)
-
-                return CalendarDate(
-                    year = dest.year,
-                    month = dest.monthOfYear,
-                    weekOfMonth = dest.toCalendar(null)[Calendar.WEEK_OF_MONTH],
-                    dest.millis
-                )
-            }
-
-            fun convertDateToMonthlyIndex(date: CalendarDate): Int {
-                val now = DateTime.now()
-
-                val yearDiff = now.year - date.year
-                val diffIndex = now.month - date.month + yearDiff * 12
-
-                return MonthlyAdapter.MAX_ITEM_COUNT - diffIndex - 1
-            }
-
-            fun convertDateToWeeklyIndex(date: CalendarDate): Int {
-                val now = DateTime.nowJoda()
-                val cur = org.joda.time.DateTime(date.timeMillis)
-                val diffIndex = Weeks.weeksBetween(cur, now).weeks
-
-                return WeeklyAdapter.MAX_ITEM_COUNT - diffIndex - 1
-            }
-        }
-    }
-
     fun interface OnDateChangeListener {
-        fun onChange(date: CalendarDate)
+        fun onChange(date: LocalDate)
     }
 
     companion object {
@@ -463,12 +409,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 }
 
 @BindingAdapter("curDate")
-fun CalendarView.setCurDate(date: CalendarDate) {
+fun CalendarView.setCurDate(date: LocalDate) {
     if (curDate != date) curDate = date
 }
 
 @InverseBindingAdapter(attribute = "curDate")
-fun CalendarView.getCurDate() = curDate
+fun CalendarView.getCurDate(): LocalDate = curDate
 
 @BindingAdapter("curDateAttrChanged")
 fun CalendarView.setListener(attrChange: InverseBindingListener) {

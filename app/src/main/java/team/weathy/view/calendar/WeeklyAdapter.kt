@@ -5,7 +5,7 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import team.weathy.view.calendar.CalendarView.CalendarDate.Companion.convertWeeklyIndexToDate
+import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.view.calendar.WeeklyAdapter.WeeklyHolder
 
 class WeeklyAdapter(

@@ -13,28 +13,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.math.MathUtils
 import team.weathy.databinding.ViewCalendarWeeklyItemBinding
-import team.weathy.util.DateTime
 import team.weathy.util.OnChangeProp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.pxFloat
-import team.weathy.view.calendar.CalendarView.CalendarDate
+import team.weathy.util.weekOfMonth
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
-    var date by OnChangeProp(CalendarDate.now()) {
+    var date: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithDate()
     }
-    private val today = DateTime.now()
+    private val today = LocalDate.now()
 
     private val isTodayInCurrentWeek
-        get() = date.year == today.year && date.month == today.month && date.weekOfMonth == today.weekOfMonth()
+        get() = date.year == today.year && date.month == today.month && date.weekOfMonth == today.weekOfMonth
 
     private val calendarItems = (0..6).map {
         ViewCalendarWeeklyItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.id = ViewCompat.generateViewId()
-
-            day.text = (it + 1).toString()
         }
     }
 
@@ -89,8 +87,10 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private fun updateUIWithDate() {
         calendarItems.forEachIndexed { idx, binding ->
-            val isToday = isTodayInCurrentWeek && today.day == idx + 1
+            val isToday = isTodayInCurrentWeek && today.dayOfWeek.value == idx + 1
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
+
+            binding.day.text = "hi"
         }
     }
 

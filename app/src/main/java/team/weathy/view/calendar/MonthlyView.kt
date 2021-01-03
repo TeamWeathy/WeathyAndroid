@@ -17,20 +17,19 @@ import androidx.lifecycle.Observer
 import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
-import team.weathy.util.DateTime
 import team.weathy.util.OnChangeProp
 import team.weathy.util.Once
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
-import team.weathy.view.calendar.CalendarView.CalendarDate
+import java.time.LocalDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     ScrollView(context, attrs) {
 
-    private val today = DateTime.now()
-    var curDate by OnChangeProp(CalendarDate.now()) {
+    private val today = LocalDate.now()
+    var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithDate()
     }
 
@@ -145,7 +144,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private fun updateUIWithDate() {
         calendarItems.forEachIndexed { idx, binding ->
-            val isToday = isTodayInCurrentMonth && idx + 1 == today.day
+            val isToday = isTodayInCurrentMonth && idx + 1 == today.dayOfMonth
             binding.circleSmall.isVisible = isToday
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
         }
@@ -183,7 +182,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
 
         if (isTodayInCurrentMonth) {
-            val itemToday = calendarItems[today.day - 1]
+            val itemToday = calendarItems[today.dayOfMonth - 1]
             itemToday.run {
                 circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
                 circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
