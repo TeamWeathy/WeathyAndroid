@@ -160,8 +160,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val newDate = convertMonthlyIndexToDate(position)
-                if (curDate != newDate) {
+                val newDate = convertMonthlyIndexToDate(position).withDayOfMonth(1)
+                if (isExpanded && curDate != newDate) {
                     curDate = newDate
                 }
             }
@@ -184,7 +184,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val newDate = convertWeeklyIndexToDate(position)
-                if (curDate != newDate) {
+                if (!isExpanded && curDate != newDate) {
                     curDate = newDate
                 }
             }
@@ -203,7 +203,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun updateUIWithCurDate() {
-        dateText.text = "${curDate.year} .${curDate.month.toString().padStart(2, '0')}"
+        dateText.text = "${curDate.year} .${curDate.monthValue.toString().padStart(2, '0')}"
 
         if (!isExpanded) {
             val nextIdx = convertDateToMonthlyIndex(curDate)

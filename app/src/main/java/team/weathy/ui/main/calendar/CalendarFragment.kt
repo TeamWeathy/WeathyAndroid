@@ -11,6 +11,7 @@ import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.debugE
+import team.weathy.util.weekOfMonth
 
 class CalendarFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
@@ -26,7 +27,7 @@ class CalendarFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.curDate.observe(viewLifecycleOwner) {
-            debugE(it)
+            debugE("$it, ${it.weekOfMonth}")
         }
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.annotation.IntRange
@@ -19,10 +20,12 @@ import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.OnChangeProp
 import team.weathy.util.Once
+import team.weathy.util.calculateRequiredRow
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
+import team.weathy.util.getMonthTexts
 import java.time.LocalDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -74,33 +77,38 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         id = ViewCompat.generateViewId()
         orientation = LinearLayout.VERTICAL
         weightSum = 5f
-        setBackgroundColor(Color.TRANSPARENT)
+
+        layoutParams = LayoutParams(
+            MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
-    private val innerLinearLayout = (1..5).map {
+    private val innerLinearLayouts = (1..6).map {
         LinearLayout(context).apply {
             id = ViewCompat.generateViewId()
             orientation = LinearLayout.HORIZONTAL
             weightSum = 7f
-            setBackgroundColor(Color.TRANSPARENT)
+
+            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, px(102), 0f)
         }
     }
-    private val calendarItems = (0..34).map {
+
+    private val calendarItems = (1..42).map {
         ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.id = ViewCompat.generateViewId()
-
-            day.text = (it + 1).toString()
         }
     }
     private val dividerGenerator = {
         View(context).apply {
             id = ViewCompat.generateViewId()
             setBackgroundColor(getColor(R.color.sub_grey_5))
+
+            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, px(1), 0f)
         }
     }
 
     init {
         configureContainer()
-        addViews()
+        addOuterLinearLayout()
         updateUIWithDate()
     }
 
@@ -110,32 +118,33 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         isVerticalScrollBarEnabled = false
     }
 
-    private fun addViews() {
-        addCalendarItems()
+    private fun addOuterLinearLayout() {
+        addView(outerLinearLayout)
     }
 
-    private fun addCalendarItems() {
-        addView(
-            outerLinearLayout, ConstraintLayout.LayoutParams(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        )
+    private fun attachLayouts() {
+        val texts = getMonthTexts(curDate)
 
-        innerLinearLayout.forEachIndexed { index, inner ->
-            if (index != 0) outerLinearLayout.addView(
-                dividerGenerator(),
-                LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, px(1), 0f)
-            )
-            outerLinearLayout.addView(
-                inner, LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, px(102), 0f)
-            )
+        innerLinearLayouts.forEach {
+            it.removeAllViews()
+        }
+        outerLinearLayout.removeAllViews()
+        val requiredRow = calculateRequiredRow(curDate)
 
-            calendarItems.subList(index * 7, index * 7 + 7).forEach {
-                inner.addView(
-                    it.root, LinearLayout.LayoutParams(
-                        android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                        android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                        1f
+        repeat(requiredRow) { row ->
+            val innerLinearLayout = innerLinearLayouts[row]
+
+            if (row > 0) outerLinearLayout.addView(dividerGenerator())
+            outerLinearLayout.addView(innerLinearLayout)
+
+            repeat(7) { column ->
+                val idx = row * 7 + column
+
+                calendarItems[idx].day.text = texts[idx]
+
+                innerLinearLayout.addView(
+                    calendarItems[idx].root, LinearLayout.LayoutParams(
+                        MATCH_PARENT, MATCH_PARENT, 1f
                     )
                 )
             }
@@ -143,6 +152,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     private fun updateUIWithDate() {
+        attachLayouts()
         calendarItems.forEachIndexed { idx, binding ->
             val isToday = isTodayInCurrentMonth && idx + 1 == today.dayOfMonth
             binding.circleSmall.isVisible = isToday
