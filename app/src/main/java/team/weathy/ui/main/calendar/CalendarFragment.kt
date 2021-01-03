@@ -20,10 +20,9 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = mainViewModel
-        //        binding.container.startLayoutAnimation()
 
         binding.date.setOnClickListener {
-            binding.calendarView.today = Random.nextInt(1, 35)
+//            binding.calendarView.today = Random.nextInt(1, 35)
         }
     }
 }

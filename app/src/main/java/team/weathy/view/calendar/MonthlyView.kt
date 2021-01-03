@@ -32,7 +32,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
     private var lineIndexIncludesToday = 0
 
-    private fun isIncludedInTodayWeek(idx: Int) = (today - 1) % 7 == idx % 7
     lateinit var animLiveData: LiveData<Float>
     private val animValue
         get() = animLiveData.value!!
@@ -144,8 +143,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             val isToday = idx + 1 == today
             binding.circleSmall.isVisible = isToday
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
-            binding.dayFirstLine.setTextColor(getDayTextColor(idx % 7, isIncludedInTodayWeek(idx)))
-            binding.dayFirstLine.text = (idx % 7 + 1 + lineIndexIncludesToday * 7).toString()
         }
     }
 
@@ -170,29 +167,18 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private fun adjustCalendarItems() {
         calendarItems.forEach { binding ->
-            binding.tempHigh.alpha = animValue
-            binding.tempLow.alpha = animValue
-            binding.circle.alpha = 1 - animValue
-
-            listOf(binding.day, binding.dayFirstLine).forEach {
-                it.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topMargin = MathUtils.lerp(5.dpFloat, 15.dpFloat, animValue).toInt()
-                }
+            binding.day.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                topMargin = MathUtils.lerp(5.dpFloat, 15.dpFloat, animValue).toInt()
             }
-
-            binding.day.alpha = animValue
-            binding.dayFirstLine.alpha = 1 - animValue
         }
 
         val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
         itemsExceptFirstLine.forEachIndexed { index, binding ->
-            binding.root.alpha = animValue
             binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
         }
 
         val itemToday = calendarItems[today - 1]
         itemToday.run {
-            circleSmall.alpha = animValue
             circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
             circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
         }

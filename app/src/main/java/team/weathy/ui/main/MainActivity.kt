@@ -4,22 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
-import team.weathy.ui.main.calendar.CalendarFragment
-import team.weathy.ui.main.calendar.HomeFragment
-import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.dpFloat
-import team.weathy.util.extensions.addFragment
-import team.weathy.util.extensions.popFragmentIfExist
-import team.weathy.util.extensions.replaceFragment
 import team.weathy.util.setOnDebounceClickListener
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        attachFragments(savedInstanceState)
+        configurePager()
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
@@ -40,12 +33,9 @@ class MainActivity : AppCompatActivity() {
         StatusBarUtil.collapseStatusBar(this)
     }
 
-    private fun attachFragments(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) return
-
-        supportFragmentManager.commit {
-            add(binding.fragmentContainer.id, HomeFragment::class.java, null, HomeFragment::class.java.simpleName)
-        }
+    private fun configurePager() = binding.fragmentPager.let { pager ->
+        pager.adapter = MainFragmentAdapter(this)
+        pager.isUserInputEnabled = false
     }
 
     private fun configureToolbar() {
@@ -120,22 +110,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateHome() {
-        popFragmentIfExist(SearchFragment::class.java)
-        replaceFragment(binding.fragmentContainer, HomeFragment::class.java)
+        binding.fragmentPager.setCurrentItem(0, false)
     }
 
     private fun navigateCalendar() {
-        popFragmentIfExist(SearchFragment::class.java)
-        replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
+        binding.fragmentPager.setCurrentItem(1, false)
     }
 
-    private fun navigateSearch() = addFragment(binding.fragmentContainer, SearchFragment::class.java)
+    private fun navigateSearch() {
+        binding.fragmentPager.setCurrentItem(2, false)
+    }
 
     override fun onBackPressed() {
         when (viewModel.menu.value) {
             HOME -> super.onBackPressed()
-            CALENDAR -> viewModel.changeMenu(HOME)
-            else -> viewModel.changeMenu(viewModel.menuBeforeNavigateSearch.value!!)
+            else -> viewModel.changeMenu(HOME)
         }
     }
 }
