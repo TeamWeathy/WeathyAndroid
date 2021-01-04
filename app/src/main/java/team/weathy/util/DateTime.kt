@@ -59,11 +59,7 @@ fun convertDateToWeeklyIndex(date: LocalDate): Int {
 
 
 fun calculateRequiredRow(date: LocalDate): Int {
-    val dayCount = date.lengthOfMonth()
-    val firstWeekStartDayOfWeek = date.withDayOfMonth(1).dayOfWeekValue
-    val previousMonthDayCount = firstWeekStartDayOfWeek - 1
-
-    return (dayCount + previousMonthDayCount) / 7 + 1
+    return (date.lengthOfMonth() + date.withDayOfMonth(1).dayOfWeekIndex - 1) / 7 + 1
 }
 
 fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
@@ -72,7 +68,7 @@ fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
     val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
 
     // 1 ~ 7 (MON ~ SUN)
-    val startDayIndex = date.withDayOfMonth(1).dayOfWeekValue - 1
+    val startDayIndex = date.withDayOfMonth(1).dayOfWeekIndex
     val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
 
     for (i in 0 until startDayIndex) {

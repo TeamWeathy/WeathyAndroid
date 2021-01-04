@@ -439,6 +439,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         fun onChange(date: LocalDate)
     }
 
+    // region External API
+    fun selectToday() {
+        curDate = today
+    }
+    // endregion
+
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 220
