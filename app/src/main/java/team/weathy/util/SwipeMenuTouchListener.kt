@@ -20,7 +20,6 @@ class SwipeMenuTouchListener(private val callback: Callback) : OnTouchListener {
                 velocityTracker?.addMovement(e)
 
                 dx = view.x - e.rawX
-                debugE("down")
             }
             MotionEvent.ACTION_MOVE -> {
                 velocityTracker?.apply {
