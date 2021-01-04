@@ -15,10 +15,10 @@ import androidx.lifecycle.Observer
 import com.google.android.material.math.MathUtils
 import team.weathy.databinding.ViewCalendarWeeklyItemBinding
 import team.weathy.util.OnChangeProp
+import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.getWeekTexts
-import team.weathy.util.transformDayOfWeek
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -96,7 +96,7 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             binding.root.alpha = if (isFuture) .3f else 1f
             binding.circle.isVisible = !isFuture
 
-            val isToday = isTodayInCurrentWeek && transformDayOfWeek(today.dayOfWeek) - 1 == idx
+            val isToday = isTodayInCurrentWeek && today.dayOfWeekIndex == idx
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
 
             binding.day.text = texts[idx].toString()

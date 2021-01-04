@@ -34,6 +34,11 @@ import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import team.weathy.R
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
@@ -42,12 +47,12 @@ import team.weathy.util.convertDateToMonthlyIndex
 import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.util.convertWeeklyIndexToDate
+import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
-import team.weathy.util.transformDayOfWeek
 import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
@@ -72,22 +77,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
 
 
-    private var isExpanded by OnChangeProp(false) { expanded ->
-        if (expanded) {
-            enableScroll()
-            enableTouchMonthlyPagerOnly()
-        } else {
-            disableScroll()
-            enableTouchWeeklyPagerOnly()
-        }
-        AnimUtil.runSpringAnimation(animValue, if (expanded) 1f else 0f, 500f) {
-            animValue = it
-        }
-
-        scrollToTop()
-        invalidate()
-    }
-
     private val animLiveData = MutableLiveData(0f)
     private var animValue by OnChangeProp(0f) {
         adjustUIsWithAnimValue()
@@ -97,9 +86,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val scrollEnabled = MutableLiveData(false)
     private val onScrollToTop = MutableLiveData<Once<Unit>>()
 
-    private val collapsed
+    private val collapsedHeight
         get() = px(MIN_HEIGHT_DP)
-    private val expanded
+    private val expandedHeight
         get() = screenHeight - px(EXPAND_MARGIN_BOTTOM_DP)
 
     private val paddingHorizontal = px(24)
@@ -151,24 +140,53 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private val monthlyViewPager = ViewPager2(context).apply {
-        layoutParams = viewPagerLayoutParams()
+    private var isExpanded = false
+    private fun expand() {
+        isExpanded = true
 
-        adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
-        setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
-        alpha = 0f
+        enableScroll()
+        enableTouchMonthlyPagerOnly()
 
-        registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val newDate = convertMonthlyIndexToDate(position).withDayOfMonth(1)
-                if (isExpanded && curDate != newDate) {
-                    curDate = newDate
-                }
-            }
-        })
+        AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
+            animValue = it
+        }
 
-        offscreenPageLimit = 1
+        scrollToTop()
+        invalidate()
     }
+
+    private fun collapse() {
+        isExpanded = false
+        disableScroll()
+        enableTouchWeeklyPagerOnly()
+
+        AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
+            animValue = it
+        }
+
+        scrollToTop()
+        invalidate()
+    }
+
+    private val monthlyViewPagerGenerator = {
+        ViewPager2(context).apply {
+            layoutParams = viewPagerLayoutParams()
+
+            adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+            setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
+            alpha = 0f
+
+            registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val newDate = convertMonthlyIndexToDate(position).withDayOfMonth(1)
+                    if (isExpanded && curDate != newDate) {
+                        curDate = newDate
+                    }
+                }
+            })
+        }
+    }
+    private var monthlyViewPager: ViewPager2? = null
     private val weeklyViewPager = ViewPager2(context).apply {
         layoutParams = viewPagerLayoutParams()
 
@@ -189,9 +207,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 }
             }
         })
-
-        offscreenPageLimit = 1
     }
+
+    private lateinit var initialJob: Job
 
     init {
         initContainer()
@@ -202,14 +220,33 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         adjustWeekTextColors()
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        initialJob = GlobalScope.launch(Dispatchers.Main) {
+            delay(700L)
+
+            if (monthlyViewPager == null) {
+                monthlyViewPager = monthlyViewPagerGenerator()
+                addView(monthlyViewPager!!, 0)
+                updateUIWithCurDate()
+            }
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        initialJob.cancel()
+    }
+
     private fun updateUIWithCurDate() {
         dateText.text = "${curDate.year} .${curDate.monthValue.toString().padStart(2, '0')}"
 
         if (!isExpanded) {
             val nextIdx = convertDateToMonthlyIndex(curDate)
 
-            if (monthlyViewPager.currentItem != nextIdx) {
-                monthlyViewPager.setCurrentItem(
+            if (monthlyViewPager?.currentItem != nextIdx) {
+                monthlyViewPager?.setCurrentItem(
                     nextIdx, false
                 )
             }
@@ -242,7 +279,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addDateText()
         addTopDivider()
         addWeekLayoutAndWeekTexts()
-        addViewPagers()
+        addView(weeklyViewPager)
     }
 
     private fun addDateText() {
@@ -260,11 +297,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
         addView(layout)
         weekTexts.forEach(layout::addView)
-    }
-
-    private fun addViewPagers() {
-        addView(monthlyViewPager)
-        addView(weeklyViewPager)
     }
 
     private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -292,7 +324,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
             val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
             val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + (transformDayOfWeek(today.dayOfWeek) - 1) * rawWidth
+            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
             val capsuleWidthRadius = capsuleWidth / 2f
 
             canvas.drawRoundRect(
@@ -332,10 +364,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         computeCurrentVelocity(1000)
                     }
 
-                    animValue = ((event.y - collapsed) / (expanded - collapsed)).clamp(0f, 1.2f)
+                    animValue = ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    isExpanded = expandVelocityTracker!!.yVelocity > 0
+                    if (expandVelocityTracker!!.yVelocity > 0) expand()
+                    else collapse()
                 }
             }
             true
@@ -350,7 +383,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun adjustHeight() = updateLayoutParams<ViewGroup.LayoutParams> {
-        height = MathUtils.lerp(collapsed.toFloat(), expanded.toFloat(), animValue).toInt()
+        height = MathUtils.lerp(collapsedHeight.toFloat(), expandedHeight.toFloat(), animValue).toInt()
     }
 
     private fun adjustWeekTextColors() {
@@ -358,7 +391,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             textView.setTextColor(
                 getWeekTextColor(
                     idx,
-                    isTodayInCurrentMonth && isTodayInCurrentWeek && (transformDayOfWeek(today.dayOfWeek) - 1) == idx % 7
+                    (if (isExpanded) isTodayInCurrentMonth else isTodayInCurrentWeek) && today.dayOfWeekIndex == idx % 7
                 )
             )
         }
@@ -377,7 +410,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun adjustViewPagersOpacity() {
         weeklyViewPager.alpha = 1 - animValue
-        monthlyViewPager.alpha = animValue
+        monthlyViewPager?.alpha = animValue
     }
 
     private fun disableScroll() {
@@ -394,12 +427,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun enableTouchWeeklyPagerOnly() {
         weeklyViewPager.isUserInputEnabled = true
-        monthlyViewPager.isUserInputEnabled = false
+        monthlyViewPager?.isUserInputEnabled = false
     }
 
     private fun enableTouchMonthlyPagerOnly() {
         weeklyViewPager.isUserInputEnabled = false
-        monthlyViewPager.isUserInputEnabled = true
+        monthlyViewPager?.isUserInputEnabled = true
     }
 
     fun interface OnDateChangeListener {

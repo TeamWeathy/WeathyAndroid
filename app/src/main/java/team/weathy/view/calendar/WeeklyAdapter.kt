@@ -28,7 +28,8 @@ class WeeklyAdapter(
 
     inner class WeeklyHolder(private val view: WeeklyView) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
-            view.date = convertWeeklyIndexToDate(position)
+            val date = convertWeeklyIndexToDate(position)
+            view.date = date
         }
     }
 

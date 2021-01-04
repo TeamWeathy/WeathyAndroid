@@ -2,18 +2,28 @@ package team.weathy.util
 
 import team.weathy.view.calendar.MonthlyAdapter
 import team.weathy.view.calendar.WeeklyAdapter
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.Calendar.*
 
 
 val LocalDate.weekOfMonth: Int
     get() {
         val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        return gc[Calendar.WEEK_OF_MONTH]
+        gc.firstDayOfWeek = SUNDAY
+        gc.minimalDaysInFirstWeek = 1
+        return gc[WEEK_OF_MONTH]
     }
+
+val LocalDate.dayOfWeekValue: Int
+    get() = when (dayOfWeek.value + 1) {
+        8 -> 1
+        else -> dayOfWeek.value + 1
+    }
+val LocalDate.dayOfWeekIndex: Int
+    get() = dayOfWeekValue - 1
 
 fun convertMonthlyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
@@ -26,15 +36,8 @@ fun convertWeeklyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
-    val subtracted = cur.minusWeeks(diffWeek.toLong())
 
-    return subtracted
-
-    //    return if (subtracted.lengthOfMonth() - subtracted.dayOfMonth < 6) {
-    //        subtracted.plusMonths(1).withDayOfMonth(1)
-    //    } else {
-    //        subtracted
-    //    }
+    return cur.minusWeeks(diffWeek.toLong())
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
@@ -54,16 +57,10 @@ fun convertDateToWeeklyIndex(date: LocalDate): Int {
     return WeeklyAdapter.MAX_ITEM_COUNT - diffIndex - 1
 }
 
-fun transformDayOfWeek(dayOfWeek: DayOfWeek): Int {
-    return when (dayOfWeek.value + 1) {
-        8 -> 1
-        else -> dayOfWeek.value + 1
-    }
-}
 
 fun calculateRequiredRow(date: LocalDate): Int {
     val dayCount = date.lengthOfMonth()
-    val firstWeekStartDayOfWeek = transformDayOfWeek(date.withDayOfMonth(1).dayOfWeek)
+    val firstWeekStartDayOfWeek = date.withDayOfMonth(1).dayOfWeekValue
     val previousMonthDayCount = firstWeekStartDayOfWeek - 1
 
     return (dayCount + previousMonthDayCount) / 7 + 1
@@ -75,7 +72,7 @@ fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
     val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
 
     // 1 ~ 7 (MON ~ SUN)
-    val startDayIndex = transformDayOfWeek(date.withDayOfMonth(1).dayOfWeek) - 1
+    val startDayIndex = date.withDayOfMonth(1).dayOfWeekValue - 1
     val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
 
     for (i in 0 until startDayIndex) {
@@ -94,5 +91,5 @@ fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
 fun getWeekTexts(date: LocalDate): List<Int> {
     val (_result) = getMonthTexts(date)
 
-    return _result.subList(date.weekOfMonth * 7, date.weekOfMonth * 7 + 7)
+    return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
 }
