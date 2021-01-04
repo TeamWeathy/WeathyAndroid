@@ -51,6 +51,7 @@ import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.util.dayOfWeekIndex
+import team.weathy.util.debugE
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -217,7 +218,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertMonthlyIndexToDate(position).withDayOfMonth(1)
+                    val newDate = convertMonthlyIndexToDate(position)
                     if (isExpanded && curDate != newDate) {
                         curDate = newDate
                     }
@@ -416,7 +417,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             textView.setTextColor(
                 getWeekTextColor(
                     idx,
-                    (if (isExpanded) isTodayInCurrentMonth else isTodayInCurrentWeek) && today.dayOfWeekIndex == idx % 7
+                    isTodayInCurrentWeek && today.dayOfWeekIndex == idx
                 )
             )
         }

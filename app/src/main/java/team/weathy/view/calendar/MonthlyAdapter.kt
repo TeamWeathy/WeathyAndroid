@@ -33,7 +33,7 @@ class MonthlyAdapter(
 
     inner class MonthlyHolder(private val view: MonthlyView) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
-            view.date = convertMonthlyIndexToDate(position).withDayOfMonth(1)
+            view.date = convertMonthlyIndexToDate(position)
         }
     }
 

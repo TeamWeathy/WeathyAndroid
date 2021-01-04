@@ -52,9 +52,9 @@ fun convertDateToMonthlyIndex(date: LocalDate): Int {
 fun convertDateToWeeklyIndex(date: LocalDate): Int {
     val now = LocalDate.now()
 
-    val diffIndex = ChronoUnit.WEEKS.between(date, now).toInt()
+    val weekDiff = ChronoUnit.WEEKS.between(date, now).toInt()
 
-    return WeeklyAdapter.MAX_ITEM_COUNT - diffIndex - 1
+    return WeeklyAdapter.MAX_ITEM_COUNT - weekDiff - 1
 }
 
 
