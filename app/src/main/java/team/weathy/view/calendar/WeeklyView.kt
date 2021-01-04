@@ -107,6 +107,6 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private fun getDayTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
         if (isToday) return Color.WHITE
 
-        return getColor(CalendarUtil.getColorFromWeek(week))
+        return getColor(CalendarUtil.getWeekBaseColor(week))
     }
 }
