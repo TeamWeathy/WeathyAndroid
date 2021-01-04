@@ -398,15 +398,15 @@ fun CalendarView.setListener(attrChange: InverseBindingListener) {
 ***CalendarView.kt***
 ```kotlin
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs) {
+    ConstraintLayout(context, attrs), CoroutineScope {
 
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
     private val today = LocalDate.now()
 
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
-        updateUIWithCurDate()
-        onDateChangeListener?.onChange(it)
-        scrollToTop()
-        invalidate()
+        onCurDateChanged()
     }
     var onDateChangeListener: OnDateChangeListener? = null
 
@@ -418,8 +418,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val animLiveData = MutableLiveData(0f)
     private var animValue by OnChangeProp(0f) {
-        adjustUIsWithAnimValue()
         animLiveData.value = it
+        onAnimValueChanged()
     }
 
     private val scrollEnabled = MutableLiveData(false)
@@ -432,7 +432,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val paddingHorizontal = px(24)
 
-    private val dateText = TextView(context).apply {
+    private val yearMonthText = TextView(context).apply {
         id = ViewCompat.generateViewId()
         textSize = 25f
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
@@ -461,8 +461,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(px(32), px(32)).apply {
             setPadding(px(6), px(6), px(6), px(6))
-            topToTop = dateText.id
-            bottomToBottom = dateText.id
+            topToTop = yearMonthText.id
+            bottomToBottom = yearMonthText.id
             rightToRight = parentId
             rightMargin = px(30)
         }
@@ -473,7 +473,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         setBackgroundColor(getColor(R.color.sub_grey_5))
 
         layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
-            topToBottom = dateText.id
+            topToBottom = yearMonthText.id
             topMargin = px(16)
         }
     }
@@ -512,27 +512,27 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun expand() {
         isExpanded = true
 
-        enableScroll()
+        notifyEnableScroll()
         enableTouchMonthlyPagerOnly()
 
         AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
             animValue = it
         }
 
-        scrollToTop()
+        notifyScrollToTop()
         invalidate()
     }
 
     private fun collapse() {
         isExpanded = false
-        disableScroll()
+        notifyDisableScroll()
         enableTouchWeeklyPagerOnly()
 
         AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
             animValue = it
         }
 
-        scrollToTop()
+        notifyScrollToTop()
         invalidate()
     }
 
@@ -583,55 +583,31 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         })
     }
 
-    private lateinit var initialJob: Job
-
     init {
         initContainer()
         addViews()
         configureExpandGestureHandling()
-        updateUIWithCurDate()
         enableTouchWeeklyPagerOnly()
-        adjustWeekTextColors()
+        changeWeekTextsColor()
+        onCurDateChanged()
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-
-        initialJob = GlobalScope.launch(Dispatchers.Main) {
+        launch {
             delay(700L)
 
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
-                updateUIWithCurDate()
+                onCurDateChanged()
             }
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        initialJob.cancel()
-    }
-
-    private fun updateUIWithCurDate() {
-        dateText.text = "${curDate.year} .${curDate.monthValue.toString().padStart(2, '0')}"
-
-        val nextMonthlyIndex = convertDateToMonthlyIndex(curDate)
-        val nextWeeklyIndex = convertDateToWeeklyIndex(curDate)
-
-        if (monthlyViewPager?.currentItem != nextMonthlyIndex) {
-            monthlyViewPager?.setCurrentItem(
-                nextMonthlyIndex, false
-            )
-        }
-
-        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
-            weeklyViewPager.setCurrentItem(
-                nextWeeklyIndex, false
-            )
-        }
-
-        adjustWeekTextColors()
+        job.cancel()
     }
 
     private fun initContainer() {
@@ -647,7 +623,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun addViews() {
-        addView(dateText)
+        addView(yearMonthText)
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()
@@ -659,14 +635,48 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         weekTexts.forEach(layout::addView)
     }
 
-    private val notchPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private fun onCurDateChanged() {
+        setYearMonthTextWithDate(curDate)
+        selectPagerItemsWithDate(curDate)
+
+        onDateChangeListener?.onChange(curDate)
+        changeWeekTextsColor()
+        notifyScrollToTop()
+        invalidate()
+    }
+
+    private fun setYearMonthTextWithDate(date: LocalDate) {
+        yearMonthText.text = "${date.year} .${date.monthValue.toString().padStart(2, '0')}"
+    }
+
+    private fun selectPagerItemsWithDate(date: LocalDate) {
+        val nextMonthlyIndex = convertDateToMonthlyIndex(date)
+        val nextWeeklyIndex = convertDateToWeeklyIndex(date)
+
+        if (monthlyViewPager?.currentItem != nextMonthlyIndex) {
+            monthlyViewPager?.setCurrentItem(
+                nextMonthlyIndex, false
+            )
+        }
+
+        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
+            weeklyViewPager.setCurrentItem(
+                nextWeeklyIndex, false
+            )
+        }
+    }
+
+
+    private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
     }
-    private val weekCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val capsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
         setShadowLayer(12f, 0f, 0f, getColor(R.color.main_mint))
     }
+
     override fun onDraw(canvas: Canvas) {
+        // bar
         canvas.drawRoundRect(
             width / 2f - px(30),
             height - pxFloat(16),
@@ -674,9 +684,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             height - pxFloat(11),
             pxFloat(10),
             pxFloat(10),
-            notchPaint,
+            barPaint,
         )
 
+        // capsule
         if (isTodayInCurrentMonth) {
             val widthWithoutPadding = width - paddingHorizontal * 2f
             val rawWidth = widthWithoutPadding / 7f
@@ -694,7 +705,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 pxFloat(72) + capsuleHeight,
                 capsuleWidthRadius,
                 capsuleWidthRadius,
-                weekCapsulePaint,
+                capsulePaint,
             )
         }
     }
@@ -735,53 +746,46 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private fun adjustUIsWithAnimValue() {
-        adjustHeight()
-        adjustWeekTextColors()
-        adjustWeekCapsulePaintOpacity()
-        adjustViewPagersOpacity()
+    private fun onAnimValueChanged() {
+        animateHeight()
+        changeWeekTextsColor()
+        animCapsulePaintAlpha()
+        animPagersAlpha()
     }
 
-    private fun adjustHeight() = updateLayoutParams<ViewGroup.LayoutParams> {
+    private fun animateHeight() = updateLayoutParams<ViewGroup.LayoutParams> {
         height = MathUtils.lerp(collapsedHeight.toFloat(), expandedHeight.toFloat(), animValue).toInt()
     }
 
-    private fun adjustWeekTextColors() {
+    private fun changeWeekTextsColor() {
         weekTexts.forEachIndexed { idx, textView ->
             textView.setTextColor(
-                getWeekTextColor(
-                    idx,
-                    isTodayInCurrentWeek && today.dayOfWeekIndex == idx
+                CalendarUtil.getWeekTextColor(
+                    context, idx, animValue, isTodayInCurrentWeek && today.dayOfWeekIndex == idx
                 )
             )
         }
     }
 
-    private fun getWeekTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
-        val weekColor = getColor(CalendarUtil.getColorFromWeek(week))
-        if (!isToday) return weekColor
 
-        return ColorUtils.blendARGB(Color.WHITE, weekColor, animValue.clamp(0f, 1f))
+    private fun animCapsulePaintAlpha() {
+        capsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
 
-    private fun adjustWeekCapsulePaintOpacity() {
-        weekCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
-    }
-
-    private fun adjustViewPagersOpacity() {
+    private fun animPagersAlpha() {
         weeklyViewPager.alpha = 1 - animValue
         monthlyViewPager?.alpha = animValue
     }
 
-    private fun disableScroll() {
+    private fun notifyDisableScroll() {
         scrollEnabled.value = false
     }
 
-    private fun enableScroll() {
+    private fun notifyEnableScroll() {
         scrollEnabled.value = true
     }
 
-    private fun scrollToTop() {
+    private fun notifyScrollToTop() {
         onScrollToTop.value = Once(Unit)
     }
 
