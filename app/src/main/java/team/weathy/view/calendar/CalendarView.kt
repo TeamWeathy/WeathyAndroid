@@ -1,5 +1,6 @@
 package team.weathy.view.calendar
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -15,6 +16,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ImageButton
+import android.widget.ImageView.ScaleType.FIT_CENTER
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.IntRange
@@ -53,6 +56,7 @@ import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
+import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
@@ -99,7 +103,36 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
+
+        layoutParams = LayoutParams(0, WRAP_CONTENT).apply {
+            topToTop = parentId
+            leftToLeft = parentId
+            rightToRight = parentId
+            topMargin = px(16)
+        }
     }
+
+    private val todayButton = ImageButton(context).apply {
+        setImageResource(R.drawable.ic_today)
+        scaleType = FIT_CENTER
+
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(attr.selectableItemBackgroundBorderless, outValue, true)
+        setBackgroundResource(outValue.resourceId)
+
+        setOnDebounceClickListener {
+            curDate = today
+        }
+
+        layoutParams = LayoutParams(px(32), px(32)).apply {
+            setPadding(px(6), px(6), px(6), px(6))
+            topToTop = dateText.id
+            bottomToBottom = dateText.id
+            rightToRight = parentId
+            rightMargin = px(30)
+        }
+    }
+
     private val topDivider = View(context).apply {
         id = ViewCompat.generateViewId()
         setBackgroundColor(getColor(R.color.sub_grey_5))
@@ -176,6 +209,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 35f * position
+            }
+
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     val newDate = convertMonthlyIndexToDate(position).withDayOfMonth(1)
@@ -193,11 +232,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         adapter = WeeklyAdapter(animLiveData)
         setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
 
-        //        setPageTransformer { page, position ->
-        //            page.pivotX = if (position < 0) page.width.toFloat() else 0f
-        //            page.pivotY = page.height * 0.5f
-        //            page.rotationY = 20f * position
-        //        }
+        setPageTransformer { page, position ->
+            page.pivotX = if (position < 0) page.width.toFloat() else 0f
+            page.pivotY = page.height * 0.5f
+            page.rotationY = 35f * position
+        }
 
         registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -242,22 +281,19 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun updateUIWithCurDate() {
         dateText.text = "${curDate.year} .${curDate.monthValue.toString().padStart(2, '0')}"
 
-        if (!isExpanded) {
-            val nextIdx = convertDateToMonthlyIndex(curDate)
+        val nextMonthlyIndex = convertDateToMonthlyIndex(curDate)
+        val nextWeeklyIndex = convertDateToWeeklyIndex(curDate)
 
-            if (monthlyViewPager?.currentItem != nextIdx) {
-                monthlyViewPager?.setCurrentItem(
-                    nextIdx, false
-                )
-            }
-        } else {
-            val nextIdx = convertDateToWeeklyIndex(curDate)
+        if (monthlyViewPager?.currentItem != nextMonthlyIndex) {
+            monthlyViewPager?.setCurrentItem(
+                nextMonthlyIndex, false
+            )
+        }
 
-            if (weeklyViewPager.currentItem != nextIdx) {
-                weeklyViewPager.setCurrentItem(
-                    nextIdx, false
-                )
-            }
+        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
+            weeklyViewPager.setCurrentItem(
+                nextWeeklyIndex, false
+            )
         }
 
         adjustWeekTextColors()
@@ -276,23 +312,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun addViews() {
-        addDateText()
-        addTopDivider()
+        addView(dateText)
+        addView(todayButton)
+        addView(topDivider)
         addWeekLayoutAndWeekTexts()
         addView(weeklyViewPager)
     }
-
-    private fun addDateText() {
-        addView(dateText, LayoutParams(0, WRAP_CONTENT))
-        dateText.updateLayoutParams<LayoutParams> {
-            topToTop = parentId
-            leftToLeft = parentId
-            rightToRight = parentId
-            topMargin = px(16)
-        }
-    }
-
-    private fun addTopDivider() = addView(topDivider)
 
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
         addView(layout)
@@ -438,12 +463,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     fun interface OnDateChangeListener {
         fun onChange(date: LocalDate)
     }
-
-    // region External API
-    fun selectToday() {
-        curDate = today
-    }
-    // endregion
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID

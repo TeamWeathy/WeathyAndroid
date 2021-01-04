@@ -43,7 +43,7 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         updateUI()
     }
 
-    fun getStyleableAttrs(attr: AttributeSet) {
+    private fun getStyleableAttrs(attr: AttributeSet) {
         context.theme.obtainStyledAttributes(attr, R.styleable.WeathyCardView, 0, 0).use { arr ->
             radius = arr.getDimension(R.styleable.WeathyCardView_weathy_radius, 35.dpFloat)
             shadowColor = arr.getColor(R.styleable.WeathyCardView_weathy_shadow_color, defaultShadowColor)
