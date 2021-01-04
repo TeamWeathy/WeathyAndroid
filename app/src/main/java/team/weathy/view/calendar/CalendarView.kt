@@ -37,8 +37,8 @@ import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,7 +51,6 @@ import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.util.dayOfWeekIndex
-import team.weathy.util.debugE
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -62,10 +61,14 @@ import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs) {
+    ConstraintLayout(context, attrs), CoroutineScope {
 
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
     private val today = LocalDate.now()
 
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
@@ -249,8 +252,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         })
     }
 
-    private lateinit var initialJob: Job
-
     init {
         initContainer()
         addViews()
@@ -262,8 +263,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-
-        initialJob = GlobalScope.launch(Dispatchers.Main) {
+        launch {
             delay(700L)
 
             if (monthlyViewPager == null) {
@@ -276,7 +276,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        initialJob.cancel()
+        job.cancel()
     }
 
     private fun updateUIWithCurDate() {
