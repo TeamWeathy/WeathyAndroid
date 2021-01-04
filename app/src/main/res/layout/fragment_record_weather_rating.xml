@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="33dp"
     android:clipToPadding="false">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="34dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/step1"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginEnd="7dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toTopOf="@id/step2"
+        app:layout_constraintBottom_toBottomOf="@id/step2"
+        app:layout_constraintEnd_toStartOf="@id/step2"/>
+
+    <ImageView
+        android:id="@+id/step2"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginEnd="7dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toTopOf="@id/step3"
+        app:layout_constraintBottom_toBottomOf="@id/step3"
+        app:layout_constraintEnd_toStartOf="@id/step3"/>
+
+    <ImageView
+        android:id="@+id/step3"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="11dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         style="@style/RecordTitleText"
@@ -32,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="오늘 옷차림에 대한 느낌을 선택해주세요."
+        android:text="옷차림에 대한 느낌을 선택해주세요."
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="@id/tv_title"/>
 
@@ -53,12 +92,11 @@
 
             <ImageView
                 android:id="@+id/img_emoji"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="34dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginVertical="18dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintWidth_percent="0.14"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -68,8 +106,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
-                android:text="너무 더웠어요"
+                android:layout_marginStart="17dp"
+                android:text="너무 더워요"
                 android:textSize="17sp"
                 android:textColor="@color/imoji_veryhot_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -108,12 +146,11 @@
 
             <ImageView
                 android:id="@+id/img_emoji2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="34dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginVertical="18dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintWidth_percent="0.14"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -123,8 +160,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
-                android:text="더웠어요"
+                android:layout_marginStart="17dp"
+                android:text="더워요"
                 android:textSize="17sp"
                 android:textColor="@color/imoji_hot_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -163,12 +200,11 @@
 
             <ImageView
                 android:id="@+id/img_emoji3"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="34dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginVertical="18dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintWidth_percent="0.14"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -178,8 +214,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
-                android:text="적당했어요"
+                android:layout_marginStart="17dp"
+                android:text="적당해요"
                 android:textSize="17sp"
                 android:textColor="@color/imoji_good_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -218,12 +254,11 @@
 
             <ImageView
                 android:id="@+id/img_emoji4"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="34dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginVertical="18dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintWidth_percent="0.14"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -233,8 +268,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
-                android:text="추웠어요"
+                android:layout_marginStart="17dp"
+                android:text="추워요"
                 android:textSize="17sp"
                 android:textColor="@color/imoji_cold_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -273,12 +308,11 @@
 
             <ImageView
                 android:id="@+id/img_emoji5"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="34dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginVertical="18dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintWidth_percent="0.14"
+                android:src="@mipmap/ic_launcher"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -288,8 +322,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
-                android:text="너무 추웠어요"
+                android:layout_marginStart="17dp"
+                android:text="너무 추워요"
                 android:textSize="17sp"
                 android:textColor="@color/imoji_verycold_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -316,7 +350,7 @@
         android:id="@+id/btn_check"
         android:layout_width="match_parent"
         android:layout_marginBottom="38dp"
-        android:text="다음"
+        android:text="완료"
         app:layout_constraintBottom_toBottomOf="parent"
         android:enabled="false"/>
 
