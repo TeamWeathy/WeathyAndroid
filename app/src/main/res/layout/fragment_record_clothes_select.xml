@@ -3,24 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:paddingHorizontal="33dp">
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
     <ImageView
         android:id="@+id/back"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
         android:src="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="26dp"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     <ImageView
         android:id="@+id/step1"
         android:layout_width="9dp"
         android:layout_height="9dp"
-        android:layout_marginTop="97dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="49dp"
         android:background="@drawable/circle"
         android:backgroundTint="@color/main_mint"
         android:alpha="0.4"
@@ -54,7 +71,7 @@
         style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="29dp"
         android:text="희지님"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -92,9 +109,10 @@
         android:id="@+id/layout_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="6dp"
+        android:layout_marginTop="38dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingVertical="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_sub">
 
@@ -105,6 +123,7 @@
             android:text="상의"
             android:textColor="@color/main_grey"
             android:textSize="18sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,10 +131,11 @@
             android:id="@+id/tv_top_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="5dp"
             android:text="0"
             android:textColor="@color/sub_grey_6"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_top"
             app:layout_constraintStart_toEndOf="@id/tv_top"
             app:layout_constraintTop_toTopOf="parent" />
@@ -127,6 +147,7 @@
             android:text="/5"
             android:textColor="@color/sub_grey_6"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_top_count"
             app:layout_constraintStart_toEndOf="@id/tv_top_count" />
 
@@ -145,9 +166,10 @@
         android:id="@+id/layout_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="6dp"
+        android:layout_marginStart="14dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingVertical="4dp"
         app:layout_constraintStart_toEndOf="@id/layout_top"
         app:layout_constraintTop_toTopOf="@id/layout_top">
 
@@ -158,6 +180,7 @@
             android:text="하의"
             android:textColor="@color/sub_grey_6"
             android:textSize="18sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -165,10 +188,11 @@
             android:id="@+id/tv_bottom_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="5dp"
             android:text="0"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
             app:layout_constraintStart_toEndOf="@id/tv_bottom"
             app:layout_constraintTop_toTopOf="parent" />
@@ -180,6 +204,7 @@
             android:text="/5"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_bottom_count"
             app:layout_constraintStart_toEndOf="@id/tv_bottom_count" />
 
@@ -199,9 +224,10 @@
         android:id="@+id/layout_outer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="6dp"
+        android:layout_marginStart="14dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingVertical="4dp"
         app:layout_constraintStart_toEndOf="@id/layout_bottom"
         app:layout_constraintTop_toTopOf="@id/layout_bottom">
 
@@ -212,6 +238,7 @@
             android:text="외투"
             android:textColor="@color/sub_grey_6"
             android:textSize="18sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -219,10 +246,11 @@
             android:id="@+id/tv_outer_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="5dp"
             android:text="0"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_outer"
             app:layout_constraintStart_toEndOf="@id/tv_outer"
             app:layout_constraintTop_toTopOf="parent" />
@@ -234,6 +262,7 @@
             android:text="/5"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_outer_count"
             app:layout_constraintStart_toEndOf="@id/tv_outer_count" />
 
@@ -253,9 +282,10 @@
         android:id="@+id/layout_etc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="6dp"
+        android:layout_marginStart="14dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="5dp"
+        android:paddingVertical="4dp"
         app:layout_constraintStart_toEndOf="@id/layout_outer"
         app:layout_constraintTop_toTopOf="@id/layout_outer">
 
@@ -266,6 +296,7 @@
             android:text="기타"
             android:textColor="@color/sub_grey_6"
             android:textSize="18sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -273,10 +304,11 @@
             android:id="@+id/tv_etc_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="5dp"
             android:text="0"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_etc"
             app:layout_constraintStart_toEndOf="@id/tv_etc"
             app:layout_constraintTop_toTopOf="parent" />
@@ -288,6 +320,7 @@
             android:text="/5"
             android:textColor="@color/sub_grey_4"
             android:textSize="15sp"
+            android:letterSpacing="-0.08"
             app:layout_constraintBottom_toBottomOf="@id/tv_etc_count"
             app:layout_constraintStart_toEndOf="@id/tv_etc_count" />
 
@@ -306,60 +339,72 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="32dp"
+        android:paddingTop="29dp"
         app:layout_constraintBottom_toTopOf="@id/btn_check"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/divider">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingVertical="1.5dp"
+            app:chipSpacingHorizontal="8dp">
 
-            <com.google.android.material.chip.Chip
+            <ImageView
                 android:id="@+id/chip_plus"
-                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+"
-                android:textColor="@color/sub_grey_1"
-                android:textSize="20sp" />
+                android:paddingTop="3dp"
+                android:src="@drawable/record_btn_addtag" />
 
             <com.google.android.material.chip.Chip
-                style = "@style/CustomChipStyle"
+                style="@style/CustomChipStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="패딩"
-                android:textSize="15sp" />
+                android:text="후드티"
+                android:textSize="15sp"/>
 
             <com.google.android.material.chip.Chip
-                style = "@style/CustomChipStyle"
+                style="@style/CustomChipStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="코트"
-                android:textSize="15sp" />
+                android:text="반팔티"
+                android:textSize="15sp"/>
 
             <com.google.android.material.chip.Chip
-                style = "@style/CustomChipStyle"
+                style="@style/CustomChipStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="점퍼"
-                android:textSize="15sp" />
-
+                android:text="니트"
+                android:textSize="15sp"/>
 
         </com.google.android.material.chip.ChipGroup>
 
     </androidx.core.widget.NestedScrollView>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/record_img_topblur"
+        app:layout_constraintTop_toBottomOf="@id/divider"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="29dp"
+        android:src="@drawable/record_img_bottomblur"
+        app:layout_constraintBottom_toBottomOf="@id/btn_check"/>
+
     <Button
         style="@style/RoundButton.Grey"
         android:id="@+id/btn_check"
         android:layout_width="match_parent"
-        android:layout_marginBottom="38dp"
+        android:layout_marginBottom="16dp"
         android:text="다음"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
