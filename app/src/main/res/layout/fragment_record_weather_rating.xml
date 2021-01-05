@@ -368,7 +368,7 @@
 </androidx.core.widget.NestedScrollView>
 
     <Button
-        style="@style/RoundButton"
+        style="@style/RoundButton.Grey"
         android:id="@+id/btn_check"
         android:layout_width="match_parent"
         android:layout_marginBottom="38dp"

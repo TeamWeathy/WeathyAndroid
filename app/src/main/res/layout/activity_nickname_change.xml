@@ -38,7 +38,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="50sp"
         android:layout_marginEnd="34dp"
-        android:background="@drawable/nickname_edit_border"
+        android:background="@drawable/edit_border"
         android:hint="부메랑"
         android:maxLength="6"
         android:paddingStart="22dp"
