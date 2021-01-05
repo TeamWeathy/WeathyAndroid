@@ -11,7 +11,6 @@ import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
-import team.weathy.util.StatusBarUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.setOnDebounceClickListener
 
@@ -31,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
-
-        StatusBarUtil.collapseStatusBar(this)
     }
 
     private fun configurePager() = binding.fragmentPager.let { pager ->
