@@ -9,6 +9,7 @@
         <item name="android:letterSpacing">-0.05</item>
         <item name="android:textColor">@color/main_grey</item>
 
+        <item name="android:windowBackground">@drawable/background_window</item>
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
         <item name="android:screenOrientation">portrait</item>
 
