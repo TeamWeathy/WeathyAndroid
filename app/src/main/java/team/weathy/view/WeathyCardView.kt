@@ -11,7 +11,6 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dpFloat
-import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.setShadowColorIfAvailable
 
@@ -34,6 +33,9 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
     var strokeWidth by OnChangeProp(0f) {
         updateUI()
     }
+    var cardBackgroundColor by OnChangeProp(Color.WHITE) {
+        updateUI()
+    }
 
     init {
         if (attrs != null) {
@@ -50,12 +52,13 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
             disableShadow = arr.getBoolean(R.styleable.WeathyCardView_weathy_disable_shadow, false)
             strokeColor = arr.getColor(R.styleable.WeathyCardView_weathy_stroke_color, Color.TRANSPARENT)
             strokeWidth = arr.getDimension(R.styleable.WeathyCardView_weathy_stroke_width, 0f)
+            cardBackgroundColor = arr.getColor(R.styleable.WeathyCardView_weathy_background_color, Color.WHITE)
         }
     }
 
     private fun updateUI() {
         background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(radius)).apply {
-            fillColor = ColorStateList.valueOf(getColor(R.color.white))
+            fillColor = ColorStateList.valueOf(cardBackgroundColor)
             strokeWidth = this@WeathyCardView.strokeWidth
             strokeColor = ColorStateList.valueOf(this@WeathyCardView.strokeColor)
         }

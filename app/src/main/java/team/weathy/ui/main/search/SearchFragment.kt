@@ -36,6 +36,21 @@ class SearchFragment : Fragment() {
                     Location(1),
                     Location(1),
                     Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
+                    Location(1),
                 )
             )
         }
