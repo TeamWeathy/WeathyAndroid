@@ -90,6 +90,8 @@ buildFeatures {
 
 ### git 사용 전략
 
+![](image/git.jpg)
+
 #### main(default) 브랜치
 
 - `main` 브랜치가 default 브랜치
@@ -105,6 +107,8 @@ buildFeatures {
 5. Pull Request 가 병합되면(main에) 팀원들에게 새로운 기능이 `main` 에 추가되었으니 로컬 저장소에서 `pull` 을 해서 동기화 하라고 알려줌
 
 ### Github action & Slack Bot
+
+![](image/slack.jpg)
 
 - 깃허브 액션으로 `push`할 때마다, 자동으로 릴리즈 빌드가 되어 팀의 슬랙 채널에 apk 파일을 전달해줌
 
@@ -242,14 +246,32 @@ val LocalDate.weekOfMonth: Int
 ## 각자 맡은 부분 및 역할 작성
 
 - 홈: 현지
+
+![](image/home.jpg)
+
 - 검색: 명주
+
+![](image/search.jpg)
+
 - 날씨추가: 희빈
+
+![](image/record.jpg)
+
 - 캘린더: 명주
+
+![](image/calendar.jpg)
+
 - 설정: 현지
+
+![](image/setting.jpg)
 
 ## 프로젝트 구조(패키지 분류 이미지)
 
+![](image/package.jpg)
+
 ## 구현 화면
+
+### TODO
 
 ## 회의록 주소
 
