@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="33dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/white"
+    android:paddingHorizontal="33dp">
 
     <TextView
-        style="@style/RecordTitleText"
         android:id="@+id/tv_nick_name"
+        style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
         android:text="희지"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/RecordTitleText"
         android:id="@+id/tv_title"
+        style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="님은 오늘"
-        app:layout_constraintTop_toTopOf="@id/tv_nick_name"
-        app:layout_constraintStart_toEndOf="@id/tv_nick_name"/>
+        app:layout_constraintStart_toEndOf="@id/tv_nick_name"
+        app:layout_constraintTop_toTopOf="@id/tv_nick_name" />
 
     <TextView
-        style="@style/RecordTitleText"
         android:id="@+id/tv_title2"
+        style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="어떤 옷"
-        app:layout_constraintTop_toBottomOf="@id/tv_nick_name"
-        app:layout_constraintStart_toStartOf="@id/tv_nick_name"/>
+        app:layout_constraintStart_toStartOf="@id/tv_nick_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_nick_name" />
 
     <TextView
-        style="@style/RecordTitleText"
         android:id="@+id/tv_title3"
+        style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="을 입었나요?"
-        app:layout_constraintTop_toTopOf="@id/tv_title2"
-        app:layout_constraintStart_toEndOf="@id/tv_title2"/>
+        app:layout_constraintStart_toEndOf="@id/tv_title2"
+        app:layout_constraintTop_toTopOf="@id/tv_title2" />
 
     <TextView
-        style="@style/RecordSubText"
         android:id="@+id/tv_sub"
+        style="@style/RecordSubText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="+를 눌러 추가하고, 꾹 눌러 삭제할 수 있어요."
-        app:layout_constraintTop_toBottomOf="@id/tv_title2"
-        app:layout_constraintStart_toStartOf="@id/tv_title2"/>
+        app:layout_constraintStart_toStartOf="@id/tv_title2"
+        app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
-        android:paddingVertical="6dp"
         android:paddingHorizontal="5dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_sub"
-        app:layout_constraintStart_toStartOf="parent">
+        android:paddingVertical="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub">
 
         <TextView
             android:id="@+id/tv_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="상의"
-            android:textSize="18sp"
             android:textColor="@color/main_grey"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_top_count"
@@ -90,10 +90,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/5"
-            android:textSize="15sp"
             android:textColor="@color/sub_grey_6"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_top_count"
-            app:layout_constraintStart_toEndOf="@id/tv_top_count"/>
+            app:layout_constraintStart_toEndOf="@id/tv_top_count" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -102,29 +102,29 @@
         android:layout_width="0dp"
         android:layout_height="3dp"
         android:background="@drawable/divider_background"
-        app:layout_constraintTop_toBottomOf="@id/layout_top"
+        app:layout_constraintEnd_toEndOf="@id/layout_top"
         app:layout_constraintStart_toStartOf="@id/layout_top"
-        app:layout_constraintEnd_toEndOf="@id/layout_top"/>
+        app:layout_constraintTop_toBottomOf="@id/layout_top" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="5dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/layout_top"
-        app:layout_constraintStart_toEndOf="@id/layout_top">
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="6dp"
+        app:layout_constraintStart_toEndOf="@id/layout_top"
+        app:layout_constraintTop_toTopOf="@id/layout_top">
 
         <TextView
             android:id="@+id/tv_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="하의"
-            android:textSize="18sp"
             android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_bottom_count"
@@ -143,10 +143,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/5"
-            android:textSize="15sp"
             android:textColor="@color/sub_grey_4"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_bottom_count"
-            app:layout_constraintStart_toEndOf="@id/tv_bottom_count"/>
+            app:layout_constraintStart_toEndOf="@id/tv_bottom_count" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -156,29 +156,29 @@
         android:layout_height="3dp"
         android:background="@drawable/divider_background"
         android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/layout_bottom"
+        app:layout_constraintEnd_toEndOf="@id/layout_bottom"
         app:layout_constraintStart_toStartOf="@id/layout_bottom"
-        app:layout_constraintEnd_toEndOf="@id/layout_bottom"/>
+        app:layout_constraintTop_toBottomOf="@id/layout_bottom" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_outer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="5dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/layout_bottom"
-        app:layout_constraintStart_toEndOf="@id/layout_bottom">
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="6dp"
+        app:layout_constraintStart_toEndOf="@id/layout_bottom"
+        app:layout_constraintTop_toTopOf="@id/layout_bottom">
 
         <TextView
             android:id="@+id/tv_outer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="외투"
-            android:textSize="18sp"
             android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_outer_count"
@@ -197,10 +197,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/5"
-            android:textSize="15sp"
             android:textColor="@color/sub_grey_4"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_outer_count"
-            app:layout_constraintStart_toEndOf="@id/tv_outer_count"/>
+            app:layout_constraintStart_toEndOf="@id/tv_outer_count" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -210,29 +210,29 @@
         android:layout_height="3dp"
         android:background="@drawable/divider_background"
         android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/layout_outer"
+        app:layout_constraintEnd_toEndOf="@id/layout_outer"
         app:layout_constraintStart_toStartOf="@id/layout_outer"
-        app:layout_constraintEnd_toEndOf="@id/layout_outer"/>
+        app:layout_constraintTop_toBottomOf="@id/layout_outer" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_etc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="5dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/layout_outer"
-        app:layout_constraintStart_toEndOf="@id/layout_outer">
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="6dp"
+        app:layout_constraintStart_toEndOf="@id/layout_outer"
+        app:layout_constraintTop_toTopOf="@id/layout_outer">
 
         <TextView
             android:id="@+id/tv_etc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="기타"
-            android:textSize="18sp"
             android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_etc_count"
@@ -251,10 +251,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/5"
-            android:textSize="15sp"
             android:textColor="@color/sub_grey_4"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_etc_count"
-            app:layout_constraintStart_toEndOf="@id/tv_etc_count"/>
+            app:layout_constraintStart_toEndOf="@id/tv_etc_count" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -264,26 +264,66 @@
         android:layout_height="3dp"
         android:background="@drawable/divider_background"
         android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/layout_etc"
+        app:layout_constraintEnd_toEndOf="@id/layout_etc"
         app:layout_constraintStart_toStartOf="@id/layout_etc"
-        app:layout_constraintEnd_toEndOf="@id/layout_etc"/>
+        app:layout_constraintTop_toBottomOf="@id/layout_etc" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toTopOf="@id/btn_check"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintVertical_bias="0.0">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_plus"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textColor="@color/sub_grey_1"
+                android:textSize="20sp" />
+
+            <com.google.android.material.chip.Chip
+                style = "@style/CustomChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="패딩"
+                android:textSize="15sp" />
+
+            <com.google.android.material.chip.Chip
+                style = "@style/CustomChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="코트"
+                android:textSize="15sp" />
+
+            <com.google.android.material.chip.Chip
+                style = "@style/CustomChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="점퍼"
+                android:textSize="15sp" />
+
+
+        </com.google.android.material.chip.ChipGroup>
 
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        style="@style/RoundButton"
         android:id="@+id/btn_check"
+        style="@style/RoundButton"
         android:layout_width="match_parent"
         android:layout_marginBottom="38dp"
         android:text="다음"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
