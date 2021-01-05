@@ -12,7 +12,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="34dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
         android:text="등록이 완료"
+        android:textColor="@color/mint_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

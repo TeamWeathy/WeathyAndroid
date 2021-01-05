@@ -12,7 +12,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="34dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -21,7 +21,9 @@
         android:layout_width="9dp"
         android:layout_height="9dp"
         android:layout_marginEnd="7dp"
-        android:src="@drawable/ic_launcher_background"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
+        android:alpha="0.4"
         app:layout_constraintTop_toTopOf="@id/step2"
         app:layout_constraintBottom_toBottomOf="@id/step2"
         app:layout_constraintEnd_toStartOf="@id/step2"/>
@@ -31,7 +33,9 @@
         android:layout_width="9dp"
         android:layout_height="9dp"
         android:layout_marginEnd="7dp"
-        android:src="@drawable/ic_launcher_background"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
+        android:alpha="0.4"
         app:layout_constraintTop_toTopOf="@id/step3"
         app:layout_constraintBottom_toBottomOf="@id/step3"
         app:layout_constraintEnd_toStartOf="@id/step3"/>
@@ -42,7 +46,8 @@
         android:layout_height="13dp"
         android:layout_marginTop="95dp"
         android:layout_marginEnd="11dp"
-        android:src="@mipmap/ic_launcher"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -53,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
         android:text="날씨"
+        android:textColor="@color/mint_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

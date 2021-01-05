@@ -6,24 +6,58 @@
     android:background="@color/white"
     android:paddingHorizontal="33dp">
 
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="34dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/step1"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginTop="97dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
+        android:alpha="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/step2"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="7dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/main_mint"
+        app:layout_constraintTop_toTopOf="@id/step1"
+        app:layout_constraintBottom_toBottomOf="@id/step1"
+        app:layout_constraintStart_toEndOf="@id/step1"/>
+
+    <ImageView
+        android:id="@+id/step3"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginStart="7dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/sub_grey_7"
+        app:layout_constraintTop_toTopOf="@id/step2"
+        app:layout_constraintBottom_toBottomOf="@id/step2"
+        app:layout_constraintStart_toEndOf="@id/step2"/>
+
     <TextView
         android:id="@+id/tv_nick_name"
         style="@style/RecordTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
-        android:text="희지"
+        android:text="희지님"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        style="@style/RecordTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="님은 오늘"
-        app:layout_constraintStart_toEndOf="@id/tv_nick_name"
-        app:layout_constraintTop_toTopOf="@id/tv_nick_name" />
 
     <TextView
         android:id="@+id/tv_title2"
@@ -31,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="어떤 옷"
+        android:textColor="@color/mint_icon"
         app:layout_constraintStart_toStartOf="@id/tv_nick_name"
         app:layout_constraintTop_toBottomOf="@id/tv_nick_name" />
 
@@ -271,6 +306,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingTop="32dp"
         app:layout_constraintBottom_toTopOf="@id/btn_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
