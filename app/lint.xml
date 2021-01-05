@@ -8,4 +8,5 @@
     <issue id="SetTextI18n" severity="ignore" />
     <issue id="RtlHardcoded" severity="ignore" />
     <issue id="SpUsage" severity="ignore" />
+    <issue id="ApplySharedPref" severity="ignore" />
 </lint>

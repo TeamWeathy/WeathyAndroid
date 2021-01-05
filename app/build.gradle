@@ -81,6 +81,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
+    implementation 'androidx.security:security-crypto:1.1.0-alpha03'
 }
 
 dependencies {
