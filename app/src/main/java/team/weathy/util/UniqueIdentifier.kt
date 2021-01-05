@@ -11,7 +11,7 @@ class UniqueIdentifier(private val spUtil: SPUtil) {
             }
         }
 
-    val isUniqueIdExist
+    val exist
         get() = spUtil.sharedPreferences.contains(KEY)
 
     private fun generate() = UUID.randomUUID()
