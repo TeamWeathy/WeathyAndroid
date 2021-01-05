@@ -12,9 +12,8 @@ import androidx.dynamicanimation.animation.SpringForce
 import team.weathy.databinding.ItemLocationBinding
 import kotlin.math.abs
 
-class LocationItemMenuSwiper private constructor(
-    private val binding: ItemLocationBinding, private val callback: Callback
-) : OnTouchListener {
+class LocationItemMenuSwiper private constructor(binding: ItemLocationBinding, private val callback: Callback) :
+    OnTouchListener {
     private var initialTranslateX = 0f
     private var offsetX = 0f
     private var springAnim: SpringAnimation? = null
@@ -43,20 +42,30 @@ class LocationItemMenuSwiper private constructor(
             MotionEvent.ACTION_MOVE -> {
                 tracker?.apply {
                     addMovement(event)
-                    computeCurrentVelocity(1000)
+                    computeCurrentVelocity(1000, 6000f)
                 }
 
                 contentContainer.translationX = initialTranslateX + event.rawX - offsetX
                 updateDeleteContainer()
             }
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                val velocity = tracker?.xVelocity ?: 0f
-                when {
-                    abs(velocity) < abs(tracker!!.yVelocity) -> {
-                    }
-                    velocity >= 0 -> closeMenu()
-                    else -> if (isOpened) deleteMenu() else openMenu()
+                tracker?.apply {
+                    addMovement(event)
+                    computeCurrentVelocity(1000, 6000f)
                 }
+
+                val xVelocity = tracker?.xVelocity ?: 0f
+                val yVelocity = tracker?.yVelocity ?: 0f
+
+                when {
+                    abs(yVelocity) > abs(xVelocity) -> if (isOpened) openMenu() else closeMenu()
+                    xVelocity == -6000f -> deleteMenu()
+                    xVelocity < -1000f && isOpened -> deleteMenu()
+                    xVelocity < -1000f && !isOpened -> openMenu()
+                    abs(xVelocity) < 1000f && contentContainer.translationX < (-140).dpFloat -> openMenu()
+                    else -> closeMenu()
+                }
+
 
                 tracker?.also {
                     it.recycle()
