@@ -19,6 +19,7 @@
         tools:layout_width="match_parent">
 
         <team.weathy.view.WeathyCardView
+            app:weathy_radius="35dp"
             android:layout_width="0dp"
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/delete_container"
@@ -28,8 +29,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:weathy_disable_shadow="true"
-            app:weathy_radius="15dp"
-            tools:layout_width="match_parent"
             app:weathy_stroke_width="1dp">
 
             <TextView
@@ -50,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:weathy_disable_shadow="true"
-            app:weathy_radius="15dp"
+            app:weathy_radius="35dp"
             app:weathy_stroke_color="#E1E1E1"
             app:weathy_stroke_width="1dp"
             tools:alpha="0.5">

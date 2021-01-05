@@ -18,40 +18,21 @@
         android:theme="@style/Theme.Weathy"
         tools:ignore="AllowBackup"
         tools:targetApi="n">
-        <activity
-            android:name=".ui.splash.SplashActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:screenOrientation="unspecified" />
-        <activity
-            android:name=".ui.setting.SettingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.nicknamechange.NicknameChangeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ui.developerinfo.DeveloperInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.record.RecordActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.landing.LandingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.nicknameset.NicknameSetActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.inquire.InquireActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.setting.SettingActivity" />
+        <activity android:name=".ui.nicknamechange.NicknameChangeActivity" />
+        <activity android:name=".ui.developerinfo.DeveloperInfoActivity" />
+        <activity android:name=".ui.record.RecordActivity" />
+        <activity android:name=".ui.landing.LandingActivity" />
+        <activity android:name=".ui.nicknameset.NicknameSetActivity" />
+        <activity android:name=".ui.inquire.InquireActivity" />
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />

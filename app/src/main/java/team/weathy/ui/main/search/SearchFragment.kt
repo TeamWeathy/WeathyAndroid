@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.model.entity.Location
 import team.weathy.util.AutoClearedValue
@@ -13,11 +14,15 @@ import team.weathy.util.setOnDebounceClickListener
 
 class SearchFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentSearchBinding>()
+    private val viewModel by viewModels<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentSearchBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         configureBackButton()
         configureList()
     }

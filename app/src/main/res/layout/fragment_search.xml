@@ -1,108 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="32dp" />
+    <data>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="32dp" />
+        <variable
+            name="vm"
+            type="team.weathy.ui.main.search.SearchViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintTop_toTopOf="parent"
-        android:fitsSystemWindows="true"
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        app:layout_constraintLeft_toRightOf="@id/guide_left"
-        app:layout_constraintRight_toLeftOf="@id/guide_right"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/back"
-            style="@style/ImageButton"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/logo512"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        app:layout_constraintLeft_toRightOf="@id/guide_left"
-        app:layout_constraintRight_toLeftOf="@id/guide_right"
-        android:layout_height="50dp"
-        android:layout_marginTop="26dp"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
-        app:boxStrokeColor="@color/main_mint"
-        app:boxStrokeWidth="1dp"
-        app:endIconDrawable="@drawable/circle"
-        app:endIconMode="clear_text"
-        app:hintEnabled="false"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:startIconDrawable="@drawable/circle">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawablePadding="12dp"
-            android:hint="날씨가 궁금한 곳을 검색해 보세요!"
-            android:maxLines="1"
-            android:textColorHint="@color/sub_grey_8"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/recentLabel"
-        android:layout_width="0dp"
-        app:layout_constraintLeft_toRightOf="@id/guide_left"
-        app:layout_constraintRight_toLeftOf="@id/guide_right"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/notosans_bold"
-        android:text="최근 검색한 위치"
-        android:textColor="@color/main_grey"
-        android:textSize="17sp"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
-
-    <View
-        app:layout_constraintLeft_toRightOf="@id/guide_left"
-        android:id="@+id/divider"
-        android:layout_width="31dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="9dp"
-        android:background="@color/sub_grey_7"
-        app:layout_constraintTop_toBottomOf="@id/recentLabel" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="32dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        tools:listitem="@layout/item_location" />
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="32dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/guide_left"
+            app:layout_constraintRight_toLeftOf="@id/guide_right"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/back"
+                style="@style/ImageButton"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="26dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxStrokeColor="@color/main_mint"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:endIconDrawable="@drawable/ic_textdelete"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/transparent"
+            app:endIconTintMode="src_over"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toRightOf="@id/guide_left"
+            app:layout_constraintRight_toLeftOf="@id/guide_right"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:startIconDrawable="@drawable/ic_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:text="@={vm.query}"
+                android:textSize="16sp" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            duration="@{100}"
+            visibilityWithAnim="@{vm.query.empty}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:text="날씨가 궁금한 곳을 검색해 보세요!"
+            android:textColor="@color/sub_grey_8"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
+            app:layout_constraintLeft_toLeftOf="@id/textInputLayout"
+            app:layout_constraintRight_toRightOf="@id/textInputLayout"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout" />
+
+        <TextView
+            android:id="@+id/recentLabel"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/notosans_bold"
+            android:text="최근 검색한 위치"
+            android:textColor="@color/main_grey"
+            android:textSize="17sp"
+            app:layout_constraintLeft_toRightOf="@id/guide_left"
+            app:layout_constraintRight_toLeftOf="@id/guide_right"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="31dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="9dp"
+            android:background="@color/sub_grey_7"
+            app:layout_constraintLeft_toRightOf="@id/guide_left"
+            app:layout_constraintTop_toBottomOf="@id/recentLabel" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="32dp"
+            android:paddingTop="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:listitem="@layout/item_location" />
+
+        <View
+            shadowOnScroll="@{true}"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/shadow_scroll"
+            app:layout_constraintTop_toTopOf="@id/list" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

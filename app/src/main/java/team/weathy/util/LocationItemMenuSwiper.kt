@@ -8,6 +8,7 @@ import android.view.View.OnTouchListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import team.weathy.databinding.ItemLocationBinding
 import kotlin.math.abs
 
@@ -69,10 +70,12 @@ class LocationItemMenuSwiper private constructor(
 
     fun openMenu(withAnim: Boolean = true) {
         isOpened = true
-        val finalValue = -root.width / 2f
+        val finalValue = (-140).dpFloat
 
         if (withAnim) {
-            springAnim = AnimUtil.runSpringAnimation(contentContainer.translationX, finalValue) {
+            springAnim = AnimUtil.runSpringAnimation(
+                contentContainer.translationX, finalValue, stiffness = SpringForce.STIFFNESS_MEDIUM
+            ) {
                 contentContainer.translationX = it
                 updateDeleteContainer()
             }
@@ -88,7 +91,9 @@ class LocationItemMenuSwiper private constructor(
         val finalValue = 0f
 
         if (withAnim) {
-            springAnim = AnimUtil.runSpringAnimation(contentContainer.translationX, finalValue) {
+            springAnim = AnimUtil.runSpringAnimation(
+                contentContainer.translationX, finalValue, stiffness = SpringForce.STIFFNESS_MEDIUM
+            ) {
                 contentContainer.translationX = it
                 updateDeleteContainer()
             }
@@ -101,7 +106,9 @@ class LocationItemMenuSwiper private constructor(
 
     fun deleteMenu() {
         isOpened = true
-        springAnim = AnimUtil.runSpringAnimation(contentContainer.translationX, -root.width * 1.5f) {
+        springAnim = AnimUtil.runSpringAnimation(
+            contentContainer.translationX, -root.width * 1.5f, stiffness = SpringForce.STIFFNESS_MEDIUM
+        ) {
             contentContainer.translationX = it
             updateDeleteContainer()
         }

@@ -2,6 +2,8 @@ package team.weathy.ui.main.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -38,6 +40,19 @@ class SearchAdapter : Adapter<Holder>() {
     }
 
     inner class Holder(private val binding: ItemLocationBinding) : ViewHolder(binding.root) {
+        private var isFirstBinding = true
+        private var itemHeight = 0
+
+        init {
+            binding.deleteContainer setOnDebounceClickListener {
+                swiper.deleteMenu()
+            }
+            // get item height dynamically
+            binding.root.doOnLayout {
+                itemHeight = it.height
+            }
+        }
+
         private val swiper = LocationItemMenuSwiper.configure(binding, object : Callback {
             override fun onOpened() {
                 menuOpens[layoutPosition] = true
@@ -48,35 +63,46 @@ class SearchAdapter : Adapter<Holder>() {
             }
 
             override fun onDeleted() {
-                AnimUtil.runSpringAnimation(200f, 0f, stiffness = 2500f, dampingRatio = 2f, onEnd = {
-                    removeItem(layoutPosition)
-                }) {
-                    binding.root.alpha = (it / 200f).coerceIn(0f, 1f)
+                runDeleteAnimation {
+                    removeItemFromCollection(layoutPosition)
                 }
             }
         })
 
-        init {
-            binding.deleteContainer setOnDebounceClickListener {
-                swiper.deleteMenu()
-            }
-        }
 
         fun bind(item: Location) {
-            binding.root.alpha = 1f
-
-            if (menuOpens[layoutPosition]) {
-                swiper.openMenu(false)
+            if (isFirstBinding) {
+                isFirstBinding = false
             } else {
-                swiper.closeMenu(false)
+                binding.root.alpha = 1f
+                binding.root.updateLayoutParams {
+                    if (itemHeight != 0) height = itemHeight
+                }
+
+                if (menuOpens[layoutPosition]) {
+                    swiper.openMenu(false)
+                } else {
+                    swiper.closeMenu(false)
+                }
             }
 
             binding.item = item
             binding.executePendingBindings()
         }
+
+        fun runDeleteAnimation(onEnd: () -> Unit) {
+            AnimUtil.runSpringAnimation(100f, 0f, stiffness = 1000f, dampingRatio = 1f, onEnd = onEnd) { raw ->
+                val animValue = raw / 100f
+
+                binding.root.alpha = (animValue).coerceIn(0f, 1f)
+                binding.root.updateLayoutParams {
+                    height = (itemHeight * animValue).toInt().coerceIn(0, itemHeight)
+                }
+            }
+        }
     }
 
-    fun removeItem(position: Int) {
+    fun removeItemFromCollection(position: Int) {
         items.removeAt(position)
         menuOpens.removeAt(position)
         notifyItemRemoved(position)
