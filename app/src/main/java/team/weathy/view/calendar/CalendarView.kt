@@ -27,6 +27,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -58,14 +59,9 @@ import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
@@ -174,16 +170,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private var isExpanded = false
     private fun expand() {
         isExpanded = true
-
         notifyEnableScroll()
         enableTouchMonthlyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 500f) {
+            animValue = it / 500f
         }
 
-        notifyScrollToTop()
-        invalidate()
+        onExpandedChange()
     }
 
     private fun collapse() {
@@ -191,10 +185,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         notifyDisableScroll()
         enableTouchWeeklyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 0f) {
+            animValue = it / 500f
         }
 
+        onExpandedChange()
+    }
+
+    private fun onExpandedChange() {
         notifyScrollToTop()
         invalidate()
     }
@@ -255,11 +253,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onCurDateChanged()
     }
 
+
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private lateinit var lazyPagerAddJob: Job
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        launch {
+        lazyPagerAddJob = scope.launch {
             delay(700L)
-
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
@@ -270,7 +270,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        job.cancel()
+        lazyPagerAddJob.cancel()
     }
 
     private fun initContainer() {
@@ -374,8 +374,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
 
-    private var expandVelocityTracker: VelocityTracker? = null
-    private var offsetY = 0f
+    private var springAnim: SpringAnimation? = null
+    private var tracker: VelocityTracker? = null
 
     @SuppressLint("Recycle")
     private fun configureExpandGestureHandling() {
@@ -386,14 +386,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         return@setOnTouchListener false
                     }
 
-                    expandVelocityTracker?.clear()
-                    expandVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
-                    expandVelocityTracker?.addMovement(event)
+                    springAnim?.cancel()
 
-                    offsetY = event.y
+                    tracker?.clear()
+                    tracker = tracker ?: VelocityTracker.obtain()
+                    tracker?.addMovement(event)
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    expandVelocityTracker?.apply {
+                    tracker?.apply {
                         addMovement(event)
                         computeCurrentVelocity(1000)
                     }
@@ -401,8 +401,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     animValue = ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    if (expandVelocityTracker!!.yVelocity > 0) expand()
+                    if (tracker!!.yVelocity > 0) expand()
                     else collapse()
+
+                    tracker?.also {
+                        it.recycle()
+                        tracker = null
+                    }
                 }
             }
             true
@@ -469,7 +474,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 220
-        private const val EXPAND_MARGIN_BOTTOM_DP = 120
+        private const val EXPAND_MARGIN_BOTTOM_DP = 108
     }
 }
 

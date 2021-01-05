@@ -11,7 +11,6 @@ import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
-import team.weathy.util.StatusBarUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.setOnDebounceClickListener
 
@@ -31,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
-
-        StatusBarUtil.collapseStatusBar(this)
     }
 
     private fun configurePager() = binding.fragmentPager.let { pager ->
@@ -86,14 +83,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun showTopNav() {
         val curTranslateY = binding.toolbar.translationY
-        AnimUtil.runSpringAnimation(curTranslateY, 0f, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 0f) {
             binding.toolbar.translationY = it
         }
     }
 
     private fun hideTopNav() {
         val curTranslateY = binding.toolbar.translationY
-        AnimUtil.runSpringAnimation(curTranslateY, (-100).dpFloat, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, (-100).dpFloat) {
             binding.toolbar.translationY = it
         }
     }
@@ -105,30 +102,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun showBottomNavSequently() = lifecycleScope.launchWhenStarted {
         val curTranslateY = binding.fab.translationY
-        AnimUtil.runSpringAnimation(curTranslateY, 0f, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 0f) {
             binding.fab.translationY = it
         }
         delay(50)
-        AnimUtil.runSpringAnimation(curTranslateY, 0f, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 0f) {
             binding.home.translationY = it
         }
         delay(50)
-        AnimUtil.runSpringAnimation(curTranslateY, 0f, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 0f) {
             binding.calendar.translationY = it
         }
     }
 
     private fun hideBottomNavSequentely() = lifecycleScope.launchWhenStarted {
         val curTranslateY = binding.fab.translationY
-        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat) {
             binding.fab.translationY = it
         }
         delay(50)
-        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat) {
             binding.home.translationY = it
         }
         delay(50)
-        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat, 100f) {
+        AnimUtil.runSpringAnimation(curTranslateY, 82.dpFloat) {
             binding.calendar.translationY = it
         }
     }

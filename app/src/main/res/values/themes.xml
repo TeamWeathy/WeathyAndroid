@@ -1,13 +1,18 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Weathy" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/main_mint</item>
+        <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:fontFamily">@font/notosans_regular</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:letterSpacing">-0.05</item>
         <item name="android:textColor">@color/main_grey</item>
+
+        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
+        <item name="android:screenOrientation">portrait</item>
+
+        <item name="colorPrimary">@color/main_mint</item>
     </style>
 
 

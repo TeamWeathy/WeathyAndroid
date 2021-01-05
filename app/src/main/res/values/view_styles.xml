@@ -6,5 +6,6 @@
         <attr name="weathy_stroke_width" format="dimension" />
         <attr name="weathy_stroke_color" format="color" />
         <attr name="weathy_disable_shadow" format="boolean" />
+        <attr name="weathy_background_color" format="color" />
     </declare-styleable>
 </resources>

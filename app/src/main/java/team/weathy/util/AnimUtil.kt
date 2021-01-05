@@ -5,15 +5,25 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 
 object AnimUtil {
-    fun runSpringAnimation(startValue: Float, finalValue: Float, multiplier: Float, callback: (value: Float) -> Unit) =
-        SpringAnimation(FloatValueHolder()).apply {
-            setStartValue(startValue * multiplier)
-            spring = SpringForce(finalValue * multiplier).apply {
-                stiffness = SpringForce.STIFFNESS_LOW
-            }
-            addUpdateListener { _, value, _ ->
-                callback(value / multiplier)
-            }
-            start()
+    fun runSpringAnimation(
+        startValue: Float,
+        finalValue: Float,
+        stiffness: Float = SpringForce.STIFFNESS_LOW,
+        dampingRatio: Float = 0.5f,
+        onEnd: (() -> Unit)? = null,
+        callback: (value: Float) -> Unit
+    ) = SpringAnimation(FloatValueHolder()).apply {
+        setStartValue(startValue)
+        spring = SpringForce(finalValue).apply {
+            this.stiffness = stiffness
+            this.dampingRatio = dampingRatio
         }
+        addUpdateListener { _, value, _ ->
+            callback(value)
+        }
+        addEndListener { _, _, _, _ ->
+            onEnd?.invoke()
+        }
+        start()
+    }
 }

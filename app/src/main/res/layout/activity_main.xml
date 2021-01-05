@@ -17,6 +17,12 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitStart"
+            android:src="@drawable/bg_top_skyblue_blur" />
+
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/fragmentPager"
@@ -28,7 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fitsSystemWindows="true"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
