@@ -253,6 +253,8 @@ val LocalDate.weekOfMonth: Int
 
 ## 회의록 주소
 
+[회의록 위키 홈](https://github.com/TeamWeathy/WeathyAndroid/wiki)
+
 ## 핵심 기능 구현 방법 코드
 
 - 현재 위치 받아오기 (`LocationService`, `FusedLocationProviderClient`, `Geocoder`)
