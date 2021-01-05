@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.chip.Chip
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
+import team.weathy.ui.record.RecordActivity
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 
@@ -15,11 +16,14 @@ class RecordClothesSelectFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            FragmentRecordClothesSelectBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+        FragmentRecordClothesSelectBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         chipPlus()
 
+        binding.btnCheck setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
+        }
     }
 
     private fun chipPlus() {

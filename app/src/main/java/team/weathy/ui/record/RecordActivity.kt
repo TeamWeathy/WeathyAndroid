@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivityRecordBinding
+import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
 import team.weathy.ui.record.detail.RecordDetailFragment
@@ -37,4 +38,6 @@ class RecordActivity : AppCompatActivity() {
     fun navigateClothesSelectToWeatherRating() = addFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java)
 
     fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
+
+    fun navigateDetailToCalendar() = addFragment(binding.fragmentContainer, CalendarFragment::class.java)
 }
