@@ -59,14 +59,9 @@ import team.weathy.util.weekOfMonth
 import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
@@ -258,11 +253,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onCurDateChanged()
     }
 
+
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private lateinit var lazyPagerAddJob: Job
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        launch {
+        lazyPagerAddJob = scope.launch {
             delay(700L)
-
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
@@ -273,7 +270,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        job.cancel()
+        lazyPagerAddJob.cancel()
     }
 
     private fun initContainer() {
