@@ -63,17 +63,17 @@
 
     <Button
         android:id="@+id/change_nickname_btn"
-        style="@style/RoundButton.Grey"
+        style="@style/RoundButton.Mint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="25dp"
         android:enabled="false"
+        android:fontFamily="@font/notosans_medium"
         android:text="변경하기"
         android:textColor="@color/white"
         android:textSize="16dp"
-        android:fontFamily="@font/notosans_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
