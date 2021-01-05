@@ -25,4 +25,6 @@
     <color name="imoji_cold_text">#00A3FF</color>
     <color name="imoji_verycold_text">#967FD4</color>
     <color name="imoji_verycold">#967FD4</color>
+    <color name="chip_background">#F8F8F8</color>
+    <color name="mint_icon">#47C0AC</color>
 </resources>

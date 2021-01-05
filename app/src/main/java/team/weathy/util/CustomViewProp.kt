@@ -1,6 +1,8 @@
 package team.weathy.util
 
 import android.view.View
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlin.reflect.KProperty
 
 class OnChangeProp<T>(private var field: T, private val callback: (value: T) -> Unit) {

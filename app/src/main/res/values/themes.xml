@@ -71,4 +71,11 @@
         <item name="android:scaleType">fitCenter</item>
     </style>
 
+    <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+        <item name="chipStrokeWidth">1.5dp</item>
+        <item name="rippleColor">@color/chip_background_color</item>
+    </style>
 </resources>
