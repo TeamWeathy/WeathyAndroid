@@ -9,6 +9,7 @@
         <item name="android:letterSpacing">-0.05</item>
         <item name="android:textColor">@color/main_grey</item>
 
+        <item name="android:windowBackground">@drawable/background_window</item>
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
         <item name="android:screenOrientation">portrait</item>
 
@@ -27,12 +28,12 @@
     </style>
 
     <style name="RoundButton.Mint">
-        <item name="backgroundTint">@color/main_mint</item>
+        <item name="backgroundTint">@color/bg_round_button_mint</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="RoundButton.Red">
-        <item name="backgroundTint">@color/text_high_temp</item>
+        <item name="backgroundTint">@color/bg_round_button_red</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
