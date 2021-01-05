@@ -6,9 +6,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
 import team.weathy.util.setOnDebounceClickListener
@@ -25,38 +27,42 @@ class NicknameChangeActivity : AppCompatActivity() {
 
         binding.nicknameEdit.addTextChangedListener(textWatcher)
         exitNicknameChange()
+
+        binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
+            setCountVisibility(hasFocus)
+            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
+        }
+
+        binding.layoutNickname setOnDebounceClickListener {
+            binding.nicknameEdit.clearFocus()
+            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
+        }
     }
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val length = s.toString().length
-            val numOfCharactersColorMint = resources.getColor(R.color.main_mint, theme)
-            val nicknameChangeBtnActive = resources.getColor(R.color.main_mint, theme)
-            val numOfCharactersColorGrey = resources.getColor(R.color.sub_grey_6, theme)
-            val nicknameChangeBtnInactive = resources.getColor(R.color.sub_grey_3, theme)
-
             binding.numOfCharacters1.text = "$length"
             binding.numOfCharacters2.text = "/6"
 
             if (length > 0) {
                 binding.changeNicknameBtn.isEnabled = true
                 binding.deleteNicknameBtn.isEnabled = true
-                binding.numOfCharacters1.setTextColor(numOfCharactersColorMint)
-                binding.changeNicknameBtn.setBackgroundColor(nicknameChangeBtnActive)
-                binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border_active)
+                binding.numOfCharacters1.setTextColor(getColor(R.color.main_mint))
+                binding.changeNicknameBtn.setBackgroundColor(getColor(R.color.main_mint))
+                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
                 binding.deleteNicknameBtn.visibility = View.VISIBLE
                 deleteNickname()
                 changeNicknameBtnClick()
             } else {
                 binding.changeNicknameBtn.isEnabled = false
                 binding.deleteNicknameBtn.isEnabled = false
-                binding.numOfCharacters1.setTextColor(numOfCharactersColorGrey)
-                binding.changeNicknameBtn.setBackgroundColor(nicknameChangeBtnInactive)
-                binding.nicknameEdit.setBackgroundResource(R.drawable.nickname_edit_border)
+                binding.numOfCharacters1.setTextColor(getColor(R.color.sub_grey_6))
+                binding.changeNicknameBtn.setBackgroundColor(getColor(R.color.sub_grey_3))
+                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
                 binding.deleteNicknameBtn.visibility = View.INVISIBLE
             }
         }
-
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
@@ -93,4 +99,10 @@ class NicknameChangeActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun setCountVisibility(hasFocus: Boolean) {
+        binding.numOfCharacters1.isVisible = hasFocus
+        binding.numOfCharacters2.isVisible = hasFocus
+    }
+
 }
