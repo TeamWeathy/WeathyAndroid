@@ -17,6 +17,7 @@
     <color name="sub_grey_5">#F1F1F1</color>
     <color name="sub_grey_6">#939393</color>
     <color name="sub_grey_7">#E1E1E1</color>
+    <color name="sub_grey_7_50">#80E1E1E1</color>
     <color name="sub_grey_8">#AFAFAF</color>
     <color name="cursor">#B3C4C4C4</color>
     <color name="imoji_veryhot_text">#D26A63</color>
@@ -25,4 +26,8 @@
     <color name="imoji_cold_text">#00A3FF</color>
     <color name="imoji_verycold_text">#967FD4</color>
     <color name="imoji_verycold">#967FD4</color>
+    <color name="shadow_scroll">#26101010</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color">@color/sub_grey_7</color>
+
 </resources>

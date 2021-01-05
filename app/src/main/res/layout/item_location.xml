@@ -11,22 +11,24 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="163dp"
         tools:layout_height="163dp"
-        tools:layout_width="309dp">
+        tools:layout_width="match_parent">
 
         <team.weathy.view.WeathyCardView
+            app:weathy_radius="35dp"
+            android:layout_width="0dp"
+            app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/delete_container"
-            android:layout_width="match_parent"
+            app:weathy_background_color="@color/sub_grey_7_50"
+            app:weathy_stroke_color="@color/sub_grey_7"
             android:layout_height="0dp"
-            android:background="#80F1F1F1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:weathy_disable_shadow="true"
-            app:weathy_radius="15dp"
-            app:weathy_stroke_color="#E1E1E1"
             app:weathy_stroke_width="1dp">
 
             <TextView
@@ -47,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:weathy_disable_shadow="true"
-            app:weathy_radius="15dp"
+            app:weathy_radius="35dp"
             app:weathy_stroke_color="#E1E1E1"
             app:weathy_stroke_width="1dp"
             tools:alpha="0.5">
