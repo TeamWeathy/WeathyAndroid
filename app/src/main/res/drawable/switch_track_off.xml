@@ -5,5 +5,5 @@
     <size
         android:width="47dp"
         android:height="27dp" />
-    <solid android:color="@color/black" />
+    <solid android:color="@color/switch_shadow" />
 </shape>
