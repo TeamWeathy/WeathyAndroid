@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,16 +26,8 @@ class NicknameChangeActivity : AppCompatActivity() {
 
         binding.nicknameEdit.addTextChangedListener(textWatcher)
         exitNicknameChange()
-
-        binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
-            setCountVisibility(hasFocus)
-            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
-        }
-
-        binding.layoutNickname setOnDebounceClickListener {
-            binding.nicknameEdit.clearFocus()
-            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
-        }
+        checkBlank()
+        checkBackground()
     }
 
     private val textWatcher = object : TextWatcher {
@@ -49,7 +40,6 @@ class NicknameChangeActivity : AppCompatActivity() {
                 binding.changeNicknameBtn.isEnabled = true
                 binding.deleteNicknameBtn.isEnabled = true
                 binding.numOfCharacters1.setTextColor(getColor(R.color.main_mint))
-                binding.changeNicknameBtn.setBackgroundColor(getColor(R.color.main_mint))
                 binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
                 binding.deleteNicknameBtn.visibility = View.VISIBLE
                 deleteNickname()
@@ -58,11 +48,12 @@ class NicknameChangeActivity : AppCompatActivity() {
                 binding.changeNicknameBtn.isEnabled = false
                 binding.deleteNicknameBtn.isEnabled = false
                 binding.numOfCharacters1.setTextColor(getColor(R.color.sub_grey_6))
-                binding.changeNicknameBtn.setBackgroundColor(getColor(R.color.sub_grey_3))
                 binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
                 binding.deleteNicknameBtn.visibility = View.INVISIBLE
             }
+
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
@@ -105,4 +96,26 @@ class NicknameChangeActivity : AppCompatActivity() {
         binding.numOfCharacters2.isVisible = hasFocus
     }
 
+    private fun checkBlank() {
+        binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
+            setCountVisibility(hasFocus)
+
+            var getEdit = binding.nicknameEdit.text.toString()
+            if (getEdit.equals("")) {
+                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
+                binding.deleteNicknameBtn.visibility = View.INVISIBLE
+            } else {
+                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
+                binding.deleteNicknameBtn.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun checkBackground() {
+        binding.layoutNickname.setOnDebounceClickListener {
+            binding.nicknameEdit.clearFocus()
+            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
+            binding.deleteNicknameBtn.visibility = View.INVISIBLE
+        }
+    }
 }
