@@ -42,7 +42,7 @@ class RecordActivity : AppCompatActivity() {
 
     fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
 
-    fun navigateDetailToCalendar() = addFragment(binding.fragmentContainer, CalendarFragment::class.java)
+    fun replaceDetailToCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
 
     fun popClothesSelect() = popFragmentIfExist(RecordClothesSelectFragment::class.java)
 

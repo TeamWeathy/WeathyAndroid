@@ -36,8 +36,7 @@ class RecordDetailFragment : Fragment() {
             setCountVisibility(hasFocus)
         }
 
-        closeRecordDetail()
-        addRecordDetail()
+        configureStartNavigation()
     }
 
     private val textWatcher = object : TextWatcher {
@@ -66,15 +65,12 @@ class RecordDetailFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(binding.etDetail.windowToken, 0)
     }
 
-    private fun closeRecordDetail() {
+    private fun configureStartNavigation() {
         binding.close setOnDebounceClickListener {
-            (activity as? RecordActivity)?.navigateDetailToCalendar()
+            requireActivity().finish()
         }
-    }
-
-    private fun addRecordDetail() {
-        binding.close setOnDebounceClickListener {
-            (activity as? RecordActivity)?.navigateDetailToCalendar()
+        binding.btnConfirm setOnDebounceClickListener {
+            (activity as? RecordActivity)?.replaceDetailToCalendar()
         }
     }
 
