@@ -356,18 +356,14 @@
                 app:chipSpacingHorizontal="8dp"
                 app:chipSpacingVertical="1.5dp">
 
-                <ImageView
+                <ImageButton
+                    android:translationY="4dp"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
                     android:id="@+id/add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/record_btn_addtag" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="후드티" />
 
             </com.google.android.material.chip.ChipGroup>
 

@@ -94,7 +94,7 @@
         <item name="chipStrokeColor">@color/chip_stroke_color</item>
         <item name="chipStrokeWidth">1.5dp</item>
         <item name="chipCornerRadius">19.5dp</item>
-        <item name="rippleColor">@color/chip_background_color</item>
+        <item name="rippleColor">@color/main_mint</item>
         <item name="chipMinHeight">38dp</item>
         <item name="textStartPadding">11dp</item>
         <item name="textEndPadding">9dp</item>
