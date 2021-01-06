@@ -49,7 +49,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            style="@style/TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="26dp"
@@ -58,25 +58,18 @@
             app:boxCornerRadiusBottomStart="25dp"
             app:boxCornerRadiusTopEnd="25dp"
             app:boxCornerRadiusTopStart="25dp"
-            app:boxStrokeColor="@color/main_mint"
-            app:boxStrokeWidth="1dp"
-            app:boxStrokeWidthFocused="1dp"
             app:endIconDrawable="@drawable/ic_textdelete"
             app:endIconMode="clear_text"
             app:endIconTint="@color/transparent"
             app:endIconTintMode="src_over"
-            app:hintEnabled="false"
             app:layout_constraintLeft_toRightOf="@id/guide_left"
             app:layout_constraintRight_toLeftOf="@id/guide_right"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:startIconDrawable="@drawable/ic_search">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:singleLine="true"
-                android:text="@={vm.query}"
-                android:textSize="16sp" />
+                style="@style/TextInputEditText"
+                android:text="@={vm.query}" />
 
 
         </com.google.android.material.textfield.TextInputLayout>
