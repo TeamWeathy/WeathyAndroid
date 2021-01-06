@@ -9,11 +9,11 @@
 
     <ImageButton
         android:id="@+id/exit_nickname_change_btn"
+        style="@style/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="22dp"
-        android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -104,11 +104,11 @@
 
     <ImageButton
         android:id="@+id/delete_nickname_btn"
+        style="@style/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="22dp"
-        android:background="?selectableItemBackgroundBorderless"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:enabled="false"
         android:src="@drawable/ic_textdelete"
         android:visibility="invisible"

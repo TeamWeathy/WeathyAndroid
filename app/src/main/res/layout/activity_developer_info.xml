@@ -8,11 +8,11 @@
 
     <ImageButton
         android:id="@+id/exit_developer_info_btn"
+        style="@style/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="22dp"
-        android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

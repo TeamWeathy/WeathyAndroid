@@ -8,11 +8,11 @@
 
     <ImageButton
         android:id="@+id/exit_setting_btn"
+        style="@style/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="33dp"
-        android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,11 +42,11 @@
 
     <ImageView
         android:id="@+id/ic_arrow"
+        style="@style/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="25dp"
-        android:src="@drawable/settings_ic_arrow"
+        android:layout_marginEnd="19dp"
+        android:src="@drawable/setting_frame_arrow"
         app:layout_constraintBottom_toBottomOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -100,9 +100,9 @@
         android:id="@+id/ic_arrow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        style="@style/ImageButton"
+        android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
-        android:src="@drawable/settings_ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider1" />
 
     <TextView
@@ -189,9 +189,9 @@
         android:id="@+id/ic_arrow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        style="@style/ImageButton"
+        android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
-        android:src="@drawable/settings_ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider2" />
 
     <View
