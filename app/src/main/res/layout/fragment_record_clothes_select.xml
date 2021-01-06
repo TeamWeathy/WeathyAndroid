@@ -339,7 +339,7 @@
             app:layout_constraintStart_toStartOf="@id/layout_etc"
             app:layout_constraintTop_toBottomOf="@id/layout_etc" />
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingTop="29dp"
@@ -349,6 +349,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider">
 
             <com.google.android.material.chip.ChipGroup
+                android:layoutAnimation="@anim/layout_animation_fade_in"
                 android:id="@+id/chip_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -366,26 +367,11 @@
                     style="@style/CustomChipStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="후드티"
-                    android:textSize="15sp" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="반팔티"
-                    android:textSize="15sp" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="니트"
-                    android:textSize="15sp" />
+                    android:text="후드티" />
 
             </com.google.android.material.chip.ChipGroup>
 
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
         <ImageView
             android:layout_width="match_parent"

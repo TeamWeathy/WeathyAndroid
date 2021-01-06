@@ -1,28 +1,61 @@
 package team.weathy.ui.record
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class RecordViewModel : ViewModel() {
-    private val _selectedClothesTabIndex = MutableLiveData(0)
-    val selectedClothesTabIndex: LiveData<Int> = _selectedClothesTabIndex
+    private val _choicedClothesTabIndex = MutableLiveData(0)
+    val choicedClothesTabIndex: LiveData<Int> = _choicedClothesTabIndex
 
-    val topClothes = MutableLiveData(listOf("상의1", "상의2"))
-    val selectedTopClothes = MutableLiveData(listOf<String>())
+    val clothesPairs = listOf<Pair<MutableLiveData<List<String>>, MutableLiveData<Set<Int>>>>(
+        MutableLiveData(listOf("상의1", "상의2")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("하의1", "하의2")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("아우터1", "아우터2")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("기타1", "기타2")) to MutableLiveData(setOf()),
+    )
+    val clothes = MediatorLiveData<List<String>>().apply {
+        value = clothesPairs[0].first.value!!
+        addSource(choicedClothesTabIndex) {
+            value = clothesPairs[it].first.value!!
+        }
+        clothesPairs.forEach {
+            addSource(it.first) { list ->
+                value = list
+            }
+        }
+    }
+    val selectedClothes = MediatorLiveData<Set<Int>>().apply {
+        value = clothesPairs[0].second.value!!
+        addSource(choicedClothesTabIndex) {
+            value = clothesPairs[it].second.value!!
+        }
+        clothesPairs.forEach {
+            addSource(it.second) { set ->
+                value = set
+            }
+        }
+    }
 
-    val bottomClothes = MutableLiveData(listOf("하의1", "하의2"))
-    val selectedBottomClothes = MutableLiveData(listOf<String>())
-
-    val outerClothes = MutableLiveData(listOf("아우터1", "아우터2"))
-    val selectedOuterClothes = MutableLiveData(listOf<String>())
-
-    val etcClothes = MutableLiveData(listOf("기타1", "기타2"))
-    val selectedEtcClothes = MutableLiveData(listOf<String>())
 
     fun changeSelectedClothesTabIndex(tab: Int) {
-        if (selectedClothesTabIndex.value != tab) {
-            _selectedClothesTabIndex.value = tab
+        if (choicedClothesTabIndex.value != tab) {
+            _choicedClothesTabIndex.value = tab
+        }
+    }
+
+    fun onChipChecked(index: Int) {
+        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
+        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
+            add(index)
+        }
+    }
+
+    fun onChipUnchecked(index: Int) {
+        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
+        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
+            remove(index)
         }
     }
 }
