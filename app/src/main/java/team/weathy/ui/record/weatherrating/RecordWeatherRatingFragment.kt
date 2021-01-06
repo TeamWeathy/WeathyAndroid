@@ -11,6 +11,7 @@ import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
 import team.weathy.ui.record.RecordActivity
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
 
@@ -31,7 +32,7 @@ class RecordWeatherRatingFragment : Fragment() {
         }
     }
 
-    private fun setReviewClickListener(cvReview: kotlin.Array<WeathyCardView>, position: Int, button: Button) {
+    private fun setReviewClickListener(cvReview: Array<WeathyCardView>, position: Int, button: Button) {
         cvReview[position] setOnDebounceClickListener {
             setBackgroundEnableListener(cvReview[position])
             setButtonEnableListener(button)
@@ -43,18 +44,18 @@ class RecordWeatherRatingFragment : Fragment() {
 
     private fun setBackgroundEnableListener(cvReview:WeathyCardView ) {
         cvReview.disableShadow = false
-        cvReview.shadowColor = resources.getColor(R.color.main_mint_shadow)
-        cvReview.strokeColor = resources.getColor(R.color.main_mint)
+        cvReview.shadowColor = getColor(R.color.main_mint_shadow)
+        cvReview.strokeColor = getColor(R.color.main_mint)
     }
 
     @SuppressLint("ResourceType")
     private fun setButtonEnableListener(button: Button) {
-        button.setBackgroundColor(resources.getColor(R.color.main_mint))
+        button.setBackgroundColor(getColor(R.color.main_mint))
         button.isEnabled = true
     }
 
     private fun setBackgroundDisableListener(cvReview: WeathyCardView) {
         cvReview.disableShadow = true
-        cvReview.strokeColor = resources.getColor(R.color.sub_grey_7)
+        cvReview.strokeColor = getColor(R.color.sub_grey_7)
     }
 }
