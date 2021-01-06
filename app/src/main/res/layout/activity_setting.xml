@@ -8,7 +8,7 @@
 
     <ImageButton
         android:id="@+id/exit_setting_btn"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
@@ -42,7 +42,7 @@
 
     <ImageView
         android:id="@+id/ic_arrow"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
@@ -100,7 +100,7 @@
         android:id="@+id/ic_arrow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider1" />
@@ -189,7 +189,7 @@
         android:id="@+id/ic_arrow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider2" />

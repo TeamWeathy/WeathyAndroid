@@ -39,7 +39,7 @@
 
             <ImageButton
                 android:id="@+id/back"
-                style="@style/ImageButton"
+                style="@style/ImageButton.size32_icon20"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_close"
                 app:layout_constraintLeft_toLeftOf="parent"
