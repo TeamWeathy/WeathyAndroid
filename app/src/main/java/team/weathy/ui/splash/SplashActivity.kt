@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.main.MainActivity
+import team.weathy.ui.nicknameset.NicknameSetActivity
 import team.weathy.util.PermissionUtil
 import team.weathy.util.extensions.showToast
 
@@ -23,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
     private fun requestLocationPermissions() {
         PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
             override fun onPermissionGranted() {
-                startMainActivityAndFinish()
+                navigateNextScreenAndFinish()
             }
 
             override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {
@@ -44,8 +45,17 @@ class SplashActivity : AppCompatActivity() {
         PermissionUtil.openPermissionSettings(this)
     }
 
-    private fun startMainActivityAndFinish() {
-        startActivity(Intent(this, MainActivity::class.java))
+    private fun navigateNextScreenAndFinish() {
+        // TODO 무조건 메인 화면으로 가기
+        //        if (uniqueId.exist) {
+        navigateMain()
+        //        } else {
+        //            navigateNicknameSet()
+        //        }
         finish()
     }
+
+    private fun navigateNicknameSet() = startActivity(Intent(this, NicknameSetActivity::class.java))
+
+    private fun navigateMain() = startActivity(Intent(this, MainActivity::class.java))
 }

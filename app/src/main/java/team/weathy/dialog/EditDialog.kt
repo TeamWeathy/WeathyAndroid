@@ -35,7 +35,7 @@ class EditDialog : DialogFragment() {
 		binding.enter.hint = hint
 		binding.tagCount.text = count
 		binding.btnAdd setOnDebounceClickListener {
-			clickListener?.onClickYes()
+			clickListener?.onClickYes(binding.enter.text?.toString() ?: "")
 
 			dismiss()
 		}
@@ -57,7 +57,7 @@ class EditDialog : DialogFragment() {
 	}
 
 	interface ClickListener {
-		fun onClickYes() {}
+		fun onClickYes(text: String) {}
 		fun onClickNo() {}
 	}
 

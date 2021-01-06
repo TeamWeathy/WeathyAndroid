@@ -12,6 +12,7 @@
     <color name="red_temp">#D18C8B</color>
     <color name="blue_temp">#3B9BD1</color>
     <color name="sub_grey_1">#555555</color>
+    <color name="sub_grey_2">#c2c2c2</color>
     <color name="sub_grey_3">#DADADA</color>
     <color name="sub_grey_4">#CDCDCD</color>
     <color name="sub_grey_5">#F1F1F1</color>
@@ -29,6 +30,7 @@
     <color name="chip_background">#F8F8F8</color>
     <color name="mint_icon">#47C0AC</color>
     <color name="shadow_scroll">#26101010</color>
+    <color name="switch_shadow">#efefef</color>
     <color name="pink">#f37088</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/sub_grey_7</color>
 

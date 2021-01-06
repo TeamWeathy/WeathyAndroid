@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        dismissKeyboardOnClick="@{true}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lineSpacingExtra="-2sp"
+            android:maxLines="4"
+            android:text="웨디에서 사용할\n닉네임을 입력해주세요."
+            android:textColor="@color/main_grey"
+            android:textSize="25sp"
+            app:layout_constraintTop_toBottomOf="@id/guide1" />
+
+        <TextView
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="닉네임은 설정에서 다시 변경할 수 있어요."
+            android:textColor="@color/sub_grey_6"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="42dp"
+            app:layout_constraintTop_toBottomOf="@id/body">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/TextInputEditText"
+                android:hint="닉네임을 6자 이내로 입력해주세요." />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            style="@style/RoundButton.Mint"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            android:text="웨디 시작하기"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

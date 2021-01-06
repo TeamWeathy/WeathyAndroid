@@ -6,35 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".ui.developerinfo.DeveloperInfoActivity">
 
+    <ImageButton
+        android:id="@+id/exit_developer_info_btn"
+        style="@style/ImageButton.size32_icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/developer_info_txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="109dp"
+        android:layout_marginTop="43dp"
         android:text="개발자 정보"
         android:textColor="@color/main_grey"
         android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/exit_developer_info_btn"
+        app:layout_constraintTop_toTopOf="@id/exit_developer_info_btn" />
 
     <TextView
         android:id="@+id/plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="65dp"
         android:text="기획"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/developer_info_txt2"
         app:layout_constraintTop_toBottomOf="@id/developer_info_txt2" />
 
     <TextView
         android:id="@+id/plan_member"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="58dp"
+        android:layout_marginStart="56dp"
         android:text="노희지 김수민 이혜인"
         android:textColor="@color/sub_grey_6"
         android:textSize="16sp"
@@ -46,7 +56,7 @@
         android:id="@+id/design"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="13dp"
         android:text="디자인"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
@@ -68,7 +78,7 @@
         android:id="@+id/ios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="13dp"
         android:text="ios"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
@@ -90,7 +100,7 @@
         android:id="@+id/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="13dp"
         android:text="안드로이드"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
@@ -112,7 +122,7 @@
         android:id="@+id/backend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="13dp"
         android:text="백엔드"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
@@ -129,17 +139,5 @@
         app:layout_constraintBottom_toBottomOf="@id/backend"
         app:layout_constraintStart_toStartOf="@+id/android_member"
         app:layout_constraintTop_toTopOf="@id/backend" />
-
-    <ImageButton
-        android:id="@+id/exit_developer_info_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="31.5dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:scaleType="fitCenter"
-        android:src="@drawable/abc_vector_test"
-        android:tint="?attr/colorControlNormal"
-        app:layout_constraintBottom_toTopOf="@id/developer_info_txt2"
-        app:layout_constraintStart_toStartOf="@id/developer_info_txt2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

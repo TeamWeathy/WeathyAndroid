@@ -6,96 +6,156 @@
     android:layout_height="match_parent"
     tools:context=".ui.setting.SettingActivity">
 
+    <ImageButton
+        android:id="@+id/exit_setting_btn"
+        style="@style/ImageButton.size32_icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="33dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="109dp"
-        android:layout_marginEnd="299dp"
-        android:fontFamily="@font/notosans_bold"
+        android:layout_marginTop="32dp"
         android:text="설정"
         android:textColor="@color/main_grey"
         android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/exit_setting_btn"
+        app:layout_constraintTop_toBottomOf="@id/exit_setting_btn" />
 
     <TextView
         android:id="@+id/change_nickname_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:fontFamily="@font/notosans_regular"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="40dp"
         android:text="닉네임 변경"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toBottomOf="@id/setting" />
 
+    <ImageView
+        android:id="@+id/ic_arrow"
+        style="@style/ImageButton.size32_icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="19dp"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/change_nickname_txt" />
+
     <TextView
         android:id="@+id/push_notif_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        android:fontFamily="@font/notosans_regular"
+        android:layout_marginTop="37dp"
         android:text="푸시 알림"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintStart_toStartOf="@id/change_nickname_txt"
         app:layout_constraintTop_toBottomOf="@id/change_nickname_txt" />
 
+    <Switch
+        android:id="@+id/push_notif_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="34dp"
+        android:thumb="@drawable/switch_thumb"
+        android:track="@drawable/switch_track_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/push_notif_txt" />
+
+    <ImageView
+        android:id="@+id/ic_arrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ImageButton.size32_icon20"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/divider1" />
 
     <TextView
         android:id="@+id/inquire_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/notosans_regular"
+        android:layout_marginTop="37dp"
         android:text="문의하기"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintStart_toStartOf="@id/push_notif_txt"
         app:layout_constraintTop_toBottomOf="@id/push_notif_txt" />
 
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inquire_txt" />
 
     <TextView
         android:id="@+id/developer_info_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
-        android:fontFamily="@font/notosans_regular"
+        android:layout_marginTop="37dp"
         android:text="개발자 정보"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintStart_toStartOf="@id/inquire_txt"
         app:layout_constraintTop_toBottomOf="@id/inquire_txt" />
 
-    <TextView
+    <View
         android:id="@+id/change_nickname_click"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:layout_marginTop="21dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="22dp"
         android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintEnd_toEndOf="@id/divider"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/setting" />
 
-    <TextView
-        android:id="@+id/setting_div_1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/change_nickname_click" />
 
-    <TextView
+    <View
         android:id="@+id/push_notif_click"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        app:layout_constraintStart_toStartOf="@id/setting"
-        app:layout_constraintTop_toBottomOf="@id/setting_div_1" />
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
     <TextView
         android:id="@+id/setting_div_2"
@@ -107,13 +167,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/push_notif_click" />
 
-    <TextView
+    <View
         android:id="@+id/inquire_click"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="60dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="@id/setting"
-        app:layout_constraintTop_toBottomOf="@id/setting_div_2" />
+        app:layout_constraintTop_toBottomOf="@id/divider1" />
 
     <TextView
         android:id="@+id/setting_div_3"
@@ -125,37 +185,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inquire_click" />
 
-    <TextView
-        android:id="@+id/developer_info_click"
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="@id/setting"
-        app:layout_constraintTop_toBottomOf="@id/setting_div_3" />
-
-    <Switch
-        android:id="@+id/push_notif_switch"
+    <ImageView
+        android:id="@+id/ic_arrow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="53dp"
-        android:thumb="@drawable/switch_thumb"
-        android:track="@drawable/switch_track_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/setting_div_1" />
+        style="@style/ImageButton.size32_icon20"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/divider2" />
 
-    <ImageButton
-        android:id="@+id/exit_setting_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="31.5dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:scaleType="fitCenter"
-        android:src="@drawable/abc_ic_clear_material"
-        app:layout_constraintBottom_toTopOf="@id/setting"
-        app:layout_constraintStart_toStartOf="@id/setting" />
-
+    <View
+        android:id="@+id/developer_info_click"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/divider2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
