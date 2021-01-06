@@ -9,7 +9,18 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Calendar.*
 
+/**
+ * YYYY-MM-DD
+ */
 typealias DateString = String
+/**
+ * YYYY-MM-DDTHH
+ */
+typealias DateHourString = String
+/**
+ * YYYY-MM-DD or YYYY-MM-DDTHH
+ */
+typealias DateOrDateHourString = String
 
 val LocalDate.weekOfMonth: Int
     get() {
