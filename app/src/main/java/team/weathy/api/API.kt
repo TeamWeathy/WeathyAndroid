@@ -46,4 +46,6 @@ object API {
 
     val auth = apiRetrofit.create(AuthAPI::class.java)
     val calendar = apiRetrofit.create(CalendarAPI::class.java)
+    val clothes = apiRetrofit.create(ClothesAPI::class.java)
+    val user = apiRetrofit.create(UserAPI::class.java)
 }
