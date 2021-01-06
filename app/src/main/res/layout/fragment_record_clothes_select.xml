@@ -351,7 +351,7 @@
             <com.google.android.material.chip.ChipGroup
                 android:layoutAnimation="@anim/layout_animation_fade_in"
                 android:id="@+id/chip_group"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:chipSpacingHorizontal="8dp"
                 app:chipSpacingVertical="1.5dp">
