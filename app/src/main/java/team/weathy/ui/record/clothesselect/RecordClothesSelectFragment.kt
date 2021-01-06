@@ -14,14 +14,16 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
+import team.weathy.dialog.EditDialog
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.debugE
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
-class RecordClothesSelectFragment : Fragment() {
+class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
@@ -34,6 +36,7 @@ class RecordClothesSelectFragment : Fragment() {
         debugE(viewModel.selectedClothes.value)
         configureTabs()
         configureChips()
+        configureAddLogic()
     }
 
     private fun configureClothesSelectNavigation() {
@@ -133,4 +136,16 @@ class RecordClothesSelectFragment : Fragment() {
     }
 
     private fun isChipSelected(index: Int) = index in viewModel.selectedClothes.value!!
+
+    private fun configureAddLogic() {
+        binding.add setOnDebounceClickListener {
+            EditDialog.newInstance("상의 추가하기", "예...", "23").show(
+                childFragmentManager, null
+            )
+        }
+    }
+
+    override fun onClickYes(text: String) {
+        requireContext().showToast(text)
+    }
 }
