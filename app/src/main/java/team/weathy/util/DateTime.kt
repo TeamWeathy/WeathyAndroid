@@ -4,10 +4,12 @@ import team.weathy.view.calendar.MonthlyAdapter
 import team.weathy.view.calendar.WeeklyAdapter
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Calendar.*
 
+typealias DateString = String
 
 val LocalDate.weekOfMonth: Int
     get() {
@@ -24,6 +26,9 @@ val LocalDate.dayOfWeekValue: Int
     }
 val LocalDate.dayOfWeekIndex: Int
     get() = dayOfWeekValue - 1
+
+val LocalDate.dateString: DateString
+    get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
 
 fun convertMonthlyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
