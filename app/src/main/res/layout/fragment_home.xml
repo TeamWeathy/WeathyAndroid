@@ -20,7 +20,7 @@
                 android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="33dp"
                 android:layout_marginTop="321dp"
                 android:text="희지"
                 android:textColor="@color/main_grey"
@@ -54,9 +54,9 @@
                 android:id="@+id/cv_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="26dp"
                 android:layout_marginTop="21dp"
-                android:layout_marginEnd="34dp"
+                android:layout_marginEnd="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/today_weathy">
@@ -270,9 +270,9 @@
                 android:id="@+id/cv_hourly_weather"
                 android:layout_width="match_parent"
                 android:layout_height="205dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="34dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_main">
@@ -299,10 +299,10 @@
             <team.weathy.view.WeathyCardView
                 android:id="@+id/cv_weekend_weather"
                 android:layout_width="match_parent"
-                android:layout_height="205dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="34dp"
+                android:layout_height="233dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_hourly_weather">
@@ -312,16 +312,271 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/cv_weekend_weather_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="25sp"
-                        android:layout_marginTop="18dp"
-                        android:fontFamily="@font/notosans_bold"
+                        android:layout_marginTop="17dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="주간 날씨"
                         android:textColor="@color/main_grey"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider_weekend"
+                        android:layout_width="31dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="9dp"
+                        android:background="@color/sub_grey_7"
+                        app:layout_constraintStart_toStartOf="@+id/cv_weekend_weather_txt"
+                        app:layout_constraintTop_toBottomOf="@id/cv_weekend_weather_txt" />
+
+                    <TextView
+                        android:id="@+id/today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="73dp"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="오늘"
+                        android:textColor="@color/mint_icon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@id/gl_today"
+                        app:layout_constraintStart_toStartOf="@id/gl_today"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="37dp" />
+
+                    <ImageView
+                        android:id="@+id/ic_today"
+                        style="@style/ImageView"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintEnd_toEndOf="@id/gl_today"
+                        app:layout_constraintStart_toStartOf="@id/gl_today"
+                        app:layout_constraintTop_toBottomOf="@id/today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_today"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="59dp"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_today"
+                        app:layout_constraintStart_toStartOf="@id/gl_today"
+                        app:layout_constraintTop_toBottomOf="@id/ic_today" />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="77dp" />
+
+                    <TextView
+                        android:id="@+id/day1"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="화"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day1"
+                        app:layout_constraintStart_toStartOf="@id/gl_day1"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day1"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day1"
+                        app:layout_constraintStart_toStartOf="@id/gl_day1"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day1"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day1"
+                        app:layout_constraintStart_toStartOf="@id/gl_day1"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="116dp" />
+
+                    <TextView
+                        android:id="@+id/day2"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day2"
+                        app:layout_constraintStart_toStartOf="@id/gl_day2"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day2"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day2"
+                        app:layout_constraintStart_toStartOf="@id/gl_day2"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day2"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day2"
+                        app:layout_constraintStart_toStartOf="@id/gl_day2"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="155dp" />
+
+                    <TextView
+                        android:id="@+id/day3"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="목"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day3"
+                        app:layout_constraintStart_toStartOf="@id/gl_day3"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day3"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day3"
+                        app:layout_constraintStart_toStartOf="@id/gl_day3"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day3"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day3"
+                        app:layout_constraintStart_toStartOf="@id/gl_day3"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="194dp" />
+
+                    <TextView
+                        android:id="@+id/day4"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="금"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day4"
+                        app:layout_constraintStart_toStartOf="@id/gl_day4"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day4"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day4"
+                        app:layout_constraintStart_toStartOf="@id/gl_day4"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day4"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day4"
+                        app:layout_constraintStart_toStartOf="@id/gl_day4"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="233dp" />
+
+                    <TextView
+                        android:id="@+id/day5"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="토"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day5"
+                        app:layout_constraintStart_toStartOf="@id/gl_day5"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day5"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day5"
+                        app:layout_constraintStart_toStartOf="@id/gl_day5"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day5"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day5"
+                        app:layout_constraintStart_toStartOf="@id/gl_day5"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/gl_day6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="272dp" />
+
+                    <TextView
+                        android:id="@+id/day6"
+                        style="@style/WeekendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="일"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day6"
+                        app:layout_constraintStart_toStartOf="@id/gl_day6"
+                        app:layout_constraintTop_toTopOf="@id/today" />
+
+                    <ImageView
+                        android:id="@+id/ic_day6"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day6"
+                        app:layout_constraintStart_toStartOf="@id/gl_day6"
+                        app:layout_constraintTop_toTopOf="@id/ic_today" />
+
+                    <TextView
+                        android:id="@+id/min_temp_day6"
+                        style="@style/MinTempText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1°"
+                        app:layout_constraintEnd_toEndOf="@id/gl_day6"
+                        app:layout_constraintStart_toStartOf="@id/gl_day6"
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
@@ -330,9 +585,9 @@
                 android:id="@+id/cv_detail_weather"
                 android:layout_width="match_parent"
                 android:layout_height="205dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="34dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_weekend_weather">
@@ -342,16 +597,180 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/cv_detail_weather_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="25sp"
                         android:layout_marginTop="18dp"
-                        android:fontFamily="@font/notosans_bold"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="상세날씨"
                         android:textColor="@color/main_grey"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divder_detail"
+                        android:layout_width="31dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="9dp"
+                        android:background="@color/sub_grey_7"
+                        app:layout_constraintStart_toStartOf="@+id/cv_detail_weather_txt"
+                        app:layout_constraintTop_toBottomOf="@id/cv_detail_weather_txt" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.2" />
+
+                    <ImageView
+                        android:id="@+id/ic_precip"
+                        style="@style/ImageView"
+                        android:layout_marginTop="31dp"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@id/cv_detail_weather_txt" />
+
+                    <TextView
+                        android:id="@+id/precip_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="강수량"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
+                        app:layout_constraintStart_toStartOf="@id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/ic_precip" />
+
+                    <TextView
+                        android:id="@+id/precip_degree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="보통"
+                        android:textColor="@color/sub_grey_1"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline"
+                        app:layout_constraintStart_toStartOf="@id/guideline"
+                        app:layout_constraintTop_toBottomOf="@id/precip_txt" />
+
+                    <TextView
+                        android:id="@+id/precip_figure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="15mm"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline"
+                        app:layout_constraintStart_toStartOf="@id/guideline"
+                        app:layout_constraintTop_toBottomOf="@id/precip_degree" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <ImageView
+                        android:id="@+id/ic_humidity"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline1"
+                        app:layout_constraintTop_toTopOf="@id/ic_precip" />
+
+                    <TextView
+                        android:id="@+id/humidity_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="습도"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@id/guideline1"
+                        app:layout_constraintTop_toTopOf="@+id/precip_txt" />
+
+                    <TextView
+                        android:id="@+id/humidity_degree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="건조"
+                        android:textColor="@color/sub_grey_1"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline1"
+                        app:layout_constraintStart_toStartOf="@id/guideline1"
+                        app:layout_constraintTop_toTopOf="@id/precip_degree" />
+
+                    <TextView
+                        android:id="@+id/humidity_figure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="30%"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline1"
+                        app:layout_constraintStart_toStartOf="@id/guideline1"
+                        app:layout_constraintTop_toTopOf="@id/precip_figure" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.8" />
+
+                    <ImageView
+                        android:id="@+id/ic_windSpeed"
+                        style="@style/ImageView"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                        app:layout_constraintStart_toStartOf="@+id/guideline2"
+                        app:layout_constraintTop_toTopOf="@id/ic_humidity" />
+
+                    <TextView
+                        android:id="@+id/windSpeed_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="풍속"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                        app:layout_constraintStart_toStartOf="@id/guideline2"
+                        app:layout_constraintTop_toTopOf="@+id/humidity_txt" />
+
+                    <TextView
+                        android:id="@+id/windSpeed_degree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="다소강함"
+                        android:textColor="@color/sub_grey_1"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline2"
+                        app:layout_constraintStart_toStartOf="@id/guideline2"
+                        app:layout_constraintTop_toTopOf="@id/humidity_degree" />
+
+                    <TextView
+                        android:id="@+id/windSpeed_figure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="12m/s"
+                        android:textColor="@color/sub_grey_6"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline2"
+                        app:layout_constraintStart_toStartOf="@id/guideline2"
+                        app:layout_constraintTop_toTopOf="@id/humidity_figure" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
