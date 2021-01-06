@@ -27,7 +27,8 @@
     <color name="imoji_verycold_text">#967FD4</color>
     <color name="imoji_verycold">#967FD4</color>
     <color name="shadow_scroll">#26101010</color>
-
+    <color name="mint_icon">#47c0ac</color>
+    <color name="switch_shadow">#efefef</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/sub_grey_7</color>
 
 </resources>
