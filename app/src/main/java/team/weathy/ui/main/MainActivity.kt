@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
+import team.weathy.api.API
+import team.weathy.api.LoginReq
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.record.RecordActivity
@@ -30,6 +32,12 @@ class MainActivity : AppCompatActivity() {
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
+
+        lifecycleScope.launchWhenCreated {
+            kotlin.runCatching {
+                API.calendar.fetchCalendarPreview("1234","1234")
+            }
+        }
     }
 
     private fun configurePager() = binding.fragmentPager.let { pager ->
