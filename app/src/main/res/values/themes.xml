@@ -6,7 +6,7 @@
 
         <item name="android:fontFamily">@font/notosans_regular</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:letterSpacing">-0.05</item>
+        <item name="android:letterSpacing">-0.08</item>
         <item name="android:textColor">@color/main_grey</item>
 
         <item name="android:windowBackground">@drawable/background_window</item>
@@ -101,11 +101,12 @@
         <item name="chipStrokeWidth">1.5dp</item>
         <item name="chipCornerRadius">19.5dp</item>
         <item name="rippleColor">@color/main_mint</item>
-        <item name="chipMinHeight">38dp</item>
+        <item name="chipMinHeight">39dp</item>
         <item name="textStartPadding">11dp</item>
         <item name="textEndPadding">9dp</item>
         <item name="android:textSize">15sp</item>
     </style>
+
     <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxBackgroundColor">@color/white</item>
         <item name="boxStrokeColor">@color/main_mint</item>
