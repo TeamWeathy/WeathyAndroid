@@ -20,8 +20,8 @@
                 android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="33dp"
-                android:layout_marginTop="321dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="265dp"
                 android:text="희지"
                 android:textColor="@color/main_grey"
                 android:textSize="16sp"
@@ -42,8 +42,7 @@
                 android:id="@+id/today_weathy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:fontFamily="@font/notosans_bold"
+                android:fontFamily="@font/notosans_medium"
                 android:text="오늘의 웨디"
                 android:textColor="@color/main_grey"
                 android:textSize="21sp"
@@ -64,31 +63,38 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="26dp"
+                    android:paddingTop="21dp"
+                    android:paddingBottom="22dp">
 
                     <TextView
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="26dp"
-                        android:layout_marginTop="23dp"
-                        android:singleLine="true"
                         android:text="2020년 12월 1일"
                         android:textColor="@color/sub_grey_6"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/ic_weather"
+                        style="@style/ImageView"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintStart_toStartOf="@id/date"
+                        app:layout_constraintTop_toBottomOf="@id/date" />
+
                     <TextView
-                        android:id="@+id/location"
+                        android:id="@+id/weather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/notosans_bold"
-                        android:text="서울 강남구"
-                        android:textColor="@color/main_grey"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="1dp"
+                        android:text="구름조금"
+                        android:textColor="@color/sub_grey_1"
                         android:textSize="15sp"
-                        app:layout_constraintStart_toStartOf="@id/date"
+                        app:layout_constraintStart_toEndOf="@id/ic_weather"
                         app:layout_constraintTop_toBottomOf="@id/date" />
 
                     <TextView
@@ -100,8 +106,8 @@
                         android:text="-4°"
                         android:textColor="@color/red_temp"
                         android:textSize="35sp"
-                        app:layout_constraintStart_toStartOf="@id/location"
-                        app:layout_constraintTop_toBottomOf="@id/location" />
+                        app:layout_constraintStart_toStartOf="@id/ic_weather"
+                        app:layout_constraintTop_toBottomOf="@id/ic_weather" />
 
                     <TextView
                         android:id="@+id/slash"
@@ -133,8 +139,7 @@
                         android:id="@+id/emoji"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
-                        android:layout_marginTop="26dp"
-                        android:layout_marginEnd="26dp"
+                        android:layout_marginTop="24dp"
                         android:src="@drawable/logo512"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -144,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:fontFamily="@font/notosans_bold"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="추웠어요"
                         android:textColor="@color/imoji_cold_text"
                         android:textSize="23sp"
@@ -155,8 +160,10 @@
                         android:id="@+id/divider1"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="15dp"
                         android:background="@color/sub_grey_5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/emojiText" />
 
                     <androidx.constraintlayout.widget.Barrier
@@ -171,20 +178,20 @@
                         android:id="@+id/label1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="26dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginTop="19dp"
                         android:text="상의"
                         android:textColor="@color/sub_grey_6"
-                        android:textSize="15sp"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:text="기모맨투맨, 히트텍"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="@id/label1"
                         app:layout_constraintLeft_toRightOf="@id/barrier"
                         app:layout_constraintRight_toRightOf="parent"
@@ -194,19 +201,20 @@
                         android:id="@+id/label2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:text="하의"
                         android:textColor="@color/sub_grey_6"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/label1"
                         app:layout_constraintTop_toBottomOf="@id/label1" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:text="청바지"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="@id/label2"
                         app:layout_constraintLeft_toRightOf="@id/barrier"
                         app:layout_constraintRight_toRightOf="parent"
@@ -216,19 +224,20 @@
                         android:id="@+id/label3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:text="외투"
                         android:textColor="@color/sub_grey_6"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/label1"
                         app:layout_constraintTop_toBottomOf="@id/label2" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:text="롱패딩"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="@id/label3"
                         app:layout_constraintLeft_toRightOf="@id/barrier"
                         app:layout_constraintRight_toRightOf="parent"
@@ -238,31 +247,25 @@
                         android:id="@+id/label4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:text="기타"
                         android:textColor="@color/sub_grey_6"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@id/label1"
                         app:layout_constraintTop_toBottomOf="@id/label3" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:text="목도리"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="@id/label4"
                         app:layout_constraintLeft_toRightOf="@id/barrier"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@id/label4" />
 
-                    <View
-                        android:id="@+id/divider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="24dp"
-                        android:background="@color/sub_grey_7"
-                        app:layout_constraintTop_toBottomOf="@id/label4" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
 
@@ -307,8 +310,8 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="51dp"
                         android:overScrollMode="never"
-                        android:scrollbars="none"
                         android:paddingHorizontal="24dp"
+                        android:scrollbars="none"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -1028,10 +1031,15 @@
                         app:layout_constraintStart_toStartOf="@id/guideline2"
                         app:layout_constraintTop_toTopOf="@id/humidity_figure" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                app:layout_constraintTop_toBottomOf="@id/cv_detail_weather"
+                app:layout_constraintStart_toStartOf="@id/cv_detail_weather"
+                app:layout_constraintEnd_toEndOf="@id/cv_detail_weather"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
