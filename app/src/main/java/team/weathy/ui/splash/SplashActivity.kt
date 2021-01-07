@@ -3,15 +3,21 @@ package team.weathy.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import team.weathy.MainApplication.Companion.uniqueId
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
 import team.weathy.util.PermissionUtil
+import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.showToast
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+
+    @Inject
+    lateinit var uniqueId: UniqueIdentifier
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

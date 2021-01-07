@@ -38,7 +38,7 @@
 
             <ImageButton
                 android:id="@+id/setting"
-                style="@style/ImageButton"
+                style="@style/ImageButton.size32_icon20"
                 android:layout_marginRight="24dp"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintRight_toRightOf="parent"
@@ -46,7 +46,7 @@
 
             <ImageButton
                 android:id="@+id/search"
-                style="@style/ImageButton"
+                style="@style/ImageButton.size32_icon20"
                 android:layout_marginRight="12dp"
                 android:src="@drawable/ic_search"
                 app:layout_constraintBottom_toBottomOf="@id/setting"

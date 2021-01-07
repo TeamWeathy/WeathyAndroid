@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.weathy.view.WeathyCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:weathy_disable_shadow="true"
+    app:weathy_radius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_animation_fade_in"
+        android:layout_marginHorizontal="29dp"
+        tools:layoutAnimation="@null">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/notosans_bold"
+            android:text="title"
+            android:textColor="@color/main_mint"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_bold"
+            android:text=" ("
+            android:textColor="@color/main_mint"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@id/title"
+            app:layout_constraintStart_toEndOf="@id/title"/>
+
+        <TextView
+            android:id="@+id/tag_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_bold"
+            android:text="n"
+            android:textColor="@color/main_mint"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@id/title2"
+            app:layout_constraintStart_toEndOf="@id/title2"/>
+
+        <TextView
+            android:id="@+id/tag_count2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_bold"
+            android:text="/50)"
+            android:textColor="@color/main_mint"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@id/tag_count"
+            app:layout_constraintStart_toEndOf="@id/tag_count"/>
+
+        <TextView
+            android:id="@+id/body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="나만 알아볼 수 있는 말로\n옷을 등록해 보세요!"
+            android:textSize="16sp"
+            android:textColor="@color/sub_grey_6"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <EditText
+            android:id="@+id/enter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/edit_border"
+            android:hint="hint"
+            android:maxLength="10"
+            android:paddingHorizontal="22dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="14dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/body" />
+
+        <ImageButton
+            android:id="@+id/delete_nickname_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="17dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:enabled="false"
+            android:scaleType="fitCenter"
+            android:visibility="invisible"
+            android:src="@drawable/ic_textdelete"
+            app:layout_constraintEnd_toEndOf="@id/enter"
+            app:layout_constraintTop_toTopOf="@id/enter"
+            app:layout_constraintBottom_toBottomOf="@id/enter"/>
+
+        <TextView
+            android:id="@+id/text_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/text_count2"
+            app:layout_constraintEnd_toStartOf="@id/text_count2"
+            app:layout_constraintTop_toTopOf="@id/text_count2" />
+
+        <TextView
+            android:id="@+id/text_count2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="/10"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enter" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/RoundButton.Cancel.Subgray2"
+            android:layout_width="0dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="27dp"
+            android:text="닫기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_add"
+            app:layout_constraintTop_toBottomOf="@id/enter" />
+
+        <Button
+            android:id="@+id/btn_add"
+            style="@style/RoundButton"
+            android:layout_width="0dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="27dp"
+            android:layout_marginLeft="13dp"
+            android:text="추가하기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_cancel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</team.weathy.view.WeathyCardView>

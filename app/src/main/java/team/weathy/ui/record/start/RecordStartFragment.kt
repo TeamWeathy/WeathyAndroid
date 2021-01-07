@@ -18,16 +18,21 @@ class RecordStartFragment : Fragment() {
     private val viewModel by activityViewModels<RecordViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentRecordStartBinding.inflate(layoutInflater, container, false).also {
-            binding = it
-            it.btnChange setOnDebounceClickListener {
-                (activity as? RecordActivity)?.navigateStartToLocationChange()
-            }
-            it.btnStart setOnDebounceClickListener {
-                (activity as? RecordActivity)?.navigateStartToClothesSelect()
-            }
-        }.root
+        FragmentRecordStartBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        configureStartNavigation()
+    }
+
+    private fun configureStartNavigation() {
+        binding.close setOnDebounceClickListener {
+            requireActivity().finish()
+        }
+        binding.btnChange setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateStartToLocationChange()
+        }
+        binding.btnStart setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateStartToClothesSelect()
+        }
     }
 }

@@ -5,14 +5,14 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import team.weathy.util.Once
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.view.calendar.MonthlyAdapter.MonthlyHolder
 
 class MonthlyAdapter(
     private val animLiveData: LiveData<Float>,
     private val scrollEnabled: LiveData<Boolean>,
-    private val onScrollToTop: LiveData<Once<Unit>>
+    private val onScrollToTop: SimpleEventLiveData
 ) : RecyclerView.Adapter<MonthlyHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthlyHolder {
         return MonthlyHolder(MonthlyView(parent.context).apply {

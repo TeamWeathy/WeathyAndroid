@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
     android:id="@+id/layout_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="33dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="14dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="26dp"
+        app:layout_constraintTop_toBottomOf="@id/close"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     <TextView
         style="@style/RecordTitleText"
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="29dp"
         android:text="등록이 완료"
+        android:textColor="@color/mint_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -39,8 +66,8 @@
         android:id="@+id/tv_sub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:text="무엇을 적든, 웨디는 다시 돌아와요."
+        android:layout_marginTop="10dp"
+        android:text="이 웨디는 비슷한 날씨에 나에게 돌아와요."
         app:layout_constraintTop_toBottomOf="@id/tv_title3"
         app:layout_constraintStart_toStartOf="@id/tv_title3"/>
 
@@ -48,19 +75,20 @@
         android:id="@+id/et_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="42dp"
         app:layout_constraintDimensionRatio="309:131"
         android:paddingHorizontal="22dp"
-        android:paddingTop="22dp"
-        android:paddingBottom="21dp"
+        android:paddingTop="19dp"
+        android:paddingBottom="20dp"
         android:includeFontPadding="false"
-        android:background="@drawable/et_record_detail"
+        android:background="@drawable/edit_border"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:hint="예 : 오늘은 바람이 많이 불었어."
+        android:hint="미래의 나에게 들려주고 싶은 날씨 조언을 적어주세요. (예 : 목도리를 챙길걸 그랬어.)"
         android:maxLength="100"
         android:gravity="top"
         android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
         app:layout_constraintTop_toBottomOf="@id/tv_sub"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -73,8 +101,9 @@
         android:text="/100"
         android:textColor="@color/sub_grey_6"
         android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@id/et_detail"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_detail" />
 
     <TextView
         android:id="@+id/tv_text_length2"
@@ -83,15 +112,19 @@
         android:text="0"
         android:textColor="@color/sub_grey_6"
         android:textSize="13sp"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="@id/tv_text_length"
         app:layout_constraintEnd_toStartOf="@id/tv_text_length"/>
 
     <Button
-        style="@style/RoundButton.Mint"
+        style="@style/RoundButton.Grey"
         android:id="@+id/btn_confirm"
         android:layout_width="match_parent"
-        android:layout_marginBottom="38dp"
-        android:text="완료"
+        android:layout_marginBottom="16dp"
+        android:text="내용 추가하기"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

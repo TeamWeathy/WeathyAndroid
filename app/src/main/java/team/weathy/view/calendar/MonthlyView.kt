@@ -19,7 +19,7 @@ import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.OnChangeProp
-import team.weathy.util.Once
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.calculateRequiredRow
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
@@ -44,7 +44,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private val animValue
         get() = animLiveData.value!!
     lateinit var scrollEnabled: LiveData<Boolean>
-    lateinit var onScrollToTop: LiveData<Once<Unit>>
+    lateinit var onScrollToTop: SimpleEventLiveData
 
     private val animValueObserver = Observer<Float> {
         adjustUIsWithAnimValue()
@@ -53,7 +53,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         if (it) enableScroll()
         else disableScroll()
     }
-    private val onScrollToTopObserver = Observer<Once<Unit>> {
+    private val onScrollToTopObserver = Observer<Unit> {
         scrollToTop()
     }
 

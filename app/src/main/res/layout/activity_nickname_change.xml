@@ -9,7 +9,7 @@
 
     <ImageButton
         android:id="@+id/exit_nickname_change_btn"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
@@ -104,7 +104,7 @@
 
     <ImageButton
         android:id="@+id/delete_nickname_btn"
-        style="@style/ImageButton"
+        style="@style/ImageButton.size32_icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
