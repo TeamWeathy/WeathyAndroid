@@ -197,6 +197,7 @@ jobs:
 - Dynamic animation: Spring 물리를 이용한 애니메이션을 구현하는 데 사용
 - Desugar JDK Library: `java.time` 패키지 유틸리티들을 사용하기 위한 desugaring에 사용
 - Flipper: 디버깅에 사용
+- Hilt: 의존성 주입에 사용
 
 
 ## 사용한 기술 스택
