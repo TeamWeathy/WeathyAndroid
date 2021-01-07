@@ -30,5 +30,5 @@
     <color name="mint_icon">#47c0ac</color>
     <color name="switch_shadow">#efefef</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/sub_grey_7</color>
-
+    <color name="image_view_background">#C4C4C4</color>
 </resources>
