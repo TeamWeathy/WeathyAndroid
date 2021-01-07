@@ -3,6 +3,7 @@ package team.weathy.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import team.weathy.MainApplication.Companion.uniqueId
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
@@ -46,12 +47,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateNextScreenAndFinish() {
-        // TODO 무조건 메인 화면으로 가기
-        //        if (uniqueId.exist) {
-        navigateMain()
-        //        } else {
-        //            navigateNicknameSet()
-        //        }
+//        if (uniqueId.exist) {
+//            navigateMain()
+//        } else {
+            navigateNicknameSet()
+//        }
         finish()
     }
 
