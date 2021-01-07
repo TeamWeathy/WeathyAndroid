@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="38dp"
             android:paddingStart="3dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="17dp"
             android:paddingVertical="4dp"
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,25 +79,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:letterSpacing="-0.08"
                 android:text="0"
                 android:textColor="@color/sub_grey_6"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_top"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_top_count2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/5"
-                android:textColor="@color/sub_grey_6"
-                android:textSize="15sp"
-                android:letterSpacing="-0.08"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/tv_top_count"
-                app:layout_constraintStart_toEndOf="@id/tv_top_count" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:paddingStart="3dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="17dp"
             android:paddingVertical="4dp"
             android:focusable="false"
             app:layout_constraintStart_toEndOf="@id/layout_top"
@@ -130,7 +117,6 @@
                 android:text="하의"
                 android:textColor="@color/sub_grey_6"
                 android:textSize="18sp"
-                android:letterSpacing="-0.08"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,22 +128,9 @@
                 android:text="0"
                 android:textColor="@color/sub_grey_4"
                 android:textSize="15sp"
-                android:letterSpacing="-0.08"
                 app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
                 app:layout_constraintStart_toEndOf="@id/tv_bottom"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_bottom_count2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/5"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                android:letterSpacing="-0.08"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/tv_bottom_count"
-                app:layout_constraintStart_toEndOf="@id/tv_bottom_count" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -177,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:paddingStart="3dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="17dp"
             android:paddingVertical="4dp"
             android:focusable="false"
             app:layout_constraintStart_toEndOf="@id/layout_bottom"
@@ -190,7 +163,6 @@
                 android:text="외투"
                 android:textColor="@color/sub_grey_6"
                 android:textSize="18sp"
-                android:letterSpacing="-0.08"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -202,22 +174,9 @@
                 android:text="0"
                 android:textColor="@color/sub_grey_4"
                 android:textSize="15sp"
-                android:letterSpacing="-0.08"
                 app:layout_constraintBottom_toBottomOf="@id/tv_outer"
                 app:layout_constraintStart_toEndOf="@id/tv_outer"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_outer_count2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/5"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                android:letterSpacing="-0.08"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/tv_outer_count"
-                app:layout_constraintStart_toEndOf="@id/tv_outer_count" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,7 +196,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:paddingStart="3dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="17dp"
             android:paddingVertical="4dp"
             app:layout_constraintStart_toEndOf="@id/layout_outer"
             app:layout_constraintTop_toTopOf="@id/layout_outer">
@@ -266,18 +225,6 @@
                 app:layout_constraintStart_toEndOf="@id/tv_etc"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_etc_count2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/5"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                android:letterSpacing="-0.08"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/tv_etc_count"
-                app:layout_constraintStart_toEndOf="@id/tv_etc_count" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -290,7 +237,7 @@
             app:layout_constraintStart_toStartOf="@id/layout_etc"
             app:layout_constraintTop_toBottomOf="@id/layout_etc" />
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingTop="29dp"
@@ -300,43 +247,25 @@
             app:layout_constraintTop_toBottomOf="@id/divider">
 
             <com.google.android.material.chip.ChipGroup
+                android:layoutAnimation="@anim/layout_animation_fade_in"
                 android:id="@+id/chip_group"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:chipSpacingVertical="1.5dp"
-                app:chipSpacingHorizontal="8dp">
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="1.5dp">
 
-                <ImageView
+                <ImageButton
+                    android:translationY="4dp"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
                     android:id="@+id/add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/record_btn_addtag" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="후드티"
-                    android:textSize="15sp"/>
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="반팔티"
-                    android:textSize="15sp"/>
-
-                <com.google.android.material.chip.Chip
-                    style="@style/CustomChipStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="니트"
-                    android:textSize="15sp"/>
 
             </com.google.android.material.chip.ChipGroup>
 
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
         <ImageView
             android:layout_width="match_parent"
@@ -350,14 +279,26 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="29dp"
             android:src="@drawable/record_img_bottomblur"
-            app:layout_constraintBottom_toBottomOf="@id/btn_check"/>
+            app:layout_constraintBottom_toBottomOf="@id/delete"/>
+
+        <Button
+            style="@style/RoundButton.Cancel"
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            app:layout_constraintDimensionRatio="120:55"
+            android:text="취소"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/delete"/>
 
         <Button
             style="@style/RoundButton.Grey"
-            android:id="@+id/btn_check"
-            android:layout_width="match_parent"
+            android:id="@+id/delete"
+            android:layout_width="0dp"
             android:layout_marginBottom="16dp"
-            android:text="다음"
+            android:layout_marginStart="12dp"
+            android:text="삭제하기"
+            app:layout_constraintStart_toEndOf="@id/cancel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
