@@ -46,5 +46,7 @@ class RecordActivity : AppCompatActivity() {
 
     fun popClothesSelect() = popFragmentIfExist(RecordClothesSelectFragment::class.java)
 
+    fun popClothesDelete() = popFragmentIfExist(RecordClothesDeleteFragment::class.java)
+
     fun popWeatherRating() = popFragmentIfExist(RecordWeatherRatingFragment::class.java)
 }
