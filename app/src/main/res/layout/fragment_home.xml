@@ -273,7 +273,6 @@
                 android:layout_marginStart="26dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="26dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_main">
 
@@ -282,16 +281,273 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@id/cv_hourly_weather_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="25sp"
-                        android:layout_marginTop="18dp"
-                        android:fontFamily="@font/notosans_bold"
+                        android:layout_marginTop="17dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="시간대별 날씨"
                         android:textColor="@color/main_grey"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider_hourly"
+                        android:layout_width="31dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="9dp"
+                        android:background="@color/sub_grey_7"
+                        app:layout_constraintStart_toStartOf="@+id/cv_hourly_weather_txt"
+                        app:layout_constraintTop_toBottomOf="@id/cv_hourly_weather_txt" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="51dp"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        android:paddingHorizontal="24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:id="@+id/inflate_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <include
+                                android:id="@+id/time1"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time2"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time1"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time3"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time2"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time4"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time3"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time5"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time4"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time6"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time5"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time7"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time6"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time8"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time7"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time9"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time8"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time10"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time9"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time11"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time10"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time12"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time11"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time13"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time12"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time14"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time13"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time15"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time14"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time16"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time15"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time17"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time18"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time18"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time17"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time19"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time18"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time20"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time19"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time21"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time20"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time22"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time21"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/time23"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="14dp"
+                                app:layout_constraintStart_toEndOf="@id/time22"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <include
+                                android:id="@+id/time24"
+                                layout="@layout/item_hourly_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="19dp"
+                                app:layout_constraintStart_toEndOf="@id/time23"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
@@ -406,7 +662,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day1"
                         app:layout_constraintStart_toStartOf="@id/gl_day1"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/gl_day2"
@@ -440,7 +696,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day2"
                         app:layout_constraintStart_toStartOf="@id/gl_day2"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/gl_day3"
@@ -474,7 +730,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day3"
                         app:layout_constraintStart_toStartOf="@id/gl_day3"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/gl_day4"
@@ -508,7 +764,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day4"
                         app:layout_constraintStart_toStartOf="@id/gl_day4"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/gl_day5"
@@ -542,7 +798,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day5"
                         app:layout_constraintStart_toStartOf="@id/gl_day5"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/gl_day6"
@@ -576,7 +832,7 @@
                         android:text="1°"
                         app:layout_constraintEnd_toEndOf="@id/gl_day6"
                         app:layout_constraintStart_toStartOf="@id/gl_day6"
-                        app:layout_constraintTop_toTopOf="@id/min_temp_today"/>
+                        app:layout_constraintTop_toTopOf="@id/min_temp_today" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
@@ -771,6 +1027,7 @@
                         app:layout_constraintEnd_toEndOf="@id/guideline2"
                         app:layout_constraintStart_toStartOf="@id/guideline2"
                         app:layout_constraintTop_toTopOf="@id/humidity_figure" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
