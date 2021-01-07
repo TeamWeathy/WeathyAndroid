@@ -2,6 +2,7 @@ package team.weathy
 
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
+import dagger.hilt.android.HiltAndroidApp
 import team.weathy.util.FlipperUtil
 import team.weathy.util.PixelRatio
 import team.weathy.util.SPUtil
@@ -9,6 +10,7 @@ import team.weathy.util.UniqueIdentifier
 import team.weathy.util.location.LocationUtil
 
 
+@HiltAndroidApp
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
