@@ -128,8 +128,8 @@
         <View
             shadowOnScroll="@{true}"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shadow_scroll"
+            android:layout_height="16dp"
+            android:background="@drawable/blur_white_top_down"
             app:layout_constraintTop_toTopOf="@id/list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
