@@ -5,13 +5,16 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import dagger.hilt.android.HiltAndroidApp
 import team.weathy.util.FlipperUtil
 import team.weathy.util.PixelRatio
-import team.weathy.util.SPUtil
-import team.weathy.util.UniqueIdentifier
 import team.weathy.util.location.LocationUtil
+import javax.inject.Inject
 
 
 @HiltAndroidApp
 class MainApplication : Application() {
+
+    @Inject
+    lateinit var locationUtil: LocationUtil
+
     override fun onCreate() {
         super.onCreate()
         initializeSingletons()
@@ -23,10 +26,7 @@ class MainApplication : Application() {
      */
     private fun initializeSingletons() {
         pixelRatio = PixelRatio(this)
-        locationUtil = LocationUtil(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(locationUtil)
-        spUtil = SPUtil(this)
-        uniqueId = UniqueIdentifier(spUtil)
     }
 
     private fun configureFlipper() {
@@ -35,8 +35,5 @@ class MainApplication : Application() {
 
     companion object {
         lateinit var pixelRatio: PixelRatio
-        lateinit var locationUtil: LocationUtil
-        lateinit var spUtil: SPUtil
-        lateinit var uniqueId: UniqueIdentifier
     }
 }

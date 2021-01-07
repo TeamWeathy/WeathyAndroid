@@ -3,7 +3,6 @@ package team.weathy.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import team.weathy.MainApplication.Companion.uniqueId
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity

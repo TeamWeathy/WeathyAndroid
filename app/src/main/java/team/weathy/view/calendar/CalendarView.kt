@@ -43,12 +43,13 @@ import kotlinx.coroutines.launch
 import team.weathy.R
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.Once
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.convertDateToMonthlyIndex
 import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.util.dayOfWeekIndex
+import team.weathy.util.emit
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -82,7 +83,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private val scrollEnabled = MutableLiveData(false)
-    private val onScrollToTop = MutableLiveData<Once<Unit>>()
+    private val onScrollToTop = SimpleEventLiveData()
 
     private val collapsedHeight
         get() = px(MIN_HEIGHT_DP)
@@ -454,7 +455,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun notifyScrollToTop() {
-        onScrollToTop.value = Once(Unit)
+        onScrollToTop.emit()
     }
 
     private fun enableTouchWeeklyPagerOnly() {

@@ -6,14 +6,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import team.weathy.MainApplication.Companion.uniqueId
 import team.weathy.util.FlipperUtil
+import team.weathy.util.UniqueIdentifier
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
 const val USER_ID_PATH_SEGMENT = "__USER_ID_PATH_SEGMENT__"
 
-class ApiFactory @Inject constructor() {
+class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     private val gson = GsonBuilder().create()
     private lateinit var okHttpClient: OkHttpClient
 

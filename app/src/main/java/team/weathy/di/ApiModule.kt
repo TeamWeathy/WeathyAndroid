@@ -13,6 +13,7 @@ import team.weathy.api.UserAPI
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeathyAPI
 import team.weathy.api.mock.MockUserAPI
+import team.weathy.util.UniqueIdentifier
 import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.annotation.AnnotationRetention.BINARY
@@ -30,7 +31,7 @@ annotation class ApiMock
 class ApiModule {
     @Provides
     @Singleton
-    fun provideRetrofitProvider() = ApiFactory()
+    fun provideRetrofitProvider(uniqueId: UniqueIdentifier) = ApiFactory(uniqueId)
 
     @Provides
     @Singleton
@@ -65,7 +66,7 @@ class ApiModule {
 
 @Module
 @InstallIn(ApplicationComponent::class)
-abstract class ApiMockModule {
+abstract class ApiModuleMock {
     @Singleton
     @Binds
     @ApiMock
