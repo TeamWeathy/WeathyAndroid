@@ -6,12 +6,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import team.weathy.MainApplication.Companion.uniqueId
 import team.weathy.util.FlipperUtil
+import team.weathy.util.UniqueIdentifier
+import javax.inject.Inject
+import kotlin.reflect.KClass
 
 const val USER_ID_PATH_SEGMENT = "__USER_ID_PATH_SEGMENT__"
 
-object API {
+class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     private val gson = GsonBuilder().create()
     private lateinit var okHttpClient: OkHttpClient
 
@@ -41,13 +43,8 @@ object API {
             .addHeader("x-access-token", "JWT 123" /*TODO*/)
 
     private val apiRetrofit =
-        Retrofit.Builder().baseUrl("https://api" /*TODO*/).addConverterFactory(GsonConverterFactory.create(gson))
+        Retrofit.Builder().baseUrl("https://www.google.com" /*TODO*/).addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient).build()
 
-    val auth = apiRetrofit.create(AuthAPI::class.java)
-    val calendar = apiRetrofit.create(CalendarAPI::class.java)
-    val clothes = apiRetrofit.create(ClothesAPI::class.java)
-    val user = apiRetrofit.create(UserAPI::class.java)
-    val weather = apiRetrofit.create(WeatherAPI::class.java)
-    val weathy = apiRetrofit.create(WeathyAPI::class.java)
+    fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
 }

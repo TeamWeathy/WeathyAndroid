@@ -125,4 +125,15 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">@color/sub_grey_8</item>
     </style>
+
+    <style name="Indicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorSize">32dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
+    <style name="Indicator.White">
+        <item name="indicatorColor">@color/white</item>
+    </style>
 </resources>
