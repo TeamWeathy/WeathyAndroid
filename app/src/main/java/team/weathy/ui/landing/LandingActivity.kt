@@ -3,6 +3,7 @@ package team.weathy.ui.landing
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -39,7 +40,6 @@ class LandingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         configurePager()
-        observewPage()
 
         reserveMockUpImageLayoutCalculation()
 
@@ -74,29 +74,25 @@ class LandingActivity : AppCompatActivity() {
         })
     }
 
-    private fun observewPage() {
-        viewModel.pagerIndex.observe(this) {
-            animateButton(it)
-        }
-    }
-
-    private fun animateButton(idx: Int) {
-        if (idx == ITEM_COUNT - 1) {
-            binding.start.animate().alpha(1f).setDuration(300L).setStartDelay(800L).withStartAction {
-                binding.start.isVisible = true
-            }.start()
-        } else {
-            binding.start.animate().alpha(0f).setDuration(300L).setStartDelay(0L).withEndAction {
-                binding.start.isVisible = false
-            }.start()
-        }
-    }
-
     companion object {
         const val ITEM_COUNT = 3
         private var mokcUpImageHeight = 0
         private var mockUpImageWidth = 0
         private val POPUP_TOP_PERCENTS = listOf(0.52f, 0.156f, 0.19f)
+
+        @BindingAdapter("landing_button")
+        @JvmStatic
+        fun Button.setLandingbuttonAnimation(idx: Int) {
+            if (idx == ITEM_COUNT - 1) {
+                animate().alpha(1f).setDuration(500L).setStartDelay(800L).withStartAction {
+                    isVisible = true
+                }.start()
+            } else {
+                animate().alpha(0f).setDuration(500L).setStartDelay(0L).withEndAction {
+                    isVisible = false
+                }.start()
+            }
+        }
 
         @BindingAdapter("landing_indicator")
         @JvmStatic
