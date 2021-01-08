@@ -11,17 +11,131 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/onboarding_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
-            landing_items="@{vm.items}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <ImageView
+            duration="500"
+            android:id="@+id/logo_bg"
+            android:layout_width="87dp"
+            android:layout_height="54dp"
+            android:src="@drawable/onboarding_img_logo_1"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide1" />
+
+        <ImageView
+            android:id="@+id/logo_2"
+            visibilityWithAnim="@{vm.pagerIndex >= 1}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:src="@drawable/ic_onboarding_line_2"
+            app:layout_constraintBottom_toBottomOf="@id/logo_bg"
+            app:layout_constraintLeft_toLeftOf="@id/logo_bg"
+            app:layout_constraintRight_toRightOf="@id/logo_bg"
+            tools:alpha="0.4" />
+
+        <ImageView
+            android:id="@+id/logo_3"
+            visibilityWithAnim="@{vm.pagerIndex >= 2}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:src="@drawable/ic_onboarding_line_3"
+            app:layout_constraintBottom_toBottomOf="@id/logo_bg"
+            app:layout_constraintLeft_toLeftOf="@id/logo_bg"
+            app:layout_constraintRight_toRightOf="@id/logo_bg"
+            tools:alpha="0.2" />
+
+        <LinearLayout
+            android:id="@+id/indicator_container"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="110dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/logo_bg">
+
+            <View
+                android:id="@+id/indicator1"
+                landing_indicator="@{vm.pagerIndex == 0}"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:alpha="0.4"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/main_mint" />
+
+            <View
+                android:id="@+id/indicator2"
+                landing_indicator="@{vm.pagerIndex == 1}"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:layout_marginLeft="7dp"
+                android:alpha="0.4"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/main_mint" />
+
+            <View
+                android:id="@+id/indicator3"
+                landing_indicator="@{vm.pagerIndex == 2}"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:layout_marginLeft="7dp"
+                android:alpha="0.4"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/main_mint" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/mockup"
+            landing_mockup="@{vm.pagerIndex}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="360:563"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicator_container"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintWidth_max="360dp"
+            tools:src="@drawable/onboarding_img_phone_1" />
+
+        <ImageView
+            android:id="@+id/popup"
+            landing_popup="@{vm.pagerIndex}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mockup"
+            tools:src="@drawable/onboarding_img_popup_1" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/blur_white_bottom_up"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <Button
+            android:text="웨디 시작하기"
             android:id="@+id/start"
             style="@style/RoundButton.Mint"
             android:layout_width="match_parent"
@@ -30,7 +144,7 @@
             android:alpha="0"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:alpha="1"
+            tools:alpha="0.1"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

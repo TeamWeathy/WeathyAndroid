@@ -17,7 +17,6 @@
         <item name="colorPrimary">@color/main_mint</item>
     </style>
 
-
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">
         <item name="textAllCaps">false</item>
         <item name="cornerRadius">30dp</item>

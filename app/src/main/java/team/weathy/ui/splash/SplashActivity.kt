@@ -32,13 +32,12 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateNextScreen() {
-        //TODO
-        //        when {
-        //            spUtil.isFirstLaunch -> navigateLanding()
-        //            !uniqueId.exist -> navigateNicknameSet()
-        //            else -> navigateMain()
-        //        }
-        navigateMain()
+//        when {
+//            spUtil.isFirstLaunch -> navigateLanding()
+//            !uniqueId.exist -> navigateNicknameSet()
+//            else -> navigateMain()
+//        }
+        navigateLanding()
         finish()
     }
 

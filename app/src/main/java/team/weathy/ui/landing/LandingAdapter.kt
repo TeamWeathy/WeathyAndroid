@@ -2,17 +2,12 @@ package team.weathy.ui.landing
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import team.weathy.databinding.ItemLandingBinding
+import team.weathy.ui.landing.LandingActivity.Companion.ITEM_COUNT
 
 class LandingAdapter : RecyclerView.Adapter<LandingAdapter.LandingHolder>() {
-    private var items = listOf<Item>()
-    fun submitItems(items: List<Item>) {
-        this.items = items
-        notifyDataSetChanged()
-    }
+    private val items = Item.defaults
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LandingHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -21,10 +16,9 @@ class LandingAdapter : RecyclerView.Adapter<LandingAdapter.LandingHolder>() {
         return LandingHolder(binding)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = ITEM_COUNT
 
     override fun onBindViewHolder(holder: LandingHolder, position: Int) = holder.bind(items[position])
-
 
     inner class LandingHolder(private val binding: ItemLandingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
@@ -34,11 +28,28 @@ class LandingAdapter : RecyclerView.Adapter<LandingAdapter.LandingHolder>() {
     }
 
     data class Item(
-        val title: String
-    )
-}
-
-@BindingAdapter("landing_items")
-fun ViewPager2.submitItems(items: List<LandingAdapter.Item>) {
-    (adapter as? LandingAdapter)?.submitItems(items)
+        val titleNormal: String,
+        val titleHighlight: String,
+        val description: String,
+    ) {
+        companion object {
+            val defaults = listOf(
+                Item(
+                    "날씨를",
+                    "기록해요",
+                    "오늘 날씨에 대한 옷차림과 상태를 기록해요",
+                ),
+                Item(
+                    "기록을",
+                    "모아봐요",
+                    "캘린더에서 날씨 기록을 모아볼 수 있어요",
+                ),
+                Item(
+                    "나에게",
+                    "돌아와요",
+                    "기록한 날씨는 비슷한 날에 돌아와요",
+                ),
+            )
+        }
+    }
 }
