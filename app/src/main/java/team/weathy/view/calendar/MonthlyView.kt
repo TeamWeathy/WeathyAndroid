@@ -3,33 +3,33 @@ package team.weathy.view.calendar
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.annotation.IntRange
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.google.android.material.math.MathUtils
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.util.OnChangeProp
 import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.calculateRequiredRow
-import team.weathy.util.dpFloat
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.getMonthTexts
+import team.weathy.util.margin
 import java.time.LocalDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ScrollView(context, attrs) {
+    FrameLayout(context, attrs) {
 
     private val today = LocalDate.now()
     private var todayIndex = 0
@@ -73,6 +73,13 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         onScrollToTop.removeObserver(onScrollToTopObserver)
     }
 
+    private val scrollView = ScrollView(context).apply {
+        id = ViewCompat.generateViewId()
+        overScrollMode = OVER_SCROLL_NEVER
+        isVerticalScrollBarEnabled = false
+
+        layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+    }
 
     private val outerLinearLayout = LinearLayout(context).apply {
         id = ViewCompat.generateViewId()
@@ -89,7 +96,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             orientation = LinearLayout.HORIZONTAL
             weightSum = 7f
 
-            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, px(102), 0f)
+            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, px(ITEM_HEIGHT_6ROW_DP), 0f)
         }
     }
 
@@ -107,20 +114,32 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
+    private val topBlur = View(context).apply {
+        setBackgroundResource(R.drawable.blur_white_top_down)
+
+        layoutParams = LayoutParams(MATCH_PARENT, px(16)).apply {
+            gravity = Gravity.TOP
+        }
+    }
+    private val bottomBlur = View(context).apply {
+        setBackgroundResource(R.drawable.blur_white_bottom_up)
+
+        layoutParams = LayoutParams(MATCH_PARENT, px(16)).apply {
+            gravity = Gravity.BOTTOM
+        }
+    }
+
     init {
-        configureContainer()
+        addView(scrollView)
         addOuterLinearLayout()
+        addView(topBlur)
+        addView(bottomBlur)
         updateUIWithDate()
     }
 
-    private fun configureContainer() {
-        id = ViewCompat.generateViewId()
-        overScrollMode = OVER_SCROLL_NEVER
-        isVerticalScrollBarEnabled = false
-    }
 
     private fun addOuterLinearLayout() {
-        addView(outerLinearLayout)
+        scrollView.addView(outerLinearLayout)
     }
 
     private fun updateUIWithDate() {
@@ -132,12 +151,25 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
         outerLinearLayout.removeAllViews()
         val requiredRow = calculateRequiredRow(date)
+        val rowHeight = when (requiredRow) {
+            4 -> px(ITEM_HEIGHT_4ROW_DP)
+            5 -> px(ITEM_HEIGHT_5ROW_DP)
+            else -> px(ITEM_HEIGHT_6ROW_DP)
+        }
+        val coldestViewMarginBottom = when (requiredRow) {
+            4 -> px(20)
+            5 -> px(8)
+            else -> px(3)
+        }
 
         repeat(requiredRow) { row ->
             val innerLinearLayout = innerLinearLayouts[row]
 
             if (row > 0) outerLinearLayout.addView(dividerGenerator())
             outerLinearLayout.addView(innerLinearLayout)
+            innerLinearLayout.updateLayoutParams {
+                height = rowHeight
+            }
 
             repeat(7) { column ->
                 val idx = row * 7 + column
@@ -156,6 +188,8 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
                 item.circleSmall.isVisible = idx == todayIndex
                 item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndex))
+
+                item.tempLow.margin.bottom = coldestViewMarginBottom
 
                 innerLinearLayout.addView(
                     item.root, LinearLayout.LayoutParams(
@@ -186,15 +220,9 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     private fun adjustCalendarItems() {
-        calendarItems.forEach { binding ->
-            binding.day.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                topMargin = MathUtils.lerp(5.dpFloat, 15.dpFloat, animValue).toInt()
-            }
-        }
-
         val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
-        itemsExceptFirstLine.forEachIndexed { index, binding ->
-            binding.root.translationY = MathUtils.lerp(index * 4f, 0f, animValue)
+        itemsExceptFirstLine.forEach { binding ->
+            binding.root.translationY = animValue * 10f
         }
 
         if (todayIndex != -1) {
@@ -214,6 +242,12 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     private fun scrollToTop() {
-        smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
+    }
+
+    companion object {
+        const val ITEM_HEIGHT_4ROW_DP = 117
+        const val ITEM_HEIGHT_5ROW_DP = 94
+        const val ITEM_HEIGHT_6ROW_DP = 81
     }
 }

@@ -94,7 +94,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val yearMonthText = TextView(context).apply {
         id = ViewCompat.generateViewId()
-        textSize = 25f
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
@@ -103,7 +103,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = parentId
             leftToLeft = parentId
             rightToRight = parentId
-            topMargin = px(16)
+            topMargin = px(26)
         }
     }
 
@@ -124,7 +124,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = yearMonthText.id
             bottomToBottom = yearMonthText.id
             rightToRight = parentId
-            rightMargin = px(30)
+            rightMargin = px(0)
         }
     }
 
@@ -134,7 +134,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
             topToBottom = yearMonthText.id
-            topMargin = px(16)
+            topMargin = px(11)
         }
     }
 
@@ -145,7 +145,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             topToBottom = topDivider.id
-            topMargin = px(20)
+            topMargin = px(16)
         }
     }
     private val weekTexts = (0..6).map {
@@ -156,15 +156,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             gravity = Gravity.CENTER
 
             layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f)
-        }
-    }
-
-
-    private val viewPagerLayoutParams = {
-        LayoutParams(MATCH_PARENT, 0).apply {
-            topToBottom = weekTextLayout.id
-            bottomToBottom = parentId
-            bottomMargin = px(32)
         }
     }
 
@@ -200,17 +191,15 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val monthlyViewPagerGenerator = {
         ViewPager2(context).apply {
-            layoutParams = viewPagerLayoutParams()
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                bottomToBottom = parentId
+                bottomMargin = px(32)
+            }
 
             adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
-
-            setPageTransformer { page, position ->
-                page.pivotX = if (position < 0) page.width.toFloat() else 0f
-                page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
-            }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -220,11 +209,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     }
                 }
             })
+
+            offscreenPageLimit = 1
         }
     }
     private var monthlyViewPager: ViewPager2? = null
     private val weeklyViewPager = ViewPager2(context).apply {
-        layoutParams = viewPagerLayoutParams()
+        layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+            topToBottom = weekTextLayout.id
+            height = px(WeeklyView.ITEM_HEIGHT_DP)
+        }
 
         adapter = WeeklyAdapter(animLiveData)
         setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
@@ -310,7 +304,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setYearMonthTextWithDate(date: LocalDate) {
-        yearMonthText.text = "${date.year} .${date.monthValue.toString().padStart(2, '0')}"
+        yearMonthText.text = "${date.year} .${date.monthValue}"
     }
 
     private fun selectPagerItemsWithDate(date: LocalDate) {
@@ -352,7 +346,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         )
 
         // capsule
-        if (isTodayInCurrentMonth) {
+        if (isTodayInCurrentWeek) {
             val widthWithoutPadding = width - paddingHorizontal * 2f
             val rawWidth = widthWithoutPadding / 7f
             val maxWidth = pxFloat(42)
@@ -474,7 +468,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
-        private const val MIN_HEIGHT_DP = 220
+        private const val MIN_HEIGHT_DP = 224
         private const val EXPAND_MARGIN_BOTTOM_DP = 108
     }
 }
