@@ -75,6 +75,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:singleLine="true"
             duration="@{100}"
             visibilityWithAnim="@{vm.query.empty}"
             android:layout_width="0dp"
