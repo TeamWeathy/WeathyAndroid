@@ -12,6 +12,18 @@ class SPUtil(context: Application) {
         context, SP_NAME, masterKey, AES256_SIV, AES256_GCM
     )
 
+    var isFirstLaunch: Boolean
+        get() {
+            val result = sharedPreferences.getBoolean("isFirstLaunch", true)
+            if (!result) {
+                sharedPreferences.edit().putBoolean("isFirstLaunch", false).commit()
+            }
+            return result
+        }
+        set(_) {
+            sharedPreferences.edit().putBoolean("isFirstLaunch", false).commit()
+        }
+
     companion object {
         private const val SP_NAME = "DO_NOT_CHANGE_THIS"
     }
