@@ -69,6 +69,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onCurDateChanged()
     }
     var onDateChangeListener: OnDateChangeListener? = null
+    var onClickYearMonthText: (() -> Unit)? = null
 
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
@@ -104,6 +105,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             leftToLeft = parentId
             rightToRight = parentId
             topMargin = px(26)
+        }
+        setOnDebounceClickListener {
+            onClickYearMonthText?.invoke()
         }
     }
 

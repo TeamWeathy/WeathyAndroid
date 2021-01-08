@@ -66,6 +66,7 @@ class LandingActivity : AppCompatActivity() {
     }
 
     private fun configurePager() = binding.pager.let {
+        it.offscreenPageLimit = 1
         it.adapter = LandingAdapter()
         it.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

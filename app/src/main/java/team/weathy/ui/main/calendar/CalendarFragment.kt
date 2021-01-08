@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import team.weathy.databinding.FragmentCalendarBinding
+import team.weathy.dialog.DateDialog
+import team.weathy.dialog.DateDialog.OnClickListener
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.debugE
 import team.weathy.util.weekOfMonth
+import java.time.LocalDate
 
-class CalendarFragment : Fragment() {
+class CalendarFragment : Fragment(), OnClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<CalendarViewModel>()
@@ -29,5 +32,13 @@ class CalendarFragment : Fragment() {
         viewModel.curDate.observe(viewLifecycleOwner) {
             debugE("$it, ${it.weekOfMonth}")
         }
+
+        binding.calendarView.onClickYearMonthText = {
+            DateDialog.newInstance(binding.calendarView.curDate).show(childFragmentManager, null)
+        }
+    }
+
+    override fun onClick(date: LocalDate) {
+        binding.calendarView.curDate = date
     }
 }

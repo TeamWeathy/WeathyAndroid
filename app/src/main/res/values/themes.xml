@@ -135,4 +135,19 @@
     <style name="Indicator.White">
         <item name="indicatorColor">@color/white</item>
     </style>
+
+    <style name="DatePicker">
+        <!-- Text color -->
+        <item name="android:textColorPrimary">@color/main_mint</item>
+        <!-- Divider color -->
+        <item name="colorControlNormal">@color/main_mint</item>
+        <item name="controlBackground">@drawable/ic_search</item>
+    </style>
+
+    <style name="RoundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_top_round_20</item>
+    </style>
+    <style name="RoundBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundBottomSheet</item>
+    </style>
 </resources>
