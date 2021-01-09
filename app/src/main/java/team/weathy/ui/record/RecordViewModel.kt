@@ -10,10 +10,10 @@ class RecordViewModel : ViewModel() {
     val choicedClothesTabIndex: LiveData<Int> = _choicedClothesTabIndex
 
     val clothesPairs = listOf<Pair<MutableLiveData<List<String>>, MutableLiveData<Set<Int>>>>(
-        MutableLiveData(listOf("상의1", "상의2")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("하의1", "하의2")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("아우터1", "아우터2")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("기타1", "기타2")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("니트", "후드티", "티셔츠")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("데님팬츠", "스커트", "슬랙스")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("패딩", "코트", "점퍼")) to MutableLiveData(setOf()),
+        MutableLiveData(listOf("목도리", "장갑", "모자")) to MutableLiveData(setOf()),
     )
     val clothes = MediatorLiveData<List<String>>().apply {
         value = clothesPairs[0].first.value!!
@@ -38,7 +38,6 @@ class RecordViewModel : ViewModel() {
         }
     }
 
-
     fun changeSelectedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
             _choicedClothesTabIndex.value = tab
@@ -56,6 +55,13 @@ class RecordViewModel : ViewModel() {
         val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
         selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
             remove(index)
+        }
+    }
+
+    fun addClothes(text: String) {
+        val clothes = clothesPairs[choicedClothesTabIndex.value!!].first
+        clothes.value = clothes.value!!.toMutableList().apply {
+            add(0, text)
         }
     }
 }
