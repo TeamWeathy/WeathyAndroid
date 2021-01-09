@@ -38,7 +38,7 @@
 
             <ImageButton
                 android:id="@+id/back"
-                style="@style/ImageButton.size48_icon20"
+                style="@style/ImageButton.size48.icon20"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_close"
@@ -122,6 +122,9 @@
             app:layout_constraintTop_toBottomOf="@id/recentLabel" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:clickable="true"
+            android:focusable="true"
+            dismissKeyboardOnClick="@{true}"
             search_adapter_items="@{vm.showRecently ? vm.recentlySearchResult : vm.searchResult}"
             android:id="@+id/list"
             android:layout_width="match_parent"

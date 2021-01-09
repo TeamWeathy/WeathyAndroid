@@ -14,6 +14,8 @@ object MockGenerator {
     fun climate(iconId: Int = 1, description: String = "설명") = Climate(iconId, description)
     fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
     fun temperature() = Temperature(20, -20)
-    fun dailyWeather(regionName: String = "region") = DailyWeather(region(name = regionName), date(), temperature())
+    fun dailyWeather(code: Int = 1, regionName: String = "region") =
+        DailyWeather(region(name = regionName, code = code), date(), temperature())
+
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
 }

@@ -18,7 +18,7 @@ class MockWeatherAPI @Inject constructor() : WeatherAPI {
     ): WeatherDailyHourlyRes {
         return WeatherDailyHourlyRes(
             OverviewWeather(
-                MockGenerator.dailyWeather(regionName = code.toString()), MockGenerator.hourlyWeather()
+                MockGenerator.dailyWeather(code = code ?: 1, regionName = code.toString()), MockGenerator.hourlyWeather()
             ), "message"
         )
     }

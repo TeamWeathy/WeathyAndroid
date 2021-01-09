@@ -1,6 +1,7 @@
 package team.weathy.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -16,6 +17,9 @@ interface RecentSearchCodeDao {
 
     @Query("DELETE FROM RecentSearchCode")
     suspend fun drop()
+
+    @Delete
+    suspend fun delete(item: RecentSearchCode)
 
     @Transaction
     suspend fun add(item: RecentSearchCode) {

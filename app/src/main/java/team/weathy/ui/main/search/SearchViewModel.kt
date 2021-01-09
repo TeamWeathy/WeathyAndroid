@@ -3,13 +3,13 @@ package team.weathy.ui.main.search
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.delay
 import team.weathy.api.WeatherAPI
 import team.weathy.database.RecentSearchCodeDao
 import team.weathy.di.ApiMock
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
 import team.weathy.util.dateHourString
+import team.weathy.util.debugE
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
@@ -39,24 +39,8 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     init {
-        launchCatch({
-            delay(1000L) // FIXME
-            recentSearchCodeDao.getAll()
-        }, loading, onSuccess = {
-            fetchRecentLocations(it)
-        })
+        getRecentSearchCodesAndFetch()
     }
-
-    private fun fetchRecentLocations(codes: List<RecentSearchCode>) = launchCatch({
-        delay(1000L) // FIXME
-        codes.map {
-            weatherAPI.fetchWeatherByLocation(
-                code = it.code, dateOrHourStr = LocalDateTime.now().dateHourString
-            ).weather!!
-        }
-    }, loading, onSuccess = {
-        recentlySearchResult.value = it
-    })
 
     fun search() {
         launchCatch({
@@ -68,7 +52,39 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     fun onItemRemoved(position: Int) {
-        searchResult.value = searchResult.value!!.toMutableList().apply {
+        if (showRecently.value == true) {
+            removeRecentSearchCode(position)
+            recentlySearchResult.removeAtPosition(position)
+
+        } else {
+            searchResult.removeAtPosition(position)
+        }
+    }
+
+
+    private fun getRecentSearchCodesAndFetch() = launchCatch({
+        val codes = recentSearchCodeDao.getAll()
+        debugE(codes)
+        fetchRecentSearchCodes(codes)
+    }, loading, onSuccess = {
+        recentlySearchResult.value = it
+    })
+
+    private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.map {
+        weatherAPI.fetchWeatherByLocation(
+            code = it.code, dateOrHourStr = LocalDateTime.now().dateHourString
+        ).weather!!
+    }
+
+    private fun removeRecentSearchCode(position: Int) = launchCatch({
+        recentlySearchResult.value?.get(position)?.let {
+            debugE(it)
+            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
+        }
+    })
+
+    private fun MutableLiveData<List<OverviewWeather>>.removeAtPosition(position: Int) {
+        value = value?.toMutableList()?.apply {
             removeAt(position)
         }
     }
