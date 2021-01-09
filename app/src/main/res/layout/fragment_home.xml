@@ -98,7 +98,7 @@
 
             <include
                 android:id="@+id/recommended"
-                layout="@layout/view_home_recommended_weathy"
+                layout="@layout/layout_home_recommended_weathy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="121dp"
@@ -123,9 +123,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="216dp"
                 android:layout_marginTop="78dp"
+                android:clipToPadding="false"
                 tools:translationY="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:clipChildren="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -234,12 +236,11 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/detailLabel" />
 
-                    <team.weathy.view.HourlyWeatherView
+                    <include
+                        layout="@layout/layout_home_weather_detail"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="21dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider3" />
+                        android:layout_height="130dp" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </team.weathy.view.WeathyCardView>

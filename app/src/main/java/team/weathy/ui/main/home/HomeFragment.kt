@@ -4,16 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
 import team.weathy.util.setOnDebounceClickListener
 
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
+
+    private var isFirstSceneShowing = true
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            isEnabled = false
+            if (isFirstSceneShowing) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            } else {
+                binding.container.transitionToState(R.layout.scene_home_first)
+            }
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
@@ -32,14 +45,19 @@ class HomeFragment : Fragment() {
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
                 when (curId) {
                     R.layout.scene_home_first -> {
-                        debugE("reset")
+                        isFirstSceneShowing = true
                         binding.hourlyView.resetAnimation()
                         binding.weeklyView.resetAnimation()
                     }
                     R.layout.scene_home_second -> {
-                        debugE("start")
+                        onBackPressedCallback.isEnabled = true
+                        isFirstSceneShowing = false
                         binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
+                    }
+                    else -> {
+                        onBackPressedCallback.isEnabled = true
+                        isFirstSceneShowing = false
                     }
                 }
             }
@@ -51,5 +69,19 @@ class HomeFragment : Fragment() {
         binding.downArrow setOnDebounceClickListener {
             binding.container.transitionToState(R.layout.scene_home_second)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isFirstSceneShowing = savedInstanceState?.getBoolean("isFirstSceneShowing") ?: true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isFirstSceneShowing", isFirstSceneShowing)
+    }
+
 }
