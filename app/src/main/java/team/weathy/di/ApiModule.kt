@@ -12,6 +12,7 @@ import team.weathy.api.ClothesAPI
 import team.weathy.api.UserAPI
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeathyAPI
+import team.weathy.api.mock.MockCalendarAPI
 import team.weathy.api.mock.MockUserAPI
 import team.weathy.api.mock.MockWeatherAPI
 import team.weathy.api.mock.MockWeathyAPI
@@ -73,6 +74,11 @@ abstract class ApiModuleMock {
     @Binds
     @ApiMock
     abstract fun bindUser(api: MockUserAPI): UserAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindCalendar(api: MockCalendarAPI): CalendarAPI
 
     @Singleton
     @Binds

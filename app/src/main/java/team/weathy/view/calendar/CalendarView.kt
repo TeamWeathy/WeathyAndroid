@@ -24,10 +24,8 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -41,6 +39,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.weathy.R
+import team.weathy.model.entity.CalendarPreview
+import team.weathy.ui.main.calendar.CalendarFragment
+import team.weathy.ui.main.calendar.YearMonthFormat
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
 import team.weathy.util.SimpleEventLiveData
@@ -57,7 +58,6 @@ import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
-import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
 import java.util.*
 
@@ -68,6 +68,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
         onCurDateChanged()
     }
+    private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
+    var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
+        dataLiveData.value = it
+    }
+
     var onDateChangeListener: OnDateChangeListener? = null
     var onClickYearMonthText: (() -> Unit)? = null
 
@@ -201,7 +206,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 bottomMargin = px(32)
             }
 
-            adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+            adapter = MonthlyAdapter(
+                animLiveData,
+                scrollEnabled,
+                onScrollToTop,
+                dataLiveData,
+                this@CalendarView.findFragment<CalendarFragment>().viewLifecycleOwner
+            )
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
@@ -262,7 +273,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
-                onCurDateChanged()
             }
         }
     }
@@ -474,20 +484,5 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 224
         private const val EXPAND_MARGIN_BOTTOM_DP = 108
-    }
-}
-
-@BindingAdapter("curDate")
-fun CalendarView.setCurDate(date: LocalDate) {
-    if (curDate != date) curDate = date
-}
-
-@InverseBindingAdapter(attribute = "curDate")
-fun CalendarView.getCurDate(): LocalDate = curDate
-
-@BindingAdapter("curDateAttrChanged")
-fun CalendarView.setListener(attrChange: InverseBindingListener) {
-    onDateChangeListener = OnDateChangeListener {
-        attrChange.onChange()
     }
 }

@@ -8,16 +8,17 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.dialog.DateDialog
 import team.weathy.dialog.DateDialog.OnClickListener
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
-import team.weathy.util.weekOfMonth
+import team.weathy.view.calendar.CalendarView
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class CalendarFragment : Fragment(), OnClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -42,16 +43,29 @@ class CalendarFragment : Fragment(), OnClickListener {
         binding.mainVm = mainViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel.curDate.observe(viewLifecycleOwner) {
-            viewModel.onCurDateChanged()
-            debugE("$it, ${it.weekOfMonth}")
-        }
-
-        binding.calendarView.onClickYearMonthText = {
-            DateDialog.newInstance(binding.calendarView.curDate).show(childFragmentManager, null)
-        }
+        configureCalendarView()
 
         handleBackPress()
+    }
+
+    private fun configureCalendarView() {
+        binding.calendarView.run {
+            onClickYearMonthText = {
+                DateDialog.newInstance(binding.calendarView.curDate).show(childFragmentManager, null)
+            }
+
+            onDateChangeListener = CalendarView.OnDateChangeListener {
+                viewModel.onCurDateChanged(it)
+            }
+        }
+
+        viewModel.curDate.observe(viewLifecycleOwner) {
+            binding.calendarView.curDate = it
+        }
+
+        viewModel.calendarData.observe(viewLifecycleOwner) {
+            binding.calendarView.data = it
+        }
     }
 
     private fun handleBackPress() {

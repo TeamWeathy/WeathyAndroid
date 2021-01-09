@@ -1,5 +1,7 @@
 package team.weathy.api.mock
 
+import team.weathy.api.FetchCalendarPreviewRes
+import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Climate
 import team.weathy.model.entity.DailyWeather
 import team.weathy.model.entity.Date
@@ -11,6 +13,7 @@ import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloset
 import team.weathy.model.entity.WeathyClothes
 import team.weathy.model.entity.WeathyClothes.Cloth
+import kotlin.random.Random
 
 object MockGenerator {
     fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
@@ -33,4 +36,13 @@ object MockGenerator {
     fun weathy() = Weathy(
         dailyWeather(), hourlyWeather(), weahtyCloset(), 1, "feedback"
     )
+
+    fun calendarPreview() = CalendarPreview(1, 1, Temperature(Random.nextInt(21), -Random.nextInt(21)))
+    fun calendarPreviews(size: Int): FetchCalendarPreviewRes {
+        val list = mutableListOf<CalendarPreview?>()
+        repeat(size) {
+            list.add(if (Random.nextInt(0, 2) == 0) null else calendarPreview())
+        }
+        return FetchCalendarPreviewRes(list, "message")
+    }
 }
