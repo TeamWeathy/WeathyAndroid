@@ -17,7 +17,6 @@
         android:layout_height="match_parent">
 
         <team.weathy.view.calendar.CalendarView
-            curDate="@={vm.curDate}"
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="220dp"
@@ -28,16 +27,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:layout_marginTop="220dp">
+            android:layout_marginTop="224dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:onClick="@{() -> vm.onClickContainer()}"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layoutAnimation="@null"
-                android:layoutAnimation="@anim/layout_animation_fade_in"
                 android:paddingHorizontal="46dp"
                 android:paddingTop="37dp"
+                android:clipToPadding="false"
                 android:paddingBottom="120dp">
 
                 <TextView
@@ -54,11 +54,105 @@
 
                 <ImageButton
                     android:id="@+id/more"
-                    style="@style/ImageButton.size32_icon20"
-                    android:src="@drawable/ic_sample"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/ripple_48"
+                    android:onClick="@{() -> vm.onClickMoreMenu()}"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/calendar_frame_more"
                     app:layout_constraintBottom_toBottomOf="@id/date"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/date" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/morePopup"
+                    visibilityWithAnim="@{vm.isMoreMenuShowing}"
+                    android:layout_width="130dp"
+                    android:layout_height="90dp"
+                    android:layout_marginRight="12dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="12dp"
+                    app:layout_constraintRight_toRightOf="@id/more"
+                    app:layout_constraintTop_toBottomOf="@id/more"
+                    tools:alpha="0.5"
+                    tools:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:weightSum="2">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="12dp"
+                                android:layout_weight="3"
+                                android:text="수정하기"
+                                android:textColor="@color/sub_grey_1"
+                                android:textSize="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toLeftOf="@id/edit_image"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/edit_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:src="@drawable/ic_edit"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/sub_grey_7" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingHorizontal="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="12dp"
+                                android:layout_weight="3"
+                                android:text="삭제하기"
+                                android:textColor="@color/pink"
+                                android:textSize="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toLeftOf="@id/delete_image"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/delete_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:src="@drawable/ic_delete"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <ImageView
                     android:id="@+id/gpsImage"

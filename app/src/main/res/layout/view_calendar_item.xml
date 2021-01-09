@@ -21,11 +21,15 @@
         android:text="-4°"
         android:textColor="@color/white"
         android:textSize="14dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/temp_low"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/temp_low"
         android:layout_width="37dp"
         android:layout_height="23dp"

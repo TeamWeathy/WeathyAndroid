@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- First <-> Second -->
+    <Transition
+        app:duration="300"
+        app:constraintSetEnd="@layout/scene_home_second"
+        app:constraintSetStart="@layout/scene_home_first">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorSide="top" />
+
+    </Transition>
+
+    <!-- Second <-> Third -->
+    <Transition
+        app:autoTransition="none"
+        app:motionInterpolator="linear"
+        app:constraintSetEnd="@layout/scene_home_third"
+        app:constraintSetStart="@layout/scene_home_second"
+        app:duration="200">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorSide="top" />
+
+    </Transition>
+
+
+</MotionScene>

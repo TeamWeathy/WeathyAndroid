@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
@@ -14,6 +15,7 @@ import team.weathy.util.AnimUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.setOnDebounceClickListener
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<MainViewModel>()
@@ -140,12 +142,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateSearch() {
         binding.fragmentPager.setCurrentItem(2, false)
-    }
-
-    override fun onBackPressed() {
-        when (viewModel.menu.value) {
-            HOME -> super.onBackPressed()
-            else -> viewModel.changeMenu(HOME)
-        }
     }
 }
