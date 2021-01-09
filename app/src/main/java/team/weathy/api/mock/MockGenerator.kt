@@ -9,11 +9,11 @@ import team.weathy.model.entity.Temperature
 import team.weathy.model.entity.User
 
 object MockGenerator {
-    fun user() = User(1, "mock user")
-    fun region() = Region(1, "region")
-    fun climate() = Climate(1, "description")
-    fun date() = Date(1, 1, "월요일")
+    fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
+    fun region(code: Int = 1, name: String = "이름") = Region(code, name)
+    fun climate(iconId: Int = 1, description: String = "설명") = Climate(iconId, description)
+    fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
     fun temperature() = Temperature(20, -20)
-    fun dailyWeather() = DailyWeather(region(), date(), temperature())
+    fun dailyWeather(regionName: String = "region") = DailyWeather(region(name = regionName), date(), temperature())
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
 }

@@ -136,6 +136,14 @@
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:listitem="@layout/item_location" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:visibility="@{vm.loading}"
+            style="@style/Indicator.Primary"
+            android:layout_marginTop="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/list" />
+
         <ImageView
             visibilityWithAnim="@{vm.showEmpty}"
             android:layout_width="wrap_content"

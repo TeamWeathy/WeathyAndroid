@@ -142,6 +142,10 @@
         <item name="indicatorColor">@color/white</item>
     </style>
 
+    <style name="Indicator.Primary">
+        <item name="indicatorColor">@color/main_mint</item>
+    </style>
+
     <style name="DatePicker">
         <!-- Text color -->
         <item name="android:textColorPrimary">@color/main_mint</item>
