@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import team.weathy.api.WeatherAPI
-import team.weathy.database.RecentSearchCodeDao
 import team.weathy.di.ApiMock
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
@@ -16,7 +15,7 @@ import team.weathy.util.extensions.updateList
 import java.time.LocalDateTime
 
 class SearchViewModel @ViewModelInject constructor(
-    @ApiMock private val weatherAPI: WeatherAPI, private val recentSearchCodeDao: RecentSearchCodeDao
+    @ApiMock private val weatherAPI: WeatherAPI
 ) : ViewModel() {
     val focused = MutableLiveData(false)
     val query = MutableLiveData("")
@@ -66,10 +65,10 @@ class SearchViewModel @ViewModelInject constructor(
 
 
     private fun getRecentSearchCodesAndFetch() = launchCatch({
-        val codes = recentSearchCodeDao.getAll()
-        fetchRecentSearchCodes(codes)
+        //        val codes = recentSearchCodeDao.getAll()
+        //        fetchRecentSearchCodes(codes)
     }, loading, onSuccess = {
-        recentlySearchResult.value = it
+        //        recentlySearchResult.value = it
     })
 
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.map {
@@ -80,7 +79,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun removeRecentSearchCode(position: Int) = launchCatch({
         recentlySearchResult.value?.get(position)?.let {
-            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
+            //            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
         }
     })
 }
