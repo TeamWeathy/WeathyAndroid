@@ -8,10 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewPropertyAnimator
 import android.widget.LinearLayout
-import androidx.core.animation.doOnStart
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-import team.weathy.R
 import team.weathy.databinding.ItemHourlyWeatherBinding
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.padZero
@@ -25,15 +22,14 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     private val timeTexts = (0 until ITEM_COUNT).map { "${curTime.hour + it}시".padZero(3) }
 
     private val weatherItems = (0 until ITEM_COUNT).map { idx ->
-        ItemHourlyWeatherBinding.bind(LayoutInflater.from(context).inflate(R.layout.item_hourly_weather, this, false))
-            .also {
-                it.hour.text = timeTexts[idx]
+        ItemHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
+            it.hour.text = timeTexts[idx]
 
-                it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
+            it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
 
-                it.hour.isInvisible = idx == 0
-                it.todayCircle.isInvisible = idx != 0
-            }
+            it.hour.isInvisible = idx == 0
+            it.todayCircle.isInvisible = idx != 0
+        }
     }
 
     private val textAnimators: MutableList<Animator> = mutableListOf()
@@ -79,7 +75,7 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
     fun startAnimation() {
         if (isAnimDone) return
-        isAnimDone = false
+        isAnimDone = true
         weatherItems.forEach { binding ->
             binding.pop.animate().alpha(1f).translationY(0f).setDuration(1200L).setStartDelay(500L).apply {
                 withEndAction { isAnimDone = true }
@@ -92,9 +88,6 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
             val dest = Random.nextInt(-20, 20)
             ValueAnimator.ofInt(0, dest).apply {
-                doOnStart {
-                    binding.temp.text = "0°"
-                }
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.temp.text = "${value}°"
@@ -105,6 +98,11 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 textAnimators.add(this)
             }
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        resetAnimation()
     }
 
     companion object {

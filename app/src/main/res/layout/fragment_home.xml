@@ -149,9 +149,9 @@
                         app:layout_constraintTop_toBottomOf="@id/hourly_label" />
 
                     <team.weathy.view.HourlyWeatherView
-                        android:id="@+id/weeklyWeatherView"
+                        android:id="@+id/hourlyView"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider" />
@@ -191,9 +191,10 @@
 
                         app:layout_constraintTop_toBottomOf="@id/weekly_label" />
 
-                    <team.weathy.view.HourlyWeatherView
+                    <team.weathy.view.WeeklyWeatherView
+                        android:id="@+id/weeklyView"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider2" />

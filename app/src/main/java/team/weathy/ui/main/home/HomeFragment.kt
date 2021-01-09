@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.debugE
 import team.weathy.util.setOnDebounceClickListener
 
 class HomeFragment : Fragment() {
@@ -30,8 +31,16 @@ class HomeFragment : Fragment() {
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
                 when (curId) {
-                    R.layout.scene_home_first -> binding.weeklyWeatherView.resetAnimation()
-                    R.layout.scene_home_second -> binding.weeklyWeatherView.startAnimation()
+                    R.layout.scene_home_first -> {
+                        debugE("reset")
+                        binding.hourlyView.resetAnimation()
+                        binding.weeklyView.resetAnimation()
+                    }
+                    R.layout.scene_home_second -> {
+                        debugE("start")
+                        binding.hourlyView.startAnimation()
+                        binding.weeklyView.startAnimation()
+                    }
                 }
             }
 

@@ -5,7 +5,6 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:background="@color/transparent"
     tools:layout_width="25dp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -29,7 +28,7 @@
         android:id="@+id/todayCircle"
         android:layout_width="9dp"
         android:layout_height="9dp"
-        android:layout_marginTop="6sp"
+        android:layout_marginTop="6dp"
         android:background="@drawable/circle"
         android:backgroundTint="@color/main_mint"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -54,7 +53,7 @@
         android:fontFamily="@font/roboto_regular"
         android:text="30%"
         android:textColor="@color/mint_icon"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="@id/gl_hourly"
         app:layout_constraintStart_toStartOf="@id/gl_hourly"
         app:layout_constraintTop_toBottomOf="@id/icon" />
@@ -67,7 +66,7 @@
         android:fontFamily="@font/roboto_regular"
         android:text="0°"
         android:textColor="@color/sub_grey_1"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="@id/gl_hourly"
         app:layout_constraintStart_toStartOf="@id/gl_hourly"
         app:layout_constraintTop_toBottomOf="@id/pop" />
