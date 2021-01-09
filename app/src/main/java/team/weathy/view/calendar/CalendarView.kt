@@ -28,6 +28,7 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.MutableLiveData
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.math.MathUtils
@@ -276,6 +277,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             delay(200)
             if (weeklyViewPager == null) {
                 weeklyViewPager = weeklyViewPagerGenerator()
+                TransitionManager.beginDelayedTransition(this@CalendarView)
                 addView(weeklyViewPager!!, 0)
             }
             delay(700)
