@@ -3,9 +3,9 @@ package team.weathy.api
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
 import retrofit2.http.Query
-import team.weathy.model.entity.DailyWeather
 import team.weathy.model.entity.DailyWeatherWithInDays
 import team.weathy.model.entity.HourlyWeather
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.util.DateHourString
 import team.weathy.util.DateOrDateHourString
 import team.weathy.util.DateString
@@ -13,12 +13,7 @@ import team.weathy.util.DateString
 
 data class WeatherDailyHourlyRes(
     @SerializedName("overviewWeather") val weather: OverviewWeather?, val message: String
-) {
-    data class OverviewWeather(
-        @SerializedName("dailyWeather") val daily: DailyWeather,
-        @SerializedName("hourlyWeather") val hourly: HourlyWeather,
-    )
-}
+)
 
 data class WithIn24HoursRes(
     @SerializedName("hourlyWeatherList") val list: List<HourlyWeather>?, val message: String,
@@ -48,12 +43,16 @@ data class WeatherDetailRes(
     }
 }
 
+data class WeatherSearchRes(
+    @SerializedName("overviewWeatherList") val list: List<OverviewWeather>?, val message: String
+)
+
 interface WeatherAPI {
     @GET("weather/overview")
     suspend fun fetchWeatherByLocation(
-        @Query("lat") lat: Double,
-        @Query("lon") lon: Double,
-        @Query("code") code: Int,
+        @Query("lat") lat: Double? = null,
+        @Query("lon") lon: Double? = null,
+        @Query("code") code: Int? = null,
         @Query("date") dateOrHourStr: DateOrDateHourString,
     ): WeatherDailyHourlyRes
 
@@ -75,6 +74,6 @@ interface WeatherAPI {
     @GET("weather/overview")
     suspend fun searchWeather(
         @Query("keyword") keyword: String, @Query("date") dateOrHourStr: DateOrDateHourString
-    ): WeatherDailyHourlyRes
+    ): WeatherSearchRes
 
 }

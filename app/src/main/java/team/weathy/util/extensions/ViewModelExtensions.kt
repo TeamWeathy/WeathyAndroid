@@ -11,10 +11,10 @@ fun <R> ViewModel.launchCatch(
     loading: MutableLiveData<Boolean>? = null,
     onSuccess: ((result: R) -> Unit)? = null,
     onFailure: ((e: Throwable) -> Unit)? = null,
+    onFinally: (() -> Unit)? = null,
 ) {
     viewModelScope.launch {
         loading?.value = true
-
         runCatching<R> {
             block()
         }.onSuccess {
@@ -22,6 +22,7 @@ fun <R> ViewModel.launchCatch(
         }.onFailure {
             onFailure?.invoke(it)
         }
+        onFinally?.invoke()
         loading?.value = false
     }
 }

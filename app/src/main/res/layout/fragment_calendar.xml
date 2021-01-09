@@ -35,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layoutAnimation="@null"
-                android:layoutAnimation="@anim/layout_animation_fade_in"
                 android:paddingHorizontal="46dp"
                 android:paddingTop="37dp"
                 android:paddingBottom="120dp">

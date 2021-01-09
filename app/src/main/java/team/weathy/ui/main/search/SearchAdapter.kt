@@ -9,15 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import team.weathy.databinding.ItemLocationBinding
-import team.weathy.model.entity.Location
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.search.SearchAdapter.Holder
 import team.weathy.util.AnimUtil
 import team.weathy.util.LocationItemMenuSwiper
 import team.weathy.util.LocationItemMenuSwiper.Callback
+import team.weathy.util.dateHourString
+import team.weathy.util.koFormat
 import team.weathy.util.setOnDebounceClickListener
+import java.time.LocalDateTime
 
-class SearchAdapter : Adapter<Holder>() {
-    private val items = mutableListOf<Location>()
+class SearchAdapter(private val onItemRemoved: (idx: Int) -> Unit) : Adapter<Holder>() {
+    private val items = mutableListOf<OverviewWeather>()
     private val menuOpens = mutableListOf<Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -31,7 +34,7 @@ class SearchAdapter : Adapter<Holder>() {
 
     override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(items[position])
 
-    fun submitList(list: List<Location>) {
+    fun submitList(list: List<OverviewWeather>) {
         items.clear()
         menuOpens.clear()
         items.addAll(list)
@@ -70,7 +73,7 @@ class SearchAdapter : Adapter<Holder>() {
         })
 
 
-        fun bind(item: Location) {
+        fun bind(item: OverviewWeather) {
             if (isFirstBinding) {
                 isFirstBinding = false
             } else {
@@ -86,7 +89,12 @@ class SearchAdapter : Adapter<Holder>() {
                 }
             }
 
-            binding.item = item
+            binding.datetimeText = LocalDateTime.now().koFormat
+            binding.locationText = item.daily.region.name
+            binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
+            binding.highTemp = "${item.daily.temperature.maxTemp}°"
+            binding.lowTemp = "${item.daily.temperature.minTemp}°"
+
             binding.executePendingBindings()
         }
 
@@ -106,12 +114,12 @@ class SearchAdapter : Adapter<Holder>() {
         items.removeAt(position)
         menuOpens.removeAt(position)
         notifyItemRemoved(position)
+        onItemRemoved(position)
     }
 }
 
-@BindingAdapter("app:recyclerview_")
-fun RecyclerView.setItems(items: List<Location>?) {
-    if (items == null) return
+@BindingAdapter("search_adapter_items")
+fun RecyclerView.setItems(items: List<OverviewWeather>) {
     (adapter as? SearchAdapter)?.run {
         submitList(items)
     }

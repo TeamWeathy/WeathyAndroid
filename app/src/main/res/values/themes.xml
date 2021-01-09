@@ -14,7 +14,13 @@
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
         <item name="android:screenOrientation">portrait</item>
 
+        <item name="android:supportsRtl">false</item>
+
         <item name="colorPrimary">@color/main_mint</item>
+    </style>
+
+    <style name="Theme.Weathy.EditText">
+        <item name="colorPrimary">#b3c4c4c4</item>
     </style>
 
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">
@@ -145,6 +151,22 @@
         <item name="indicatorColor">@color/white</item>
     </style>
 
+    <style name="DatePicker">
+        <!-- Text color -->
+        <item name="android:textColorPrimary">@color/main_mint</item>
+        <!-- Divider color -->
+        <item name="colorControlNormal">@color/main_mint</item>
+        <item name="controlBackground">@drawable/ic_search</item>
+    </style>
+
+    <style name="RoundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_top_round_20</item>
+    </style>
+  
+    <style name="RoundBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundBottomSheet</item>
+    </style>
+  
     <style name="ImageView">
         <item name="android:background">@color/image_view_background</item>
         <item name="android:layout_width">20dp</item>
@@ -168,5 +190,4 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/red_temp</item>
     </style>
-
 </resources>
