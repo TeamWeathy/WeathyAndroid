@@ -70,7 +70,6 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     fun startAnimation() {
-        resetAnimation()
         weatherItems.forEach { binding ->
             binding.pop.animate().alpha(1f).translationY(0f).setDuration(1200L).setStartDelay(500L).apply {
                 viewAnimators.add(this)
