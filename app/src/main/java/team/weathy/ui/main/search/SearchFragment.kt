@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import reactivecircus.flowbinding.android.widget.textChanges
 import team.weathy.databinding.FragmentSearchBinding
+import team.weathy.ui.main.MainMenu.HOME
+import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
 import team.weathy.util.setOnDebounceClickListener
@@ -24,6 +27,7 @@ import team.weathy.util.setOnDebounceClickListener
 class SearchFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentSearchBinding>()
     private val viewModel by viewModels<SearchViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentSearchBinding.inflate(layoutInflater, container, false).also { binding = it }.root
@@ -35,6 +39,8 @@ class SearchFragment : Fragment() {
         configureBackButton()
         configureList()
         configureTextField()
+
+        handleBackPress()
     }
 
     private fun configureBackButton() = binding.back setOnDebounceClickListener {
@@ -60,13 +66,11 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mainViewModel.changeMenu(HOME)
+            }
+        })
     }
 }
