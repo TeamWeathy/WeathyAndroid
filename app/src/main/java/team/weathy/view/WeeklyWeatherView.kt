@@ -54,7 +54,9 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
 
 
+    private var isAnimDone = false
     fun resetAnimation() {
+        isAnimDone = false
         textAnimators.forEach { it.cancel() }
         viewAnimators.forEach { it.cancel() }
         textAnimators.clear()
@@ -69,9 +71,13 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
+
     fun startAnimation() {
+        if (isAnimDone) return
+        isAnimDone = false
         weatherItems.forEach { binding ->
             binding.pop.animate().alpha(1f).translationY(0f).setDuration(1200L).setStartDelay(500L).apply {
+                withEndAction { isAnimDone = true }
                 viewAnimators.add(this)
                 start()
             }
