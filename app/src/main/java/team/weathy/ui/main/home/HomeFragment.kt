@@ -17,17 +17,22 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.container.addTransitionListener(object : MotionLayout.TransitionListener {
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+            override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {
             }
 
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                if (p2 != R.layout.scene_home_third) binding.bg.crossfade = p3
+            override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+                if (endId != R.layout.scene_home_third) binding.bg.crossfade = progress
             }
 
-            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+            override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
+                when (curId) {
+                    R.layout.scene_home_first -> binding.weeklyWeatherView.resetAnimation()
+                    R.layout.scene_home_second -> binding.weeklyWeatherView.startAnimation()
+                }
             }
 
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {

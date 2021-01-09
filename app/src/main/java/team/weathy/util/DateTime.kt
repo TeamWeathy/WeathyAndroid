@@ -24,7 +24,7 @@ typealias DateHourString = String
  */
 typealias DateOrDateHourString = String
 
-fun String.padZero() = padStart(2, '0')
+fun String.padZero(length: Int = 2) = padStart(length, '0')
 fun Int.padZero() = toString().padZero()
 
 
