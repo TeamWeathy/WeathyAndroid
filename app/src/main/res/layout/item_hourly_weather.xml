@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
     android:layout_weight="1"
     android:background="@color/transparent"
-    tools:layout_height="164dp"
     tools:layout_width="25dp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -17,7 +16,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/hourly_txt"
+        android:id="@+id/hour"
         style="@style/WeekendText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,15 +27,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ic_hourly"
+        android:id="@+id/icon"
         style="@style/ImageView"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="@id/gl_hourly"
         app:layout_constraintStart_toStartOf="@id/gl_hourly"
-        app:layout_constraintTop_toBottomOf="@id/hourly_txt" />
+        app:layout_constraintTop_toBottomOf="@id/hour" />
 
     <TextView
-        android:id="@+id/hourly_percent"
+        android:id="@+id/pop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -46,10 +45,10 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/gl_hourly"
         app:layout_constraintStart_toStartOf="@id/gl_hourly"
-        app:layout_constraintTop_toBottomOf="@id/ic_hourly" />
+        app:layout_constraintTop_toBottomOf="@id/icon" />
 
     <TextView
-        android:id="@+id/hourly_temp"
+        android:id="@+id/temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
@@ -59,6 +58,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/gl_hourly"
         app:layout_constraintStart_toStartOf="@id/gl_hourly"
-        app:layout_constraintTop_toBottomOf="@id/hourly_percent" />
+        app:layout_constraintTop_toBottomOf="@id/pop" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
