@@ -5,5 +5,4 @@
             android:color="@color/ripple_grey"
             android:radius="24dp" />
     </item>
-
 </layer-list>

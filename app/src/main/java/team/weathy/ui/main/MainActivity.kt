@@ -143,11 +143,4 @@ class MainActivity : AppCompatActivity() {
     private fun navigateSearch() {
         binding.fragmentPager.setCurrentItem(2, false)
     }
-
-    override fun onBackPressed() {
-        when (viewModel.menu.value) {
-            HOME -> super.onBackPressed()
-            else -> viewModel.changeMenu(HOME)
-        }
-    }
 }
