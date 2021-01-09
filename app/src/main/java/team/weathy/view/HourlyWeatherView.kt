@@ -9,6 +9,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewPropertyAnimator
 import android.widget.LinearLayout
 import androidx.core.animation.doOnStart
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import team.weathy.R
 import team.weathy.databinding.ItemHourlyWeatherBinding
 import team.weathy.util.extensions.pxFloat
@@ -16,7 +18,7 @@ import team.weathy.util.padZero
 import java.time.LocalDateTime
 import kotlin.random.Random
 
-class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
     private val curTime = LocalDateTime.now()
@@ -28,6 +30,9 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 it.hour.text = timeTexts[idx]
 
                 it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
+
+                it.hour.isInvisible = idx == 0
+                it.todayCircle.isInvisible = idx != 0
             }
     }
 
