@@ -52,7 +52,10 @@ class MonthlyAdapter(
         }
 
         fun bind(position: Int) {
-            view.date = convertMonthlyIndexToDate(position)
+            val date = convertMonthlyIndexToDate(position)
+
+            view.date = date
+            view.data = data.value?.get(date.yearMonthFormat)
         }
     }
 

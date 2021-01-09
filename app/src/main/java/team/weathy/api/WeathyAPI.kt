@@ -36,9 +36,9 @@ interface WeathyAPI {
         @Query("code") code: Int, @Query("date") date: DateString
     ): WeathyRes
 
-    @GET("weathy/{weathyId}")
-    fun fetchWeathyWithId(
-        @Path("weathyId") weathyId: Int
+    @GET("weathy")
+    fun fetchWeathyWithDate(
+        @Query("date") date: DateString
     ): WeathyRes
 
     @POST("weathy")

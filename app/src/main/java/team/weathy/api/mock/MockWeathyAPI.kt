@@ -13,7 +13,7 @@ class MockWeathyAPI @Inject constructor() : WeathyAPI {
         TODO("Not yet implemented")
     }
 
-    override fun fetchWeathyWithId(weathyId: Int): WeathyRes {
+    override fun fetchWeathyWithDate(date: DateString): WeathyRes {
         return WeathyRes(MockGenerator.weathy(), "hi")
     }
 

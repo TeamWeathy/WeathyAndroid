@@ -25,6 +25,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
@@ -40,7 +41,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.weathy.R
 import team.weathy.model.entity.CalendarPreview
-import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.YearMonthFormat
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
@@ -198,6 +198,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         invalidate()
     }
 
+    private val fragmentViewLifecycleOwner
+        get() = findFragment<Fragment>().viewLifecycleOwner
+
     private val monthlyViewPagerGenerator = {
         ViewPager2(context).apply {
             layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
@@ -207,11 +210,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = MonthlyAdapter(
-                animLiveData,
-                scrollEnabled,
-                onScrollToTop,
-                dataLiveData,
-                this@CalendarView.findFragment<CalendarFragment>().viewLifecycleOwner
+                animLiveData, scrollEnabled, onScrollToTop, dataLiveData, fragmentViewLifecycleOwner
             )
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
@@ -229,30 +228,35 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
     private var monthlyViewPager: ViewPager2? = null
-    private val weeklyViewPager = ViewPager2(context).apply {
-        layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
-            topToBottom = weekTextLayout.id
-            height = px(WeeklyView.ITEM_HEIGHT_DP)
-        }
-
-        adapter = WeeklyAdapter(animLiveData)
-        setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
-
-        setPageTransformer { page, position ->
-            page.pivotX = if (position < 0) page.width.toFloat() else 0f
-            page.pivotY = page.height * 0.5f
-            page.rotationY = 35f * position
-        }
-
-        registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val newDate = convertWeeklyIndexToDate(position)
-                if (!isExpanded && curDate != newDate) {
-                    curDate = newDate
-                }
+    private val weeklyViewPagerGenerator = {
+        ViewPager2(context).apply {
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                height = px(WeeklyView.ITEM_HEIGHT_DP)
             }
-        })
+
+            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner)
+            setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
+
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 35f * position
+            }
+
+            registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val newDate = convertWeeklyIndexToDate(position)
+                    if (!isExpanded && curDate != newDate) {
+                        curDate = newDate
+                    }
+                }
+            })
+
+            offscreenPageLimit = 1
+        }
     }
+    private var weeklyViewPager: ViewPager2? = null
 
     init {
         initContainer()
@@ -269,7 +273,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         lazyPagerAddJob = scope.launch {
-            delay(700L)
+            delay(200)
+            if (weeklyViewPager == null) {
+                weeklyViewPager = weeklyViewPagerGenerator()
+                addView(weeklyViewPager!!, 0)
+            }
+            delay(700)
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
@@ -299,7 +308,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()
-        addView(weeklyViewPager)
     }
 
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
@@ -331,8 +339,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             )
         }
 
-        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
-            weeklyViewPager.setCurrentItem(
+        if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
+            weeklyViewPager?.setCurrentItem(
                 nextWeeklyIndex, false
             )
         }
@@ -450,7 +458,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun animPagersAlpha() {
-        weeklyViewPager.alpha = 1 - animValue
+        weeklyViewPager?.alpha = 1 - animValue
         monthlyViewPager?.alpha = animValue
     }
 
@@ -467,12 +475,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun enableTouchWeeklyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = true
+        weeklyViewPager?.isUserInputEnabled = true
         monthlyViewPager?.isUserInputEnabled = false
     }
 
     private fun enableTouchMonthlyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = false
+        weeklyViewPager?.isUserInputEnabled = false
         monthlyViewPager?.isUserInputEnabled = true
     }
 

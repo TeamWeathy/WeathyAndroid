@@ -9,6 +9,7 @@ import team.weathy.model.entity.HourlyWeather
 import team.weathy.model.entity.Region
 import team.weathy.model.entity.Temperature
 import team.weathy.model.entity.User
+import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloset
 import team.weathy.model.entity.WeathyClothes
@@ -37,7 +38,9 @@ object MockGenerator {
         dailyWeather(), hourlyWeather(), weahtyCloset(), 1, "feedback"
     )
 
-    fun calendarPreview() = CalendarPreview(1, 1, Temperature(Random.nextInt(21), -Random.nextInt(21)))
+    fun calendarPreview() =
+        CalendarPreview(1, WeatherStamp.values().random(), Temperature(Random.nextInt(21), -Random.nextInt(21)))
+
     fun calendarPreviews(size: Int): FetchCalendarPreviewRes {
         val list = mutableListOf<CalendarPreview?>()
         repeat(size) {

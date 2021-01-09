@@ -15,6 +15,7 @@ import team.weathy.api.WeathyAPI
 import team.weathy.di.ApiMock
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Weathy
+import team.weathy.util.dateString
 import team.weathy.util.debugE
 import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateMap
@@ -49,7 +50,6 @@ class CalendarViewModel @ViewModelInject constructor(
     init {
         collectCurDateFlow()
         collectYearMonthFlow()
-        fetchCurDateWeathy()
     }
 
     fun onClickMoreMenu() {
@@ -77,9 +77,9 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     private fun fetchCurDateWeathy() {
-        debugE("fetchCurDateWeathy")
+        debugE("fetchCurDateWeathy ${curDateFlow.value.dateString}")
         launchCatch({
-            weathyAPI.fetchWeathyWithId(1)
+            weathyAPI.fetchWeathyWithDate(curDateFlow.value.dateString)
         }, onSuccess = {
             _curWeathy.value = it.weathy
         })
@@ -92,16 +92,16 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     private fun fetchMonthlyDataIfNeeded() {
-        debugE("fetchMonthlyDataIfNeeded")
+        debugE("fetchMonthlyDataIfNeeded ${curDateFlow.value.dateString}")
         val date = curDateFlow.value
         if (!_calendarData.value!!.containsKey(date.yearMonthFormat)) {
             launchCatch({
                 val s = getStartDateStringInCalendar(date.year, date.monthValue)
                 val e = getEndDateStringInCalendar(date.year, date.monthValue)
                 calendarAPI.fetchCalendarPreview(s, e)
-            }, onSuccess = {
+            }, onSuccess = { (list) ->
                 _calendarData.updateMap {
-                    this[date.yearMonthFormat] = it.list
+                    this[date.yearMonthFormat] = list
                 }
             })
         }
