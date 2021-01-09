@@ -14,7 +14,13 @@
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
         <item name="android:screenOrientation">portrait</item>
 
+        <item name="android:supportsRtl">false</item>
+
         <item name="colorPrimary">@color/main_mint</item>
+    </style>
+
+    <style name="Theme.Weathy.EditText">
+        <item name="colorPrimary">#b3c4c4c4</item>
     </style>
 
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">

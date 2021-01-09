@@ -2,7 +2,9 @@ package team.weathy.util
 
 import team.weathy.view.calendar.MonthlyAdapter
 import team.weathy.view.calendar.WeeklyAdapter
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -22,6 +24,27 @@ typealias DateHourString = String
  */
 typealias DateOrDateHourString = String
 
+fun String.padZero() = padStart(2, '0')
+fun Int.padZero() = toString().padZero()
+
+
+val DayOfWeek.koFormat: String
+    get() = when (value) {
+        1 -> "월"
+        2 -> "화"
+        3 -> "수"
+        4 -> "목"
+        5 -> "금"
+        6 -> "토"
+        else -> "일"
+    }
+val Int.koFormat: String
+    get() = if (this < 13) {
+        "오전 ${this}시"
+    } else {
+        "오후 ${this - 12}시"
+    }
+
 val LocalDate.weekOfMonth: Int
     get() {
         val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
@@ -40,6 +63,11 @@ val LocalDate.dayOfWeekIndex: Int
 
 val LocalDate.dateString: DateString
     get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+val LocalDateTime.dateHourString: DateHourString
+    get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
+
+val LocalDateTime.koFormat: String
+    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 . ${hour.koFormat}"
 
 fun convertMonthlyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
