@@ -120,4 +120,14 @@
         android:alpha="0.7"
         android:translationY="1000dp"
         app:layout_constraintTop_toBottomOf="@id/weeklyCard" />
+
+    <ImageView
+        android:alpha="0"
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/mainscroll_img_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

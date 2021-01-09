@@ -131,4 +131,13 @@
         android:alpha="1"
         android:translationY="0dp"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/mainscroll_img_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
