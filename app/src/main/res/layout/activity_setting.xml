@@ -156,16 +156,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider" />
 
-    <TextView
-        android:id="@+id/setting_div_2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/push_notif_click" />
-
     <View
         android:id="@+id/inquire_click"
         android:layout_width="match_parent"
@@ -173,16 +163,6 @@
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toBottomOf="@id/divider1" />
-
-    <TextView
-        android:id="@+id/setting_div_3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inquire_click" />
 
     <ImageView
         android:id="@+id/ic_arrow2"

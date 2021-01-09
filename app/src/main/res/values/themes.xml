@@ -106,6 +106,15 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
+    <style name="ImageButton.size48_padding19">
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:paddingTop">19dp</item>
+        <item name="android:paddingStart">19dp</item>
+        <item name="android:paddingEnd">18dp</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+    </style>
+
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/chip_background_color</item>
         <item name="android:textColor">@color/chip_text_color</item>
@@ -164,7 +173,32 @@
     <style name="RoundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_top_round_20</item>
     </style>
+  
     <style name="RoundBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/RoundBottomSheet</item>
+    </style>
+  
+    <style name="ImageView">
+        <item name="android:background">@color/image_view_background</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="WeekendText">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/sub_grey_6</item>
+    </style>
+
+    <style name="MinTempText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/blue_temp</item>
+    </style>
+
+    <style name="MaxTempText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/red_temp</item>
     </style>
 </resources>
