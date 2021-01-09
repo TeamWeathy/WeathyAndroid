@@ -2,12 +2,51 @@ package team.weathy.util
 
 import team.weathy.view.calendar.MonthlyAdapter
 import team.weathy.view.calendar.WeeklyAdapter
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Calendar.*
 
+/**
+ * YYYY-MM-DD
+ */
+typealias DateString = String
+/**
+ * YYYY-MM-DDTHH
+ */
+typealias DateHourString = String
+/**
+ * YYYY-MM-DD or YYYY-MM-DDTHH
+ */
+typealias DateOrDateHourString = String
+
+fun String.padZero() = padStart(2, '0')
+fun Int.padZero() = toString().padZero()
+
+
+val DayOfWeek.koFormat: String
+    get() = when (value) {
+        1 -> "월"
+        2 -> "화"
+        3 -> "수"
+        4 -> "목"
+        5 -> "금"
+        6 -> "토"
+        else -> "일"
+    }
+val Int.koFormat: String
+    get() = if (this < 13) {
+        "오전 ${this}시"
+    } else {
+        "오후 ${this - 12}시"
+    }
+
+val LocalDate.yearMonthFormat: String
+    get() = "${year}-${monthValue.padZero()}"
 
 val LocalDate.weekOfMonth: Int
     get() {
@@ -17,13 +56,28 @@ val LocalDate.weekOfMonth: Int
         return gc[WEEK_OF_MONTH]
     }
 
+/**
+ * 1(SUN) -> 7(SAT)
+ */
 val LocalDate.dayOfWeekValue: Int
     get() = when (dayOfWeek.value + 1) {
         8 -> 1
         else -> dayOfWeek.value + 1
     }
+
+/**
+ * 0(SUN) -> 6(SAT)
+ */
 val LocalDate.dayOfWeekIndex: Int
     get() = dayOfWeekValue - 1
+
+val LocalDate.dateString: DateString
+    get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+val LocalDateTime.dateHourString: DateHourString
+    get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
+
+val LocalDateTime.koFormat: String
+    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 . ${hour.koFormat}"
 
 fun convertMonthlyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()
@@ -88,4 +142,21 @@ fun getWeekTexts(date: LocalDate): List<Int> {
     val (_result) = getMonthTexts(date)
 
     return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
+}
+
+fun getStartDateStringInCalendar(year: Int, month: Int): DateString {
+    val date = LocalDate.of(year, month, 1)
+    val startDayIndex = date.dayOfWeekIndex
+
+    val startDateInCalendar = date.minusDays(startDayIndex.toLong())
+    return startDateInCalendar.dateString
+}
+
+fun getEndDateStringInCalendar(year: Int, month: Int): DateString {
+    val firstDate = LocalDate.of(year, month, 1)
+    val lastDate = LocalDate.of(year, month, firstDate.lengthOfMonth())
+    val endDayIndex = lastDate.dayOfWeekIndex
+
+    val endDateInCalendar = lastDate.plusDays(6 - endDayIndex.toLong())
+    return endDateInCalendar.dateString
 }

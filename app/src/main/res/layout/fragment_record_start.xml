@@ -8,7 +8,7 @@
         android:id="@+id/close"
         android:layout_marginTop="8dp"
         android:layout_marginStart="12dp"
-        style="@style/ImageButton.size48_icon20"
+        style="@style/ImageButton.size48.icon20"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

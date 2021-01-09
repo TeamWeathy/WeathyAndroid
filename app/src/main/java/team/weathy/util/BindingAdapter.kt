@@ -83,7 +83,7 @@ fun View.setShadowOnScroll(show: Boolean, _siblingDirectParentDepthDiff: Int) {
 
     val recyclerView = (p as? ViewGroup)?.children?.first { it is RecyclerView } ?: return
 
-    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.shadow_scroll_selector)
+    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.shadow_scroll_anim)
     recyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
         isActivated = recyclerView.canScrollVertically(-1)
     }

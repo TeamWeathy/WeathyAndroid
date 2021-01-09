@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/search_bg_morning"
         dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,27 +21,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="32dp" />
+            app:layout_constraintGuide_begin="26dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="32dp" />
+            app:layout_constraintGuide_end="26dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/guide_left"
-            app:layout_constraintRight_toLeftOf="@id/guide_right"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/back"
-                style="@style/ImageButton.size32_icon20"
-                android:layout_marginTop="16dp"
+                style="@style/ImageButton.size48.icon20"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_close"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +52,7 @@
             style="@style/TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="11dp"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="25dp"
             app:boxCornerRadiusBottomStart="25dp"
@@ -64,10 +64,15 @@
             app:endIconTintMode="src_over"
             app:layout_constraintLeft_toRightOf="@id/guide_left"
             app:layout_constraintRight_toLeftOf="@id/guide_right"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:startIconDrawable="@drawable/ic_search">
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textField"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="15dp"
+                android:paddingStart="22dp"
+                android:textCursorDrawable="@drawable/cursor"
+                tools:text="asd"
                 style="@style/TextInputEditText"
                 android:text="@={vm.query}" />
 
@@ -75,8 +80,9 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:singleLine="true"
             duration="@{100}"
-            visibilityWithAnim="@{vm.query.empty}"
+            visibilityWithAnim="@{vm.query.empty &amp;&amp; !vm.focused}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
@@ -84,17 +90,20 @@
             android:text="날씨가 궁금한 곳을 검색해 보세요!"
             android:textColor="@color/sub_grey_8"
             android:textSize="16sp"
+            android:layout_marginHorizontal="48dp"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
             app:layout_constraintLeft_toLeftOf="@id/textInputLayout"
             app:layout_constraintRight_toRightOf="@id/textInputLayout"
             app:layout_constraintTop_toTopOf="@id/textInputLayout" />
 
         <TextView
+            visibilityWithAnim="@{vm.showRecently}"
             android:id="@+id/recentLabel"
             android:layout_width="0dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/notosans_bold"
+            android:fontFamily="@font/"
             android:text="최근 검색한 위치"
             android:textColor="@color/main_grey"
             android:textSize="17sp"
@@ -103,6 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <View
+            visibilityWithAnim="@{vm.showRecently}"
             android:id="@+id/divider"
             android:layout_width="31dp"
             android:layout_height="1dp"
@@ -112,6 +122,10 @@
             app:layout_constraintTop_toBottomOf="@id/recentLabel" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:clickable="true"
+            android:focusable="true"
+            dismissKeyboardOnClick="@{true}"
+            search_adapter_items="@{vm.showRecently ? vm.recentlySearchResult : vm.searchResult}"
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -125,12 +139,27 @@
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:listitem="@layout/item_location" />
 
-        <View
-            shadowOnScroll="@{true}"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/shadow_scroll"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:visibility="@{vm.loading}"
+            style="@style/Indicator.Primary"
+            android:layout_marginTop="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/list" />
+
+        <ImageView
+            visibilityWithAnim="@{vm.showEmpty}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:src="@{vm.showRecently ? @drawable/search_recent_empty_img_empty : @drawable/search_empty_img_empty}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout"
+            tools:alpha="1"
+            tools:src="@drawable/search_empty_img_empty" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

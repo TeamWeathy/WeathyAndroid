@@ -14,9 +14,14 @@
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
         <item name="android:screenOrientation">portrait</item>
 
+        <item name="android:supportsRtl">false</item>
+
         <item name="colorPrimary">@color/main_mint</item>
     </style>
 
+    <style name="Theme.Weathy.EditText">
+        <item name="colorPrimary">#b3c4c4c4</item>
+    </style>
 
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">
         <item name="textAllCaps">false</item>
@@ -78,18 +83,34 @@
     </style>
 
     <style name="ImageButton">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:scaleType">fitCenter</item>
     </style>
 
-    <style name="ImageButton.size32_icon20">
+    <style name="ImageButton.size32">
+        <item name="android:background">@drawable/ripple_32</item>
+    </style>
+
+    <style name="ImageButton.size48">
+        <item name="android:background">@drawable/ripple_48</item>
+    </style>
+
+    <style name="ImageButton.size32.icon20">
         <item name="android:padding">6dp</item>
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
     </style>
 
-    <style name="ImageButton.size48_icon20">
+    <style name="ImageButton.size48.icon20">
         <item name="android:padding">14dp</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+    </style>
+
+    <style name="ImageButton.size48_padding19">
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:paddingTop">19dp</item>
+        <item name="android:paddingStart">19dp</item>
+        <item name="android:paddingEnd">18dp</item>
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
     </style>
@@ -133,5 +154,60 @@
         <item name="android:textSize">16sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">@color/sub_grey_8</item>
+    </style>
+
+    <style name="Indicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorSize">32dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
+    <style name="Indicator.White">
+        <item name="indicatorColor">@color/white</item>
+    </style>
+
+    <style name="Indicator.Primary">
+        <item name="indicatorColor">@color/main_mint</item>
+    </style>
+
+    <style name="DatePicker">
+        <!-- Text color -->
+        <item name="android:textColorPrimary">@color/main_mint</item>
+        <!-- Divider color -->
+        <item name="colorControlNormal">@color/main_mint</item>
+        <item name="controlBackground">@drawable/ic_search</item>
+    </style>
+
+    <style name="RoundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_top_round_20</item>
+    </style>
+  
+    <style name="RoundBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundBottomSheet</item>
+    </style>
+  
+    <style name="ImageView">
+        <item name="android:background">@color/image_view_background</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="WeekendText">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/sub_grey_6</item>
+    </style>
+
+    <style name="MinTempText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/blue_temp</item>
+    </style>
+
+    <style name="MaxTempText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/red_temp</item>
     </style>
 </resources>

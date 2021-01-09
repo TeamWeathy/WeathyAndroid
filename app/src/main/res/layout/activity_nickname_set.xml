@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="team.weathy.ui.nicknameset.NicknameSetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
+            app:layout_constraintGuide_begin="85dp" />
 
         <TextView
             android:id="@+id/title"
@@ -49,16 +52,30 @@
             app:layout_constraintTop_toBottomOf="@id/body">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:maxLength="6"
+                android:text="@={vm.nickname}"
                 style="@style/TextInputEditText"
                 android:hint="닉네임을 6자 이내로 입력해주세요." />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/submit"
+            android:clickable="@{!vm.loadingSubmit}"
+            android:enabled="@{vm.isSubmitEnabled}"
             style="@style/RoundButton.Mint"
             android:layout_width="match_parent"
             android:layout_marginBottom="25dp"
-            android:text="웨디 시작하기"
+            android:onDebounceClick="@{() -> vm.onSubmit()}"
+            android:text='@{vm.loadingSubmit ? "" : "웨디 시작하기"}'
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            style="@style/Indicator.White"
+            android:visibility="@{vm.loadingSubmit}"
+            app:layout_constraintBottom_toBottomOf="@id/submit"
+            app:layout_constraintLeft_toLeftOf="@id/submit"
+            app:layout_constraintRight_toRightOf="@id/submit"
+            app:layout_constraintTop_toTopOf="@id/submit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

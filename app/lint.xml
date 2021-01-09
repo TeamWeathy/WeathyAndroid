@@ -9,4 +9,6 @@
     <issue id="RtlHardcoded" severity="ignore" />
     <issue id="SpUsage" severity="ignore" />
     <issue id="ApplySharedPref" severity="ignore" />
+    <issue id="RtlSymmetry" severity="ignore" />
+    <issue id="SmallSp" severity="ignore" />
 </lint>

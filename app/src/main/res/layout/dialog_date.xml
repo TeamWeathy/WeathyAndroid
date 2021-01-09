@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageButton
+        android:id="@+id/close"
+        style="@style/ImageButton.size48.icon20"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="11dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toTopOf="@id/picker"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/select"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginRight="14dp"
+        android:src="@drawable/calendar_frame_check"
+        app:layout_constraintBottom_toTopOf="@id/picker"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <DatePicker
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:spinnersShown="true"
+        android:theme="@style/DatePicker"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

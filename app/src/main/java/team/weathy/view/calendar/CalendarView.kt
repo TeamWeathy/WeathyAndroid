@@ -24,11 +24,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.MutableLiveData
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.math.MathUtils
@@ -41,14 +41,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.weathy.R
+import team.weathy.model.entity.CalendarPreview
+import team.weathy.ui.main.calendar.YearMonthFormat
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
-import team.weathy.util.Once
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.convertDateToMonthlyIndex
 import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
 import team.weathy.util.convertWeeklyIndexToDate
 import team.weathy.util.dayOfWeekIndex
+import team.weathy.util.emit
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
@@ -56,7 +59,6 @@ import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
-import team.weathy.view.calendar.CalendarView.OnDateChangeListener
 import java.time.LocalDate
 import java.util.*
 
@@ -67,7 +69,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
         onCurDateChanged()
     }
+    private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
+    var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
+        dataLiveData.value = it
+    }
+
     var onDateChangeListener: OnDateChangeListener? = null
+    var onClickYearMonthText: (() -> Unit)? = null
 
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
@@ -82,7 +90,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private val scrollEnabled = MutableLiveData(false)
-    private val onScrollToTop = MutableLiveData<Once<Unit>>()
+    private val onScrollToTop = SimpleEventLiveData()
 
     private val collapsedHeight
         get() = px(MIN_HEIGHT_DP)
@@ -93,7 +101,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val yearMonthText = TextView(context).apply {
         id = ViewCompat.generateViewId()
-        textSize = 25f
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
@@ -102,7 +110,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = parentId
             leftToLeft = parentId
             rightToRight = parentId
-            topMargin = px(16)
+            topMargin = px(26)
+        }
+        setOnDebounceClickListener {
+            onClickYearMonthText?.invoke()
         }
     }
 
@@ -123,7 +134,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = yearMonthText.id
             bottomToBottom = yearMonthText.id
             rightToRight = parentId
-            rightMargin = px(30)
+            rightMargin = px(0)
         }
     }
 
@@ -133,7 +144,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
             topToBottom = yearMonthText.id
-            topMargin = px(16)
+            topMargin = px(11)
         }
     }
 
@@ -144,7 +155,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             topToBottom = topDivider.id
-            topMargin = px(20)
+            topMargin = px(16)
         }
     }
     private val weekTexts = (0..6).map {
@@ -155,15 +166,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             gravity = Gravity.CENTER
 
             layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1f)
-        }
-    }
-
-
-    private val viewPagerLayoutParams = {
-        LayoutParams(MATCH_PARENT, 0).apply {
-            topToBottom = weekTextLayout.id
-            bottomToBottom = parentId
-            bottomMargin = px(32)
         }
     }
 
@@ -197,19 +199,22 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         invalidate()
     }
 
+    private val fragmentViewLifecycleOwner
+        get() = findFragment<Fragment>().viewLifecycleOwner
+
     private val monthlyViewPagerGenerator = {
         ViewPager2(context).apply {
-            layoutParams = viewPagerLayoutParams()
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                bottomToBottom = parentId
+                bottomMargin = px(32)
+            }
 
-            adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+            adapter = MonthlyAdapter(
+                animLiveData, scrollEnabled, onScrollToTop, dataLiveData, fragmentViewLifecycleOwner
+            )
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
-
-            setPageTransformer { page, position ->
-                page.pivotX = if (position < 0) page.width.toFloat() else 0f
-                page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
-            }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -219,30 +224,40 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     }
                 }
             })
+
+            offscreenPageLimit = 1
         }
     }
     private var monthlyViewPager: ViewPager2? = null
-    private val weeklyViewPager = ViewPager2(context).apply {
-        layoutParams = viewPagerLayoutParams()
-
-        adapter = WeeklyAdapter(animLiveData)
-        setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
-
-        setPageTransformer { page, position ->
-            page.pivotX = if (position < 0) page.width.toFloat() else 0f
-            page.pivotY = page.height * 0.5f
-            page.rotationY = 35f * position
-        }
-
-        registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val newDate = convertWeeklyIndexToDate(position)
-                if (!isExpanded && curDate != newDate) {
-                    curDate = newDate
-                }
+    private val weeklyViewPagerGenerator = {
+        ViewPager2(context).apply {
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                height = px(WeeklyView.ITEM_HEIGHT_DP)
             }
-        })
+
+            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner)
+            setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
+
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 35f * position
+            }
+
+            registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val newDate = convertWeeklyIndexToDate(position)
+                    if (!isExpanded && curDate != newDate) {
+                        curDate = newDate
+                    }
+                }
+            })
+
+            offscreenPageLimit = 1
+        }
     }
+    private var weeklyViewPager: ViewPager2? = null
 
     init {
         initContainer()
@@ -259,11 +274,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         lazyPagerAddJob = scope.launch {
-            delay(700L)
+            delay(200)
+            if (weeklyViewPager == null) {
+                weeklyViewPager = weeklyViewPagerGenerator()
+                TransitionManager.beginDelayedTransition(this@CalendarView)
+                addView(weeklyViewPager!!, 0)
+            }
+            delay(700)
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
-                onCurDateChanged()
             }
         }
     }
@@ -290,7 +310,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()
-        addView(weeklyViewPager)
     }
 
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
@@ -309,7 +328,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setYearMonthTextWithDate(date: LocalDate) {
-        yearMonthText.text = "${date.year} .${date.monthValue.toString().padStart(2, '0')}"
+        yearMonthText.text = "${date.year} .${date.monthValue}"
     }
 
     private fun selectPagerItemsWithDate(date: LocalDate) {
@@ -322,8 +341,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             )
         }
 
-        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
-            weeklyViewPager.setCurrentItem(
+        if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
+            weeklyViewPager?.setCurrentItem(
                 nextWeeklyIndex, false
             )
         }
@@ -351,7 +370,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         )
 
         // capsule
-        if (isTodayInCurrentMonth) {
+        if (isTodayInCurrentWeek) {
             val widthWithoutPadding = width - paddingHorizontal * 2f
             val rawWidth = widthWithoutPadding / 7f
             val maxWidth = pxFloat(42)
@@ -441,7 +460,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun animPagersAlpha() {
-        weeklyViewPager.alpha = 1 - animValue
+        weeklyViewPager?.alpha = 1 - animValue
         monthlyViewPager?.alpha = animValue
     }
 
@@ -454,16 +473,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun notifyScrollToTop() {
-        onScrollToTop.value = Once(Unit)
+        onScrollToTop.emit()
     }
 
     private fun enableTouchWeeklyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = true
+        weeklyViewPager?.isUserInputEnabled = true
         monthlyViewPager?.isUserInputEnabled = false
     }
 
     private fun enableTouchMonthlyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = false
+        weeklyViewPager?.isUserInputEnabled = false
         monthlyViewPager?.isUserInputEnabled = true
     }
 
@@ -473,22 +492,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
-        private const val MIN_HEIGHT_DP = 220
+        private const val MIN_HEIGHT_DP = 224
         private const val EXPAND_MARGIN_BOTTOM_DP = 108
-    }
-}
-
-@BindingAdapter("curDate")
-fun CalendarView.setCurDate(date: LocalDate) {
-    if (curDate != date) curDate = date
-}
-
-@InverseBindingAdapter(attribute = "curDate")
-fun CalendarView.getCurDate(): LocalDate = curDate
-
-@BindingAdapter("curDateAttrChanged")
-fun CalendarView.setListener(attrChange: InverseBindingListener) {
-    onDateChangeListener = OnDateChangeListener {
-        attrChange.onChange()
     }
 }

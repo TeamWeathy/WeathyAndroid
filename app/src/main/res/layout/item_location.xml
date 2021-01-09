@@ -6,12 +6,27 @@
     <data>
 
         <variable
-            name="item"
-            type="team.weathy.model.entity.Location" />
+            name="datetime_text"
+            type="String" />
+
+        <variable
+            name="location_text"
+            type="String" />
+
+        <variable
+            name="cur_temp"
+            type="String" />
+
+        <variable
+            name="high_temp"
+            type="String" />
+
+        <variable
+            name="low_temp"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="163dp"
@@ -65,8 +80,9 @@
                     android:layout_marginHorizontal="25dp"
                     android:layout_marginTop="23dp"
                     android:maxLines="1"
-                    android:text="12월 20일 일요일 오후 4시"
                     android:textColor="@color/sub_grey_1"
+                    android:text="@{datetime_text}"
+                    tools:text="12월 20일 일요일 오후 4시"
                     android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,11 +92,73 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="25dp"
                     android:layout_marginTop="3dp"
-                    android:fontFamily="@font/notosans_bold"
+                    android:fontFamily="@font/notosans_medium"
                     android:maxLines="1"
-                    android:text="서울 서초구"
+                    android:text="@{location_text}"
+                    android:textColor="@color/main_grey"
+                    tools:text="서울 서초구"
                     android:textSize="17sp"
                     app:layout_constraintTop_toBottomOf="@id/datetime" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/search_img_sunnycloud"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="@{cur_temp}"
+                    android:textColor="@color/sub_grey_1"
+                    android:textSize="60sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/high"
+                    tools:text="-2" />
+
+                <TextView
+                    android:id="@+id/high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="@{high_temp}"
+                    android:textColor="@color/text_high_temp"
+                    android:textSize="25sp"
+                    app:layout_constraintBottom_toBottomOf="@id/low"
+                    app:layout_constraintRight_toRightOf="@id/divider"
+                    tools:text="-2" />
+
+                <TextView
+                    android:id="@+id/divider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:text="/"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/low"
+                    app:layout_constraintRight_toLeftOf="@id/low"
+                    app:layout_constraintTop_toTopOf="@id/low" />
+
+                <TextView
+                    android:id="@+id/low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="22dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="@{low_temp}"
+                    android:textColor="@color/blue_temp"
+                    android:textSize="25sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="-2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

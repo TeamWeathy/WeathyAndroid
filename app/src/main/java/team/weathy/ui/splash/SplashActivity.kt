@@ -3,14 +3,24 @@ package team.weathy.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.databinding.ActivitySplashBinding
+import team.weathy.ui.landing.LandingActivity
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
-import team.weathy.util.PermissionUtil
-import team.weathy.util.extensions.showToast
+import team.weathy.util.SPUtil
+import team.weathy.util.UniqueIdentifier
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+
+    @Inject
+    lateinit var uniqueId: UniqueIdentifier
+
+    @Inject
+    lateinit var spUtil: SPUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,42 +28,21 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        requestLocationPermissions()
+        navigateNextScreen()
     }
 
-    private fun requestLocationPermissions() {
-        PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
-            override fun onPermissionGranted() {
-                navigateNextScreenAndFinish()
-            }
-
-            override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {
-                showToast("권한 허용이 안되어있습니다 $deniedPermissions")
-                openLocationSettings()
-            }
-
-            override fun onAnyPermissionsPermanentlyDeined(
-                deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
-            ) {
-                showToast("권한 허용이 영구적으로 거부되었습니다 $permanentDeniedPermissions")
-                openLocationSettings()
-            }
-        })
-    }
-
-    private fun openLocationSettings() {
-        PermissionUtil.openPermissionSettings(this)
-    }
-
-    private fun navigateNextScreenAndFinish() {
-        // TODO 무조건 메인 화면으로 가기
-        //        if (uniqueId.exist) {
-        navigateMain()
-        //        } else {
-        //            navigateNicknameSet()
+    private fun navigateNextScreen() {
+        //        when {
+        //            spUtil.isFirstLaunch -> navigateLanding()
+        //            !uniqueId.exist -> navigateNicknameSet()
+        //            else -> navigateMain()
         //        }
+        navigateMain()
+//                navigateLanding()
         finish()
     }
+
+    private fun navigateLanding() = startActivity(Intent(this, LandingActivity::class.java))
 
     private fun navigateNicknameSet() = startActivity(Intent(this, NicknameSetActivity::class.java))
 

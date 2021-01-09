@@ -8,11 +8,9 @@
 
     <ImageButton
         android:id="@+id/exit_setting_btn"
-        style="@style/ImageButton.size32_icon20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="33dp"
+        style="@style/ImageButton.size48.icon20"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +23,8 @@
         android:text="설정"
         android:textColor="@color/main_grey"
         android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@id/exit_setting_btn"
+        android:layout_marginLeft="26dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/exit_setting_btn" />
 
     <TextView
@@ -42,7 +41,7 @@
 
     <ImageView
         android:id="@+id/ic_arrow"
-        style="@style/ImageButton.size32_icon20"
+        style="@style/ImageButton.size32.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
@@ -100,7 +99,7 @@
         android:id="@+id/ic_arrow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton.size32_icon20"
+        style="@style/ImageButton.size32.icon20"
         android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider1" />
@@ -157,16 +156,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider" />
 
-    <TextView
-        android:id="@+id/setting_div_2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/push_notif_click" />
-
     <View
         android:id="@+id/inquire_click"
         android:layout_width="match_parent"
@@ -175,21 +164,11 @@
         app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toBottomOf="@id/divider1" />
 
-    <TextView
-        android:id="@+id/setting_div_3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inquire_click" />
-
     <ImageView
         android:id="@+id/ic_arrow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton.size32_icon20"
+        style="@style/ImageButton.size32.icon20"
         android:src="@drawable/setting_frame_arrow"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
         app:layout_constraintTop_toTopOf="@id/divider2" />
