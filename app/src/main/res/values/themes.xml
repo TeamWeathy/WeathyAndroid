@@ -95,9 +95,9 @@
     </style>
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/chip_background_color</item>
-        <item name="android:textColor">@color/chip_text_color</item>
-        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+        <item name="chipBackgroundColor">@color/chip_select_bg</item>
+        <item name="android:textColor">@color/chip_select_text</item>
+        <item name="chipStrokeColor">@color/chip_select_stroke</item>
         <item name="chipStrokeWidth">1.5dp</item>
         <item name="chipCornerRadius">19.5dp</item>
         <item name="rippleColor">@color/main_mint</item>
@@ -105,6 +105,14 @@
         <item name="textStartPadding">11dp</item>
         <item name="textEndPadding">9dp</item>
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="CustomChipStyle.Delete">
+        <item name="chipBackgroundColor">@color/chip_delete_bg</item>
+        <item name="android:textColor">@color/chip_delete_text</item>
+        <item name="strokeColor">@color/chip_delete_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="rippleColor">@color/pink</item>
     </style>
 
     <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">

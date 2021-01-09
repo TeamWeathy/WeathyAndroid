@@ -51,6 +51,13 @@ class RecordViewModel : ViewModel() {
         }
     }
 
+    fun onChipCheckedForDelete(index: Int) {
+        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
+        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
+            add(index)
+        }
+    }
+
     fun onChipUnchecked(index: Int) {
         val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
         selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
@@ -64,4 +71,19 @@ class RecordViewModel : ViewModel() {
             add(0, text)
         }
     }
-}
+
+    fun deleteClothes(index : Int) {
+        val clothes = clothesPairs[choicedClothesTabIndex.value!!].first
+        clothes.value = clothes.value!!.toMutableList().apply {
+            removeAt(index)
+        }
+    }
+
+    fun allSelectedClothes() : Int {
+        var selectedClothesCount = 0
+        for (i in 0..3) {
+            selectedClothesCount += clothesPairs[i].second.value!!.size
+        }
+        return selectedClothesCount
+        }
+    }

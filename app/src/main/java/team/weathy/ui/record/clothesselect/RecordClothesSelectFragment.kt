@@ -1,6 +1,8 @@
 package team.weathy.ui.record.clothesselect
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -34,6 +37,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureTabs()
         configureChips()
         configureAddLogic()
+        setButtonActivation()
     }
 
     private fun configureClothesSelectNavigation() {
@@ -44,9 +48,20 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
         binding.add.setOnLongClickListener {
+            val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vib.vibrate(100)
             (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
             true
         }
+//        binding.chipGroup.children.drop(1).forEachIndexed { _, view ->
+//            val chip = view as Chip
+//            chip.setOnLongClickListener {
+//                val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+//                vib.vibrate(100)
+//                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
+//                true
+//            }
+//        }
     }
 
     private fun configureTabs() {
@@ -102,10 +117,17 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             addChipsForChoicedClothes(it)
         }
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
-            updateChipSelectedState()
-            updateTabTexts()
+            if (viewModel.selectedClothes.value!!.size <= 5) {
+                updateChipSelectedState()
+                updateTabTexts()
+            }
+            if (viewModel.selectedClothes.value!!.size == 5) {
+                requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
+                setChipUnCheckedState()
+            }
         }
     }
+
 
     private fun removeAllChipsWithoutFirst() {
         while (binding.chipGroup.childCount > 1) {
@@ -143,6 +165,14 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
+    private fun setChipUnCheckedState() {
+        binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
+            val chip = view as Chip
+            chip.isCheckable = false
+            chip.isClickable = false
+        }
+    }
+
     private fun updateTabTexts() {
         (layouts[viewModel.choicedClothesTabIndex.value!!].getChildAt(1) as? TextView)?.run {
             text = viewModel.selectedClothes.value!!.size.toString()
@@ -154,6 +184,18 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun isChipSelected(index: Int) = index in viewModel.selectedClothes.value!!
+
+    private fun setButtonActivation() {
+        viewModel.selectedClothes.observe(viewLifecycleOwner) {
+            if (viewModel.selectedClothes.value!!.isNotEmpty()) {
+                binding.btnCheck.isEnabled = true
+                binding.btnCheck.setBackgroundColor(getColor(R.color.main_mint))
+            } else {
+                binding.btnCheck.isEnabled = false
+                binding.btnCheck.setBackgroundColor(getColor(R.color.sub_grey_3))
+            }
+        }
+    }
 
     private fun configureAddLogic() {
         binding.add setOnDebounceClickListener {
