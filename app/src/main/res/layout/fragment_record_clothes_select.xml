@@ -9,7 +9,7 @@
 
     <ImageButton
         android:id="@+id/back"
-        style="@style/ImageButton.size48_icon20"
+        style="@style/ImageButton.size48.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"

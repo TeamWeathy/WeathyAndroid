@@ -7,7 +7,7 @@
 
     <ImageButton
         android:id="@+id/close"
-        style="@style/ImageButton.size48_icon20"
+        style="@style/ImageButton.size48.icon20"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="11dp"
         android:src="@drawable/ic_close"

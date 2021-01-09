@@ -38,7 +38,7 @@
 
             <ImageButton
                 android:id="@+id/back"
-                style="@style/ImageButton.size48_icon20"
+                style="@style/ImageButton.size48.icon20"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_close"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@id/textInputLayout" />
 
         <TextView
-            visibilityWithAnim="@{vm.query.empty &amp;&amp; !vm.focused}"
+            visibilityWithAnim="@{vm.showRecently}"
             android:id="@+id/recentLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -111,8 +111,8 @@
             app:layout_constraintRight_toLeftOf="@id/guide_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
-        <Viewnotosans_bold
-            visibilityWithAnim="@{vm.query.empty &amp;&amp; !vm.focused}"
+        <View
+            visibilityWithAnim="@{vm.showRecently}"
             android:id="@+id/divider"
             android:layout_width="31dp"
             android:layout_height="1dp"
@@ -122,7 +122,10 @@
             app:layout_constraintTop_toBottomOf="@id/recentLabel" />
 
         <androidx.recyclerview.widget.RecyclerView
-            search_adapter_items="@{vm.searchResult}"
+            android:clickable="true"
+            android:focusable="true"
+            dismissKeyboardOnClick="@{true}"
+            search_adapter_items="@{vm.showRecently ? vm.recentlySearchResult : vm.searchResult}"
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -136,12 +139,20 @@
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:listitem="@layout/item_location" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:visibility="@{vm.loading}"
+            style="@style/Indicator.Primary"
+            android:layout_marginTop="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/list" />
+
         <ImageView
             visibilityWithAnim="@{vm.showEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0"
-            android:src="@{vm.isRecentItemShown ? @drawable/search_recent_empty_img_empty : @drawable/search_empty_img_empty}"
+            android:src="@{vm.showRecently ? @drawable/search_recent_empty_img_empty : @drawable/search_empty_img_empty}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

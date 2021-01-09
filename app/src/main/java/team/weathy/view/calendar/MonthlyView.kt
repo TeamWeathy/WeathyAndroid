@@ -14,12 +14,10 @@ import androidx.annotation.IntRange
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
+import team.weathy.model.entity.CalendarPreview
 import team.weathy.util.OnChangeProp
-import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.calculateRequiredRow
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -36,41 +34,19 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     var date: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithDate()
     }
+    var data: List<CalendarPreview?>? by OnChangeProp(null) {
+        updateUIWithData()
+    }
 
     private val isTodayInCurrentMonth
         get() = date.year == today.year && date.month == today.month
 
-    lateinit var animLiveData: LiveData<Float>
-    private val animValue
-        get() = animLiveData.value!!
-    lateinit var scrollEnabled: LiveData<Boolean>
-    lateinit var onScrollToTop: SimpleEventLiveData
-
-    private val animValueObserver = Observer<Float> {
+    var animValue: Float by OnChangeProp(0f) {
         adjustUIsWithAnimValue()
     }
-    private val scrollEnabledObserver = Observer<Boolean> {
+    var scrollEnabled: Boolean by OnChangeProp(true) {
         if (it) enableScroll()
         else disableScroll()
-    }
-    private val onScrollToTopObserver = Observer<Unit> {
-        scrollToTop()
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        animLiveData.observeForever(animValueObserver)
-        scrollEnabled.observeForever(scrollEnabledObserver)
-        onScrollToTop.observeForever(onScrollToTopObserver)
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-
-        animLiveData.removeObserver(animValueObserver)
-        scrollEnabled.removeObserver(scrollEnabledObserver)
-        onScrollToTop.removeObserver(onScrollToTopObserver)
     }
 
     private val scrollView = ScrollView(context).apply {
@@ -183,8 +159,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 val shouldBeDisabled = !isInCurrentMonthRange || isFuture
 
                 item.root.alpha = if (shouldBeDisabled) .3f else 1f
-                item.tempHigh.isVisible = !shouldBeDisabled
-                item.tempLow.isVisible = !shouldBeDisabled
 
                 item.circleSmall.isVisible = idx == todayIndex
                 item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndex))
@@ -196,6 +170,21 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                         MATCH_PARENT, MATCH_PARENT, 1f
                     )
                 )
+            }
+        }
+    }
+
+    private fun updateUIWithData() {
+        calendarItems.forEachIndexed { index, binding ->
+            data?.getOrNull(index)?.let {
+                binding.tempHigh.isVisible = true
+                binding.tempLow.isVisible = true
+
+                binding.tempHigh.text = it.temperature.maxTemp.toString()
+                binding.tempLow.text = it.temperature.minTemp.toString()
+            } ?: run {
+                binding.tempHigh.isVisible = false
+                binding.tempLow.isVisible = false
             }
         }
     }
@@ -241,7 +230,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         setOnTouchListener(null)
     }
 
-    private fun scrollToTop() {
+    fun scrollToTop() {
         scrollView.smoothScrollTo(0, 0)
     }
 

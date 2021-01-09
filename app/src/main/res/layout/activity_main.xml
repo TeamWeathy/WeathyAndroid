@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="team.weathy.ui.main.MainMenu" />
 
         <variable
@@ -17,37 +16,33 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitStart"
-            android:src="@drawable/bg_top_skyblue_blur" />
-
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/fragmentPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:id="@+id/toolbar"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:background="@color/transparent"
+            android:clipChildren="true"
+            android:clipToPadding="true"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
+                style="@style/ImageButton.size48.icon20"
                 android:id="@+id/setting"
-                style="@style/ImageButton.size32_icon20"
-                android:layout_marginRight="24dp"
+                android:layout_marginRight="9dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/search"
-                style="@style/ImageButton.size32_icon20"
-                android:layout_marginRight="12dp"
+                style="@style/ImageButton.size48.icon20"
                 android:src="@drawable/ic_search"
                 app:layout_constraintBottom_toBottomOf="@id/setting"
                 app:layout_constraintRight_toLeftOf="@id/setting"
@@ -62,12 +57,8 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
+                style="@style/ImageButton.size32.icon20"
                 android:id="@+id/home"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                android:scaleType="fitCenter"
                 android:src="@drawable/ic_weather_selected"
                 android:tint="@{vm.menu == MainMenu.HOME ? @color/main_mint : @color/sub_grey_4  }"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -77,11 +68,8 @@
 
 
             <ImageButton
+                style="@style/ImageButton.size32.icon20"
                 android:id="@+id/calendar"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:padding="6dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_calendar_selected"
                 android:tint="@{vm.menu == MainMenu.CALENDAR ? @color/main_mint : @color/sub_grey_4  }"
