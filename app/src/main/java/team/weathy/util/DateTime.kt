@@ -45,6 +45,9 @@ val Int.koFormat: String
         "오후 ${this - 12}시"
     }
 
+val LocalDate.yearMonthFormat: String
+    get() = "${year}-${monthValue.padZero()}"
+
 val LocalDate.weekOfMonth: Int
     get() {
         val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
@@ -53,11 +56,18 @@ val LocalDate.weekOfMonth: Int
         return gc[WEEK_OF_MONTH]
     }
 
+/**
+ * 1(SUN) -> 7(SAT)
+ */
 val LocalDate.dayOfWeekValue: Int
     get() = when (dayOfWeek.value + 1) {
         8 -> 1
         else -> dayOfWeek.value + 1
     }
+
+/**
+ * 0(SUN) -> 6(SAT)
+ */
 val LocalDate.dayOfWeekIndex: Int
     get() = dayOfWeekValue - 1
 
@@ -132,4 +142,21 @@ fun getWeekTexts(date: LocalDate): List<Int> {
     val (_result) = getMonthTexts(date)
 
     return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
+}
+
+fun getStartDateStringInCalendar(year: Int, month: Int): DateString {
+    val date = LocalDate.of(year, month, 1)
+    val startDayIndex = date.dayOfWeekIndex
+
+    val startDateInCalendar = date.minusDays(startDayIndex.toLong())
+    return startDateInCalendar.dateString
+}
+
+fun getEndDateStringInCalendar(year: Int, month: Int): DateString {
+    val firstDate = LocalDate.of(year, month, 1)
+    val lastDate = LocalDate.of(year, month, firstDate.lengthOfMonth())
+    val endDayIndex = lastDate.dayOfWeekIndex
+
+    val endDateInCalendar = lastDate.plusDays(6 - endDayIndex.toLong())
+    return endDateInCalendar.dateString
 }

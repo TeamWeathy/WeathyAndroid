@@ -24,6 +24,8 @@
 
 
     <View
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/circle"
         android:layout_width="16dp"
         android:layout_height="16dp"
