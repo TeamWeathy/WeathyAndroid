@@ -53,12 +53,10 @@ class DBTest {
         Truth.assertThat(dao.getAll()).hasSize(3)
 
         val result = dao.getAll(10)
-        debugE(result)
         Truth.assertThat(result[2]).isEqualTo(codes[2])
 
         dao.add(codes[2])
         val newResult = dao.getAll(10)
-        debugE(newResult)
 
         Truth.assertThat(newResult.first()).isEqualTo(codes[2])
     }

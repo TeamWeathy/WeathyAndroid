@@ -64,7 +64,6 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun getRecentSearchCodesAndFetch() = launchCatch({
         val codes = recentSearchCodeDao.getAll()
-        debugE(codes)
         fetchRecentSearchCodes(codes)
     }, loading, onSuccess = {
         recentlySearchResult.value = it
@@ -78,7 +77,6 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun removeRecentSearchCode(position: Int) = launchCatch({
         recentlySearchResult.value?.get(position)?.let {
-            debugE(it)
             recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
         }
     })
