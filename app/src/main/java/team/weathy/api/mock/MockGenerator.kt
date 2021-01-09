@@ -7,6 +7,10 @@ import team.weathy.model.entity.HourlyWeather
 import team.weathy.model.entity.Region
 import team.weathy.model.entity.Temperature
 import team.weathy.model.entity.User
+import team.weathy.model.entity.Weathy
+import team.weathy.model.entity.WeathyCloset
+import team.weathy.model.entity.WeathyClothes
+import team.weathy.model.entity.WeathyClothes.Cloth
 
 object MockGenerator {
     fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
@@ -18,4 +22,15 @@ object MockGenerator {
         DailyWeather(region(name = regionName, code = code), date(), temperature())
 
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
+
+    fun weahtyCloset() = WeathyCloset(
+        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
+        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
+        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
+        WeathyClothes(1, listOf(Cloth(1, "cloth 1")))
+    )
+
+    fun weathy() = Weathy(
+        dailyWeather(), hourlyWeather(), weahtyCloset(), 1, "feedback"
+    )
 }

@@ -7,18 +7,12 @@ import retrofit2.http.HTTP
 import retrofit2.http.POST
 import team.weathy.model.entity.Category
 import team.weathy.model.entity.Clothes
+import team.weathy.model.entity.ClothesCloset
 
 
 data class ClothesRes(
-    @SerializedName("closet") val closet: Closet, @SerializedName("message") val message: String
-) {
-    data class Closet(
-        @SerializedName("top") val top: List<Clothes>,
-        @SerializedName("bottom") val bottom: List<Clothes>,
-        @SerializedName("outer") val outer: List<Clothes>,
-        @SerializedName("etc") val etc: List<Clothes>
-    )
-}
+    val closet: ClothesCloset, val message: String
+)
 
 data class CreateClothesReq(
     val category: Category, val name: String

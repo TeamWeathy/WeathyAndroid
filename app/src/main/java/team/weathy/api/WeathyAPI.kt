@@ -7,36 +7,12 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
-import team.weathy.model.entity.DailyWeather
-import team.weathy.model.entity.HourlyWeather
+import team.weathy.model.entity.Weathy
 import team.weathy.util.DateString
-
 
 data class WeathyRes(
     val weathy: Weathy?, val message: String
-) {
-    data class Weathy(
-        val dailyWeather: DailyWeather,
-        val hourlyWeather: HourlyWeather,
-        val closet: Closet,
-        val stampId: Int,
-        val feedback: String
-    ) {
-
-        data class Closet(
-            val top: Clothes, val bottom: Clothes, val outer: Clothes, val etc: Clothes
-        ) {
-
-            data class Clothes(
-                val categoryId: Int, val clothes: List<Cloth>
-            ) {
-                data class Cloth(
-                    val id: Int, val name: String
-                )
-            }
-        }
-    }
-}
+)
 
 data class CreateWeathyReq(
     val userId: Int,

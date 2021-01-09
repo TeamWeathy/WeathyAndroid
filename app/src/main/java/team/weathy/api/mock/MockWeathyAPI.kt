@@ -1,0 +1,31 @@
+package team.weathy.api.mock
+
+import team.weathy.api.CreateWeathyReq
+import team.weathy.api.EditWeathyReq
+import team.weathy.api.MessageRes
+import team.weathy.api.WeathyAPI
+import team.weathy.api.WeathyRes
+import team.weathy.util.DateString
+import javax.inject.Inject
+
+class MockWeathyAPI @Inject constructor() : WeathyAPI {
+    override fun fetchRecommendedWeathy(code: Int, date: DateString): WeathyRes {
+        TODO("Not yet implemented")
+    }
+
+    override fun fetchWeathyWithId(weathyId: Int): WeathyRes {
+        return WeathyRes(MockGenerator.weathy(), "hi")
+    }
+
+    override fun createWeathy(req: CreateWeathyReq): MessageRes {
+        TODO("Not yet implemented")
+    }
+
+    override fun editWeathy(weathyId: Int, req: EditWeathyReq): MessageRes {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteWeathy(weathyId: Int): MessageRes {
+        TODO("Not yet implemented")
+    }
+}

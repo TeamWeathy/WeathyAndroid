@@ -9,10 +9,10 @@ import team.weathy.di.ApiMock
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
 import team.weathy.util.dateHourString
-import team.weathy.util.debugE
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
+import team.weathy.util.extensions.updateList
 import java.time.LocalDateTime
 
 class SearchViewModel @ViewModelInject constructor(
@@ -54,10 +54,13 @@ class SearchViewModel @ViewModelInject constructor(
     fun onItemRemoved(position: Int) {
         if (showRecently.value == true) {
             removeRecentSearchCode(position)
-            recentlySearchResult.removeAtPosition(position)
-
+            recentlySearchResult.updateList {
+                removeAt(position)
+            }
         } else {
-            searchResult.removeAtPosition(position)
+            searchResult.updateList {
+                removeAt(position)
+            }
         }
     }
 
@@ -80,11 +83,5 @@ class SearchViewModel @ViewModelInject constructor(
             recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
         }
     })
-
-    private fun MutableLiveData<List<OverviewWeather>>.removeAtPosition(position: Int) {
-        value = value?.toMutableList()?.apply {
-            removeAt(position)
-        }
-    }
 }
 

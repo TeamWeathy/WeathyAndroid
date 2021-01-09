@@ -43,6 +43,7 @@ class CalendarFragment : Fragment(), OnClickListener {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.curDate.observe(viewLifecycleOwner) {
+            viewModel.onCurDateChanged()
             debugE("$it, ${it.weekOfMonth}")
         }
 

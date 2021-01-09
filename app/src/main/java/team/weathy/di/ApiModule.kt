@@ -14,6 +14,7 @@ import team.weathy.api.WeatherAPI
 import team.weathy.api.WeathyAPI
 import team.weathy.api.mock.MockUserAPI
 import team.weathy.api.mock.MockWeatherAPI
+import team.weathy.api.mock.MockWeathyAPI
 import team.weathy.util.UniqueIdentifier
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -77,5 +78,10 @@ abstract class ApiModuleMock {
     @Binds
     @ApiMock
     abstract fun bindWeather(api: MockWeatherAPI): WeatherAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindWeathy(api: MockWeathyAPI): WeathyAPI
 }
 
