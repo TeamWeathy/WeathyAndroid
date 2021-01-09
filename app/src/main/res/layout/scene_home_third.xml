@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:alpha="0"
+        android:translationY="-500dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/gps_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:translationX="-8dp"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toTopOf="@+id/weather_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datetime" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:fontFamily="@font/notosans_medium"
+        android:translationX="-8dp"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toBottomOf="@id/gps_image"
+        app:layout_constraintLeft_toRightOf="@id/gps_image"
+        app:layout_constraintTop_toTopOf="@id/gps_image" />
+
+    <ImageView
+        android:id="@+id/weather_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="4dp"
+        android:alpha="0"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toTopOf="@+id/nickname"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gps_image"
+        app:layout_constraintWidth_max="400dp" />
+
+
+    <TextView
+        android:id="@+id/nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:text="희지님이 기억하는"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toTopOf="@+id/today_weathy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_image" />
+
+    <TextView
+        android:id="@+id/today_weathy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:alpha="0"
+        android:fontFamily="@font/notosans_medium"
+
+        android:text="오늘의 웨디"
+        android:textColor="@color/main_grey"
+        android:textSize="21sp"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toTopOf="@+id/recommended"
+        app:layout_constraintStart_toStartOf="@id/nickname"
+        app:layout_constraintTop_toBottomOf="@+id/nickname" />
+
+    <include
+        android:id="@+id/recommended"
+        layout="@layout/view_home_recommended_weathy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="121dp"
+        android:alpha="0"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:translationY="-500dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/downArrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:paddingVertical="10dp"
+        android:src="@drawable/ic_down"
+        android:translationY="-200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recommended" />
+
+    <team.weathy.view.WeathyCardView
+        android:id="@+id/hourlyCard"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:layout_marginBottom="24dp"
+        android:alpha="1"
+        android:translationY="0dp"
+        app:layout_constraintBottom_toTopOf="@id/weeklyCard" />
+
+    <team.weathy.view.WeathyCardView
+        android:id="@+id/weeklyCard"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:layout_marginBottom="24dp"
+        android:alpha="1"
+        android:translationY="0dp"
+        app:layout_constraintBottom_toTopOf="@id/detailCard" />
+
+    <team.weathy.view.WeathyCardView
+        android:id="@+id/detailCard"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="96dp"
+        android:alpha="1"
+        android:translationY="0dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/mainscroll_img_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
