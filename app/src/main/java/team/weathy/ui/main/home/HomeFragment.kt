@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
 import team.weathy.util.setOnDebounceClickListener
 
 class HomeFragment : Fragment() {
@@ -29,7 +28,6 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                debugE(p1)
             }
 
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
