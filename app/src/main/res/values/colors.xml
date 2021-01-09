@@ -34,4 +34,5 @@
     <color name="pink">#f37088</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/sub_grey_7</color>
     <color name="image_view_background">#C4C4C4</color>
+    <color name="transparent_black">#1e000000</color>
 </resources>
