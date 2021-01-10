@@ -148,11 +148,6 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        resetAnimation()
-    }
-
     companion object {
         private const val ITEM_COUNT = 7
     }
