@@ -68,6 +68,18 @@ class CalendarViewModel @ViewModelInject constructor(
     val weathyStampRepresentation = curWeathy.map {
         it?.stampId?.representationPast
     }
+    val weathyTopClothes = curWeathy.map {
+        it?.closet?.top?.clothes?.joinToString(" . ") { it.name } ?: ""
+    }
+    val weathyBottomClothes = curWeathy.map {
+        it?.closet?.bottom?.clothes?.joinToString(" . ") { it.name } ?: ""
+    }
+    val weathyOuterClothes = curWeathy.map {
+        it?.closet?.outer?.clothes?.joinToString(" . ") { it.name } ?: ""
+    }
+    val weathyEtcClothes = curWeathy.map {
+        it?.closet?.etc?.clothes?.joinToString(" . ") { it.name } ?: ""
+    }
     val weathyFeedback = curWeathy.map {
         it?.feedback ?: ""
     }

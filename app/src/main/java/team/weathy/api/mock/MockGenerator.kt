@@ -29,10 +29,18 @@ object MockGenerator {
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
 
     fun weahtyCloset() = WeathyCloset(
-        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
-        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
-        WeathyClothes(1, listOf(Cloth(1, "cloth 1"))),
-        WeathyClothes(1, listOf(Cloth(1, "cloth 1")))
+        WeathyClothes(1, (0 until Random.nextInt(2, 7)).map {
+            Cloth(it, LoremIpsum.getInstance().firstName)
+        }),
+        WeathyClothes(1, (0 until Random.nextInt(2, 6)).map {
+            Cloth(it, LoremIpsum.getInstance().firstName)
+        }),
+        WeathyClothes(1, (0 until Random.nextInt(2, 7)).map {
+            Cloth(it, LoremIpsum.getInstance().firstName)
+        }),
+        WeathyClothes(1, (0 until Random.nextInt(2, 6)).map {
+            Cloth(it, LoremIpsum.getInstance().firstName)
+        }),
     )
 
     fun weathy() = Weathy(

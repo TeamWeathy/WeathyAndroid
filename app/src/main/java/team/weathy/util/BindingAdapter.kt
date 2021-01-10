@@ -94,3 +94,8 @@ fun View.setShadowOnScroll(show: Boolean, _siblingDirectParentDepthDiff: Int) {
         isActivated = recyclerView.canScrollVertically(-1)
     }
 }
+
+@BindingAdapter("android:selected")
+fun View.setSelectedBinding(isSelected: Boolean) {
+    this.isSelected = isSelected
+}

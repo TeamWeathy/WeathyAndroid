@@ -23,6 +23,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
+            android:visibility="@{vm.curWeathy != null}"
+            tools:alpha="0.5"
             android:id="@+id/scrollView"
             android:overScrollMode="never"
             android:layout_width="match_parent"
@@ -288,9 +290,17 @@
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="기모맨투맨, 히트텍"
+                    android:text="@{vm.weathyTopClothes}"
+                    tools:text="기모맨투맨, 히트텍"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label1"
@@ -310,9 +320,17 @@
                     app:layout_constraintTop_toBottomOf="@id/label1" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="청바지"
+                    android:text="@{vm.weathyBottomClothes}"
+                    tools:text="청바지"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label2"
@@ -332,9 +350,17 @@
                     app:layout_constraintTop_toBottomOf="@id/label2" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="롱패딩"
+                    android:text="@{vm.weathyOuterClothes}"
+                    tools:text="롱패딩"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label3"
@@ -347,6 +373,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="13sp"
@@ -354,9 +381,17 @@
                     app:layout_constraintTop_toBottomOf="@id/label3" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="목도리 장갑"
+                    android:text="@{vm.weathyEtcClothes}"
+                    tools:text="목도리 장갑"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label4"
@@ -387,12 +422,12 @@
         </ScrollView>
 
         <LinearLayout
-            android:visibility="@{mainVm.loadingCalendar}"
-            tools:visibility="gone"
+            android:layout_marginTop="224dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
+            android:visibility="@{vm.curWeathy == null}"
             android:gravity="center"
+            app:layout_constraintVertical_bias="0.38"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -400,18 +435,22 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="104dp"
-                android:layout_height="65dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo512" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="웨디를 기록해주세요"
-                android:textColor="@color/sub_grey_8"
-                android:textSize="16sp" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/calendar_img_empty" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/sub_grey_5"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="기록하기"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                app:cornerRadius="20dp" />
         </LinearLayout>
 
 
