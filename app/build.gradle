@@ -43,7 +43,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs = ["-Xinline-classes"]
+        freeCompilerArgs = ["-Xinline-classes", "-Xopt-in=kotlin.RequiresOptIn"]
     }
     buildFeatures {
         dataBinding true
@@ -92,11 +92,11 @@ dependencies {
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-android:1.0.0"
-
     implementation "androidx.room:room-runtime:2.2.6"
     kapt "androidx.room:room-compiler:2.2.6"
     implementation "androidx.room:room-ktx:2.2.6"
+
+    implementation "com.thedeanda:lorem:2.1"
 }
 
 dependencies {

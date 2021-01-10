@@ -11,7 +11,7 @@ import team.weathy.api.ApiSerializer
 import java.lang.reflect.Type
 
 @JsonAdapter(WeatherSerizlier::class)
-enum class Weather(val id: Int, @DrawableRes iconId: Int) {
+enum class Weather(val id: Int, @DrawableRes val iconId: Int) {
     CLEAR_SKY(
         1, R.drawable.ic_clearsky_day
     ),

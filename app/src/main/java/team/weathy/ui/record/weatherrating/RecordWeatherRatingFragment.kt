@@ -27,6 +27,13 @@ class RecordWeatherRatingFragment : Fragment() {
         for (i in cvReview.indices)
             setReviewClickListener(cvReview, i, binding.btnCheck)
 
+        configureStartNavigation()
+    }
+
+    private fun configureStartNavigation() {
+        binding.back setOnDebounceClickListener {
+            (activity as? RecordActivity)?.popWeatherRating()
+        }
         binding.btnCheck setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateWeatherRatingToDetail()
         }

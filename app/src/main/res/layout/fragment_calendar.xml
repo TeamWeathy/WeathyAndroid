@@ -23,6 +23,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
+            android:visibility="@{vm.curWeathy != null}"
+            tools:alpha="0.5"
+            android:id="@+id/scrollView"
             android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,6 +33,7 @@
             android:layout_marginTop="224dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layoutAnimation="@anim/layout_animation_calendar"
                 android:onClick="@{() -> vm.onClickContainer()}"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
@@ -42,14 +46,14 @@
 
                 <TextView
                     android:id="@+id/date"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="12월 21일 월요일"
+                    android:text="@{vm.weathyDate}"
+                    android:textSize="13sp"
                     android:textColor="@color/sub_grey_1"
-                    android:textSize="15sp"
+                    tools:text="12월 21일 월요일"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/more"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
@@ -155,26 +159,44 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <ImageView
-                    android:id="@+id/gpsImage"
+                    android:id="@+id/weather_icon"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginTop="9.5dp"
-                    android:src="@drawable/ic_sample"
+                    srcResource="@{vm.weathyWeatherIcon}"
+                    tools:src="@drawable/ic_snow"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/date" />
 
                 <TextView
-                    android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="서울 서초동"
+                    android:layout_marginLeft="6dp"
+                    android:fontFamily="@font/notosans_medium"
+                    android:text="@{vm.weathyClimateDescription}"
                     android:textColor="@color/main_grey"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/gpsImage"
-                    app:layout_constraintLeft_toRightOf="@id/gpsImage"
-                    app:layout_constraintTop_toTopOf="@id/gpsImage" />
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="@id/weather_icon"
+                    app:layout_constraintLeft_toRightOf="@id/weather_icon"
+                    app:layout_constraintTop_toTopOf="@id/weather_icon"
+                    tools:text="흐림" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:id="@+id/location"
+                    android:fontFamily="@font/notosans_medium"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:singleLine="true"
+                    android:text="@{vm.weathyLocation}"
+                    android:textColor="@color/main_grey"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@id/date"
+                    app:layout_constraintLeft_toRightOf="@id/date"
+                    app:layout_constraintRight_toLeftOf="@id/more"
+                    app:layout_constraintTop_toTopOf="@id/date"
+                    app:layout_goneMarginLeft="12dp"
+                    tools:text="서울 서초동" />
 
                 <TextView
                     android:id="@+id/temp1"
@@ -182,11 +204,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/roboto_light"
-                    android:text="-4°"
+                    android:text="@{vm.weathyTempHigh}"
+                    app:layout_constraintTop_toBottomOf="@id/weather_icon"
                     android:textColor="@color/red_temp"
                     android:textSize="35sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/location" />
+                    tools:text="-4°" />
 
                 <TextView
                     android:id="@+id/temp2"
@@ -207,7 +230,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:fontFamily="@font/roboto_light"
-                    android:text="-4°"
+                    android:text="@{vm.weathyTempLow}"
+                    tools:text="-4°"
                     android:textColor="@color/blue_temp"
                     android:textSize="35sp"
                     app:layout_constraintBottom_toBottomOf="@id/temp2"
@@ -216,10 +240,12 @@
 
                 <ImageView
                     android:id="@+id/emoji"
-                    android:layout_width="33dp"
-                    android:layout_height="33dp"
+                    srcResource="@{vm.weathyStampIcon}"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:layout_marginTop="12dp"
-                    android:src="@drawable/logo512"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/img_verycold"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/temp3" />
 
@@ -227,11 +253,12 @@
                     android:id="@+id/emojiText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/notosans_bold"
-                    android:text="매우 추웠어요"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/notosans_medium"
+                    android:text="@{vm.weathyStampRepresentation}"
+                    android:textSize="23sp"
                     android:textColor="@color/imoji_verycold_text"
-                    android:textSize="25sp"
+                    tools:text="너무 추웠어요"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/emoji" />
 
@@ -258,16 +285,24 @@
                     android:layout_marginTop="22dp"
                     android:text="상의"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="기모맨투맨, 히트텍"
+                    android:text="@{vm.weathyTopClothes}"
+                    tools:text="기모맨투맨, 히트텍"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label1"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
@@ -277,19 +312,27 @@
                     android:id="@+id/label2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="하의"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/label1" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="청바지"
+                    android:text="@{vm.weathyBottomClothes}"
+                    tools:text="청바지"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label2"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
@@ -299,19 +342,27 @@
                     android:id="@+id/label3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="외투"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/label2" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="롱패딩"
+                    android:text="@{vm.weathyOuterClothes}"
+                    tools:text="롱패딩"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label3"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
@@ -321,19 +372,28 @@
                     android:id="@+id/label4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
+
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/label3" />
 
                 <TextView
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:selected="@{true}"
+                    android:singleLine="true"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="목도리 장갑"
+                    android:text="@{vm.weathyEtcClothes}"
+                    tools:text="목도리 장갑"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label4"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
@@ -352,7 +412,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:lineSpacingExtra="3sp"
-                    android:text="기모랑 히트텍 입고 하나 더 입었어야 했다...\n진짜 바람이 살을 파고드는 것처럼 추운 날이었어"
+                    android:text="@{vm.weathyFeedback}"
+                    tools:text="기모랑 히트텍 입고 하나 더 입었어야 했다...\n진짜 바람이 살을 파고드는 것처럼 추운 날이었어"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
@@ -361,12 +422,12 @@
         </ScrollView>
 
         <LinearLayout
-            android:visibility="@{mainVm.loadingCalendar}"
-            tools:visibility="gone"
+            android:layout_marginTop="224dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
+            android:visibility="@{vm.curWeathy == null}"
             android:gravity="center"
+            app:layout_constraintVertical_bias="0.38"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -374,18 +435,22 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="104dp"
-                android:layout_height="65dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo512" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="웨디를 기록해주세요"
-                android:textColor="@color/sub_grey_8"
-                android:textSize="16sp" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/calendar_img_empty" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/sub_grey_5"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="기록하기"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                app:cornerRadius="20dp" />
         </LinearLayout>
 
 

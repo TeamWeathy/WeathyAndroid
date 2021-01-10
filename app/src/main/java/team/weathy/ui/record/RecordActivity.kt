@@ -34,15 +34,17 @@ class RecordActivity : AppCompatActivity() {
 
     fun navigateStartToClothesSelect() = addFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java)
 
-    fun navigateClothesSelectToClothesDelete() =
-        addFragment(binding.fragmentContainer, RecordClothesDeleteFragment::class.java)
+    fun navigateClothesSelectToClothesDelete() = addFragment(binding.fragmentContainer, RecordClothesDeleteFragment::class.java)
 
-    fun navigateClothesSelectToWeatherRating() =
-        addFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java)
+    fun navigateClothesSelectToWeatherRating() = addFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java)
 
     fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
 
-    fun navigateDetailToCalendar() = addFragment(binding.fragmentContainer, CalendarFragment::class.java)
+    fun replaceDetailToCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
 
     fun popClothesSelect() = popFragmentIfExist(RecordClothesSelectFragment::class.java)
+
+    fun popClothesDelete() = popFragmentIfExist(RecordClothesDeleteFragment::class.java)
+
+    fun popWeatherRating() = popFragmentIfExist(RecordWeatherRatingFragment::class.java)
 }

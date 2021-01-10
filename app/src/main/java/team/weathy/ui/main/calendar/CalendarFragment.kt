@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.dialog.DateDialog
 import team.weathy.dialog.DateDialog.OnClickListener
+import team.weathy.ui.main.MainMenu.CALENDAR
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
@@ -24,14 +25,14 @@ class CalendarFragment : Fragment(), OnClickListener {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<CalendarViewModel>()
 
-    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (viewModel.isMoreMenuShowing.value == true) {
                 viewModel.onClickMoreMenu()
             } else {
                 mainViewModel.changeMenu(HOME)
+                isEnabled = false
             }
-            isEnabled = false
         }
     }
 
@@ -45,7 +46,7 @@ class CalendarFragment : Fragment(), OnClickListener {
 
         configureCalendarView()
 
-        handleBackPress()
+        registerBackPressCallback()
     }
 
     private fun configureCalendarView() {
@@ -61,6 +62,8 @@ class CalendarFragment : Fragment(), OnClickListener {
 
         viewModel.curDate.observe(viewLifecycleOwner) {
             binding.calendarView.curDate = it
+            binding.container.startLayoutAnimation()
+            binding.scrollView.smoothScrollTo(0, 0)
         }
 
         viewModel.calendarData.observe(viewLifecycleOwner) {
@@ -68,11 +71,13 @@ class CalendarFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun handleBackPress() {
-        viewModel.isMoreMenuShowing.observe(viewLifecycleOwner) {
-            if (it) onBackPressedCallback.isEnabled = true
-        }
+    private fun registerBackPressCallback() {
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        mainViewModel.menu.observe(viewLifecycleOwner) {
+            if (it == CALENDAR) {
+                onBackPressedCallback.isEnabled = true
+            }
+        }
     }
 
     override fun onClick(date: LocalDate) {

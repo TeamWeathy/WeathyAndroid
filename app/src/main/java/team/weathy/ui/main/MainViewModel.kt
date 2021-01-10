@@ -14,7 +14,4 @@ class MainViewModel : ViewModel() {
             _menu.value = menu
         }
     }
-
-    private val _loadingCalendar = MutableLiveData(false)
-    val loadingCalendar: LiveData<Boolean> = _loadingCalendar
 }
