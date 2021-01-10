@@ -12,8 +12,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:altSrc="@drawable/main_bg_night"
-            android:src="@drawable/mainscroll_box_topblur_night"
+            android:src="@drawable/mainscroll_bg_morning"
+            app:altSrc="@drawable/main_bg_morning"
             app:crossfade="1" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
@@ -65,7 +65,9 @@
                 android:layout_height="0dp"
                 android:layout_marginVertical="4dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_clearsky_night"
+                android:src="@drawable/main_img_fewclouds"
+                android:translationX="-20dp"
+                android:translationY="-20dp"
                 app:layout_constraintBottom_toTopOf="@+id/nickname"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -115,21 +117,21 @@
                 app:layout_constraintTop_toBottomOf="@id/recommended" />
 
             <team.weathy.view.WeathyCardView
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:alpha="1"
                 android:id="@+id/hourlyCard"
                 android:layout_width="match_parent"
                 android:layout_height="216dp"
                 android:layout_marginTop="78dp"
                 android:clipToPadding="false"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:alpha="1"
                 tools:translationY="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:clipChildren="false"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:clipChildren="false">
 
                     <TextView
                         android:id="@+id/hourly_label"
@@ -161,12 +163,12 @@
             </team.weathy.view.WeathyCardView>
 
             <team.weathy.view.WeathyCardView
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="16dp"
                 android:id="@+id/weeklyCard"
                 android:layout_width="match_parent"
                 android:layout_height="216dp"
                 android:layout_marginTop="24dp"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="16dp"
                 app:layout_constraintTop_toBottomOf="@id/hourlyCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -205,12 +207,12 @@
             </team.weathy.view.WeathyCardView>
 
             <team.weathy.view.WeathyCardView
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="16dp"
                 android:id="@+id/detailCard"
                 android:layout_width="match_parent"
                 android:layout_height="216dp"
                 android:layout_marginTop="24dp"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="16dp"
                 app:layout_constraintTop_toBottomOf="@id/weeklyCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
