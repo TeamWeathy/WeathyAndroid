@@ -28,6 +28,10 @@ fun String.padZero(length: Int = 2) = padStart(length, '0')
 fun Int.padZero() = toString().padZero()
 
 
+/**
+ * 1 -> 월
+ * 7 -> 일
+ */
 val DayOfWeek.koFormat: String
     get() = when (value) {
         1 -> "월"
@@ -38,6 +42,12 @@ val DayOfWeek.koFormat: String
         6 -> "토"
         else -> "일"
     }
+
+/**
+ * 1 -> 오전 1시
+ * 13 -> 오후 1시
+ * 24 -> 오후 12시
+ */
 val Int.koFormat: String
     get() = if (this < 13) {
         "오전 ${this}시"
@@ -45,9 +55,15 @@ val Int.koFormat: String
         "오후 ${this - 12}시"
     }
 
+/**
+ * 1997-04
+ */
 val LocalDate.yearMonthFormat: String
     get() = "${year}-${monthValue.padZero()}"
 
+/**
+ * 0 ~ 6
+ */
 val LocalDate.weekOfMonth: Int
     get() {
         val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
@@ -65,19 +81,26 @@ val LocalDate.dayOfWeekValue: Int
         else -> dayOfWeek.value + 1
     }
 
-/**
- * 0(SUN) -> 6(SAT)
- */
+/** 0(SUN) -> 6(SAT) */
 val LocalDate.dayOfWeekIndex: Int
     get() = dayOfWeekValue - 1
 
 val LocalDate.dateString: DateString
     get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+
+/** 1997-04-04T23 */
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
 
+/**
+ * 04월 04일 월요일 . 오전 1시
+ */
 val LocalDateTime.koFormat: String
     get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 . ${hour.koFormat}"
+
+/** 4월 4일 금요일 */
+val LocalDate.koFormat: String
+    get() = "${monthValue}월 ${dayOfMonth}일 ${dayOfWeek.koFormat}요일"
 
 fun convertMonthlyIndexToDate(index: Int): LocalDate {
     val cur = LocalDate.now()

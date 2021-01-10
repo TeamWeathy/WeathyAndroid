@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -34,6 +35,11 @@ fun ImageView.loadUrlAsync(url: String?) {
             .transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
             .placeholder(anim).into(this)
     }
+}
+
+@BindingAdapter("srcResource")
+fun ImageView.setResourceWithId(@DrawableRes id: Int) {
+    setImageResource(id)
 }
 
 @BindingAdapter("android:visibility")
