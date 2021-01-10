@@ -63,7 +63,7 @@
             android:layout_marginStart="4dp"
             android:fontFamily="@font/roboto_light"
             android:text="/"
-            android:textColor="#6B6B6B"
+            android:textColor="@color/temp_bar"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="@id/max_temp"
             app:layout_constraintStart_toEndOf="@id/max_temp"
