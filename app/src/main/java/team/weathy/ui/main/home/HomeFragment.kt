@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
+    private val viewModel by viewModels<HomeViewModel>()
 
     private var isFirstSceneShowing = true
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -33,6 +37,8 @@ class HomeFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.container.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {

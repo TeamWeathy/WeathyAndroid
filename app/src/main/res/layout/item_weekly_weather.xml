@@ -50,6 +50,7 @@
         app:layout_constraintEnd_toEndOf="@id/gl_hourly" />
 
     <View
+        android:layout_marginVertical="4dp"
         android:id="@+id/temp_between_bar"
         android:layout_width="2dp"
         android:layout_height="16dp"

@@ -6,10 +6,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import team.weathy.R
 import team.weathy.databinding.ItemWeeklyWeatherBinding
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.getFont
 import team.weathy.util.extensions.px
 import team.weathy.util.koFormat
 import java.time.LocalDateTime
@@ -27,9 +29,10 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private val weatherItems = (0 until ITEM_COUNT).map { idx ->
         ItemWeeklyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
-            it.root.layoutParams = LayoutParams(0, px(125), 1f)
+            it.root.layoutParams = LayoutParams(0, px(129), 1f)
 
-            it.week.setTextColor(getColor(if (idx == 0) R.color.main_mint else R.color.sub_grey_6))
+            it.week.typeface = context.getFont(R.font.notosans_medium)
+            it.week.setTextColor(getColor(if (idx == 0) R.color.mint_icon else R.color.sub_grey_6))
             it.week.text = weeks[idx]
         }
     }
@@ -79,7 +82,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         isAnimDone = true
 
         val duration1 = 600L
-        val duration2 = 600L
+        val duration2 = 1100L
 
         weatherItems.forEach { binding ->
             val lowDest = Random.nextInt(-20, 0)
@@ -108,7 +111,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 animators.add(this)
             }
 
-            ValueAnimator.ofInt(1, px(20)).apply {
+            ValueAnimator.ofInt(1, px(16)).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.tempBetweenBar.updateLayoutParams {
