@@ -1,301 +1,315 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="26dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/title1"
-            style="@style/RecordTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="85dp"
-            android:text="삭제할 옷"
-            android:textColor="@color/pink"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/title2"
-            style="@style/RecordTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="을"
-            app:layout_constraintStart_toEndOf="@id/title1"
-            app:layout_constraintTop_toTopOf="@id/title1" />
-
-        <TextView
-            android:id="@+id/tv_title2"
-            style="@style/RecordTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="선택해주세요."
-            app:layout_constraintStart_toStartOf="@id/title1"
-            app:layout_constraintTop_toBottomOf="@id/title1" />
-
-        <TextView
-            android:id="@+id/tv_sub"
-            style="@style/RecordSubText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="여러 개 선택도 가능해요."
-            app:layout_constraintStart_toStartOf="@id/tv_title2"
-            app:layout_constraintTop_toBottomOf="@id/tv_title2" />
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:paddingStart="3dp"
-            android:paddingEnd="17dp"
-            android:paddingVertical="4dp"
-            android:focusable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_sub">
-
-            <TextView
-                android:id="@+id/tv_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="상의"
-                android:textColor="@color/main_grey"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_top_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="0"
-                android:textColor="@color/sub_grey_6"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_top"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:background="@drawable/divider_background"
-            android:backgroundTint="@color/pink"
-            app:layout_constraintEnd_toEndOf="@id/layout_top"
-            app:layout_constraintStart_toStartOf="@id/layout_top"
-            app:layout_constraintTop_toBottomOf="@id/layout_top" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:paddingStart="3dp"
-            android:paddingEnd="17dp"
-            android:paddingVertical="4dp"
-            android:focusable="false"
-            app:layout_constraintStart_toEndOf="@id/layout_top"
-            app:layout_constraintTop_toTopOf="@id/layout_top">
-
-            <TextView
-                android:id="@+id/tv_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="하의"
-                android:textColor="@color/sub_grey_6"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_bottom_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="0"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
-                app:layout_constraintStart_toEndOf="@id/tv_bottom"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:background="@drawable/divider_background"
-            android:backgroundTint="@color/pink"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@id/layout_bottom"
-            app:layout_constraintStart_toStartOf="@id/layout_bottom"
-            app:layout_constraintTop_toBottomOf="@id/layout_bottom" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_outer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:paddingStart="3dp"
-            android:paddingEnd="17dp"
-            android:paddingVertical="4dp"
-            android:focusable="false"
-            app:layout_constraintStart_toEndOf="@id/layout_bottom"
-            app:layout_constraintTop_toTopOf="@id/layout_bottom">
-
-            <TextView
-                android:id="@+id/tv_outer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="외투"
-                android:textColor="@color/sub_grey_6"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_outer_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="0"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_outer"
-                app:layout_constraintStart_toEndOf="@id/tv_outer"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:background="@drawable/divider_background"
-            android:backgroundTint="@color/pink"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@id/layout_outer"
-            app:layout_constraintStart_toStartOf="@id/layout_outer"
-            app:layout_constraintTop_toBottomOf="@id/layout_outer" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_etc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:paddingStart="3dp"
-            android:paddingEnd="17dp"
-            android:paddingVertical="4dp"
-            app:layout_constraintStart_toEndOf="@id/layout_outer"
-            app:layout_constraintTop_toTopOf="@id/layout_outer">
-
-            <TextView
-                android:id="@+id/tv_etc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="기타"
-                android:textColor="@color/sub_grey_6"
-                android:textSize="18sp"
-                android:letterSpacing="-0.08"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_etc_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="0"
-                android:textColor="@color/sub_grey_4"
-                android:textSize="15sp"
-                android:letterSpacing="-0.08"
-                app:layout_constraintBottom_toBottomOf="@id/tv_etc"
-                app:layout_constraintStart_toEndOf="@id/tv_etc"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/divider4"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:background="@drawable/divider_background"
-            android:backgroundTint="@color/pink"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@id/layout_etc"
-            app:layout_constraintStart_toStartOf="@id/layout_etc"
-            app:layout_constraintTop_toBottomOf="@id/layout_etc" />
-
-        <ScrollView
-            android:layout_width="0dp"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingTop="29dp"
-            app:layout_constraintBottom_toTopOf="@id/delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider">
+            android:paddingHorizontal="26dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.google.android.material.chip.ChipGroup
-                android:layoutAnimation="@anim/layout_animation_fade_in"
-                android:id="@+id/chip_group"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/title1"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipSpacingHorizontal="8dp"
-                app:chipSpacingVertical="1.5dp">
+                android:layout_marginTop="85dp"
+                android:text="삭제할 옷"
+                android:textColor="@color/pink"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            </com.google.android.material.chip.ChipGroup>
+            <TextView
+                android:id="@+id/title2"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="을"
+                app:layout_constraintStart_toEndOf="@id/title1"
+                app:layout_constraintTop_toTopOf="@id/title1" />
 
-        </ScrollView>
+            <TextView
+                android:id="@+id/tv_title2"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="선택해주세요."
+                app:layout_constraintStart_toStartOf="@id/title1"
+                app:layout_constraintTop_toBottomOf="@id/title1" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/record_img_topblur"
-            android:visibility="invisible"
-            app:layout_constraintTop_toBottomOf="@id/divider"/>
+            <TextView
+                android:id="@+id/tv_sub"
+                style="@style/RecordSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="여러 개 선택도 가능해요."
+                app:layout_constraintStart_toStartOf="@id/tv_title2"
+                app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="29dp"
-            android:src="@drawable/record_img_bottomblur"
-            app:layout_constraintBottom_toBottomOf="@id/delete"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:paddingStart="3dp"
+                android:paddingEnd="17dp"
+                android:paddingVertical="4dp"
+                android:focusable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub">
 
-        <Button
-            style="@style/RoundButton.Cancel"
-            android:id="@+id/cancel"
-            android:layout_width="0dp"
-            app:layout_constraintDimensionRatio="120:55"
-            android:text="취소"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/delete"/>
+                <TextView
+                    android:id="@+id/tv_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="상의"
+                    android:textColor="@color/main_grey"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            style="@style/RoundButton.Grey"
-            android:id="@+id/delete"
-            android:layout_width="0dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="12dp"
-            android:text="삭제하기"
-            android:enabled="false"
-            app:layout_constraintStart_toEndOf="@id/cancel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/tv_top_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0"
+                    android:textColor="@color/sub_grey_6"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_top"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:background="@drawable/divider_background"
+                android:backgroundTint="@color/pink"
+                app:layout_constraintEnd_toEndOf="@id/layout_top"
+                app:layout_constraintStart_toStartOf="@id/layout_top"
+                app:layout_constraintTop_toBottomOf="@id/layout_top" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:paddingStart="3dp"
+                android:paddingEnd="17dp"
+                android:paddingVertical="4dp"
+                android:focusable="false"
+                app:layout_constraintStart_toEndOf="@id/layout_top"
+                app:layout_constraintTop_toTopOf="@id/layout_top">
+
+                <TextView
+                    android:id="@+id/tv_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="하의"
+                    android:textColor="@color/sub_grey_6"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_bottom_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0"
+                    android:textColor="@color/sub_grey_4"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
+                    app:layout_constraintStart_toEndOf="@id/tv_bottom"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:background="@drawable/divider_background"
+                android:backgroundTint="@color/pink"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/layout_bottom"
+                app:layout_constraintStart_toStartOf="@id/layout_bottom"
+                app:layout_constraintTop_toBottomOf="@id/layout_bottom" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_outer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:paddingStart="3dp"
+                android:paddingEnd="17dp"
+                android:paddingVertical="4dp"
+                android:focusable="false"
+                app:layout_constraintStart_toEndOf="@id/layout_bottom"
+                app:layout_constraintTop_toTopOf="@id/layout_bottom">
+
+                <TextView
+                    android:id="@+id/tv_outer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="외투"
+                    android:textColor="@color/sub_grey_6"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_outer_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0"
+                    android:textColor="@color/sub_grey_4"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_outer"
+                    app:layout_constraintStart_toEndOf="@id/tv_outer"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:background="@drawable/divider_background"
+                android:backgroundTint="@color/pink"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/layout_outer"
+                app:layout_constraintStart_toStartOf="@id/layout_outer"
+                app:layout_constraintTop_toBottomOf="@id/layout_outer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_etc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:paddingStart="3dp"
+                android:paddingEnd="17dp"
+                android:paddingVertical="4dp"
+                app:layout_constraintStart_toEndOf="@id/layout_outer"
+                app:layout_constraintTop_toTopOf="@id/layout_outer">
+
+                <TextView
+                    android:id="@+id/tv_etc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기타"
+                    android:textColor="@color/sub_grey_6"
+                    android:textSize="18sp"
+                    android:letterSpacing="-0.08"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_etc_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0"
+                    android:textColor="@color/sub_grey_4"
+                    android:textSize="15sp"
+                    android:letterSpacing="-0.08"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_etc"
+                    app:layout_constraintStart_toEndOf="@id/tv_etc"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:background="@drawable/divider_background"
+                android:backgroundTint="@color/pink"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/layout_etc"
+                app:layout_constraintStart_toStartOf="@id/layout_etc"
+                app:layout_constraintTop_toBottomOf="@id/layout_etc" />
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:overScrollMode="never"
+                android:paddingTop="29dp"
+                android:paddingBottom="67dp"
+                android:clipToPadding="false"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="@+id/bottom_blur"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layoutAnimation="@anim/layout_animation_fade_in"
+                    android:id="@+id/chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="1.5dp">
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </ScrollView>
+
+            <View
+                shadowOnScroll="@{true}"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:alpha="0"
+                android:background="@drawable/blur_white_top_down"
+                app:layout_constraintTop_toTopOf="@id/scrollView" />
+
+            <View
+                android:id="@+id/bottom_blur"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/blur_white_bottom_up"
+                android:layout_marginBottom="29dp"
+                app:layout_constraintBottom_toBottomOf="@id/delete" />
+
+            <Button
+                style="@style/RoundButton.Cancel"
+                android:id="@+id/cancel"
+                android:layout_width="0dp"
+                app:layout_constraintDimensionRatio="120:55"
+                android:text="취소"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/delete" />
+
+            <Button
+                style="@style/RoundButton.Grey"
+                android:id="@+id/delete"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="12dp"
+                android:text="삭제하기"
+                android:enabled="false"
+                app:layout_constraintStart_toEndOf="@id/cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
