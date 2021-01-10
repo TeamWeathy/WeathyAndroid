@@ -8,6 +8,7 @@
         app:constraintSetStart="@layout/scene_home_first">
 
         <OnSwipe
+            app:maxAcceleration="2000"
             app:dragDirection="dragUp"
             app:touchAnchorSide="top" />
 
@@ -19,9 +20,12 @@
         app:motionInterpolator="linear"
         app:constraintSetEnd="@layout/scene_home_third"
         app:constraintSetStart="@layout/scene_home_second"
-        app:duration="200">
+        app:duration="100"
+        >
 
         <OnSwipe
+            app:maxAcceleration="50"
+            app:maxVelocity="20"
             app:dragDirection="dragUp"
             app:touchAnchorSide="top" />
 

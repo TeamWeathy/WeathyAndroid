@@ -3,7 +3,17 @@ package team.weathy.ui.main.search
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
+import team.weathy.database.RecentSearchCodeDao
 import team.weathy.di.ApiMock
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
@@ -14,8 +24,9 @@ import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateList
 import java.time.LocalDateTime
 
+@FlowPreview
 class SearchViewModel @ViewModelInject constructor(
-    @ApiMock private val weatherAPI: WeatherAPI
+    @ApiMock private val weatherAPI: WeatherAPI, private val recentSearchCodeDao: RecentSearchCodeDao
 ) : ViewModel() {
     val focused = MutableLiveData(false)
     val query = MutableLiveData("")
@@ -31,22 +42,36 @@ class SearchViewModel @ViewModelInject constructor(
     }
     val showEmpty = MediatorLiveData(true) {
         addSources(
-            showRecently, recentlySearchResult, searchResult
-        ) { showRecently, recentlySearchResult, searchResult ->
-            value = if (showRecently) recentlySearchResult.isEmpty() else searchResult.isEmpty()
+            showRecently, recentlySearchResult, searchResult, query, loading,
+        ) { showRecently, recentlySearchResult, searchResult, query, loading ->
+            value = when {
+                loading -> false
+                else -> if (showRecently) recentlySearchResult.isEmpty() else (searchResult.isEmpty() && query.isNotBlank())
+            }
         }
     }
 
     init {
-        getRecentSearchCodesAndFetch()
+        viewModelScope.launch {
+            query.asFlow().drop(1).distinctUntilChanged().debounce(200).filter(String::isNotEmpty).collect {
+                search()
+            }
+        }
     }
 
-    fun search() {
+    fun clear() {
+        focused.value = false
+        query.value = ""
+        loading.value = false
+        recentlySearchResult.value = listOf()
+        searchResult.value = listOf()
+    }
+
+    private fun search() {
         launchCatch({
             weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = LocalDateTime.now().dateHourString)
         }, loading, onSuccess = { (list) ->
             searchResult.value = list ?: listOf()
-            showEmpty.value = list == null
         })
     }
 
@@ -63,12 +88,11 @@ class SearchViewModel @ViewModelInject constructor(
         }
     }
 
-
-    private fun getRecentSearchCodesAndFetch() = launchCatch({
-        //        val codes = recentSearchCodeDao.getAll()
-        //        fetchRecentSearchCodes(codes)
+    fun getRecentSearchCodesAndFetch() = launchCatch({
+        val codes = recentSearchCodeDao.getAll()
+        fetchRecentSearchCodes(codes)
     }, loading, onSuccess = {
-        //        recentlySearchResult.value = it
+        recentlySearchResult.value = it
     })
 
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.map {
@@ -79,7 +103,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun removeRecentSearchCode(position: Int) = launchCatch({
         recentlySearchResult.value?.get(position)?.let {
-            //            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
+            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
         }
     })
 }

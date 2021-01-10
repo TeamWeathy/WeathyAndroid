@@ -4,6 +4,6 @@ data class Weathy(
     val dailyWeather: DailyWeather,
     val hourlyWeather: HourlyWeather,
     val closet: WeathyCloset,
-    val stampId: Int,
+    val stampId: WeatherStamp,
     val feedback: String
 )

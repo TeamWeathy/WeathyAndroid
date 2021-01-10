@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -34,6 +35,11 @@ fun ImageView.loadUrlAsync(url: String?) {
             .transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
             .placeholder(anim).into(this)
     }
+}
+
+@BindingAdapter("srcResource")
+fun ImageView.setResourceWithId(@DrawableRes id: Int) {
+    setImageResource(id)
 }
 
 @BindingAdapter("android:visibility")
@@ -87,4 +93,9 @@ fun View.setShadowOnScroll(show: Boolean, _siblingDirectParentDepthDiff: Int) {
     recyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
         isActivated = recyclerView.canScrollVertically(-1)
     }
+}
+
+@BindingAdapter("android:selected")
+fun View.setSelectedBinding(isSelected: Boolean) {
+    this.isSelected = isSelected
 }
