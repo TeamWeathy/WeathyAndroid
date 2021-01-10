@@ -183,22 +183,29 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         when (viewModel.choicedClothesTabIndex.value) {
             0 -> {
                 EditDialog.newInstance(
-                    "상의 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                    "상의 추가하기",
+                    viewModel.clothes.value!!.size.toString(),
+                    getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             1 -> {
                 EditDialog.newInstance(
-                    "하의 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                    "하의 추가하기",
+                    viewModel.clothes.value!!.size.toString(),
+                    getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             2 -> {
                 EditDialog.newInstance(
-                    "외투 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                    "외투 추가하기",
+                    viewModel.clothes.value!!.size.toString(),
+                    getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             3 -> {
                 EditDialog.newInstance(
-                    "기타 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                    "기타 추가하기",
+                    viewModel.clothes.value!!.size.toString()
                 ).show(childFragmentManager, null)
             }
         }

@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:background="@drawable/edit_border"
-            android:hint="hint"
+            android:hint="예 : 폴로반팔티, 기모레깅스, 히트텍"
             android:maxLength="10"
             android:paddingHorizontal="22dp"
             android:paddingTop="15dp"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@id/body" />
 
         <ImageButton
-            android:id="@+id/delete_nickname_btn"
+            android:id="@+id/text_delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
@@ -140,13 +140,14 @@
 
         <Button
             android:id="@+id/btn_add"
-            style="@style/RoundButton"
+            style="@style/RoundButton.Grey"
             android:layout_width="0dp"
             android:layout_height="47dp"
             android:layout_marginTop="35dp"
             android:layout_marginBottom="27dp"
             android:layout_marginLeft="13dp"
             android:text="추가하기"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/btn_cancel"
             app:layout_constraintRight_toRightOf="parent"
