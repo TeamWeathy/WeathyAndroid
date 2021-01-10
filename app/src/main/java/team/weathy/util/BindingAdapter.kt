@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.ScrollView
 import androidx.annotation.DrawableRes
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -87,11 +88,13 @@ fun View.setShadowOnScroll(show: Boolean, _siblingDirectParentDepthDiff: Int) {
         p ?: return
     }
 
-    val recyclerView = (p as? ViewGroup)?.children?.first { it is RecyclerView } ?: return
+    val candidates = (p as? ViewGroup)?.children ?: return
+
+    val scrollableView = candidates.find { it is ScrollView } ?: candidates.find { it is RecyclerView } ?: return
 
     stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.shadow_scroll_anim)
-    recyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
-        isActivated = recyclerView.canScrollVertically(-1)
+    scrollableView.setOnScrollChangeListener { _, _, _, _, _ ->
+        isActivated = scrollableView.canScrollVertically(-1)
     }
 }
 

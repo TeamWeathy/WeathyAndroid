@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
         configureList()
         configureTextFieldSearch()
 
-        handleBackPress()
+        registerBackPressCallback()
         handleMainMenuChange()
     }
 
@@ -57,13 +57,12 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun handleBackPress() {
+    private fun registerBackPressCallback() =
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 mainViewModel.changeMenu(HOME)
             }
         })
-    }
 
     private fun handleMainMenuChange() {
         mainViewModel.menu.observe(viewLifecycleOwner) {

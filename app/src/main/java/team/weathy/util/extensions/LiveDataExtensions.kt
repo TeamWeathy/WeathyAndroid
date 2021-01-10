@@ -16,6 +16,12 @@ inline fun <K, V> MutableLiveData<Map<K, V>>.updateMap(updater: MutableMap<K, V>
     value = draft
 }
 
+inline fun <T> MutableLiveData<Set<T>>.updateSet(updater: MutableSet<T>.() -> Unit) {
+    val draft = value?.toMutableSet()
+    draft?.run(updater)
+    value = draft
+}
+
 fun <T> MediatorLiveData(value: T, block: MediatorLiveData<T>.() -> Unit) = MediatorLiveData<T>().apply {
     this.value = value
     block(this)

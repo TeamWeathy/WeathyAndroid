@@ -1,16 +1,12 @@
 package team.weathy.ui.record.clothesselect
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -50,21 +46,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.btnCheck setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
-        binding.add.setOnLongClickListener {
-            val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vib.vibrate(100)
-            (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-            true
-        }
-//        binding.chipGroup.children.drop(1).forEachIndexed { _, view ->
-//            val chip = view as Chip
-//            chip.setOnLongClickListener {
-//                val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//                vib.vibrate(100)
-//                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-//                true
-//            }
-//        }
     }
 
     private fun configureTabs() {
@@ -95,22 +76,16 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             view.isInvisible = index != tab
         }
         category.forEachIndexed { index, textView ->
-            if (index == tab)
-                textView.setTextColor(getColor(R.color.main_grey))
-            else
-                textView.setTextColor(getColor(R.color.sub_grey_6))
+            if (index == tab) textView.setTextColor(getColor(R.color.main_grey))
+            else textView.setTextColor(getColor(R.color.sub_grey_6))
         }
         count1.forEachIndexed { index, textView ->
-            if (index == tab)
-                textView.setTextColor(getColor(R.color.sub_grey_6))
-            else
-                textView.setTextColor(getColor(R.color.sub_grey_3))
+            if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
+            else textView.setTextColor(getColor(R.color.sub_grey_3))
         }
         count2.forEachIndexed { index, textView ->
-            if (index == tab)
-                textView.setTextColor(getColor(R.color.sub_grey_6))
-            else
-                textView.setTextColor(getColor(R.color.sub_grey_3))
+            if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
+            else textView.setTextColor(getColor(R.color.sub_grey_3))
         }
     }
 
@@ -118,18 +93,10 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         viewModel.clothes.observe(viewLifecycleOwner) {
             removeAllChipsWithoutFirst()
             addChipsForChoicedClothes(it)
-
-            if (viewModel.clothes.value!!.size > 50) {
-                showToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
-            }
         }
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
-            if (viewModel.selectedClothes.value!!.size <= 5) {
-                updateChipSelectedState()
-                updateTabTexts()
-            } else {
-                showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
-            }
+            updateChipSelectedState()
+            updateTabTexts()
         }
     }
 
@@ -149,15 +116,30 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setOnCheckedChangeListener { _, isChecked ->
+            setOnCheckedChangeListener { button, isChecked ->
+                if (viewModel.selectedClothes.value!!.size > 5) {
+                    button.isChecked = false
+                    showExceedMaximumSelectedToast()
+                    return@setOnCheckedChangeListener
+                }
+
                 if (isChecked) {
                     onChipChecked(index)
                 } else {
                     onChipUnchecked(index)
                 }
             }
+
+            setOnLongClickListener {
+                val vib = requireContext().getSystemService(Vibrator::class.java)
+                vib.vibrate(100)
+                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
+                true
+            }
         }
     }
+
+    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
 
     private fun onChipChecked(index: Int) = viewModel.onChipChecked(index)
 
@@ -173,10 +155,8 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun updateTabTexts() {
         (layouts[viewModel.choicedClothesTabIndex.value!!].getChildAt(1) as? TextView)?.run {
             text = viewModel.selectedClothes.value!!.size.toString()
-            if (viewModel.selectedClothes.value!!.isNotEmpty())
-                setTextColor(getColor(R.color.mint_icon))
-            else
-                setTextColor(getColor(R.color.sub_grey_6))
+            if (viewModel.selectedClothes.value!!.isNotEmpty()) setTextColor(getColor(R.color.mint_icon))
+            else setTextColor(getColor(R.color.sub_grey_6))
         }
     }
 
@@ -194,51 +174,37 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun configureAddLogic() {
-        binding.add setOnDebounceClickListener {
-            when (viewModel.choicedClothesTabIndex.value) {
-                0 -> {
-                    EditDialog.newInstance("상의 추가하기",
-                        "예 : 폴로반팔티, 기모레깅스, 히트텍",
-                        viewModel.clothes.value!!.size.toString())
-                        .show(childFragmentManager, null)
-                }
-                1 -> {
-                    EditDialog.newInstance("하의 추가하기",
-                        "예 : 폴로반팔티, 기모레깅스, 히트텍",
-                        viewModel.clothes.value!!.size.toString())
-                        .show(childFragmentManager, null)
-                }
-                2 -> {
-                    EditDialog.newInstance("외투 추가하기",
-                        "예 : 폴로반팔티, 기모레깅스, 히트텍",
-                        viewModel.clothes.value!!.size.toString())
-                        .show(childFragmentManager, null)
-                }
-                3 -> {
-                    EditDialog.newInstance("기타 추가하기",
-                        "예 : 폴로반팔티, 기모레깅스, 히트텍",
-                        viewModel.clothes.value!!.size.toString())
-                        .show(childFragmentManager, null)
-                }
+    private fun configureAddLogic() = binding.add setOnDebounceClickListener {
+        if (viewModel.clothes.value!!.size >= 50) {
+            requireContext().showToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
+            return@setOnDebounceClickListener
+        }
+
+        when (viewModel.choicedClothesTabIndex.value) {
+            0 -> {
+                EditDialog.newInstance(
+                    "상의 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                ).show(childFragmentManager, null)
+            }
+            1 -> {
+                EditDialog.newInstance(
+                    "하의 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                ).show(childFragmentManager, null)
+            }
+            2 -> {
+                EditDialog.newInstance(
+                    "외투 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                ).show(childFragmentManager, null)
+            }
+            3 -> {
+                EditDialog.newInstance(
+                    "기타 추가하기", "예 : 폴로반팔티, 기모레깅스, 히트텍", viewModel.clothes.value!!.size.toString()
+                ).show(childFragmentManager, null)
             }
         }
     }
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
-    }
-
-    @SuppressLint("InflateParams")
-    private fun showToast(message: String) {
-        val v = layoutInflater.inflate(R.layout.toast_common, null)
-
-        val text: TextView = v.findViewById(R.id.text)
-        text.text = message
-
-        val toast = Toast(context)
-        toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
-        toast.view = v
-        toast.show()
     }
 }
