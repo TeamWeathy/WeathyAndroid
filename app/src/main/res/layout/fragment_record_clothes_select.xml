@@ -346,13 +346,15 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_etc" />
 
             <ScrollView
-                android:overScrollMode="never"
                 android:id="@+id/scrollView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:overScrollMode="never"
                 android:paddingTop="29dp"
+                android:paddingBottom="67dp"
+                android:clipToPadding="false"
                 android:scrollbars="none"
-                app:layout_constraintBottom_toTopOf="@id/btn_check"
+                app:layout_constraintBottom_toBottomOf="@+id/bottom_blur"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider">
@@ -381,16 +383,18 @@
             <View
                 shadowOnScroll="@{true}"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="52dp"
                 android:alpha="0"
                 android:background="@drawable/blur_white_top_down"
                 app:layout_constraintTop_toTopOf="@id/scrollView" />
 
             <View
+                android:id="@+id/bottom_blur"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="52dp"
                 android:background="@drawable/blur_white_bottom_up"
-                app:layout_constraintBottom_toBottomOf="@id/scrollView" />
+                android:layout_marginBottom="29dp"
+                app:layout_constraintBottom_toBottomOf="@id/btn_check" />
 
             <Button
                 android:id="@+id/btn_check"
