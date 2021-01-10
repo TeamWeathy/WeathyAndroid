@@ -1,13 +1,16 @@
 package team.weathy.ui.record.clothesselect
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -115,15 +118,17 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         viewModel.clothes.observe(viewLifecycleOwner) {
             removeAllChipsWithoutFirst()
             addChipsForChoicedClothes(it)
+
+            if (viewModel.clothes.value!!.size > 50) {
+                showToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
+            }
         }
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
             if (viewModel.selectedClothes.value!!.size <= 5) {
                 updateChipSelectedState()
                 updateTabTexts()
-            }
-            if (viewModel.selectedClothes.value!!.size == 5) {
-                requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
-                setChipUnCheckedState()
+            } else {
+                showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
             }
         }
     }
@@ -162,14 +167,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
             val chip = view as Chip
             chip.isChecked = isChipSelected(index)
-        }
-    }
-
-    private fun setChipUnCheckedState() {
-        binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
-            val chip = view as Chip
-            chip.isCheckable = false
-            chip.isClickable = false
         }
     }
 
@@ -230,5 +227,18 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
+    }
+
+    @SuppressLint("InflateParams")
+    private fun showToast(message: String) {
+        val v = layoutInflater.inflate(R.layout.toast_common, null)
+
+        val text: TextView = v.findViewById(R.id.text)
+        text.text = message
+
+        val toast = Toast(context)
+        toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
+        toast.view = v
+        toast.show()
     }
 }

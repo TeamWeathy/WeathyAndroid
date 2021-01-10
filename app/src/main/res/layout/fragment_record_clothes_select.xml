@@ -33,7 +33,7 @@
             android:layout_width="9dp"
             android:layout_height="9dp"
             android:layout_marginTop="41dp"
-            android:layout_marginEnd="49dp"
+            android:layout_marginEnd="43dp"
             android:alpha="0.4"
             android:background="@drawable/circle"
             android:backgroundTint="@color/main_mint"
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="+를 눌러 추가하고, 꾹 눌러 삭제할 수 있어요."
+            android:text="옷은 길게 눌러 삭제하고, +를 눌러 추가할 수 있어요."
             app:layout_constraintStart_toStartOf="@id/tv_title2"
             app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 
@@ -343,6 +343,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingTop="29dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toTopOf="@id/btn_check"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
