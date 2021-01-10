@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import team.weathy.util.extensions.updateList
+import team.weathy.util.extensions.updateSet
 
 class RecordViewModel : ViewModel() {
     private val _choicedClothesTabIndex = MutableLiveData(0)
@@ -17,24 +19,24 @@ class RecordViewModel : ViewModel() {
     )
     val clothes = MediatorLiveData<List<String>>().apply {
         value = clothesPairs[0].first.value!!
-        addSource(choicedClothesTabIndex) {
-            value = clothesPairs[it].first.value!!
-        }
         clothesPairs.forEach {
             addSource(it.first) { list ->
                 value = list
             }
         }
+        addSource(choicedClothesTabIndex) {
+            value = clothesPairs[it].first.value!!
+        }
     }
     val selectedClothes = MediatorLiveData<Set<Int>>().apply {
         value = clothesPairs[0].second.value!!
-        addSource(choicedClothesTabIndex) {
-            value = clothesPairs[it].second.value!!
-        }
         clothesPairs.forEach {
             addSource(it.second) { set ->
                 value = set
             }
+        }
+        addSource(choicedClothesTabIndex) {
+            value = clothesPairs[it].second.value!!
         }
     }
 
@@ -44,46 +46,41 @@ class RecordViewModel : ViewModel() {
         }
     }
 
-    fun onChipChecked(index: Int) {
-        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
-        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
-            add(index)
-        }
+    fun onChipChecked(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
+        add(index)
     }
 
-    fun onChipCheckedForDelete(index: Int) {
-        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
-        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
-            add(index)
-        }
+    fun onChipCheckedForDelete(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
+        add(index)
     }
 
-    fun onChipUnchecked(index: Int) {
-        val selectedClothes = clothesPairs[choicedClothesTabIndex.value!!].second
-        selectedClothes.value = selectedClothes.value!!.toMutableSet().apply {
-            remove(index)
-        }
+    fun onChipUnchecked(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
+        remove(index)
     }
 
     fun addClothes(text: String) {
-        val clothes = clothesPairs[choicedClothesTabIndex.value!!].first
-        clothes.value = clothes.value!!.toMutableList().apply {
+        val (clothes, selectedIndices) = clothesPairs[choicedClothesTabIndex.value!!]
+
+        clothes.updateList {
             add(0, text)
         }
-    }
 
-    fun deleteClothes(index : Int) {
-        val clothes = clothesPairs[choicedClothesTabIndex.value!!].first
-        clothes.value = clothes.value!!.toMutableList().apply {
-            removeAt(index)
+        selectedIndices.updateSet {
+            val original = toMutableSet()
+            clear()
+            original.map { it + 1 }.forEach(this::add)
         }
     }
 
-    fun allSelectedClothes() : Int {
+    fun deleteClothes(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].first.updateList {
+        removeAt(index)
+    }
+
+    fun allSelectedClothes(): Int {
         var selectedClothesCount = 0
         for (i in 0..3) {
             selectedClothesCount += clothesPairs[i].second.value!!.size
         }
         return selectedClothesCount
-        }
     }
+}
