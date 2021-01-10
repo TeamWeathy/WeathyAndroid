@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.Gravity
@@ -24,7 +23,6 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -50,21 +48,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.btnCheck setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
-        binding.add.setOnLongClickListener {
-            val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vib.vibrate(100)
-            (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-            true
-        }
-//        binding.chipGroup.children.drop(1).forEachIndexed { _, view ->
-//            val chip = view as Chip
-//            chip.setOnLongClickListener {
-//                val vib = this.context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//                vib.vibrate(100)
-//                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-//                true
-//            }
-//        }
     }
 
     private fun configureTabs() {
@@ -155,6 +138,13 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
                 } else {
                     onChipUnchecked(index)
                 }
+            }
+
+            setOnLongClickListener {
+                val vib = requireContext().getSystemService(Vibrator::class.java)
+                vib.vibrate(100)
+                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
+                true
             }
         }
     }
