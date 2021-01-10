@@ -11,12 +11,11 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentSearchBinding
-import team.weathy.ui.main.MainMenu
 import team.weathy.ui.main.MainMenu.HOME
+import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
-import team.weathy.util.debugE
 import team.weathy.util.setOnDebounceClickListener
 
 @AndroidEntryPoint
@@ -58,11 +57,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        debugE("destory")
-    }
-
     private fun handleBackPress() {
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -73,7 +67,14 @@ class SearchFragment : Fragment() {
 
     private fun handleMainMenuChange() {
         mainViewModel.menu.observe(viewLifecycleOwner) {
-            if (it != MainMenu.SEARCH) viewModel.clear()
+            when (it) {
+                SEARCH -> {
+                    viewModel.getRecentSearchCodesAndFetch()
+                }
+                else -> {
+                    viewModel.clear()
+                }
+            }
         }
     }
 }

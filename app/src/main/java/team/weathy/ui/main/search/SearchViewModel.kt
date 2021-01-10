@@ -52,8 +52,6 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     init {
-        getRecentSearchCodesAndFetch()
-
         viewModelScope.launch {
             query.asFlow().drop(1).distinctUntilChanged().debounce(200).filter(String::isNotEmpty).collect {
                 search()
@@ -90,7 +88,7 @@ class SearchViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun getRecentSearchCodesAndFetch() = launchCatch({
+    fun getRecentSearchCodesAndFetch() = launchCatch({
         val codes = recentSearchCodeDao.getAll()
         fetchRecentSearchCodes(codes)
     }, loading, onSuccess = {
