@@ -1,15 +1,12 @@
 package team.weathy.ui.record.clothesselect
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Vibrator
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -23,6 +20,7 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -103,7 +101,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             addChipsForChoicedClothes(it)
 
             if (viewModel.clothes.value!!.size > 50) {
-                showToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
+                requireContext().showToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
             }
         }
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
@@ -111,7 +109,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
                 updateChipSelectedState()
                 updateTabTexts()
             } else {
-                showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
+                requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
             }
         }
     }
@@ -217,18 +215,5 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
-    }
-
-    @SuppressLint("InflateParams")
-    private fun showToast(message: String) {
-        val v = layoutInflater.inflate(R.layout.toast_common, null)
-
-        val text: TextView = v.findViewById(R.id.text)
-        text.text = message
-
-        val toast = Toast(context)
-        toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
-        toast.view = v
-        toast.show()
     }
 }
