@@ -5,14 +5,15 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.ViewPropertyAnimator
 import android.widget.LinearLayout
-import androidx.core.animation.doOnStart
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.updateLayoutParams
 import team.weathy.R
-import team.weathy.databinding.ItemHourlyWeatherBinding
-import team.weathy.util.extensions.pxFloat
-import team.weathy.util.padZero
+import team.weathy.databinding.ItemWeeklyWeatherBinding
+import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.getFont
+import team.weathy.util.extensions.px
+import team.weathy.util.koFormat
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -20,19 +21,23 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     LinearLayout(context, attrs) {
 
     private val curTime = LocalDateTime.now()
-    private val timeTexts = (0 until ITEM_COUNT).map { "${curTime.hour + it}시".padZero(3) }
 
-    private val weatherItems = (0 until ITEM_COUNT).map { idx ->
-        ItemHourlyWeatherBinding.bind(LayoutInflater.from(context).inflate(R.layout.item_hourly_weather, this, false))
-            .also {
-                it.hour.text = timeTexts[idx]
-
-                it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
-            }
+    private val weeks = (0 until ITEM_COUNT).map { idx ->
+        if (idx == 0) "오늘"
+        else curTime.plusDays(idx.toLong()).dayOfWeek.koFormat
     }
 
-    private val textAnimators: MutableList<Animator> = mutableListOf()
-    private val viewAnimators: MutableList<ViewPropertyAnimator> = mutableListOf()
+    private val weatherItems = (0 until ITEM_COUNT).map { idx ->
+        ItemWeeklyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
+            it.root.layoutParams = LayoutParams(0, px(129), 1f)
+
+            it.week.typeface = context.getFont(R.font.notosans_medium)
+            it.week.setTextColor(getColor(if (idx == 0) R.color.mint_icon else R.color.sub_grey_6))
+            it.week.text = weeks[idx]
+        }
+    }
+
+    private val animators: MutableList<Animator> = mutableListOf()
 
     init {
         initContainer()
@@ -53,51 +58,95 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
 
-
     private var isAnimDone = false
     fun resetAnimation() {
         isAnimDone = false
-        textAnimators.forEach { it.cancel() }
-        viewAnimators.forEach { it.cancel() }
-        textAnimators.clear()
-        viewAnimators.clear()
+        animators.forEach { it.cancel() }
+        animators.clear()
 
         weatherItems.forEach { binding ->
-            binding.pop.alpha = 0f
-            binding.pop.translationY = -pxFloat(10)
-            binding.temp.alpha = 0f
-            binding.temp.translationY = pxFloat(10)
-            binding.temp.text = "0°"
+            binding.tempBetweenBar.updateLayoutParams {
+                height = 1
+            }
+            binding.tempHigh.text = "0°"
+            binding.tempLow.text = "0°"
+            binding.tempHigh.alpha = 0f
+            binding.tempLow.alpha = 0f
+            binding.tempBetweenBar.alpha = 0f
         }
     }
 
 
     fun startAnimation() {
         if (isAnimDone) return
-        isAnimDone = false
-        weatherItems.forEach { binding ->
-            binding.pop.animate().alpha(1f).translationY(0f).setDuration(1200L).setStartDelay(500L).apply {
-                withEndAction { isAnimDone = true }
-                viewAnimators.add(this)
-                start()
-            }
-            binding.temp.animate().alpha(1f).translationY(0f).setDuration(700L).apply {
-                viewAnimators.add(this)
-            }.start()
+        isAnimDone = true
 
-            val dest = Random.nextInt(-20, 20)
-            ValueAnimator.ofInt(0, dest).apply {
-                doOnStart {
-                    binding.temp.text = "0°"
-                }
+        val duration1 = 600L
+        val duration2 = 1100L
+
+        weatherItems.forEach { binding ->
+            val lowDest = Random.nextInt(-20, 0)
+            val highDest = Random.nextInt(0, 20)
+
+            ValueAnimator.ofInt(0, lowDest).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
-                    binding.temp.text = "${value}°"
+                    binding.tempLow.text = "${value}°"
                 }
-                duration = 1200L
+                duration = duration1
                 start()
 
-                textAnimators.add(this)
+                animators.add(this)
+            }
+
+            ValueAnimator.ofInt(0, highDest).apply {
+                addUpdateListener {
+                    val value = it.animatedValue as Int
+                    binding.tempHigh.text = "${value}°"
+                }
+                duration = duration2
+                startDelay = duration1
+                start()
+
+                animators.add(this)
+            }
+
+            ValueAnimator.ofInt(1, px(16)).apply {
+                addUpdateListener {
+                    val value = it.animatedValue as Int
+                    binding.tempBetweenBar.updateLayoutParams {
+                        height = value
+                    }
+                }
+                duration = duration2
+                startDelay = duration1
+                start()
+
+                animators.add(this)
+            }
+
+            ValueAnimator.ofFloat(0f, 1f).apply {
+                addUpdateListener {
+                    val value = it.animatedValue as Float
+                    binding.tempLow.alpha = value
+                }
+                duration = duration1
+                start()
+
+                animators.add(this)
+            }
+
+            ValueAnimator.ofFloat(0f, 1f).apply {
+                addUpdateListener {
+                    val value = it.animatedValue as Float
+                    binding.tempHigh.alpha = value
+                    binding.tempBetweenBar.alpha = value
+                }
+                duration = 600L
+                startDelay = 600L
+                start()
+
+                animators.add(this)
             }
         }
     }

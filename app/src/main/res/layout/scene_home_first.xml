@@ -78,7 +78,7 @@
 
     <include
         android:id="@+id/recommended"
-        layout="@layout/view_home_recommended_weathy"
+        layout="@layout/layout_home_recommended_weathy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="121dp"

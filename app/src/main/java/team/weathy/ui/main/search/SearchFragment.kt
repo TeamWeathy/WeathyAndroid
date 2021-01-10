@@ -8,21 +8,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.drop
-import reactivecircus.flowbinding.android.widget.textChanges
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.ui.main.MainMenu.HOME
+import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
 import team.weathy.util.setOnDebounceClickListener
 
-@FlowPreview
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentSearchBinding>()
@@ -38,31 +33,27 @@ class SearchFragment : Fragment() {
 
         configureBackButton()
         configureList()
-        configureTextField()
+        configureTextFieldSearch()
 
         handleBackPress()
+        handleMainMenuChange()
     }
 
     private fun configureBackButton() = binding.back setOnDebounceClickListener {
         requireActivity().onBackPressed()
     }
 
+    @OptIn(FlowPreview::class)
     private fun configureList() = binding.list.let { list ->
-        list.adapter = SearchAdapter {
+        list.adapter = SearchAdapter(onItemRemoved = {
             viewModel.onItemRemoved(it)
-        }
+        }, viewModel.showRecently, viewLifecycleOwner)
         list.addItemDecoration(LinearItemDecoration(20))
     }
 
-    private fun configureTextField() = binding.textField.let {
+    private fun configureTextFieldSearch() = binding.textField.let { it ->
         it.setOnFocusChangeListener { _, hasFocus ->
             viewModel.focused.value = hasFocus
-        }
-
-        lifecycleScope.launchWhenStarted {
-            it.textChanges().drop(1).debounce(500L).collect {
-                viewModel.search()
-            }
         }
     }
 
@@ -72,5 +63,18 @@ class SearchFragment : Fragment() {
                 mainViewModel.changeMenu(HOME)
             }
         })
+    }
+
+    private fun handleMainMenuChange() {
+        mainViewModel.menu.observe(viewLifecycleOwner) {
+            when (it) {
+                SEARCH -> {
+                    viewModel.getRecentSearchCodesAndFetch()
+                }
+                else -> {
+                    viewModel.clear()
+                }
+            }
+        }
     }
 }

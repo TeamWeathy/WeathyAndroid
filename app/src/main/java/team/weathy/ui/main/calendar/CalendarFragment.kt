@@ -61,6 +61,8 @@ class CalendarFragment : Fragment(), OnClickListener {
 
         viewModel.curDate.observe(viewLifecycleOwner) {
             binding.calendarView.curDate = it
+            binding.container.startLayoutAnimation()
+            binding.scrollView.smoothScrollTo(0, 0)
         }
 
         viewModel.calendarData.observe(viewLifecycleOwner) {

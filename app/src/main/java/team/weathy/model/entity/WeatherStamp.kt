@@ -1,6 +1,7 @@
 package team.weathy.model.entity
 
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
@@ -11,16 +12,28 @@ import team.weathy.api.ApiSerializer
 import java.lang.reflect.Type
 
 @JsonAdapter(WeatherStampSerializer::class)
-enum class WeatherStamp(val id: Int, @ColorRes val colorRes: Int) {
-    VERY_HOT(1, R.color.imoji_veryhot), HOT(2, R.color.imoji_hot), GOOD(3, R.color.imoji_good), COLD(
-        4, R.color.imoji_cold
+enum class WeatherStamp(
+    val id: Int,
+    @ColorRes val colorRes: Int,
+    val representation: String,
+    val representationPast: String,
+    @DrawableRes val iconRes: Int,
+) {
+    VERY_HOT(1, R.color.imoji_veryhot, "너무 더워요", "너무 더웠어요", R.drawable.img_veryhot), HOT(
+        2, R.color.imoji_hot, "더워요", "더웠어요", R.drawable.img_hot
     ),
-    VERY_COLD(5, R.color.imoji_verycold),
+    GOOD(
+        3, R.color.imoji_good, "적당해요", "적당했어요", R.drawable.img_good
+    ),
+    COLD(
+        4, R.color.imoji_cold, "추워요", "추웠어요", R.drawable.img_cold
+    ),
+    VERY_COLD(5, R.color.imoji_verycold, "너무 추워요", "너무 추웠어요", R.drawable.img_verycold),
 
     ;
 
     companion object {
-        fun fromId(id: Int): WeatherStamp? {
+        fun fromId(id: Int?): WeatherStamp? {
             return values().find { it.id == id }
         }
     }
