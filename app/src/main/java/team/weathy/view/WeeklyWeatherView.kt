@@ -27,7 +27,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private val weatherItems = (0 until ITEM_COUNT).map { idx ->
         ItemWeeklyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
-            it.root.layoutParams = LayoutParams(0, px(120), 1f)
+            it.root.layoutParams = LayoutParams(0, px(125), 1f)
 
             it.week.setTextColor(getColor(if (idx == 0) R.color.main_mint else R.color.sub_grey_6))
             it.week.text = weeks[idx]
@@ -108,7 +108,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 animators.add(this)
             }
 
-            ValueAnimator.ofInt(1, px(16)).apply {
+            ValueAnimator.ofInt(1, px(20)).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.tempBetweenBar.updateLayoutParams {
