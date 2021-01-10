@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@id/textInputLayout" />
 
         <TextView
-            visibilityWithAnim="@{vm.showRecently}"
+            android:visibility="@{vm.showRecently}"
             android:id="@+id/recentLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <View
-            visibilityWithAnim="@{vm.showRecently}"
+            android:visibility="@{vm.showRecently}"
             android:id="@+id/divider"
             android:layout_width="31dp"
             android:layout_height="1dp"
@@ -148,16 +148,14 @@
             app:layout_constraintTop_toTopOf="@id/list" />
 
         <ImageView
-            visibilityWithAnim="@{vm.showEmpty}"
+            android:visibility="@{vm.showEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0"
             android:src="@{vm.showRecently ? @drawable/search_recent_empty_img_empty : @drawable/search_empty_img_empty}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-            tools:alpha="1"
             tools:src="@drawable/search_empty_img_empty" />
 
 

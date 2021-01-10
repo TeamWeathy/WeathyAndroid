@@ -4,8 +4,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -30,13 +30,8 @@ class CalendarViewModel @ViewModelInject constructor(
     @ApiMock private val calendarAPI: CalendarAPI, @ApiMock private val weathyAPI: WeathyAPI
 ) : ViewModel() {
 
-    private val curDateFlow = MutableStateFlow(LocalDate.now())
-    private val _curDateMutable = MutableLiveData(LocalDate.now())
-    val curDate: LiveData<LocalDate> = _curDateMutable
-
-    private val yearMonthFormatFlow = curDateFlow.map {
-        it.yearMonthFormat
-    }.distinctUntilChanged()
+    private val _curDate = MutableLiveData(LocalDate.now())
+    val curDate: LiveData<LocalDate> = _curDate
 
     private val _calendarData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
     val calendarData: LiveData<Map<YearMonthFormat, List<CalendarPreview?>>> = _calendarData
@@ -61,39 +56,38 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     fun onCurDateChanged(date: LocalDate) {
-        if (curDateFlow.value.year == date.year && curDateFlow.value.monthValue == date.monthValue && curDateFlow.value.dayOfMonth == date.dayOfMonth) {
+        if (_curDate.value!!.year == date.year && _curDate.value!!.monthValue == date.monthValue && _curDate.value!!.dayOfMonth == date.dayOfMonth) {
             return
         }
-        curDateFlow.value = date
+        _curDate.value = date
     }
 
     private fun collectCurDateFlow() {
         viewModelScope.launch {
-            curDateFlow.collect {
-                _curDateMutable.value = it
+            _curDate.asFlow().collect {
                 fetchCurDateWeathy()
             }
         }
     }
 
     private fun fetchCurDateWeathy() {
-        debugE("fetchCurDateWeathy ${curDateFlow.value.dateString}")
+        debugE("fetchCurDateWeathy ${_curDate.value!!.dateString}")
         launchCatch({
-            weathyAPI.fetchWeathyWithDate(curDateFlow.value.dateString)
+            weathyAPI.fetchWeathyWithDate(_curDate.value!!.dateString)
         }, onSuccess = {
             _curWeathy.value = it.weathy
         })
     }
 
     private fun collectYearMonthFlow() = viewModelScope.launch {
-        yearMonthFormatFlow.collect {
+        _curDate.asFlow().map { it.yearMonthFormat }.distinctUntilChanged().collect {
             fetchMonthlyDataIfNeeded()
         }
     }
 
     private fun fetchMonthlyDataIfNeeded() {
-        debugE("fetchMonthlyDataIfNeeded ${curDateFlow.value.dateString}")
-        val date = curDateFlow.value
+        debugE("fetchMonthlyDataIfNeeded ${_curDate.value!!.dateString}")
+        val date = _curDate.value!!
         if (!_calendarData.value!!.containsKey(date.yearMonthFormat)) {
             launchCatch({
                 val s = getStartDateStringInCalendar(date.year, date.monthValue)

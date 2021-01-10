@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -14,12 +16,15 @@ import team.weathy.ui.main.search.SearchAdapter.Holder
 import team.weathy.util.AnimUtil
 import team.weathy.util.LocationItemMenuSwiper
 import team.weathy.util.LocationItemMenuSwiper.Callback
-import team.weathy.util.dateHourString
 import team.weathy.util.koFormat
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDateTime
 
-class SearchAdapter(private val onItemRemoved: (idx: Int) -> Unit) : Adapter<Holder>() {
+class SearchAdapter(
+    private val onItemRemoved: (idx: Int) -> Unit,
+    private val isRecentShowing: LiveData<Boolean>,
+    private val lifecycleOwner: LifecycleOwner
+) : Adapter<Holder>() {
     private val items = mutableListOf<OverviewWeather>()
     private val menuOpens = mutableListOf<Boolean>()
 
@@ -46,16 +51,6 @@ class SearchAdapter(private val onItemRemoved: (idx: Int) -> Unit) : Adapter<Hol
         private var isFirstBinding = true
         private var itemHeight = 0
 
-        init {
-            binding.deleteContainer setOnDebounceClickListener {
-                swiper.deleteMenu()
-            }
-            // get item height dynamically
-            binding.root.doOnLayout {
-                itemHeight = it.height
-            }
-        }
-
         private val swiper = LocationItemMenuSwiper.configure(binding, object : Callback {
             override fun onOpened() {
                 menuOpens[layoutPosition] = true
@@ -71,6 +66,24 @@ class SearchAdapter(private val onItemRemoved: (idx: Int) -> Unit) : Adapter<Hol
                 }
             }
         })
+
+        init {
+            binding.deleteContainer setOnDebounceClickListener {
+                swiper.deleteMenu()
+            }
+            // get item height dynamically
+            binding.root.doOnLayout {
+                itemHeight = it.height
+            }
+
+            isRecentShowing.observe(lifecycleOwner) {
+                if (it) {
+                    binding.root.setOnTouchListener(swiper)
+                } else {
+                    binding.root.setOnTouchListener(null)
+                }
+            }
+        }
 
 
         fun bind(item: OverviewWeather) {

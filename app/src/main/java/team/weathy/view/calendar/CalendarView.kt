@@ -274,13 +274,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         lazyPagerAddJob = scope.launch {
-            delay(200)
             if (weeklyViewPager == null) {
                 weeklyViewPager = weeklyViewPagerGenerator()
                 TransitionManager.beginDelayedTransition(this@CalendarView)
                 addView(weeklyViewPager!!, 0)
             }
-            delay(700)
+            delay(400)
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
