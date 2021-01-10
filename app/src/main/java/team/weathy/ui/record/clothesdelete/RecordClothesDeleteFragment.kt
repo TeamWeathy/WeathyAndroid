@@ -1,6 +1,7 @@
 package team.weathy.ui.record.clothesdelete
 
 import android.app.Activity
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
+import kotlin.math.roundToInt
 
 class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesDeleteBinding>()
@@ -129,8 +131,10 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
             setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     onChipCheckedForDelete(index)
+                    chipStrokeWidth = 4.5f
                 } else {
                     onChipUnchecked(index)
+                    chipStrokeWidth = 3f
                 }
             }
         }

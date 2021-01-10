@@ -131,7 +131,7 @@
     <style name="CustomChipStyle.Delete">
         <item name="chipBackgroundColor">@color/chip_delete_bg</item>
         <item name="android:textColor">@color/chip_delete_text</item>
-        <item name="strokeColor">@color/chip_delete_stroke</item>
+        <item name="chipStrokeColor">@color/chip_delete_stroke</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="rippleColor">@color/pink</item>
     </style>
