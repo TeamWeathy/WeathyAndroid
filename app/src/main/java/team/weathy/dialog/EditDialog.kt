@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import team.weathy.MainApplication.Companion.pixelRatio
 import team.weathy.databinding.DialogEditBinding
@@ -41,7 +42,12 @@ class EditDialog : DialogFragment() {
 		}
 		binding.btnCancel setOnDebounceClickListener {
 			clickListener?.onClickNo()
+
 			dismiss()
+		}
+		binding.btnAdd.isEnabled = false
+		binding.enter.addTextChangedListener {
+			binding.btnAdd.isEnabled = !it.isNullOrBlank()
 		}
 	}
 
