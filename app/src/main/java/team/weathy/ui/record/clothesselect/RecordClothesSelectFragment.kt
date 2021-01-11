@@ -117,7 +117,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
-                if (viewModel.selectedClothes.value!!.size > 5) {
+                if (viewModel.selectedClothes.value!!.size >= 5) {
                     button.isChecked = false
                     showExceedMaximumSelectedToast()
                     return@setOnCheckedChangeListener
@@ -139,7 +139,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
+    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는")
 
     private fun onChipChecked(index: Int) = viewModel.onChipChecked(index)
 
