@@ -176,7 +176,17 @@
                 app:layout_constraintStart_toStartOf="@id/today_weathy"
                 app:layout_constraintTop_toTopOf="@id/today_weathy" />
 
+            <View
+                android:alpha="0"
+                android:background="@color/transparent_black"
+                android:elevation="9dp"
+                android:layout_marginLeft="-26dp"
+                android:layout_marginRight="-26dp"
+                android:id="@+id/dim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
             <ImageView
+                android:clickable="false"
                 android:id="@+id/weathy_explanation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

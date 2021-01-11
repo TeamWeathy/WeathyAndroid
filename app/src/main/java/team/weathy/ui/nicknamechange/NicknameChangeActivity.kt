@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -75,7 +76,8 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun changeNicknameBtnClick() {
         binding.changeNicknameBtn.setOnDebounceClickListener {
-            Toast.makeText(this, "변경되었습니다.", Toast.LENGTH_SHORT).show()
+            showToast("닉네임이 변경되었습니다.")
+            finish()
         }
     }
 

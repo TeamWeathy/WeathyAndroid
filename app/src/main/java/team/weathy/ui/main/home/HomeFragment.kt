@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import team.weathy.MainApplication.Companion.pixelRatio
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.extensions.getColor
+import team.weathy.util.debugE
+import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
 
 @AndroidEntryPoint
@@ -21,14 +24,22 @@ class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
     private val viewModel by viewModels<HomeViewModel>()
 
+    private var shouldDisableThirdScene = false
+    private var isHelpPopupShowing = false
     private var isFirstSceneShowing = true
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (isFirstSceneShowing) {
-                isEnabled = false
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            } else {
-                binding.container.transitionToState(R.layout.scene_home_first)
+            when {
+                isHelpPopupShowing -> {
+                    hideHelpPopup()
+                }
+                isFirstSceneShowing -> {
+                    isEnabled = false
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+                else -> {
+                    binding.container.transitionToState(R.layout.scene_home_first)
+                }
             }
         }
     }
@@ -65,6 +76,10 @@ class HomeFragment : Fragment() {
                         isFirstSceneShowing = false
                         binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
+
+                        if (shouldDisableThirdScene) {
+                            binding.container.definedTransitions.last().setEnable(false)
+                        }
                     }
                     else -> {
                         isFirstSceneShowing = false
@@ -76,6 +91,16 @@ class HomeFragment : Fragment() {
             }
         })
 
+        binding.weeklyCard.doOnLayout {
+            val screenHeight = pixelRatio.screenHeight
+            val marginTop = 100.dp
+            val marginBottom = 96.dp
+            val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
+            val marginBetweenCards = 24.dp * 2
+
+            shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+        }
+
         binding.downArrow setOnDebounceClickListener {
             binding.container.transitionToState(R.layout.scene_home_second)
         }
@@ -83,30 +108,43 @@ class HomeFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isFirstSceneShowing = savedInstanceState?.getBoolean("isFirstSceneShowing") ?: true
+        isHelpPopupShowing = savedInstanceState?.getBoolean("isHelpPopupShowing") ?: false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("isFirstSceneShowing", isFirstSceneShowing)
+        outState.putBoolean("isHelpPopupShowing", isHelpPopupShowing)
     }
 
-    private fun weathyQuestionBtnClick() {
-        binding.weathyQuestion.setOnDebounceClickListener {
-            binding.weathyExplanation.alpha = 1f
-            binding.exitExplanation.alpha = 1f
-            binding.container.setBackgroundColor(getColor(R.color.shadow_scroll))
-        }
+    private fun weathyQuestionBtnClick() = binding.weathyQuestion.setOnDebounceClickListener {
+        showHelpPopup()
     }
 
-    private fun exitExplanationBtnClick() {
-        binding.exitExplanation.setOnDebounceClickListener {
-            binding.weathyExplanation.alpha = 0f
-            binding.exitExplanation.alpha = 0f
-            binding.container.setBackgroundColor(getColor(R.color.transparent))
-        }
+    private fun exitExplanationBtnClick() = binding.exitExplanation.setOnDebounceClickListener {
+        hideHelpPopup()
+    }
+
+    private fun showHelpPopup() {
+        isHelpPopupShowing = true
+        binding.weathyExplanation.alpha = 1f
+        binding.exitExplanation.alpha = 1f
+        binding.dim.alpha = 1f
+        binding.dim.isClickable = true
+        binding.dim.isFocusable = true
+        binding.container.isInteractionEnabled = false
+    }
+
+    private fun hideHelpPopup() {
+        isHelpPopupShowing = false
+        binding.weathyExplanation.alpha = 0f
+        binding.exitExplanation.alpha = 0f
+        binding.dim.alpha = 0f
+        binding.dim.isClickable = false
+        binding.dim.isFocusable = false
+        binding.container.isInteractionEnabled = true
     }
 }
