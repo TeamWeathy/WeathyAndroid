@@ -3,6 +3,8 @@ package team.weathy.ui.record
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import team.weathy.R
 import team.weathy.databinding.ActivityRecordBinding
 import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment

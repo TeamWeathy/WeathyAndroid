@@ -123,6 +123,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
+                if (viewModel.selectedClothes.value!!.size == 4 && button.isChecked) {
+                    button.isChecked = false
+                    showExceedMaximumSelectedToast()
+                    return@setOnCheckedChangeListener
+                }
+
                 if (isChecked) {
                     viewModel.onChipChecked(index)
                 } else {

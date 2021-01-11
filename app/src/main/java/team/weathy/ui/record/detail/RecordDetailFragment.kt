@@ -1,7 +1,8 @@
 package team.weathy.ui.record.detail
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +14,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
-import team.weathy.ui.record.RecordActivity
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
@@ -46,10 +46,10 @@ class RecordDetailFragment : Fragment() {
             binding.tvTextLength2.text = "$length"
 
             if (length > 0) {
-                setButtonActivation(true, getColor(R.color.main_mint))
+                setButtonEnabled(true)
                 setTextActivation(getColor(R.color.main_mint), R.drawable.edit_border_active)
             } else {
-                setButtonActivation(false, getColor(R.color.sub_grey_3))
+                setButtonDisabled(false)
                 setTextActivation(getColor(R.color.sub_grey_6), R.drawable.edit_border)
             }
         }
@@ -80,9 +80,18 @@ class RecordDetailFragment : Fragment() {
         binding.tvTextLength2.isVisible = hasFocus
     }
 
-    private fun setButtonActivation(isEnable: Boolean, color: Int) {
+    private fun setButtonEnabled(isEnable: Boolean) {
+        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        colorChangeActive.setTarget(binding.btnConfirm)
+        colorChangeActive.start()
         binding.btnConfirm.isEnabled = isEnable
-        binding.btnConfirm.setBackgroundColor(color)
+    }
+
+    private fun setButtonDisabled(isEnable: Boolean) {
+        val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
+        colorChange.setTarget(binding.btnConfirm)
+        colorChange.start()
+        binding.btnConfirm.isEnabled = isEnable
     }
 
     private fun setTextActivation(color: Int, drawable: Int) {
