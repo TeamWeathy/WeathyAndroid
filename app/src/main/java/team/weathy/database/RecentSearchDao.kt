@@ -9,7 +9,7 @@ import team.weathy.model.entity.RecentSearchCode
 
 @Dao
 interface RecentSearchCodeDao {
-    @Query("SELECT * FROM RecentSearchCode")
+    @Query("SELECT * FROM RecentSearchCode ORDER BY id DESC")
     suspend fun getAll(): List<RecentSearchCode>
 
     @Insert
@@ -18,15 +18,15 @@ interface RecentSearchCodeDao {
     @Query("DELETE FROM RecentSearchCode")
     suspend fun drop()
 
-    @Delete
-    suspend fun delete(item: RecentSearchCode)
+    @Query("DELETE FROM RecentSearchCode WHERE :code == code")
+    suspend fun delete(code: Int)
 
     @Transaction
     suspend fun add(item: RecentSearchCode) {
         val items = getAll()
-        val newItems = (listOf(item) + items)
+        val newItems = (listOf(item) + items).distinct().take(3)
         drop()
-        newItems.take(3).forEach {
+        newItems.forEach {
             addInternal(it)
         }
     }
