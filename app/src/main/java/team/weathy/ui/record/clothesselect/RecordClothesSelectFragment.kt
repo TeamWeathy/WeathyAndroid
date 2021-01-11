@@ -148,7 +148,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는")
+    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
 
     private fun updateChipSelectedState() {
         binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
