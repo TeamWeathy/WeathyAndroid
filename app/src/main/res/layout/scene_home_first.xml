@@ -225,6 +225,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:translationY="20dp"
         android:alpha="0"
         android:src="@drawable/mainscroll_img_logo"
         app:layout_constraintLeft_toLeftOf="parent"
