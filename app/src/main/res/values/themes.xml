@@ -106,7 +106,7 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
-    <style name="ImageButton.size48_padding19">
+    <style name="ImageButton.size48.padding19">
         <item name="android:paddingBottom">18dp</item>
         <item name="android:paddingTop">19dp</item>
         <item name="android:paddingStart">19dp</item>
