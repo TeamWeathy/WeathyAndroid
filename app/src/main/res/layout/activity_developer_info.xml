@@ -6,9 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.developerinfo.DeveloperInfoActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/setting_img_devinfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        />
+
     <ImageButton
         android:id="@+id/exit_developer_info_btn"
-        style="@style/ImageButton.size32.icon20"
+        style="@style/ImageButton.size48.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
@@ -16,128 +25,5 @@
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/developer_info_txt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:text="개발자 정보"
-        android:textColor="@color/main_grey"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@id/exit_developer_info_btn"
-        app:layout_constraintTop_toTopOf="@id/exit_developer_info_btn" />
-
-    <TextView
-        android:id="@+id/plan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
-        android:text="기획"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/developer_info_txt2"
-        app:layout_constraintTop_toBottomOf="@id/developer_info_txt2" />
-
-    <TextView
-        android:id="@+id/plan_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:text="노희지 김수민 이혜인"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/plan"
-        app:layout_constraintStart_toEndOf="@id/plan"
-        app:layout_constraintTop_toTopOf="@id/plan" />
-
-    <TextView
-        android:id="@+id/design"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="디자인"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/plan"
-        app:layout_constraintTop_toBottomOf="@id/plan" />
-
-    <TextView
-        android:id="@+id/design_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이예슬 임정은 조승우"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/design"
-        app:layout_constraintStart_toStartOf="@+id/plan_member"
-        app:layout_constraintTop_toTopOf="@id/design" />
-
-    <TextView
-        android:id="@+id/ios"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="ios"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/design"
-        app:layout_constraintTop_toBottomOf="@id/design" />
-
-    <TextView
-        android:id="@+id/ios_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이예슬 송황호 이다은 이인애"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/ios"
-        app:layout_constraintStart_toStartOf="@+id/design_member"
-        app:layout_constraintTop_toTopOf="@id/ios" />
-
-    <TextView
-        android:id="@+id/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="안드로이드"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/ios"
-        app:layout_constraintTop_toBottomOf="@id/ios" />
-
-    <TextView
-        android:id="@+id/android_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="문명주 김희빈 박현지"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/android"
-        app:layout_constraintStart_toStartOf="@+id/ios_member"
-        app:layout_constraintTop_toTopOf="@id/android" />
-
-    <TextView
-        android:id="@+id/backend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="백엔드"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/android"
-        app:layout_constraintTop_toBottomOf="@id/android" />
-
-    <TextView
-        android:id="@+id/backend_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="신연상 김자현 최선욱"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/backend"
-        app:layout_constraintStart_toStartOf="@+id/android_member"
-        app:layout_constraintTop_toTopOf="@id/backend" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -351,6 +351,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:paddingTop="29dp"
+                android:paddingBottom="41dp"
+                android:clipToPadding="false"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toTopOf="@id/btn_check"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -381,16 +383,17 @@
             <View
                 shadowOnScroll="@{true}"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="52dp"
                 android:alpha="0"
                 android:background="@drawable/blur_white_top_down"
                 app:layout_constraintTop_toTopOf="@id/scrollView" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="52dp"
                 android:background="@drawable/blur_white_bottom_up"
-                app:layout_constraintBottom_toBottomOf="@id/scrollView" />
+                android:layout_marginBottom="29dp"
+                app:layout_constraintBottom_toBottomOf="@id/btn_check" />
 
             <Button
                 android:id="@+id/btn_check"

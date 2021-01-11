@@ -218,7 +218,7 @@
                     android:layout_marginLeft="4dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="/"
-                    android:textColor="#C2C2C2"
+                    android:textColor="@color/temp_bar"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="@id/temp1"
                     app:layout_constraintLeft_toRightOf="@id/temp1"

@@ -16,6 +16,7 @@ import team.weathy.databinding.FragmentRecordDetailBinding
 import team.weathy.ui.record.RecordActivity
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 class RecordDetailFragment : Fragment() {
@@ -70,7 +71,7 @@ class RecordDetailFragment : Fragment() {
             requireActivity().finish()
         }
         binding.btnConfirm setOnDebounceClickListener {
-            (activity as? RecordActivity)?.replaceDetailToCalendar()
+            requireContext().showToast("웨디에 내용이 추가되었어요!")
         }
     }
 

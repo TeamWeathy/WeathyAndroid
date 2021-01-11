@@ -12,7 +12,6 @@
         <item name="android:windowBackground">@drawable/background_window</item>
 
         <item name="android:windowSoftInputMode">adjustResize|stateAlwaysHidden</item>
-        <item name="android:screenOrientation">portrait</item>
 
         <item name="android:supportsRtl">false</item>
 
@@ -106,7 +105,7 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
-    <style name="ImageButton.size48_padding19">
+    <style name="ImageButton.size48.padding19">
         <item name="android:paddingBottom">18dp</item>
         <item name="android:paddingTop">19dp</item>
         <item name="android:paddingStart">19dp</item>
@@ -131,7 +130,7 @@
     <style name="CustomChipStyle.Delete">
         <item name="chipBackgroundColor">@color/chip_delete_bg</item>
         <item name="android:textColor">@color/chip_delete_text</item>
-        <item name="strokeColor">@color/chip_delete_stroke</item>
+        <item name="chipStrokeColor">@color/chip_delete_stroke</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="rippleColor">@color/pink</item>
     </style>
@@ -150,7 +149,7 @@
 
     <style name="TextInputEditText">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">50dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">@color/sub_grey_8</item>

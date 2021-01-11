@@ -23,7 +23,7 @@ object MockGenerator {
     fun climate(iconId: Int = 1, description: String = LoremIpsum.getInstance().name) = Climate(iconId, description)
     fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
     fun temperature() = Temperature(Random.nextInt(0, 20), Random.nextInt(-20, 0))
-    fun dailyWeather(code: Int = 1, regionName: String = LoremIpsum.getInstance().city) =
+    fun dailyWeather(code: Int = Random.nextInt(), regionName: String = LoremIpsum.getInstance().city) =
         DailyWeather(region(name = regionName, code = code), date(), temperature())
 
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
