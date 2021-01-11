@@ -11,6 +11,8 @@ import team.weathy.util.DateHourString
 import team.weathy.util.DateOrDateHourString
 import team.weathy.util.DateString
 import javax.inject.Inject
+import kotlin.random.Random
+import kotlin.random.Random.Default
 
 class MockWeatherAPI @Inject constructor() : WeatherAPI {
     override suspend fun fetchWeatherByLocation(
@@ -18,7 +20,7 @@ class MockWeatherAPI @Inject constructor() : WeatherAPI {
     ): WeatherDailyHourlyRes {
         return WeatherDailyHourlyRes(
             OverviewWeather(
-                MockGenerator.dailyWeather(code = code ?: 1, regionName = code.toString()), MockGenerator.hourlyWeather()
+                MockGenerator.dailyWeather(code = code ?: Random.nextInt(), regionName = code.toString()), MockGenerator.hourlyWeather()
             ), "message"
         )
     }

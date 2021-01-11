@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="datetime_text"
             type="String" />
@@ -24,9 +23,14 @@
         <variable
             name="low_temp"
             type="String" />
+
+        <variable
+            name="on_click"
+            type="kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:onClick="@{() -> on_click.invoke()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="163dp"

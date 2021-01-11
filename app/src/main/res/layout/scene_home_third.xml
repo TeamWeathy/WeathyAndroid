@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
         android:alpha="0"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:translationX="-8dp"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintBottom_toTopOf="@+id/weather_image"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/datetime" />
@@ -32,7 +32,7 @@
         android:alpha="0"
         android:fontFamily="@font/notosans_medium"
         android:translationX="-8dp"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintBottom_toBottomOf="@id/gps_image"
         app:layout_constraintLeft_toRightOf="@id/gps_image"
         app:layout_constraintTop_toTopOf="@id/gps_image" />
@@ -42,9 +42,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:alpha="0"
+<<<<<<< HEAD
         android:scaleType="centerCrop"
         android:src="@drawable/main_img_fewclouds"
         android:translationY="-500dp"
+=======
+        android:translationY="-700dp"
+>>>>>>> main
         app:layout_constraintBottom_toTopOf="@+id/nickname"
         app:layout_constraintEnd_toStartOf="@+id/current_temp"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +64,7 @@
         android:text="희지님이 기억하는"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintBottom_toTopOf="@+id/today_weathy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weather_image" />
@@ -75,7 +79,7 @@
         android:text="오늘의 웨디"
         android:textColor="@color/main_grey"
         android:textSize="21sp"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintBottom_toTopOf="@+id/recommended"
         app:layout_constraintStart_toStartOf="@id/nickname"
         app:layout_constraintTop_toBottomOf="@+id/nickname" />
@@ -200,7 +204,7 @@
         android:alpha="0"
         android:scaleX="0.5"
         android:scaleY="0.5"
-        android:translationY="-500dp"
+        android:translationY="-700dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView

@@ -24,8 +24,8 @@ class HomeFragment : Fragment() {
     private var isFirstSceneShowing = true
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            isEnabled = false
             if (isFirstSceneShowing) {
+                isEnabled = false
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             } else {
                 binding.container.transitionToState(R.layout.scene_home_first)
@@ -62,13 +62,11 @@ class HomeFragment : Fragment() {
                         binding.weeklyView.resetAnimation()
                     }
                     R.layout.scene_home_second -> {
-                        onBackPressedCallback.isEnabled = true
                         isFirstSceneShowing = false
                         binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
                     }
                     else -> {
-                        onBackPressedCallback.isEnabled = true
                         isFirstSceneShowing = false
                     }
                 }
