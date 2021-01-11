@@ -1,5 +1,7 @@
 package team.weathy.ui.record.clothesselect
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -165,11 +167,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setButtonActivation() {
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
             if (viewModel.selectedClothes.value!!.isNotEmpty()) {
-                binding.btnCheck.isEnabled = true
-                binding.btnCheck.setBackgroundColor(getColor(R.color.main_mint))
+                setButtonEnabled(true)
             } else {
-                binding.btnCheck.isEnabled = false
-                binding.btnCheck.setBackgroundColor(getColor(R.color.sub_grey_3))
+                setButtonDisabled(false)
             }
         }
     }
@@ -213,5 +213,19 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
+    }
+
+    private fun setButtonEnabled(isEnable: Boolean) {
+        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        colorChangeActive.setTarget(binding.btnCheck)
+        colorChangeActive.start()
+        binding.btnCheck.isEnabled = isEnable
+    }
+
+    private fun setButtonDisabled(isEnable: Boolean) {
+        val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
+        colorChange.setTarget(binding.btnCheck)
+        colorChange.start()
+        binding.btnCheck.isEnabled = isEnable
     }
 }
