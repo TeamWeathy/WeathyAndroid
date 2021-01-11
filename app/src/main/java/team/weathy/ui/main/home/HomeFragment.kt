@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 @AndroidEntryPoint
