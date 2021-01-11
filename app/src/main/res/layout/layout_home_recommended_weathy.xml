@@ -29,7 +29,7 @@
         <ImageView
             android:id="@+id/ic_weather"
             style="@style/ImageView"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="@id/date"
             app:layout_constraintTop_toBottomOf="@id/date" />
 
@@ -38,22 +38,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="1dp"
             android:text="구름조금"
             android:textColor="@color/sub_grey_1"
             android:textSize="15sp"
             app:layout_constraintStart_toEndOf="@id/ic_weather"
-            app:layout_constraintTop_toBottomOf="@id/date" />
+            app:layout_constraintTop_toTopOf="@id/ic_weather"
+            app:layout_constraintBottom_toBottomOf="@id/ic_weather"/>
 
         <TextView
             android:id="@+id/max_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_light"
-            android:text="-4°"
+            android:text="-20°"
             android:textColor="@color/red_temp"
-            android:textSize="35sp"
+            android:textSize="30sp"
             app:layout_constraintStart_toStartOf="@id/ic_weather"
             app:layout_constraintTop_toBottomOf="@id/ic_weather" />
 
@@ -76,9 +76,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/roboto_light"
-            android:text="-4°"
+            android:text="-20°"
             android:textColor="@color/blue_temp"
-            android:textSize="35sp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@id/max_temp"
             app:layout_constraintStart_toEndOf="@id/slash"
             app:layout_constraintTop_toTopOf="@id/max_temp" />
@@ -87,16 +87,16 @@
             android:id="@+id/emoji"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="3dp"
             android:src="@drawable/logo512"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/date" />
 
         <TextView
             android:id="@+id/emojiText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/notosans_medium"
             android:text="추웠어요"
             android:textColor="@color/imoji_cold_text"
