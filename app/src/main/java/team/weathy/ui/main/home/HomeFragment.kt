@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
 
 @AndroidEntryPoint
@@ -34,13 +35,16 @@ class HomeFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+            FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+
+        weathyQuestionBtnClick()
+        exitExplanationBtnClick()
 
         binding.container.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {
@@ -92,4 +96,19 @@ class HomeFragment : Fragment() {
         outState.putBoolean("isFirstSceneShowing", isFirstSceneShowing)
     }
 
+    private fun weathyQuestionBtnClick() {
+        binding.weathyQuestion.setOnDebounceClickListener {
+            binding.weathyExplanation.alpha = 1f
+            binding.exitExplanation.alpha = 1f
+            binding.container.setBackgroundColor(getColor(R.color.shadow_scroll))
+        }
+    }
+
+    private fun exitExplanationBtnClick() {
+        binding.exitExplanation.setOnDebounceClickListener {
+            binding.weathyExplanation.alpha = 0f
+            binding.exitExplanation.alpha = 0f
+            binding.container.setBackgroundColor(getColor(R.color.transparent))
+        }
+    }
 }
