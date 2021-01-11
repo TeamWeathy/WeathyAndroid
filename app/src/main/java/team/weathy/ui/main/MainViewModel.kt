@@ -2,7 +2,6 @@ package team.weathy.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import team.weathy.util.EventLiveData
+import team.weathy.util.debugE
 import team.weathy.util.extensions.updateList
 import team.weathy.util.extensions.updateSet
 
@@ -93,7 +94,7 @@ class RecordViewModel : ViewModel() {
     }
 
     fun onChipChecked(index: Int) {
-        if(selectedClothes.value!!.contains(index)) return
+        if (selectedClothes.value!!.contains(index)) return
 
         if (selectedClothes.value!!.size == 5) {
             onChipCheckedFailed.emit(index + 1 /* because of add button */)
@@ -136,5 +137,9 @@ class RecordViewModel : ViewModel() {
             selectedClothesCount += clothesPairs[i].second.value!!.size
         }
         return selectedClothesCount
+    }
+
+    fun onLocationChanged() {
+        debugE("hi")
     }
 }
