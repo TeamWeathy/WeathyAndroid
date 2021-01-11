@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -47,8 +48,10 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:id="@+id/textInputLayout"
             android:layout_marginTop="42dp"
+            android:layout_height="wrap_content"
+            app:counterTextColor="@color/main_mint"
             app:layout_constraintTop_toBottomOf="@id/body">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -57,6 +60,29 @@
                 style="@style/TextInputEditText"
                 android:hint="닉네임을 6자 이내로 입력해주세요." />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_marginTop="2dp"
+            android:id="@+id/maxLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/6"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            app:layout_constraintRight_toRightOf="@id/textInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+        <TextView
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{vm.nickname.length() + ""}'
+            android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
+            android:textSize="13sp"
+            tools:textColor="@color/sub_grey_6"
+            app:layout_constraintRight_toLeftOf="@id/maxLength"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout"
+            tools:text="0" />
 
         <Button
             android:id="@+id/submit"
