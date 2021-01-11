@@ -125,18 +125,19 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/search_img_sunnycloud"
-                app:layout_constraintTop_toBottomOf="@id/tv_location"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="2dp"
                 android:text="서울 서초구"
                 android:textColor="@color/main_grey"
                 android:textSize="17sp"
@@ -147,7 +148,7 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="21dp"
                 android:layout_marginStart="25dp"
                 android:text="1월 1일 일요일"
                 android:textColor="@color/sub_grey_1"
@@ -159,39 +160,42 @@
                 android:id="@+id/high_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="87dp"
-                android:layout_marginEnd="93dp"
+                android:layout_marginEnd="2dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="-4°"
+                android:letterSpacing="-0.05"
+                android:text="20°"
                 android:textColor="@color/red_temp"
-                android:textSize="50sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="40sp"
+                app:layout_constraintEnd_toStartOf="@id/temp"
+                app:layout_constraintTop_toTopOf="@id/low_temp" />
 
             <TextView
                 android:id="@+id/temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginEnd="5dp"
                 android:fontFamily="@font/roboto_light"
                 android:text="/"
                 android:textColor="#6B6B6B"
-                android:textSize="27sp"
-                app:layout_constraintBottom_toBottomOf="@id/high_temp"
-                app:layout_constraintLeft_toRightOf="@id/high_temp"
-                app:layout_constraintTop_toTopOf="@id/high_temp" />
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/low_temp"
+                app:layout_constraintEnd_toStartOf="@id/low_temp"
+                app:layout_constraintTop_toTopOf="@id/low_temp" />
 
             <TextView
                 android:id="@+id/low_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginTop="95dp"
+                android:layout_marginEnd="25dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="-4°"
+                android:text="-20°"
                 android:textColor="@color/blue_temp"
-                android:textSize="50sp"
-                app:layout_constraintStart_toEndOf="@id/temp"
-                app:layout_constraintTop_toTopOf="@id/high_temp" />
+                android:textSize="40sp"
+                android:letterSpacing="-0.05"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </team.weathy.view.WeathyCardView>
