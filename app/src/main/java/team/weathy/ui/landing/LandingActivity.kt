@@ -79,7 +79,7 @@ class LandingActivity : AppCompatActivity() {
         const val ITEM_COUNT = 3
         private var mokcUpImageHeight = 0
         private var mockUpImageWidth = 0
-        private val POPUP_TOP_PERCENTS = listOf(0.52f, 0.156f, 0.19f)
+        private val POPUP_TOP_PERCENTS = listOf(0.55f, 0.19f, 0.22f)
 
         @BindingAdapter("landing_button")
         @JvmStatic
@@ -129,7 +129,7 @@ class LandingActivity : AppCompatActivity() {
                         0 -> 318
                         1 -> 315
                         else -> 326
-                    } / 360
+                    } / 346
                 }
 
                 scaleX = 0.75f

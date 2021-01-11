@@ -23,10 +23,7 @@ fun Context.showToast(message: String) {
     binding.text.text = message
 
     Toast(this).apply {
-        setGravity(Gravity.BOTTOM, 0, (resources.displayMetrics.density * 96).roundToInt())
-
-
+        setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, (resources.displayMetrics.density * 100).roundToInt())
         view = binding.root
     }.show()
-
 }

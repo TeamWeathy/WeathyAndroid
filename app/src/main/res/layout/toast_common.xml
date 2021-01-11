@@ -2,20 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/toast_common"
+
     android:paddingHorizontal="20dp">
 
-    <TextView
-        android:id="@+id/text"
+    <FrameLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:text="toast"
-        android:textSize="16sp"
-        android:textColor="@color/main_grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/toast_common">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="toast"
+            android:textColor="@color/main_grey"
+            android:textSize="16sp"
+
+            />
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

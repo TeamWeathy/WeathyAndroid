@@ -1,6 +1,8 @@
 package team.weathy.util
 
 import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -8,9 +10,14 @@ import androidx.security.crypto.MasterKey
 
 class SPUtil(context: Application) {
     private val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
-    val sharedPreferences = EncryptedSharedPreferences.create(
-        context, SP_NAME, masterKey, AES256_SIV, AES256_GCM
-    )
+
+    val sharedPreferences: SharedPreferences = try {
+        EncryptedSharedPreferences.create(
+            context, SP_NAME, masterKey, AES256_SIV, AES256_GCM
+        )
+    } catch (e: Throwable) {
+        context.getSharedPreferences(SP_NAME, MODE_PRIVATE)
+    }
 
     var isFirstLaunch: Boolean
         get() {

@@ -38,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
         //            else -> navigateMain()
         //        }
         navigateMain()
-        //        navigateLanding()
+        //                navigateLanding()
         finish()
     }
 
