@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
 import team.weathy.dialog.EditDialog
@@ -24,6 +25,7 @@ import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
+@FlowPreview
 class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
@@ -116,6 +118,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.chipGroup.startLayoutAnimation()
     }
 
+    @Suppress("DEPRECATION")
     private fun createChip(text: String, index: Int): Chip {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
@@ -177,29 +180,22 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         when (viewModel.choicedClothesTabIndex.value) {
             0 -> {
                 EditDialog.newInstance(
-                    "상의 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "상의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             1 -> {
                 EditDialog.newInstance(
-                    "하의 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "하의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             2 -> {
                 EditDialog.newInstance(
-                    "외투 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "외투 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             3 -> {
                 EditDialog.newInstance(
-                    "기타 추가하기",
-                    viewModel.clothes.value!!.size.toString()
+                    "기타 추가하기", viewModel.clothes.value!!.size.toString()
                 ).show(childFragmentManager, null)
             }
         }

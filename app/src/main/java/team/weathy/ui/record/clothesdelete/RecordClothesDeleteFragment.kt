@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesdelete
 
 import android.app.Activity
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesDeleteBinding
 import team.weathy.dialog.CommonDialog
@@ -22,8 +22,8 @@ import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
-import kotlin.math.roundToInt
 
+@FlowPreview
 class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesDeleteBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
@@ -90,16 +90,12 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
             view.isInvisible = index != tab
         }
         category.forEachIndexed { index, textView ->
-            if (index == tab)
-                textView.setTextColor(getColor(R.color.main_grey))
-            else
-                textView.setTextColor(getColor(R.color.sub_grey_6))
+            if (index == tab) textView.setTextColor(getColor(R.color.main_grey))
+            else textView.setTextColor(getColor(R.color.sub_grey_6))
         }
         count.forEachIndexed { index, textView ->
-            if (index == tab)
-                textView.setTextColor(getColor(R.color.sub_grey_6))
-            else
-                textView.setTextColor(getColor(R.color.sub_grey_3))
+            if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
+            else textView.setTextColor(getColor(R.color.sub_grey_3))
         }
     }
 
@@ -172,8 +168,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
                 "삭제하면 되돌릴 수 없어요.",
                 "삭제하기",
                 getColor(R.color.pink),
-                true)
-                .show(childFragmentManager, null)
+                true).show(childFragmentManager, null)
         }
     }
 

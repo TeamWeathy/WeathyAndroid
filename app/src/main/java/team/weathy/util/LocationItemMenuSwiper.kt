@@ -66,10 +66,14 @@ class LocationItemMenuSwiper private constructor(binding: ItemLocationBinding, p
                     else -> closeMenu()
                 }
 
-
                 tracker?.also {
                     it.recycle()
                     tracker = null
+                }
+
+                if (event.eventTime - event.downTime < 100 && event.actionMasked == MotionEvent.ACTION_UP) {
+                    view.performClick()
+                    return false
                 }
             }
         }

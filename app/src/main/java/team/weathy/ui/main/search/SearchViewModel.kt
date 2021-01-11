@@ -27,7 +27,8 @@ import java.time.LocalDateTime
 
 @FlowPreview
 class SearchViewModel @ViewModelInject constructor(
-    @ApiMock private val weatherAPI: WeatherAPI, private val recentSearchCodeDao: RecentSearchCodeDao
+    @ApiMock private val weatherAPI: WeatherAPI,
+    private val recentSearchCodeDao: RecentSearchCodeDao,
 ) : ViewModel() {
     val focused = MutableLiveData(false)
     val query = MutableLiveData("")
@@ -76,23 +77,30 @@ class SearchViewModel @ViewModelInject constructor(
         })
     }
 
-    fun onItemClicked(position: Int) = launchCatch({
-        if (showRecently.value == true) return@launchCatch
-        searchResult.value?.get(position)?.daily?.region?.code?.let {
-            recentSearchCodeDao.add(RecentSearchCode(it))
+    suspend fun onItemClicked(position: Int) {
+        kotlin.runCatching {
+            if (showRecently.value == false) {
+                searchResult.value?.get(position)?.daily?.region?.code?.let {
+                    recentSearchCodeDao.add(RecentSearchCode(it))
+                    getRecentSearchCodesAndFetch()
+                }
+            }
         }
-    }, onSuccess = {
-        getRecentSearchCodesAndFetch()
-    }, onFailure = {
-        debugE(it)
-    })
+    }
 
-    fun getRecentSearchCodesAndFetch() = launchCatch({
-        val codes = recentSearchCodeDao.getAll()
-        fetchRecentSearchCodes(codes)
-    }, loading, onSuccess = {
-        recentlySearchResult.value = it
-    })
+    suspend fun getRecentSearchCodesAndFetch() {
+        loading.value = true
+
+        kotlin.runCatching {
+            val codes = recentSearchCodeDao.getAll()
+            fetchRecentSearchCodes(codes)
+        }.onSuccess {
+            recentlySearchResult.value = it
+        }.onFailure {
+        }
+
+        loading.value = false
+    }
 
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.map {
         weatherAPI.fetchWeatherByLocation(
