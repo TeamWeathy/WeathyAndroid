@@ -98,6 +98,10 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             updateChipSelectedState()
             updateTabTexts()
         }
+        viewModel.onChipCheckedFailed.observe(viewLifecycleOwner) {
+            (binding.chipGroup.children.toList().getOrNull(it) as? Chip)?.isChecked = false
+            showExceedMaximumSelectedToast()
+        }
     }
 
 
@@ -117,16 +121,10 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
-                if (viewModel.selectedClothes.value!!.size == 4 && button.isChecked) {
-                    button.isChecked = false
-                    showExceedMaximumSelectedToast()
-                    return@setOnCheckedChangeListener
-                }
-
                 if (isChecked) {
-                    onChipChecked(index)
+                    viewModel.onChipChecked(index)
                 } else {
-                    onChipUnchecked(index)
+                    viewModel.onChipUnchecked(index)
                 }
             }
 
@@ -140,10 +138,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는")
-
-    private fun onChipChecked(index: Int) = viewModel.onChipChecked(index)
-
-    private fun onChipUnchecked(index: Int) = viewModel.onChipUnchecked(index)
 
     private fun updateChipSelectedState() {
         binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
