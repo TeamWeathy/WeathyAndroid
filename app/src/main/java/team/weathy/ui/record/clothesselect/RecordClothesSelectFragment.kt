@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isInvisible
@@ -67,6 +68,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
         constraintLayout.setOnClickListener {
             viewModel.changeSelectedClothesTabIndex(index)
+            binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
         }
     }
 
