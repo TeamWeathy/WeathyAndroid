@@ -9,16 +9,15 @@ import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionSc
 import androidx.security.crypto.MasterKey
 
 class SPUtil(context: Application) {
-    private val masterKey: MasterKey? = try {
-        MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
-    } catch (e: Throwable) {
-        null
-    }
-    val sharedPreferences: SharedPreferences = masterKey?.let {
+    private val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+
+    val sharedPreferences: SharedPreferences = try {
         EncryptedSharedPreferences.create(
             context, SP_NAME, masterKey, AES256_SIV, AES256_GCM
         )
-    } ?: context.getSharedPreferences(SP_NAME, MODE_PRIVATE)
+    } catch (e: Throwable) {
+        context.getSharedPreferences(SP_NAME, MODE_PRIVATE)
+    }
 
     var isFirstLaunch: Boolean
         get() {
