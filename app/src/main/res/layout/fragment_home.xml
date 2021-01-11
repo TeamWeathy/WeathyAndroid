@@ -105,6 +105,41 @@
                 app:layout_constraintStart_toStartOf="@id/nickname"
                 app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
+            <ImageButton
+                android:id="@+id/weathy_question"
+                style="@style/ImageButton.size48.padding19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="85dp"
+                android:src="@drawable/ic_help"
+                app:layout_constraintBottom_toBottomOf="@id/today_weathy"
+                app:layout_constraintStart_toStartOf="@id/today_weathy"
+                app:layout_constraintTop_toTopOf="@id/today_weathy" />
+
+            <ImageView
+                android:id="@+id/weathy_explanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0"
+                android:elevation="10dp"
+                android:src="@drawable/main_help_box_help"
+                app:layout_constraintStart_toStartOf="@id/today_weathy"
+                app:layout_constraintTop_toBottomOf="@id/today_weathy" />
+
+            <ImageButton
+                android:id="@+id/exit_explanation"
+                style="@style/ImageButton.size48.padding19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:alpha="0"
+                android:elevation="10dp"
+                android:src="@drawable/ic_close_small"
+                app:layout_constraintEnd_toEndOf="@id/weathy_explanation"
+                app:layout_constraintTop_toTopOf="@id/weathy_explanation" />
+
             <include
                 android:id="@+id/recommended"
                 layout="@layout/layout_home_recommended_weathy"
