@@ -3,19 +3,21 @@ package team.weathy.ui.record
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
-import team.weathy.R
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivityRecordBinding
 import team.weathy.ui.main.calendar.CalendarFragment
+import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
 import team.weathy.ui.record.detail.RecordDetailFragment
-import team.weathy.ui.record.locationchange.RecordLocationChangeFragment
 import team.weathy.ui.record.start.RecordStartFragment
 import team.weathy.ui.record.weatherrating.RecordWeatherRatingFragment
 import team.weathy.util.extensions.popFragmentIfExist
 import team.weathy.util.extensions.replaceFragment
 
+@FlowPreview
+@AndroidEntryPoint
 class RecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecordBinding
 
@@ -31,7 +33,7 @@ class RecordActivity : AppCompatActivity() {
     }
 
     fun navigateStartToLocationChange() =
-        replaceFragment(binding.fragmentContainer, RecordLocationChangeFragment::class.java, true)
+        replaceFragment(binding.fragmentContainer, SearchFragment.newInstance(true), true)
 
     fun navigateStartToClothesSelect() =
         replaceFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java, true)
