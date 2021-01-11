@@ -66,6 +66,7 @@
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
+                android:background="@drawable/bg_clothes_tab"
                 android:focusable="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub">
@@ -112,6 +113,7 @@
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
+                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 app:layout_constraintStart_toEndOf="@id/layout_top"
                 app:layout_constraintTop_toTopOf="@id/layout_top">
@@ -159,6 +161,7 @@
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
+                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 app:layout_constraintStart_toEndOf="@id/layout_bottom"
                 app:layout_constraintTop_toTopOf="@id/layout_bottom">
@@ -206,6 +209,7 @@
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
+                android:background="@drawable/bg_clothes_tab"
                 app:layout_constraintStart_toEndOf="@id/layout_outer"
                 app:layout_constraintTop_toTopOf="@id/layout_outer">
 
