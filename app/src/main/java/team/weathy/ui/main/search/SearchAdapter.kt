@@ -22,6 +22,7 @@ import java.time.LocalDateTime
 
 class SearchAdapter(
     private val onItemRemoved: (idx: Int) -> Unit,
+    private val onItemClicked: (idx: Int) -> Unit,
     private val isRecentShowing: LiveData<Boolean>,
     private val lifecycleOwner: LifecycleOwner
 ) : Adapter<Holder>() {
@@ -74,6 +75,10 @@ class SearchAdapter(
             // get item height dynamically
             binding.root.doOnLayout {
                 itemHeight = it.height
+            }
+
+            binding.onClick = {
+                onItemClicked(layoutPosition)
             }
 
             isRecentShowing.observe(lifecycleOwner) {

@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        style="@style/ImageButton.size48_padding19"
+        style="@style/ImageButton.size48.padding19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

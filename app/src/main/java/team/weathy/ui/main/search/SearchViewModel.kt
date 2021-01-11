@@ -18,6 +18,7 @@ import team.weathy.di.ApiMock
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
 import team.weathy.util.dateHourString
+import team.weathy.util.debugE
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
@@ -75,18 +76,16 @@ class SearchViewModel @ViewModelInject constructor(
         })
     }
 
-    fun onItemRemoved(position: Int) {
-        if (showRecently.value == true) {
-            removeRecentSearchCode(position)
-            recentlySearchResult.updateList {
-                removeAt(position)
-            }
-        } else {
-            searchResult.updateList {
-                removeAt(position)
-            }
+    fun onItemClicked(position: Int) = launchCatch({
+        if (showRecently.value == true) return@launchCatch
+        searchResult.value?.get(position)?.daily?.region?.code?.let {
+            recentSearchCodeDao.add(RecentSearchCode(it))
         }
-    }
+    }, onSuccess = {
+        getRecentSearchCodesAndFetch()
+    }, onFailure = {
+        debugE(it)
+    })
 
     fun getRecentSearchCodesAndFetch() = launchCatch({
         val codes = recentSearchCodeDao.getAll()
@@ -101,10 +100,18 @@ class SearchViewModel @ViewModelInject constructor(
         ).weather!!
     }
 
-    private fun removeRecentSearchCode(position: Int) = launchCatch({
-        recentlySearchResult.value?.get(position)?.let {
-            recentSearchCodeDao.delete(RecentSearchCode(it.daily.region.code))
+    fun onItemRemoved(position: Int) {
+        if (showRecently.value == false) return
+        val code = recentlySearchResult.value?.get(position)?.daily?.region?.code ?: return
+
+        removeRecentSearchCode(code)
+        recentlySearchResult.updateList {
+            removeAt(position)
         }
+    }
+
+    private fun removeRecentSearchCode(code: Int) = launchCatch({
+        recentSearchCodeDao.delete(code)
     })
 }
 

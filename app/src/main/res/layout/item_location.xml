@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="datetime_text"
             type="String" />
@@ -24,9 +23,14 @@
         <variable
             name="low_temp"
             type="String" />
+
+        <variable
+            name="on_click"
+            type="kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:onClick="@{() -> on_click.invoke()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="163dp"
@@ -111,15 +115,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="20dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{cur_temp}"
                     android:textColor="@color/sub_grey_1"
-                    android:textSize="60sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/high"
-                    tools:text="-2" />
+                    android:layout_marginBottom="0dp"
+                    android:textSize="50sp"
+                    app:layout_constraintBottom_toTopOf="@id/high"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="-20" />
 
                 <TextView
                     android:id="@+id/high"
@@ -129,7 +133,7 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@{high_temp}"
                     android:textColor="@color/text_high_temp"
-                    android:textSize="25sp"
+                    android:textSize="23sp"
                     app:layout_constraintBottom_toBottomOf="@id/low"
                     app:layout_constraintRight_toRightOf="@id/divider"
                     tools:text="-2" />
@@ -155,7 +159,7 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@{low_temp}"
                     android:textColor="@color/blue_temp"
-                    android:textSize="25sp"
+                    android:textSize="23sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     tools:text="-2" />

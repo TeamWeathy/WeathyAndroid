@@ -47,6 +47,8 @@ class SearchFragment : Fragment() {
     private fun configureList() = binding.list.let { list ->
         list.adapter = SearchAdapter(onItemRemoved = {
             viewModel.onItemRemoved(it)
+        }, onItemClicked = {
+            viewModel.onItemClicked(it)
         }, viewModel.showRecently, viewLifecycleOwner)
         list.addItemDecoration(LinearItemDecoration(20))
     }

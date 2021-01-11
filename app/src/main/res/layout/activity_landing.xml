@@ -109,12 +109,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="360:563"
+            app:layout_constraintDimensionRatio="346:563"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/indicator_container"
             app:layout_constraintVertical_bias="1"
-            app:layout_constraintWidth_max="360dp"
+            app:layout_constraintWidth_max="400dp"
             tools:src="@drawable/onboarding_img_phone_1" />
 
         <ImageView
