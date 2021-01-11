@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import team.weathy.util.EventLiveData
 import team.weathy.util.extensions.updateList
 import team.weathy.util.extensions.updateSet
 
@@ -83,14 +84,24 @@ class RecordViewModel : ViewModel() {
         }
     }
 
+    val onChipCheckedFailed = EventLiveData<Int>()
+
     fun changeSelectedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
             _choicedClothesTabIndex.value = tab
         }
     }
 
-    fun onChipChecked(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
-        add(index)
+    fun onChipChecked(index: Int) {
+        if(selectedClothes.value!!.contains(index)) return
+
+        if (selectedClothes.value!!.size == 5) {
+            onChipCheckedFailed.emit(index + 1 /* because of add button */)
+            return
+        }
+        clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
+            add(index)
+        }
     }
 
     fun onChipCheckedForDelete(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
@@ -111,7 +122,7 @@ class RecordViewModel : ViewModel() {
         selectedIndices.updateSet {
             val original = toMutableSet()
             clear()
-            original.map { it + 1 }.forEach(this::add)
+            addAll(original.map { it + 1 })
         }
     }
 
