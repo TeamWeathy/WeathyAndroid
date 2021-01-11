@@ -40,16 +40,13 @@
 
     <ImageView
         android:id="@+id/weather_image"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginVertical="4dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/main_img_fewclouds"
-        android:translationX="-20dp"
-        android:translationY="-20dp"
         app:layout_constraintBottom_toTopOf="@+id/nickname"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/current_temp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gps_image"
         app:layout_constraintWidth_max="400dp" />
 
@@ -58,24 +55,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_light"
-        android:text="-2°"
+        android:text="-20°"
         android:textColor="@color/sub_grey_1"
-        android:textSize="60sp"
-        app:layout_constraintStart_toEndOf="@id/weather_image"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/weather_image"
         app:layout_constraintTop_toTopOf="@id/weather_image" />
 
     <TextView
         android:id="@+id/max_temp_today"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
         android:layout_marginBottom="7dp"
         android:fontFamily="@font/roboto_light"
-        android:text="-4°"
+        android:text="20°"
         android:textColor="@color/red_temp"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@id/current_temp"
-        app:layout_constraintStart_toEndOf="@id/current_temp" />
+        android:textSize="23sp"
+        app:layout_constraintStart_toStartOf="@id/current_temp"
+        app:layout_constraintTop_toBottomOf="@id/current_temp" />
 
     <TextView
         android:id="@+id/slash_temp_today"
@@ -86,7 +84,8 @@
         android:textColor="@color/temp_bar"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/max_temp_today"
-        app:layout_constraintLeft_toRightOf="@id/max_temp_today"
+        app:layout_constraintEnd_toStartOf="@id/min_temp_today"
+        app:layout_constraintStart_toEndOf="@id/max_temp_today"
         app:layout_constraintTop_toTopOf="@id/max_temp_today" />
 
     <TextView
@@ -94,22 +93,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_light"
-        android:text="-4°"
+        android:text="-20°"
         android:textColor="@color/blue_temp"
-        android:textSize="25sp"
+        android:textSize="23sp"
         app:layout_constraintBottom_toBottomOf="@id/slash_temp_today"
+        app:layout_constraintEnd_toEndOf="@id/current_temp"
         app:layout_constraintLeft_toRightOf="@id/slash_temp_today"
         app:layout_constraintTop_toTopOf="@id/slash_temp_today" />
 
     <TextView
+        android:id="@+id/today_feeling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="저 구름은 어디에서 왔을까요조금 흐리지만"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:text="조금 흐리지만\n햇살이 따스해요:)"
         android:textColor="@color/black_0.58"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/current_temp"
         app:layout_constraintStart_toStartOf="@id/current_temp"
-        app:layout_constraintTop_toBottomOf="@id/current_temp" />
+        app:layout_constraintTop_toBottomOf="@id/max_temp_today" />
 
 
     <TextView

@@ -39,14 +39,15 @@
 
     <ImageView
         android:id="@+id/weather_image"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginVertical="4dp"
         android:alpha="0"
+        android:scaleType="centerCrop"
+        android:src="@drawable/main_img_fewclouds"
         android:translationY="-500dp"
         app:layout_constraintBottom_toTopOf="@+id/nickname"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/current_temp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gps_image"
         app:layout_constraintWidth_max="400dp" />
 
@@ -71,7 +72,6 @@
         android:layout_marginBottom="21dp"
         android:alpha="0"
         android:fontFamily="@font/notosans_medium"
-
         android:text="오늘의 웨디"
         android:textColor="@color/main_grey"
         android:textSize="21sp"
