@@ -26,14 +26,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.setting.SettingActivity" />
-        <activity android:name=".ui.nicknamechange.NicknameChangeActivity" />
-        <activity android:name=".ui.developerinfo.DeveloperInfoActivity" />
-        <activity android:name=".ui.record.RecordActivity" />
-        <activity android:name=".ui.landing.LandingActivity" />
-        <activity android:name=".ui.nicknameset.NicknameSetActivity" />
-        <activity android:name=".ui.inquire.InquireActivity" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.nicknamechange.NicknameChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.developerinfo.DeveloperInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.record.RecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.landing.LandingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.nicknameset.NicknameSetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.inquire.InquireActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />
