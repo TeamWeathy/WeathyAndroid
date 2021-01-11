@@ -2,13 +2,14 @@ package team.weathy.ui.setting
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
 import team.weathy.ui.inquire.InquireActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
+
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
@@ -50,9 +51,10 @@ class SettingActivity : AppCompatActivity() {
     private fun pushNotifSwitchAct() {
         binding.pushNotifSwitch.setOnCheckedChangeListener { _, onSwitch ->
             if (onSwitch) {
-                Toast.makeText(this, "On", Toast.LENGTH_SHORT).show()
+                showToast("위치 정보 제공에 동의하셨습니다.")
+
             } else {
-                Toast.makeText(this, "Off", Toast.LENGTH_SHORT).show()
+                showToast("위치 정보 제공에 동의하지 않으셨습니다.")
             }
         }
     }
