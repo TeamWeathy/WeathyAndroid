@@ -52,9 +52,6 @@ class SettingActivity : AppCompatActivity() {
         binding.pushNotifSwitch.setOnCheckedChangeListener { _, onSwitch ->
             if (onSwitch) {
                 showToast("위치 정보 제공에 동의하셨습니다.")
-
-            } else {
-                showToast("위치 정보 제공에 동의하지 않으셨습니다.")
             }
         }
     }
