@@ -22,14 +22,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
       - name: Android Test
       	run: ./gradlew :app:connectedAndroidTest
-
       - name: Build Release
         if: ${{ contains(github.ref, 'main') }}
         run: ./gradlew assembleRelease
-
       - name: Build Debug
         if: ${{ !contains(github.ref, 'main') }}
         run: ./gradlew assembleDebug
