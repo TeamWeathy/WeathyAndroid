@@ -4,25 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import team.weathy.MainApplication.Companion.pixelRatio
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
+import team.weathy.util.PixelRatio
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
     private val viewModel by viewModels<HomeViewModel>()
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
 
     private var shouldDisableThirdScene = false
     private var isHelpPopupShowing = false
@@ -52,7 +54,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+//        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         weathyQuestionBtnClick()
         exitExplanationBtnClick()

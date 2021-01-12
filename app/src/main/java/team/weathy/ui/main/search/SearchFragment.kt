@@ -39,6 +39,13 @@ class SearchFragment : Fragment() {
      */
     private val recordViewModel by activityViewModels<RecordViewModel>()
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            mainViewModel.changeMenu(HOME)
+            isEnabled = false
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentSearchBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
@@ -54,7 +61,7 @@ class SearchFragment : Fragment() {
             registerBackPressCallback()
             handleMainMenuChange()
         } else {
-            getRecentSEarchCodesAndFetch() // fetch
+            fetchRecentSearchLocations() // fetch
         }
     }
 
@@ -89,17 +96,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun registerBackPressCallback() =
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                mainViewModel.changeMenu(HOME)
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
+    override fun onResume() {
+        super.onResume()
+        onBackPressedCallback.isEnabled = true
+    }
 
     private fun handleMainMenuChange() {
         mainViewModel.menu.observe(viewLifecycleOwner) {
             when (it) {
                 SEARCH -> {
-                    getRecentSEarchCodesAndFetch()
+                    fetchRecentSearchLocations()
                 }
                 else -> {
                     viewModel.clear()
@@ -108,7 +116,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun getRecentSEarchCodesAndFetch() = lifecycleScope.launchWhenStarted {
+    private fun fetchRecentSearchLocations() = lifecycleScope.launchWhenStarted {
         viewModel.getRecentSearchCodesAndFetch()
     }
 

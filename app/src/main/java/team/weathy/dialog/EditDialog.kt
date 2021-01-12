@@ -11,16 +11,22 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import team.weathy.MainApplication.Companion.pixelRatio
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.DialogEditBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.PixelRatio
 import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class EditDialog : DialogFragment() {
 	private var binding by AutoClearedValue<DialogEditBinding>()
+
+	@Inject
+	lateinit var pixelRatio: PixelRatio
 
 	private val title: String
 		get() = arguments?.getString("title") ?: ""
