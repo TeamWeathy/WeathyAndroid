@@ -85,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:text="어떤 옷"
                 android:textColor="@color/mint_icon"
+                android:fontFamily="@font/notosans_medium"
                 app:layout_constraintStart_toStartOf="@id/tv_nick_name"
                 app:layout_constraintTop_toBottomOf="@id/tv_nick_name" />
 

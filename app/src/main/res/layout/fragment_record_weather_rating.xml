@@ -69,6 +69,7 @@
             android:layout_marginStart="26dp"
             android:text="날씨"
             android:textColor="@color/mint_icon"
+            android:fontFamily="@font/notosans_medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 

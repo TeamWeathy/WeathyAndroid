@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:text="웨디"
         android:textColor="@color/mint_icon"
+        android:fontFamily="@font/notosans_medium"
         app:layout_constraintTop_toTopOf="@id/tv_title2"
         app:layout_constraintStart_toEndOf="@id/tv_title2"/>
 

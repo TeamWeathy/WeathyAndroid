@@ -33,6 +33,7 @@
         android:layout_marginTop="29dp"
         android:text="등록이 완료"
         android:textColor="@color/mint_icon"
+        android:fontFamily="@font/notosans_medium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
