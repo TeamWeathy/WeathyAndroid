@@ -94,7 +94,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:paddingTop="42dp"
+            android:layout_marginTop="30dp"
             android:paddingHorizontal="26dp"
             android:clipToPadding="false"
             android:clipChildren="false"
@@ -111,6 +111,7 @@
                     android:id="@+id/cv_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     app:weathy_radius="20dp"
                     app:weathy_disable_shadow="true"
                     app:weathy_stroke_width="1dp"
