@@ -172,9 +172,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setButtonActivation() {
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
             if (viewModel.selectedClothes.value!!.isNotEmpty()) {
-                setButtonEnabled(true)
+                if (!binding.btnCheck.isEnabled)
+                    setButtonEnabled(true)
             } else {
-                setButtonDisabled(false)
+                if (binding.btnCheck.isEnabled)
+                    setButtonDisabled(false)
             }
         }
     }
