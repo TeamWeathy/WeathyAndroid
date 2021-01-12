@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/datetime"
         android:layout_width="wrap_content"
@@ -17,23 +16,40 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/gps_image"
+        android:id="@+id/gps_image_shadow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0"
-        android:translationX="-8dp"
+        android:src="@drawable/ic_gps_shadow"
+        android:translationY="-700dp"
+        app:layout_constraintBottom_toBottomOf="@id/gps_image"
+        app:layout_constraintEnd_toEndOf="@id/gps_image"
+        app:layout_constraintStart_toStartOf="@id/gps_image"
+        app:layout_constraintTop_toTopOf="@id/gps_image" />
+
+    <ImageView
+        android:id="@+id/gps_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:alpha="0"
+        android:enabled="false"
+        android:src="@drawable/ic_gps"
         android:translationY="-700dp"
         app:layout_constraintBottom_toTopOf="@+id/weather_image"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/datetime"
         app:layout_constraintTop_toBottomOf="@+id/datetime" />
 
     <TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="9dp"
         android:alpha="0"
         android:fontFamily="@font/notosans_medium"
-        android:translationX="-8dp"
+        android:text="서울 도봉구"
+        android:textColor="@color/main_grey"
+        android:textSize="20sp"
         android:translationY="-700dp"
         app:layout_constraintBottom_toBottomOf="@id/gps_image"
         app:layout_constraintLeft_toRightOf="@id/gps_image"
@@ -100,10 +116,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginTop="4dp"
-        android:elevation="10dp"
         android:alpha="0"
-        android:translationY="-700dp"
+        android:elevation="10dp"
         android:src="@drawable/main_help_box_help"
+        android:translationY="-700dp"
         app:layout_constraintStart_toStartOf="@id/today_weathy"
         app:layout_constraintTop_toBottomOf="@id/today_weathy" />
 
@@ -115,8 +131,8 @@
         android:layout_marginTop="8dp"
         android:alpha="0"
         android:elevation="10dp"
-        android:translationY="-700dp"
         android:src="@drawable/ic_close_small"
+        android:translationY="-700dp"
         app:layout_constraintEnd_toEndOf="@id/weathy_explanation"
         app:layout_constraintTop_toTopOf="@id/weathy_explanation" />
 
@@ -220,17 +236,17 @@
         android:layout_width="match_parent"
         android:layout_height="216dp"
         android:layout_marginTop="78dp"
-        android:alpha="1"
-        tools:alpha="1"
+        android:alpha="0"
         android:translationY="0dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:alpha="1" />
 
     <team.weathy.view.WeathyCardView
         android:id="@+id/weeklyCard"
         android:layout_width="match_parent"
         android:layout_height="216dp"
         android:layout_marginTop="24dp"
-        android:alpha="1"
+        android:alpha="0"
         android:translationY="0dp"
         app:layout_constraintTop_toBottomOf="@id/hourlyCard"
         tools:alpha="1" />
@@ -239,11 +255,11 @@
         android:id="@+id/detailCard"
         android:layout_width="match_parent"
         android:layout_height="216dp"
-        tools:alpha="1"
         android:layout_marginTop="24dp"
-        android:alpha="1"
+        android:alpha="0"
         android:translationY="0dp"
-        app:layout_constraintTop_toBottomOf="@id/weeklyCard" />
+        app:layout_constraintTop_toBottomOf="@id/weeklyCard"
+        tools:alpha="1" />
 
     <ImageView
         android:id="@+id/logo"
@@ -253,4 +269,5 @@
         android:src="@drawable/mainscroll_img_logo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

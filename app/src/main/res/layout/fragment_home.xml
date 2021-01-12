@@ -43,27 +43,37 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/gps_image"
+                android:id="@+id/gps_image_shadow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_gps_shadow"
-                android:translationX="-8dp"
+                app:layout_constraintBottom_toBottomOf="@id/gps_image"
+                app:layout_constraintEnd_toEndOf="@id/gps_image"
+                app:layout_constraintStart_toStartOf="@id/gps_image"
+                app:layout_constraintTop_toTopOf="@id/gps_image" />
+
+            <ImageView
+                android:id="@+id/gps_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:enabled="false"
+                android:src="@drawable/ic_gps"
                 app:layout_constraintBottom_toTopOf="@+id/weather_image"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/datetime"
                 app:layout_constraintTop_toBottomOf="@+id/datetime" />
 
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
                 android:fontFamily="@font/notosans_medium"
                 android:text="서울 도봉구"
                 android:textColor="@color/main_grey"
                 android:textSize="20sp"
-                android:translationX="-8dp"
                 app:layout_constraintBottom_toBottomOf="@id/gps_image"
-                app:layout_constraintLeft_toRightOf="@id/gps_image"
-                app:layout_constraintTop_toTopOf="@id/gps_image" />
+                app:layout_constraintLeft_toRightOf="@id/gps_image" />
 
             <ImageView
                 android:id="@+id/weather_image"
@@ -177,22 +187,23 @@
                 app:layout_constraintTop_toTopOf="@id/today_weathy" />
 
             <View
-                android:alpha="0"
-                android:background="@color/transparent_black"
-                android:elevation="9dp"
-                android:layout_marginLeft="-26dp"
-                android:layout_marginRight="-26dp"
                 android:id="@+id/dim"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_marginLeft="-26dp"
+                android:layout_marginRight="-26dp"
+                android:alpha="0"
+                android:background="@color/transparent_black"
+                android:elevation="9dp" />
+
             <ImageView
-                android:clickable="false"
                 android:id="@+id/weathy_explanation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:alpha="0"
+                android:clickable="false"
                 android:elevation="10dp"
                 android:src="@drawable/main_help_box_help"
                 app:layout_constraintStart_toStartOf="@id/today_weathy"
