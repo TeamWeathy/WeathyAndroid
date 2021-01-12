@@ -116,10 +116,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.downArrow setOnDebounceClickListener {
-            binding.container.transitionToState(R.layout.scene_home_second)
-        }
-
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
