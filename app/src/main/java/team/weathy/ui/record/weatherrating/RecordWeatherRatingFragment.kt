@@ -57,6 +57,7 @@ class RecordWeatherRatingFragment : Fragment() {
         cvReview.disableShadow = false
         cvReview.shadowColor = getColor(R.color.main_mint_shadow)
         cvReview.strokeColor = getColor(R.color.main_mint)
+        cvReview.strokeWidth = 4.5f
     }
 
     private fun setButtonEnableListener(button: Button) {
@@ -69,5 +70,6 @@ class RecordWeatherRatingFragment : Fragment() {
     private fun setBackgroundDisableListener(cvReview: WeathyCardView) {
         cvReview.disableShadow = true
         cvReview.strokeColor = getColor(R.color.sub_grey_7)
+        cvReview.strokeWidth = 3f
     }
 }
