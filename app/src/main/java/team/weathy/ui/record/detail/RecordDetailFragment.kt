@@ -46,10 +46,12 @@ class RecordDetailFragment : Fragment() {
             binding.tvTextLength2.text = "$length"
 
             if (length > 0) {
-                setButtonEnabled(true)
+                if (!binding.btnConfirm.isEnabled)
+                    setButtonEnabled(true)
                 setTextActivation(getColor(R.color.main_mint), R.drawable.edit_border_active)
             } else {
-                setButtonDisabled(false)
+                if (binding.btnConfirm.isEnabled)
+                    setButtonDisabled(false)
                 setTextActivation(getColor(R.color.sub_grey_6), R.drawable.edit_border)
             }
         }
