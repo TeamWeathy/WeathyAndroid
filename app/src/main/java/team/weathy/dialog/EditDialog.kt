@@ -59,6 +59,9 @@ class EditDialog : DialogFragment() {
 		binding.enter.addTextChangedListener {
 			binding.btnAdd.isEnabled = !it.isNullOrBlank()
 			binding.textDeleteBtn.isVisible = !it.isNullOrBlank()
+			binding.textDeleteBtn setOnDebounceClickListener {
+				binding.enter.setText("")
+			}
 			if (!it.isNullOrBlank()) {
 				binding.btnAdd.setBackgroundColor(color)
 				binding.textCount.setTextColor(color)
