@@ -33,7 +33,7 @@ class SPUtilImpl @Inject constructor(context: Application) : SPUtil {
     override var isFirstLaunch: Boolean
         get() {
             val result = sharedPreferences.getBoolean("isFirstLaunch", true)
-            if (!result) {
+            if (result) {
                 sharedPreferences.edit().putBoolean("isFirstLaunch", false).commit()
             }
             return result
