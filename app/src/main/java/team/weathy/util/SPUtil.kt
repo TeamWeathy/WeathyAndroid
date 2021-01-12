@@ -7,11 +7,22 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
 import androidx.security.crypto.MasterKey
+import team.weathy.util.SPUtil.Companion.SP_NAME
+import javax.inject.Inject
 
-class SPUtil(context: Application) {
+interface SPUtil {
+    val sharedPreferences: SharedPreferences
+    var isFirstLaunch: Boolean
+
+    companion object {
+        const val SP_NAME = "DO_NOT_CHANGE_THIS"
+    }
+}
+
+class SPUtilImpl @Inject constructor(context: Application) : SPUtil {
     private val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
-    val sharedPreferences: SharedPreferences = try {
+    override val sharedPreferences: SharedPreferences = try {
         EncryptedSharedPreferences.create(
             context, SP_NAME, masterKey, AES256_SIV, AES256_GCM
         )
@@ -19,7 +30,7 @@ class SPUtil(context: Application) {
         context.getSharedPreferences(SP_NAME, MODE_PRIVATE)
     }
 
-    var isFirstLaunch: Boolean
+    override var isFirstLaunch: Boolean
         get() {
             val result = sharedPreferences.getBoolean("isFirstLaunch", true)
             if (!result) {
@@ -31,7 +42,4 @@ class SPUtil(context: Application) {
             sharedPreferences.edit().putBoolean("isFirstLaunch", false).commit()
         }
 
-    companion object {
-        private const val SP_NAME = "DO_NOT_CHANGE_THIS"
-    }
 }
