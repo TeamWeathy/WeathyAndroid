@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+//        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         weathyQuestionBtnClick()
         exitExplanationBtnClick()

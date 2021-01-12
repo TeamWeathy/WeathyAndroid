@@ -51,6 +51,9 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -110,13 +113,47 @@ dependencies {
 dependencies {
     testImplementation 'androidx.test:core:1.3.0'
     testImplementation 'junit:junit:4.13.1'
-    testImplementation 'com.google.truth:truth:1.0'
+    testImplementation "com.google.truth:truth:1.1"
     testImplementation 'org.mockito:mockito-core:3.6.28'
+    testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.28-alpha'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    androidTestImplementation 'androidx.test:core:1.3.0'
     androidTestImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'com.google.truth:truth:1.0'
+
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.3.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
+    androidTestImplementation 'com.google.truth:truth:1.1'
+
+    // Espresso dependencies
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+
+    // The following Espresso dependency can be either "implementation"
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK's compile classpath or the test APK
+    // classpath.
+    debugImplementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
+
+    // For instrumented tests.
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
+    // ...with Kotlin.
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.28-alpha'
+
+//    debugImplementation "androidx.fragment:fragment-testing:1.2.5"
 }

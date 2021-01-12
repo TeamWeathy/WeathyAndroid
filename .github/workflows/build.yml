@@ -23,6 +23,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Android Test
+      	run: ./gradlew :app:connectedAndroidTest
+
       - name: Build Release
         if: ${{ contains(github.ref, 'main') }}
         run: ./gradlew assembleRelease
