@@ -11,7 +11,7 @@ import kotlin.random.Random
 
 class MockWeathyAPI @Inject constructor() : WeathyAPI {
     override fun fetchRecommendedWeathy(code: Int, date: DateString): WeathyRes {
-        TODO("Not yet implemented")
+        return WeathyRes(MockGenerator.weathy(), "")
     }
 
     override fun fetchWeathyWithDate(date: DateString): WeathyRes {

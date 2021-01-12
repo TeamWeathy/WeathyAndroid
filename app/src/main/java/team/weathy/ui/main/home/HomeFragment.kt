@@ -107,11 +107,7 @@ class HomeFragment : Fragment() {
                     val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
                     val marginBetweenCards = 24.dp * 2
 
-                    debugE(screenHeight)
-                    debugE("${binding.weeklyCard.height} ${binding.hourlyCard.height} ${binding.detailCard.height}")
-
                     shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
-                    debugE(shouldDisableThirdScene)
                 }
             }
         }
