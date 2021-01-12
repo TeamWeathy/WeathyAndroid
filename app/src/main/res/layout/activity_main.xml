@@ -54,6 +54,7 @@
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
             android:layout_height="82dp"
+            android:background="@drawable/blur_white_bottom_up"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
