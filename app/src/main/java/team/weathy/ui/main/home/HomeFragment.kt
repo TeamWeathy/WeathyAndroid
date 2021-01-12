@@ -15,9 +15,9 @@ import team.weathy.MainApplication.Companion.pixelRatio
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -74,6 +74,7 @@ class HomeFragment : Fragment() {
                     }
                     R.layout.scene_home_second -> {
                         isFirstSceneShowing = false
+                        startCardAnimation()
                         binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
 
@@ -147,4 +148,11 @@ class HomeFragment : Fragment() {
         binding.dim.isFocusable = false
         binding.container.isInteractionEnabled = true
     }
+
+    private fun startCardAnimation() {
+        binding.hourlyCard.animate().translationY(-300F).setDuration(300L).setStartDelay(300L).alpha(1F).start()
+        binding.weeklyCard.animate().translationY(-300F).setDuration(300L).setStartDelay(1000L).alpha(1F).start()
+        binding.detailCard.animate().translationY(-300F).setDuration(300L).setStartDelay(1700L).alpha(1F).start()
+    }
+
 }
