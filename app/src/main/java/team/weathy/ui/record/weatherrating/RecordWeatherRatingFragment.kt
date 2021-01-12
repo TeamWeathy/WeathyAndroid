@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
 import team.weathy.ui.record.RecordActivity
@@ -15,6 +16,7 @@ import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
 
+@FlowPreview
 class RecordWeatherRatingFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordWeatherRatingBinding>()
 

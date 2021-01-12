@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
@@ -15,6 +16,7 @@ import team.weathy.util.AnimUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

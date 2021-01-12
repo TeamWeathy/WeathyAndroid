@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivitySplashBinding
 import team.weathy.ui.landing.LandingActivity
 import team.weathy.ui.main.MainActivity
@@ -12,6 +13,7 @@ import team.weathy.util.SPUtil
 import team.weathy.util.UniqueIdentifier
 import javax.inject.Inject
 
+@FlowPreview
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
@@ -32,12 +34,12 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateNextScreen() {
-        //        when {
-        //            spUtil.isFirstLaunch -> navigateLanding()
-        //            !uniqueId.exist -> navigateNicknameSet()
-        //            else -> navigateMain()
-        //        }
-        navigateMain()
+        when {
+            spUtil.isFirstLaunch -> navigateLanding()
+            !uniqueId.exist -> navigateNicknameSet()
+            else -> navigateMain()
+        }
+        //        navigateMain()
         //                navigateLanding()
         finish()
     }

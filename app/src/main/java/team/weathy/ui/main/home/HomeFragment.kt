@@ -11,18 +11,23 @@ import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import team.weathy.MainApplication.Companion.pixelRatio
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.PixelRatio
+import team.weathy.util.debugE
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
     private val viewModel by viewModels<HomeViewModel>()
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
 
     private var shouldDisableThirdScene = false
     private var isHelpPopupShowing = false
@@ -52,10 +57,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         weathyQuestionBtnClick()
         exitExplanationBtnClick()
+
+
+        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+
+        binding.topBlur.pivotY = 0f
 
         binding.container.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {
@@ -74,7 +83,6 @@ class HomeFragment : Fragment() {
                     }
                     R.layout.scene_home_second -> {
                         isFirstSceneShowing = false
-                        startCardAnimation()
                         binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
 
@@ -93,13 +101,21 @@ class HomeFragment : Fragment() {
         })
 
         binding.weeklyCard.doOnLayout {
-            val screenHeight = pixelRatio.screenHeight
-            val marginTop = 100.dp
-            val marginBottom = 96.dp
-            val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
-            val marginBetweenCards = 24.dp * 2
+            binding.hourlyCard.doOnLayout {
+                binding.detailCard.doOnLayout {
+                    val screenHeight = pixelRatio.screenHeight - 25.dp
+                    val marginTop = 78.dp
+                    val marginBottom = 96.dp
+                    val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
+                    val marginBetweenCards = 24.dp * 2
 
-            shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+                    debugE(screenHeight)
+                    debugE("${binding.weeklyCard.height} ${binding.hourlyCard.height} ${binding.detailCard.height}")
+
+                    shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+                    debugE(shouldDisableThirdScene)
+                }
+            }
         }
 
         binding.downArrow setOnDebounceClickListener {
@@ -147,12 +163,6 @@ class HomeFragment : Fragment() {
         binding.dim.isClickable = false
         binding.dim.isFocusable = false
         binding.container.isInteractionEnabled = true
-    }
-
-    private fun startCardAnimation() {
-        binding.hourlyCard.animate().translationY(-300F).setDuration(300L).setStartDelay(300L).alpha(1F).start()
-        binding.weeklyCard.animate().translationY(-300F).setDuration(300L).setStartDelay(1000L).alpha(1F).start()
-        binding.detailCard.animate().translationY(-300F).setDuration(300L).setStartDelay(1700L).alpha(1F).start()
     }
 
 }

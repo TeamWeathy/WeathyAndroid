@@ -26,6 +26,25 @@ fun AppCompatActivity.replaceFragment(
     }
 }
 
+fun AppCompatActivity.replaceFragment(
+    containerView: FragmentContainerView, fragment: Fragment, addToBackStack: Boolean = false
+) {
+    val tagName = fragment::class.java.simpleName
+    val exists = supportFragmentManager.findFragmentByTag(tagName)
+
+    supportFragmentManager.commit {
+        setCustomAnimations(
+            R.anim.enter_from_right, R.anim.exit_to_left, R.anim.pop_enter_from_left, R.anim.pop_exit_to_right
+        )
+        exists?.run {
+            replace(containerView.id, exists)
+        } ?: replace(
+            containerView.id, fragment, tagName
+        )
+        if (addToBackStack) addToBackStack(tagName)
+    }
+}
+
 fun AppCompatActivity.addFragment(containerView: FragmentContainerView, clazz: Class<out Fragment>) {
     val tagName = clazz.simpleName
 
