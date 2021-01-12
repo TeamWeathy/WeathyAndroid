@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/topBlur"
-        android:layout_height="78dp"
         android:layout_width="match_parent"
+        android:layout_height="78dp"
         android:alpha="0"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,10 +35,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="wrap_content"
         android:id="@+id/logo"
-        android:layout_marginTop="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
         android:alpha="0"
         android:elevation="10dp"
         android:outlineProvider="none"
@@ -49,8 +49,8 @@
 
     <ImageView
         android:id="@+id/weather_image"
-        android:layout_height="0dp"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="45dp"
         android:scaleType="centerCrop"
@@ -65,9 +65,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_weather"
         android:layout_width="0dp"
-        android:layout_marginBottom="21dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="21dp"
         app:layout_constraintBottom_toTopOf="@id/recommended"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/guide_left"
@@ -75,33 +75,55 @@
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/gps_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_marginStart="15dp"
+        android:src="@drawable/ic_gps_shadow"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/container_weather" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:fontFamily="@font/notosans_medium"
+        android:text="서울 도봉구"
+        android:textColor="@color/main_grey"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/gps_image"
+        app:layout_constraintLeft_toRightOf="@id/gps_image"
+        app:layout_constraintTop_toTopOf="@id/gps_image" />
+
     <include
         android:id="@+id/recommended"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="121dp"
         layout="@layout/layout_home_recommended_weathy"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="121dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/guide_left"
         app:layout_constraintRight_toRightOf="@id/guide_right" />
 
     <ImageView
         android:id="@+id/downArrow"
-        android:alpha="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="1"
         android:paddingVertical="10dp"
         android:src="@drawable/ic_down"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recommended" />
 
-
     <team.weathy.view.WeathyCardView
         android:id="@+id/detailCard"
         android:layout_width="0dp"
-        android:layout_marginTop="24dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:paddingHorizontal="24dp"
         android:paddingVertical="16dp"
         app:layout_constraintLeft_toLeftOf="@id/guide_left"
