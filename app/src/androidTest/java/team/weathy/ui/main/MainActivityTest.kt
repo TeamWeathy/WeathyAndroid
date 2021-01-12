@@ -1,7 +1,7 @@
 package team.weathy.ui.main
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.FlowPreview
@@ -12,7 +12,6 @@ import team.weathy.IdlingRegistryRule
 import team.weathy.MainApplication
 import team.weathy.util.PixelRatio
 import team.weathy.util.SPUtil
-import team.weathy.util.debugE
 import javax.inject.Inject
 
 @FlowPreview
@@ -24,11 +23,6 @@ class MainActivityTest {
     @get:Rule
     val idlingRule = IdlingRegistryRule()
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
-    val scenario
-        get() = activityRule.scenario
-
     @Inject
     lateinit var spUtil: SPUtil
 
@@ -39,7 +33,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun test() {
-        debugE(spUtil)
+    fun navigate_SearchFragment() {
+        ActivityScenario.launch(MainActivity::class.java)
     }
 }
