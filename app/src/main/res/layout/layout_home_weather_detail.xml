@@ -9,6 +9,7 @@
         android:id="@+id/pop_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintWidth_min="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,6 +19,7 @@
             android:id="@+id/pop_image"
             android:layout_width="20dp"
             android:layout_height="20dp"
+
             android:src="@drawable/ic_clearsky_day"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -121,6 +123,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintWidth_min="100dp"
         android:id="@+id/wind_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

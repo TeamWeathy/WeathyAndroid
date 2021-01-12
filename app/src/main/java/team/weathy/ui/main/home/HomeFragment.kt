@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
         exitExplanationBtnClick()
 
 
+        binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
         binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         binding.topBlur.pivotY = 0f

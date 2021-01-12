@@ -68,10 +68,19 @@
                 app:percentY="1" />
 
             <KeyPosition
-                app:framePosition="40"
+                app:framePosition="60"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/downArrow"
                 app:percentY="1" />
+
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="10"
+                app:motionTarget="@id/downArrow" />
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="20"
+                app:motionTarget="@id/downArrow" />
 
             <KeyPosition
                 app:framePosition="40"
