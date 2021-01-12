@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import team.weathy.util.PixelRatio
 import team.weathy.util.location.LocationUtil
 import javax.inject.Singleton
 
@@ -20,4 +21,8 @@ class SingletonModule {
     @Provides
     @Singleton
     fun provideLocationUtll(@ApplicationContext context: Application) = LocationUtil(context)
+
+    @Provides
+    @Singleton
+    fun providePixelRatio(@ApplicationContext context: Application) = PixelRatio(context)
 }
