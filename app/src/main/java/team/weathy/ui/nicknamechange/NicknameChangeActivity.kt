@@ -76,7 +76,7 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun changeNicknameBtnClick() {
         binding.changeNicknameBtn.setOnDebounceClickListener {
-            showToast("닉네임이 변경되었습니다.")
+            showToast("닉네임이 변경되었어요!")
             finish()
         }
     }
