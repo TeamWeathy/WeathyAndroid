@@ -141,9 +141,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="17dp"
                             android:layout_marginStart="17dp"
+                            android:fontFamily="@font/notosans_medium"
                             android:text="너무 더워요"
                             android:textSize="17sp"
-                            android:textColor="@color/imoji_veryhot_text"
+                            android:textColor="@color/pink"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji"/>
 
@@ -196,6 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="17dp"
                         android:layout_marginStart="17dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="더워요"
                         android:textSize="17sp"
                         android:textColor="@color/imoji_hot_text"
@@ -249,13 +251,14 @@
                         android:id="@+id/tv_review3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginStart="17dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="적당해요"
-                        android:textSize="17sp"
                         android:textColor="@color/imoji_good_text"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img_emoji3"/>
+                        android:textSize="17sp"
+                        app:layout_constraintStart_toEndOf="@id/img_emoji3"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_sub_review3"
@@ -306,6 +309,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="17dp"
                         android:layout_marginStart="17dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="추워요"
                         android:textSize="17sp"
                         android:textColor="@color/imoji_cold_text"
@@ -363,6 +367,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="17dp"
                         android:layout_marginStart="17dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="너무 추워요"
                         android:textSize="17sp"
                         android:textColor="@color/imoji_verycold_text"
