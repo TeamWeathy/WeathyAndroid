@@ -33,7 +33,7 @@ class RecordDetailFragment : Fragment() {
             binding.etDetail.clearFocus()
         }
 
-        binding.etDetail.setOnFocusChangeListener { view, hasFocus ->
+        binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
             setCountVisibility(hasFocus)
         }
 

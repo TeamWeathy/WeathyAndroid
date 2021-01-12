@@ -18,6 +18,7 @@ import team.weathy.databinding.ActivityLandingBinding
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
 import team.weathy.util.UniqueIdentifier
+import team.weathy.util.__TEST__IDLING__
 import team.weathy.util.extensions.px
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
@@ -84,14 +85,15 @@ class LandingActivity : AppCompatActivity() {
         @BindingAdapter("landing_button")
         @JvmStatic
         fun Button.setLandingbuttonAnimation(idx: Int) {
+            __TEST__IDLING__.increment()
             if (idx == ITEM_COUNT - 1) {
                 animate().alpha(1f).setDuration(500L).setStartDelay(800L).withStartAction {
                     isVisible = true
-                }.start()
+                }.withEndAction { __TEST__IDLING__.decrement() }.start()
             } else {
                 animate().alpha(0f).setDuration(500L).setStartDelay(0L).withEndAction {
                     isVisible = false
-                }.start()
+                }.withEndAction { __TEST__IDLING__.decrement() }.start()
             }
         }
 

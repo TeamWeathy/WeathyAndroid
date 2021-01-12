@@ -13,17 +13,23 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
-import team.weathy.MainApplication.Companion.pixelRatio
+import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.DialogCommonBinding
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.PixelRatio
 import team.weathy.util.dp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class CommonDialog : DialogFragment() {
     private var binding by AutoClearedValue<DialogCommonBinding>()
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
 
     private val title: String
         get() = arguments?.getString("title") ?: ""

@@ -1,23 +1,16 @@
-package team.weathy
+package team.weathy.database
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import team.weathy.database.AppDatabase
-import team.weathy.database.RecentSearchCodeDao
 import team.weathy.model.entity.RecentSearchCode
-import team.weathy.util.debugE
-import java.io.IOException
 
-@RunWith(AndroidJUnit4::class)
-class DBTest {
+class RecentSearchCodeDaoTest {
     private lateinit var dao: RecentSearchCodeDao
     private lateinit var db: AppDatabase
 
@@ -31,13 +24,11 @@ class DBTest {
     }
 
     @After
-    @Throws(IOException::class)
     fun closeDb() {
         db.close()
     }
 
     @Test
-    @Throws(Exception::class)
     fun add() = runBlocking {
         Truth.assertThat(dao.getAll()).hasSize(0)
 
@@ -45,19 +36,18 @@ class DBTest {
         codes.forEach {
             dao.add(it)
         }
+        // 1
+        // 2 1
+        // 3 2 1
 
         Truth.assertThat(dao.getAll()).hasSize(3)
-
         dao.add(codes.first())
+        // 1 3 2
 
         Truth.assertThat(dao.getAll()).hasSize(3)
 
-        val result = dao.getAll(10)
-        Truth.assertThat(result[2]).isEqualTo(codes[2])
-
-        dao.add(codes[2])
-        val newResult = dao.getAll(10)
-
-        Truth.assertThat(newResult.first()).isEqualTo(codes[2])
+        Truth.assertThat(dao.getAll()[0].code).isEqualTo(1)
+        Truth.assertThat(dao.getAll()[1].code).isEqualTo(3)
+        Truth.assertThat(dao.getAll()[2].code).isEqualTo(2)
     }
 }

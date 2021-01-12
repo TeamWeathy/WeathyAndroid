@@ -31,9 +31,9 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
 
-    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT)) {
+    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT) && uniqueId.exist) {
         val idx = pathSegments().indexOf(USER_ID_PATH_SEGMENT)
-        newBuilder().setPathSegment(idx, uniqueId.id).build()
+        newBuilder().setPathSegment(idx, uniqueId.id!!).build()
     } else {
         this
     }
