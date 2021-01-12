@@ -4,9 +4,9 @@
 
     <!-- First <-> Second -->
     <Transition
-        app:duration="1500"
         app:constraintSetEnd="@layout/scene_home_second"
-        app:constraintSetStart="@layout/scene_home_first">
+        app:constraintSetStart="@layout/scene_home_first"
+        app:duration="1500">
 
         <OnSwipe
             app:dragDirection="dragUp"
@@ -87,31 +87,54 @@
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/hourlyCard"
                 app:percentY="0" />
+
+            <KeyPosition
+                app:framePosition="63"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/hourlyCard"
+                app:percentY="0.3" />
+
             <KeyPosition
                 app:framePosition="85"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/hourlyCard"
-                app:percentY="1" />
+                app:percentY="0.6" />
+
             <KeyPosition
-                app:framePosition="45"
+                app:framePosition="50"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/weeklyCard"
                 app:percentY="0" />
+
+            <KeyPosition
+                app:framePosition="75"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/weeklyCard"
+                app:percentY="0.3" />
+
             <KeyPosition
                 app:framePosition="90"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/weeklyCard"
-                app:percentY="1" />
+                app:percentY="0.6" />
+
             <KeyPosition
                 app:framePosition="50"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/detailCard"
-                app:percentY="0" />
+                app:percentY="0.3" />
+
+            <KeyPosition
+                app:framePosition="85"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/detailCard"
+                app:percentY="0.6" />
+
             <KeyPosition
                 app:framePosition="95"
                 app:keyPositionType="deltaRelative"
                 app:motionTarget="@id/detailCard"
-                app:percentY="1" />
+                app:percentY="0.6" />
 
         </KeyFrameSet>
 
@@ -120,16 +143,15 @@
     <!-- Second <-> Third -->
     <Transition
         app:autoTransition="none"
-        app:motionInterpolator="linear"
         app:constraintSetEnd="@layout/scene_home_third"
         app:constraintSetStart="@layout/scene_home_second"
         app:duration="100"
-        >
+        app:motionInterpolator="linear">
 
         <OnSwipe
+            app:dragDirection="dragUp"
             app:maxAcceleration="50"
             app:maxVelocity="20"
-            app:dragDirection="dragUp"
             app:touchAnchorSide="top" />
 
     </Transition>
