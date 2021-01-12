@@ -1,5 +1,6 @@
 package team.weathy.util
 
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -10,6 +11,6 @@ class DateTimeTest {
         val date1 = LocalDate.of(2020, 1, 20)
         val date2 = LocalDate.of(2020, 1, 14)
 
-        println(ChronoUnit.WEEKS.between(date1, date2).toInt())
+        assertThat(date2.until(date1, ChronoUnit.WEEKS)).isEqualTo(0)
     }
 }

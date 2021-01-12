@@ -25,7 +25,7 @@ class CalendarFragment : Fragment(), OnClickListener {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<CalendarViewModel>()
 
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             if (viewModel.isMoreMenuShowing.value == true) {
                 viewModel.onClickMoreMenu()
@@ -73,11 +73,11 @@ class CalendarFragment : Fragment(), OnClickListener {
 
     private fun registerBackPressCallback() {
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        mainViewModel.menu.observe(viewLifecycleOwner) {
-            if (it == CALENDAR) {
-                onBackPressedCallback.isEnabled = true
-            }
-        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onBackPressedCallback.isEnabled = true
     }
 
     override fun onClick(date: LocalDate) {

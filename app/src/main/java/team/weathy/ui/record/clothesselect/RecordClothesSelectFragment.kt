@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
 import team.weathy.dialog.EditDialog
@@ -24,6 +25,7 @@ import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
+@FlowPreview
 class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
@@ -98,6 +100,10 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             updateChipSelectedState()
             updateTabTexts()
         }
+        viewModel.onChipCheckedFailed.observe(viewLifecycleOwner) {
+            (binding.chipGroup.children.toList().getOrNull(it) as? Chip)?.isChecked = false
+            showExceedMaximumSelectedToast()
+        }
     }
 
 
@@ -112,21 +118,16 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.chipGroup.startLayoutAnimation()
     }
 
+    @Suppress("DEPRECATION")
     private fun createChip(text: String, index: Int): Chip {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
-                if (viewModel.selectedClothes.value!!.size >= 5) {
-                    button.isChecked = false
-                    showExceedMaximumSelectedToast()
-                    return@setOnCheckedChangeListener
-                }
-
                 if (isChecked) {
-                    onChipChecked(index)
+                    viewModel.onChipChecked(index)
                 } else {
-                    onChipUnchecked(index)
+                    viewModel.onChipUnchecked(index)
                 }
             }
 
@@ -140,10 +141,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는")
-
-    private fun onChipChecked(index: Int) = viewModel.onChipChecked(index)
-
-    private fun onChipUnchecked(index: Int) = viewModel.onChipUnchecked(index)
 
     private fun updateChipSelectedState() {
         binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
@@ -183,29 +180,22 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         when (viewModel.choicedClothesTabIndex.value) {
             0 -> {
                 EditDialog.newInstance(
-                    "상의 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "상의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             1 -> {
                 EditDialog.newInstance(
-                    "하의 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "하의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             2 -> {
                 EditDialog.newInstance(
-                    "외투 추가하기",
-                    viewModel.clothes.value!!.size.toString(),
-                    getColor(R.color.main_mint)
+                    "외투 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
                 ).show(childFragmentManager, null)
             }
             3 -> {
                 EditDialog.newInstance(
-                    "기타 추가하기",
-                    viewModel.clothes.value!!.size.toString()
+                    "기타 추가하기", viewModel.clothes.value!!.size.toString()
                 ).show(childFragmentManager, null)
             }
         }

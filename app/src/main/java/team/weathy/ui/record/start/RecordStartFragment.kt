@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentRecordStartBinding
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
 class RecordStartFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordStartBinding>()
 

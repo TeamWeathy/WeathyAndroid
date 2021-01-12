@@ -8,12 +8,14 @@ import team.weathy.util.PixelRatio
 import team.weathy.util.location.LocationUtil
 import javax.inject.Inject
 
-
 @HiltAndroidApp
 class MainApplication : Application() {
 
     @Inject
     lateinit var locationUtil: LocationUtil
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
 
     override fun onCreate() {
         super.onCreate()
@@ -21,11 +23,8 @@ class MainApplication : Application() {
         configureFlipper()
     }
 
-    /**
-     * Simple and easy dependency injection :)
-     */
     private fun initializeSingletons() {
-        pixelRatio = PixelRatio(this)
+        MainApplication.pixelRatio = this.pixelRatio
         ProcessLifecycleOwner.get().lifecycle.addObserver(locationUtil)
     }
 

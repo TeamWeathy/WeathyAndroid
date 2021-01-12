@@ -3,18 +3,21 @@ package team.weathy.ui.record
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivityRecordBinding
 import team.weathy.ui.main.calendar.CalendarFragment
+import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
 import team.weathy.ui.record.detail.RecordDetailFragment
-import team.weathy.ui.record.locationchange.RecordLocationChangeFragment
 import team.weathy.ui.record.start.RecordStartFragment
 import team.weathy.ui.record.weatherrating.RecordWeatherRatingFragment
-import team.weathy.util.extensions.addFragment
 import team.weathy.util.extensions.popFragmentIfExist
 import team.weathy.util.extensions.replaceFragment
 
+@FlowPreview
+@AndroidEntryPoint
 class RecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecordBinding
 
@@ -30,17 +33,21 @@ class RecordActivity : AppCompatActivity() {
     }
 
     fun navigateStartToLocationChange() =
-        addFragment(binding.fragmentContainer, RecordLocationChangeFragment::class.java)
+        replaceFragment(binding.fragmentContainer, SearchFragment.newInstance(true), true)
 
-    fun navigateStartToClothesSelect() = addFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java)
+    fun navigateStartToClothesSelect() =
+        replaceFragment(binding.fragmentContainer, RecordClothesSelectFragment::class.java, true)
 
-    fun navigateClothesSelectToClothesDelete() = addFragment(binding.fragmentContainer, RecordClothesDeleteFragment::class.java)
+    fun navigateClothesSelectToClothesDelete() =
+        replaceFragment(binding.fragmentContainer, RecordClothesDeleteFragment::class.java, true)
 
-    fun navigateClothesSelectToWeatherRating() = addFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java)
+    fun navigateClothesSelectToWeatherRating() =
+        replaceFragment(binding.fragmentContainer, RecordWeatherRatingFragment::class.java, true)
 
-    fun navigateWeatherRatingToDetail() = addFragment(binding.fragmentContainer, RecordDetailFragment::class.java)
+    fun navigateWeatherRatingToDetail() =
+        replaceFragment(binding.fragmentContainer, RecordDetailFragment::class.java, true)
 
-    fun replaceDetailToCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java)
+    fun replaceDetailToCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java, true)
 
     fun popClothesSelect() = popFragmentIfExist(RecordClothesSelectFragment::class.java)
 
