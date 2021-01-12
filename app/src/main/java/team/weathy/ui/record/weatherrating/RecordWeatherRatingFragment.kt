@@ -45,7 +45,8 @@ class RecordWeatherRatingFragment : Fragment() {
     private fun setReviewClickListener(cvReview: Array<WeathyCardView>, position: Int, button: Button) {
         cvReview[position] setOnDebounceClickListener {
             setBackgroundEnableListener(cvReview[position])
-            setButtonEnableListener(button)
+            if (!button.isEnabled)
+                setButtonEnableListener(button)
             for (i in cvReview.indices)
                 if (i != position)
                     setBackgroundDisableListener(cvReview[i])
