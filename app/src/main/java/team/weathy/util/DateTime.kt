@@ -102,6 +102,10 @@ val LocalDateTime.koFormat: String
 val LocalDate.koFormat: String
     get() = "${monthValue}월 ${dayOfMonth}일 ${dayOfWeek.koFormat}요일"
 
+/** 4월 4일*/
+val LocalDate.monthDayFormat: String
+    get() = "${monthValue}월 ${dayOfMonth}일"
+
 fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
     val cur = LocalDate.now()
 

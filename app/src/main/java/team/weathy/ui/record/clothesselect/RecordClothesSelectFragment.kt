@@ -213,6 +213,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
+        requireContext().showToast("태그가 추가되었어요!")
     }
 
     private fun setButtonEnabled(isEnable: Boolean) {

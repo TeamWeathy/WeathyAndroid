@@ -1,5 +1,7 @@
 package team.weathy.dialog
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -57,18 +59,19 @@ class EditDialog : DialogFragment() {
 			setCountVisibility(hasFocus)
 		}
 		binding.enter.addTextChangedListener {
-			binding.btnAdd.isEnabled = !it.isNullOrBlank()
 			binding.textDeleteBtn.isVisible = !it.isNullOrBlank()
 			binding.textDeleteBtn setOnDebounceClickListener {
 				binding.enter.setText("")
 			}
 			if (!it.isNullOrBlank()) {
-				binding.btnAdd.setBackgroundColor(color)
+				if (!binding.btnAdd.isEnabled)
+					setButtonEnabled(true)
 				binding.textCount.setTextColor(color)
 				binding.textCount.text = it.length.toString()
 				binding.enter.setBackgroundResource(R.drawable.edit_border_active)
 			} else {
-				binding.btnAdd.setBackgroundColor(getColor(R.color.sub_grey_3))
+				if (binding.btnAdd.isEnabled)
+					setButtonDisabled(false)
 				binding.textCount.setTextColor(getColor(R.color.sub_grey_6))
 				binding.textCount.text = "0"
 				binding.enter.setBackgroundResource(R.drawable.edit_border)
@@ -105,5 +108,19 @@ class EditDialog : DialogFragment() {
 	private fun setCountVisibility(hasFocus: Boolean) {
 		binding.textCount.isVisible = hasFocus
 		binding.textCount2.isVisible = hasFocus
+	}
+
+	private fun setButtonEnabled(isEnable: Boolean) {
+		val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+		colorChangeActive.setTarget(binding.btnAdd)
+		colorChangeActive.start()
+		binding.btnAdd.isEnabled = isEnable
+	}
+
+	private fun setButtonDisabled(isEnable: Boolean) {
+		val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
+		colorChange.setTarget(binding.btnAdd)
+		colorChange.start()
+		binding.btnAdd.isEnabled = isEnable
 	}
 }

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
@@ -20,17 +22,14 @@ import team.weathy.view.WeathyCardView
 @FlowPreview
 class RecordWeatherRatingFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordWeatherRatingBinding>()
+    private val viewModel by viewModels<RecordWeatherRatingViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordWeatherRatingBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val cvReview = arrayOf(binding.cvReview, binding.cvReview2, binding.cvReview3, binding.cvReview4, binding.cvReview5)
-
-        for (i in cvReview.indices)
-            setReviewClickListener(cvReview, i, binding.btnCheck)
-
         configureStartNavigation()
+        configureTabs()
     }
 
     private fun configureStartNavigation() {
@@ -42,21 +41,40 @@ class RecordWeatherRatingFragment : Fragment() {
         }
     }
 
-    private fun setReviewClickListener(cvReview: Array<WeathyCardView>, position: Int, button: Button) {
-        cvReview[position] setOnDebounceClickListener {
-            setBackgroundEnableListener(cvReview[position])
-            if (!button.isEnabled)
-                setButtonEnableListener(button)
-            for (i in cvReview.indices)
-                if (i != position)
-                    setBackgroundDisableListener(cvReview[i])
+    private fun configureTabs() {
+        setOnTabClickListeners()
+        viewModel.selectedWeatherRatingIndex.observe(viewLifecycleOwner) { tab ->
+            selectTab(tab)
         }
     }
 
-    private fun setBackgroundEnableListener(cvReview:WeathyCardView ) {
+    private val cvReview
+        get() = arrayOf(binding.cvReview, binding.cvReview2, binding.cvReview3, binding.cvReview4, binding.cvReview5)
+
+    private fun setOnTabClickListeners() = cvReview.forEachIndexed { index, constraintLayout ->
+        constraintLayout.setOnClickListener {
+            viewModel.changeSelectedWeatherRatingIndex(index)
+        }
+    }
+
+    private fun selectTab(tab: Int) {
+        cvReview.forEachIndexed { index, _ ->
+            if (index == tab) {
+                setBackgroundEnableListener(cvReview[index])
+                if (!binding.btnCheck.isEnabled)
+                    setButtonEnableListener(binding.btnCheck)
+                for (i in cvReview.indices)
+                    if (i != index)
+                        setBackgroundDisableListener(cvReview[i])
+            }
+        }
+    }
+
+    private fun setBackgroundEnableListener(cvReview:WeathyCardView) {
         cvReview.disableShadow = false
         cvReview.shadowColor = getColor(R.color.main_mint_shadow)
         cvReview.strokeColor = getColor(R.color.main_mint)
+        cvReview.strokeWidth = 4.5f
     }
 
     private fun setButtonEnableListener(button: Button) {
@@ -69,5 +87,6 @@ class RecordWeatherRatingFragment : Fragment() {
     private fun setBackgroundDisableListener(cvReview: WeathyCardView) {
         cvReview.disableShadow = true
         cvReview.strokeColor = getColor(R.color.sub_grey_7)
+        cvReview.strokeWidth = 3f
     }
 }
