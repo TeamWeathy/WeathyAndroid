@@ -21,6 +21,7 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 @FlowPreview
@@ -104,7 +105,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
             removeAllChips()
             addChipsForChoicedClothes(it)
         }
-        viewModel.selectedClothes.observe(viewLifecycleOwner) {
+        viewModel.selectedClothesForDelete.observe(viewLifecycleOwner) {
             updateChipSelectedState()
         }
     }
@@ -125,12 +126,12 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
+                chipStrokeWidth = if (isChecked) {
                     onChipCheckedForDelete(index)
-                    chipStrokeWidth = 4.5f
+                    4.5f
                 } else {
                     onChipUnchecked(index)
-                    chipStrokeWidth = 3f
+                    3f
                 }
             }
         }
@@ -147,11 +148,11 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
         }
     }
 
-    private fun isChipSelected(index: Int) = index in viewModel.selectedClothes.value!!
+    private fun isChipSelected(index: Int) = index in viewModel.selectedClothesForDelete.value!!
 
     private fun setButtonActivation() {
-        viewModel.selectedClothes.observe(viewLifecycleOwner) {
-            if (viewModel.selectedClothes.value!!.isNotEmpty()) {
+        viewModel.selectedClothesForDelete.observe(viewLifecycleOwner) {
+            if (viewModel.selectedClothesForDelete.value!!.isNotEmpty()) {
                 binding.delete.isEnabled = true
                 binding.delete.setBackgroundColor(getColor(R.color.pink))
             } else {
@@ -173,10 +174,11 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     }
 
     override fun onClickYes() {
-        viewModel.selectedClothes.observe(viewLifecycleOwner) {
+        viewModel.selectedClothesForDelete.observe(viewLifecycleOwner) {
 
         }
         (activity as? RecordActivity)?.popClothesDelete()
         StatusBarUtil.changeColor(context as Activity, getColor(R.color.main_mint))
+        requireContext().showToast("태그가 삭제되었어요!")
     }
 }
