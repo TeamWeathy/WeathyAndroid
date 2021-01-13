@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
@@ -21,7 +22,7 @@ import team.weathy.view.WeathyCardView
 @FlowPreview
 class RecordWeatherRatingFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordWeatherRatingBinding>()
-    private val viewModel by activityViewModels<RecordWeatherRatingViewModel>()
+    private val viewModel by viewModels<RecordWeatherRatingViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordWeatherRatingBinding.inflate(layoutInflater, container, false).also { binding = it }.root
