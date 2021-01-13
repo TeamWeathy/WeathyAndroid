@@ -44,7 +44,7 @@ class RecordViewModel @ViewModelInject constructor(
     val weather = MutableLiveData(locationUtil.selectedWeatherLocation.value!!)
     val weatherDate = date.toLocalDate().monthDayFormat
     val weatherRegion = weather.map { it.region.name }
-    val weatherIcon = weather.map { it.hourly.climate.weather.bigIconId }
+    val weatherIcon = weather.map { it.hourly.climate.weather.mediumIconId }
     val tempHigh = weather.map { "${it.daily.temperature.maxTemp}°" }
     val tempLow = weather.map { "${it.daily.temperature.minTemp}°" }
 
