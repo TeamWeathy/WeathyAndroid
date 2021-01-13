@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import team.weathy.api.CalendarAPI
 import team.weathy.api.WeathyAPI
-import team.weathy.di.ApiMock
+import team.weathy.di.Api
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Weather
 import team.weathy.model.entity.Weathy
@@ -30,7 +30,7 @@ import java.time.LocalDate
 typealias YearMonthFormat = String
 
 class CalendarViewModel @ViewModelInject constructor(
-    @ApiMock private val calendarAPI: CalendarAPI, @ApiMock private val weathyAPI: WeathyAPI
+    @Api private val calendarAPI: CalendarAPI, @Api private val weathyAPI: WeathyAPI
 ) : ViewModel() {
 
     private val _curDate = MutableLiveData(LocalDate.now())
@@ -48,7 +48,7 @@ class CalendarViewModel @ViewModelInject constructor(
         it.koFormat
     }
     val weathyLocation = curWeathy.map {
-        it?.dailyWeather?.region?.name ?: ""
+        it?.region?.name ?: ""
     }
     val weathyWeatherIcon = curWeathy.map {
         Weather.withId(it?.hourlyWeather?.climate?.iconId).iconId

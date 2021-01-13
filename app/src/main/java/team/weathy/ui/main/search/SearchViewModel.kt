@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.database.RecentSearchCodeDao
-import team.weathy.di.ApiMock
+import team.weathy.di.Api
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
 import team.weathy.util.dateHourString
@@ -27,7 +27,7 @@ import java.time.LocalDateTime
 
 @FlowPreview
 class SearchViewModel @ViewModelInject constructor(
-    @ApiMock private val weatherAPI: WeatherAPI,
+    @Api private val weatherAPI: WeatherAPI,
     private val recentSearchCodeDao: RecentSearchCodeDao,
 ) : ViewModel() {
     val focused = MutableLiveData(false)
@@ -80,7 +80,8 @@ class SearchViewModel @ViewModelInject constructor(
     suspend fun onItemClicked(position: Int) {
         kotlin.runCatching {
             if (showRecently.value == false) {
-                searchResult.value?.get(position)?.daily?.region?.code?.let {
+                searchResult.value?.get(position)?.region?.code?.let {
+                    debugE(it)
                     recentSearchCodeDao.add(RecentSearchCode(it))
                     getRecentSearchCodesAndFetch()
                 }
@@ -110,7 +111,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     fun onItemRemoved(position: Int) {
         if (showRecently.value == false) return
-        val code = recentlySearchResult.value?.get(position)?.daily?.region?.code ?: return
+        val code = recentlySearchResult.value?.get(position)?.region?.code ?: return
 
         removeRecentSearchCode(code)
         recentlySearchResult.updateList {

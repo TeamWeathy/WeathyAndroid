@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 
 class SearchAdapter(
     private val onItemRemoved: (idx: Int) -> Unit,
-    private val onItemClicked: (idx: Int) -> Unit,
+    private val onItemClicked: (idx: Int, item: OverviewWeather) -> Unit,
     private val isRecentShowing: LiveData<Boolean>,
     private val lifecycleOwner: LifecycleOwner
 ) : Adapter<Holder>() {
@@ -78,7 +78,7 @@ class SearchAdapter(
             }
 
             binding.onClick = {
-                onItemClicked(layoutPosition)
+                onItemClicked(layoutPosition, items[layoutPosition])
             }
 
             isRecentShowing.observe(lifecycleOwner) {
@@ -108,7 +108,7 @@ class SearchAdapter(
             }
 
             binding.datetimeText = LocalDateTime.now().koFormat
-            binding.locationText = item.daily.region.name
+            binding.locationText = item.region.name
             binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
             binding.highTemp = "${item.daily.temperature.maxTemp}°"
             binding.lowTemp = "${item.daily.temperature.minTemp}°"

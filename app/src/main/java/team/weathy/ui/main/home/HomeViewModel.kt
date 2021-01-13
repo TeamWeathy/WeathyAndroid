@@ -12,10 +12,9 @@ import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
 import team.weathy.api.WeathyAPI
-import team.weathy.di.ApiMock
+import team.weathy.di.Api
 import team.weathy.model.entity.DailyWeatherWithInDays
 import team.weathy.model.entity.HourlyWeather
-import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.Weather
 import team.weathy.model.entity.Weathy
 import team.weathy.util.dateHourString
@@ -27,12 +26,12 @@ import java.time.LocalDateTime
 
 class HomeViewModel @ViewModelInject constructor(
     private val locationUtil: LocationUtil,
-    @ApiMock private val weatherAPI: WeatherAPI,
-    @ApiMock private val weathyAPI: WeathyAPI
+    @Api private val weatherAPI: WeatherAPI,
+    @Api private val weathyAPI: WeathyAPI
 ) : ViewModel() {
     val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
 
-    val currentWeather = MutableLiveData<OverviewWeather?>()
+    val currentWeather = locationUtil.selectedWeatherLocation.asLiveData(viewModelScope.coroutineContext)
     val loadingWeather = MutableLiveData(true)
 
     val isLocationAvailable = locationUtil.isLocationAvailable.asLiveData(viewModelScope.coroutineContext)
@@ -45,11 +44,11 @@ class HomeViewModel @ViewModelInject constructor(
 
     // region UI
     val datetimeText = lastFetchDateTime.map { it.koFormat }
-    val regionText = currentWeather.map { it?.daily?.region?.name ?: "" }
+    val regionText = currentWeather.map { it?.region?.name ?: "" }
     val curTempText = currentWeather.map { "${it?.hourly?.temperature ?: 0}°" }
     val maxTempText = currentWeather.map { "${it?.daily?.temperature?.maxTemp ?: 0}°" }
     val minTempText = currentWeather.map { "${it?.daily?.temperature?.minTemp ?: 0}°" }
-    val descriptionText = currentWeather.map { it?.hourly?.climate?.description ?: "" }
+    val descriptionText = currentWeather.map { it?.hourly?.climate?.description?.replace("\\n", "\n") ?: "" }
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
@@ -112,7 +111,8 @@ class HomeViewModel @ViewModelInject constructor(
                     it.latitude, it.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
                 )
             }.onSuccess { res ->
-                currentWeather.value = res.weather
+                res.weather ?: return@onSuccess
+                locationUtil.selectPlace(res.weather)
             }.onFailure {
 
             }
@@ -123,8 +123,7 @@ class HomeViewModel @ViewModelInject constructor(
     private fun collectCurrentWeather() = viewModelScope.launch {
         currentWeather.asFlow().collect { weather ->
             weather ?: return@collect
-
-            val code = weather.daily.region.code
+            val code = weather.region.code
             val dateString = LocalDate.now().dateString
             val dateHourString = LocalDateTime.now().dateHourString
 

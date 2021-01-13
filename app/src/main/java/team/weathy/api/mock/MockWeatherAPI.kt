@@ -1,6 +1,5 @@
 package team.weathy.api.mock
 
-import com.thedeanda.lorem.LoremIpsum
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDailyHourlyRes
 import team.weathy.api.WeatherDetailRes
@@ -16,7 +15,6 @@ import team.weathy.util.DateHourString
 import team.weathy.util.DateOrDateHourString
 import team.weathy.util.DateString
 import javax.inject.Inject
-import kotlin.random.Random
 
 class MockWeatherAPI @Inject constructor() : WeatherAPI {
     override suspend fun fetchWeatherByLocation(
@@ -24,9 +22,7 @@ class MockWeatherAPI @Inject constructor() : WeatherAPI {
     ): WeatherDailyHourlyRes {
         return WeatherDailyHourlyRes(
             OverviewWeather(
-                MockGenerator.dailyWeather(
-                    code = code ?: Random.nextInt(), regionName = code?.toString() ?: LoremIpsum.getInstance().city
-                ), MockGenerator.hourlyWeather()
+                MockGenerator.region(), MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
             ), "message"
         )
     }
@@ -47,33 +43,7 @@ class MockWeatherAPI @Inject constructor() : WeatherAPI {
         return WeatherSearchRes(
             listOf(
                 OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
-                    MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-                ),
-                OverviewWeather(
+                    MockGenerator.region(),
                     MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
                 ),
             ), "success"

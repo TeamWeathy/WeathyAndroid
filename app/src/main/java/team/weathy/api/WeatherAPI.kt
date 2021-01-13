@@ -71,7 +71,7 @@ interface WeatherAPI {
         @Query("code") code: Int, @Query("date") dateHourStr: DateString
     ): WeatherDetailRes
 
-    @GET("weather/overview")
+    @GET("weather/overviews")
     suspend fun searchWeather(
         @Query("keyword") keyword: String, @Query("date") dateOrHourStr: DateOrDateHourString
     ): WeatherSearchRes

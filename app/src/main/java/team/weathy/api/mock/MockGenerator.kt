@@ -19,12 +19,12 @@ import kotlin.random.Random
 
 object MockGenerator {
     fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
-    fun region(code: Int = 1, name: String = "이름") = Region(code, name)
+    fun region(code: Int = Random.nextInt(), name: String = LoremIpsum.getInstance().city) = Region(code, name)
     fun climate(iconId: Int = 1, description: String = LoremIpsum.getInstance().name) = Climate(iconId, description)
     fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
     fun temperature() = Temperature(Random.nextInt(0, 20), Random.nextInt(-20, 0))
     fun dailyWeather(code: Int = Random.nextInt(), regionName: String = LoremIpsum.getInstance().city) =
-        DailyWeather(region(name = regionName, code = code), date(), temperature())
+        DailyWeather(date(), temperature())
 
     fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
 
@@ -44,6 +44,7 @@ object MockGenerator {
     )
 
     fun weathy() = Weathy(
+        region(),
         dailyWeather(),
         hourlyWeather(),
         weahtyCloset(),

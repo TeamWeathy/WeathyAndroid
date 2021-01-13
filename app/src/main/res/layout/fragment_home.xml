@@ -27,6 +27,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:clipToPadding="false"
+            android:clipChildren="false"
             app:layoutDescription="@xml/home_motion">
 
             <androidx.constraintlayout.widget.Guideline
@@ -184,16 +185,17 @@
                     app:layout_constraintTop_toTopOf="@id/slash_temp_today" />
 
                 <TextView
+                    android:layout_marginRight="24dp"
                     android:id="@+id/today_feeling"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    app:layout_constraintRight_toRightOf="parent"
                     android:lineSpacingExtra="-2dp"
                     tools:text="조금 흐리지만\n햇살이 따스해요:)"
                     android:text="@{vm.descriptionText}"
                     android:textColor="@color/black_0.58"
                     android:textSize="16dp"
-                    app:layout_constraintStart_toStartOf="@id/current_temp"
                     app:layout_constraintTop_toBottomOf="@id/max_temp_today" />
 
 
