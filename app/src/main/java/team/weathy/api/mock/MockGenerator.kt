@@ -3,6 +3,7 @@ package team.weathy.api.mock
 import com.thedeanda.lorem.LoremIpsum
 import team.weathy.api.FetchCalendarPreviewRes
 import team.weathy.model.entity.CalendarPreview
+import team.weathy.model.entity.ClothCategory.TOP
 import team.weathy.model.entity.DailyWeather
 import team.weathy.model.entity.Date
 import team.weathy.model.entity.HourlyWeather
@@ -14,8 +15,8 @@ import team.weathy.model.entity.Weather
 import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloset
+import team.weathy.model.entity.WeathyCloth
 import team.weathy.model.entity.WeathyClothes
-import team.weathy.model.entity.WeathyClothes.Cloth
 import kotlin.random.Random
 
 object MockGenerator {
@@ -29,17 +30,17 @@ object MockGenerator {
     fun hourlyWeather() = HourlyWeather("time", 17, Climate(Weather.values().random(), "description"), 5)
 
     fun weahtyCloset() = WeathyCloset(
-        WeathyClothes(1, (0 until Random.nextInt(2, 7)).map {
-            Cloth(it, LoremIpsum.getInstance().firstName)
+        WeathyClothes(TOP, (0 until Random.nextInt(2, 7)).map {
+            WeathyCloth(it, LoremIpsum.getInstance().firstName)
         }),
-        WeathyClothes(1, (0 until Random.nextInt(2, 6)).map {
-            Cloth(it, LoremIpsum.getInstance().firstName)
+        WeathyClothes(TOP, (0 until Random.nextInt(2, 6)).map {
+            WeathyCloth(it, LoremIpsum.getInstance().firstName)
         }),
-        WeathyClothes(1, (0 until Random.nextInt(2, 7)).map {
-            Cloth(it, LoremIpsum.getInstance().firstName)
+        WeathyClothes(TOP, (0 until Random.nextInt(2, 7)).map {
+            WeathyCloth(it, LoremIpsum.getInstance().firstName)
         }),
-        WeathyClothes(1, (0 until Random.nextInt(2, 6)).map {
-            Cloth(it, LoremIpsum.getInstance().firstName)
+        WeathyClothes(TOP, (0 until Random.nextInt(2, 6)).map {
+            WeathyCloth(it, LoremIpsum.getInstance().firstName)
         }),
     )
 

@@ -10,11 +10,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import kotlinx.coroutines.FlowPreview
 import team.weathy.api.ClothesAPI
+import team.weathy.api.CreateClothesReq
+import team.weathy.api.DeleteClothesReq
 import team.weathy.di.Api
+import team.weathy.model.entity.ClothCategory
+import team.weathy.model.entity.ClothCategory.BOTTOM
+import team.weathy.model.entity.ClothCategory.ETC
+import team.weathy.model.entity.ClothCategory.OUTER
+import team.weathy.model.entity.ClothCategory.TOP
 import team.weathy.model.entity.OverviewWeather
+import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
 import team.weathy.util.EventLiveData
-import team.weathy.util.extensions.updateList
+import team.weathy.util.extensions.MediatorLiveData
+import team.weathy.util.extensions.addSources
+import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateSet
 import team.weathy.util.location.LocationUtil
 import team.weathy.util.monthDayFormat
@@ -49,47 +59,80 @@ class RecordViewModel @ViewModelInject constructor(
     private val _choicedClothesTabIndex = MutableLiveData(0)
     val choicedClothesTabIndex: LiveData<Int> = _choicedClothesTabIndex
 
-    val clothesPairs = listOf<Pair<MutableLiveData<List<String>>, MutableLiveData<Set<Int>>>>(
-        MutableLiveData(listOf("니트", "후드티", "티셔츠")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("데님팬츠", "스커트", "슬랙스")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("패딩", "코트", "점퍼")) to MutableLiveData(setOf()),
-        MutableLiveData(listOf("목도리", "장갑", "모자")) to MutableLiveData(setOf()),
-    )
-    val clothes = MediatorLiveData<List<String>>().apply {
-        value = clothesPairs[0].first.value!!
-        clothesPairs.forEach {
+    private val selectedCategory
+        get() = ClothCategory.fromId(_choicedClothesTabIndex.value!! + 1)
+
+    val clothesTriple =
+        listOf<Triple<MutableLiveData<List<WeathyCloth>>, MutableLiveData<Set<WeathyCloth>>, MutableLiveData<Set<WeathyCloth>>>>(
+            Triple(MutableLiveData(listOf()), MutableLiveData(setOf()), MutableLiveData(setOf())),
+            Triple(MutableLiveData(listOf()), MutableLiveData(setOf()), MutableLiveData(setOf())),
+            Triple(MutableLiveData(listOf()), MutableLiveData(setOf()), MutableLiveData(setOf())),
+            Triple(MutableLiveData(listOf()), MutableLiveData(setOf()), MutableLiveData(setOf())),
+        )
+    val clothes = MediatorLiveData<List<WeathyCloth>>().apply {
+        value = clothesTriple[0].first.value!!
+        clothesTriple.forEach {
             addSource(it.first) { list ->
                 value = list
             }
         }
         addSource(choicedClothesTabIndex) {
-            value = clothesPairs[it].first.value!!
+            value = clothesTriple[it].first.value!!
         }
     }
-    val selectedClothes = MediatorLiveData<Set<Int>>().apply {
-        value = clothesPairs[0].second.value!!
-        clothesPairs.forEach {
+    val selectedClothes = MediatorLiveData<Set<WeathyCloth>>().apply {
+        value = clothesTriple[0].second.value!!
+        clothesTriple.forEach {
             addSource(it.second) { set ->
                 value = set
             }
         }
         addSource(choicedClothesTabIndex) {
-            value = clothesPairs[it].second.value!!
+            value = clothesTriple[it].second.value!!
         }
     }
-    val selectedClothesForDelete = MediatorLiveData<Set<Int>>().apply {
-        value = clothesPairs[0].second.value!!
-        clothesPairs.forEach {
-            addSource(it.second) { set ->
+    val selectedClothesForDelete = MediatorLiveData<Set<WeathyCloth>>().apply {
+        value = clothesTriple[0].third.value!!
+        clothesTriple.forEach {
+            addSource(it.third) { set ->
                 value = set
             }
         }
         addSource(choicedClothesTabIndex) {
-            value = clothesPairs[it].second.value!!
+            value = clothesTriple[it].third.value!!
         }
     }
 
-    val onChipCheckedFailed = EventLiveData<Int>()
+    val isButtonEnabled = MediatorLiveData(false) {
+        addSources(
+            clothesTriple[0].second, clothesTriple[1].second, clothesTriple[2].second, clothesTriple[3].second
+        ) { c1, c2, c3, c4 ->
+            value = !(c1.isEmpty() && c2.isEmpty() && c3.isEmpty() && c4.isEmpty())
+        }
+    }
+
+    val onChipCheckedFailed = EventLiveData<WeathyCloth>()
+
+    init {
+        fetchClothes()
+    }
+
+    private fun fetchClothes() {
+        launchCatch({
+            clothesAPI.getClothes().closet
+        }, onSuccess = {
+            clothesTriple[0].first.value = it.top.clothes
+            clothesTriple[1].first.value = it.bottom.clothes
+            clothesTriple[2].first.value = it.outer.clothes
+            clothesTriple[3].first.value = it.etc.clothes
+        })
+    }
+
+    fun clearSelectedChipsForDelete() {
+        clothesTriple.forEach {
+            it.third.value = setOf()
+        }
+    }
 
     fun changeSelectedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
@@ -97,48 +140,79 @@ class RecordViewModel @ViewModelInject constructor(
         }
     }
 
-    fun onChipChecked(index: Int) {
-        if (selectedClothes.value!!.contains(index)) return
+    fun onChipChecked(name: String) {
+        val cloth = clothes.value!!.find { it.name == name } ?: return
+        if (selectedClothes.value!!.contains(cloth)) return
 
         if (selectedClothes.value!!.size == 5) {
-            onChipCheckedFailed.emit(index + 1 /* because of add button */)
+            onChipCheckedFailed.emit(cloth)
             return
         }
-        clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
-            add(index)
+        clothesTriple[choicedClothesTabIndex.value!!].second.updateSet {
+            add(cloth)
         }
     }
 
-    fun onChipCheckedForDelete(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
-        add(index)
+    fun onChipCheckedForDelete(name: String) = clothesTriple[choicedClothesTabIndex.value!!].third.updateSet {
+        val cloth = clothes.value!!.find { it.name == name } ?: return
+        add(cloth)
     }
 
-    fun onChipUnchecked(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].second.updateSet {
-        remove(index)
+    fun onChipUnchecked(name: String) = clothesTriple[choicedClothesTabIndex.value!!].second.updateSet {
+        val cloth = clothes.value!!.find { it.name == name } ?: return
+        remove(cloth)
     }
 
-    fun addClothes(text: String) {
-        val (clothes, selectedIndices) = clothesPairs[choicedClothesTabIndex.value!!]
-
-        clothes.updateList {
-            add(0, text)
-        }
-
-        selectedIndices.updateSet {
-            val original = toMutableSet()
-            clear()
-            addAll(original.map { it + 1 })
-        }
+    fun onChipUncheckedForDelete(name: String) = clothesTriple[choicedClothesTabIndex.value!!].third.updateSet {
+        val cloth = clothes.value!!.find { it.name == name } ?: return
+        remove(cloth)
     }
 
-    fun deleteClothes(index: Int) = clothesPairs[choicedClothesTabIndex.value!!].first.updateList {
-        removeAt(index)
+    suspend fun addClothes(clothName: String) {
+        val (clothes) = clothesTriple[choicedClothesTabIndex.value!!]
+
+        val category = selectedCategory
+
+        launchCatch({
+            clothesAPI.createClothes(CreateClothesReq(category, clothName))
+        }, onSuccess = {
+            clothes.value = when (category) {
+                TOP -> it.closet.top.clothes
+                BOTTOM -> it.closet.bottom.clothes
+                OUTER -> it.closet.outer.clothes
+                ETC -> it.closet.etc.clothes
+            }
+        }).join()
+    }
+
+    suspend fun deleteClothes() {
+        val deletedClothIds = clothesTriple.map { it.third.value!! }.flatten().map { it.id }
+
+        launchCatch({
+            clothesAPI.deleteClothes(
+                DeleteClothesReq(deletedClothIds)
+            ).closet
+        }, onSuccess = {
+            clothesTriple[0].first.value = it.top.clothes
+            clothesTriple[1].first.value = it.bottom.clothes
+            clothesTriple[2].first.value = it.outer.clothes
+            clothesTriple[3].first.value = it.etc.clothes
+
+            clothesTriple.forEach { (_, selected, _) ->
+                selected.updateSet {
+                    removeIf { it.id in deletedClothIds }
+                }
+            }
+
+            clothes.value = clothesTriple[choicedClothesTabIndex.value!!].first.value!!
+            selectedClothes.value = clothesTriple[choicedClothesTabIndex.value!!].second.value!!
+        }).join()
     }
 
     fun allSelectedClothes(): Int {
         var selectedClothesCount = 0
         for (i in 0..3) {
-            selectedClothesCount += clothesPairs[i].second.value!!.size
+            selectedClothesCount += clothesTriple[i].third.value!!.size
         }
         return selectedClothesCount
     }

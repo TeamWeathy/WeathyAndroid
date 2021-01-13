@@ -1,7 +1,5 @@
 package team.weathy.ui.record.clothesselect
 
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -14,15 +12,18 @@ import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
 import team.weathy.dialog.EditDialog
+import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
@@ -99,13 +100,17 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         viewModel.clothes.observe(viewLifecycleOwner) {
             removeAllChipsWithoutFirst()
             addChipsForChoicedClothes(it)
+            updateChipSelectedState()
+            updateTabTexts()
         }
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
             updateChipSelectedState()
             updateTabTexts()
         }
-        viewModel.onChipCheckedFailed.observe(viewLifecycleOwner) {
-            (binding.chipGroup.children.toList().getOrNull(it) as? Chip)?.isChecked = false
+        viewModel.onChipCheckedFailed.observe(viewLifecycleOwner) { cloth ->
+            (binding.chipGroup.children.toList().find { chip ->
+                (chip as? Chip)?.text.toString() == cloth.name
+            } as? Chip)!!.isChecked = false
             showExceedMaximumSelectedToast()
         }
     }
@@ -117,27 +122,21 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun addChipsForChoicedClothes(clothes: List<String>) = clothes.forEachIndexed { index, s ->
-        binding.chipGroup.addView(createChip(s, index))
+    private fun addChipsForChoicedClothes(clothes: List<WeathyCloth>) = clothes.forEach { cloth ->
+        binding.chipGroup.addView(createChip(cloth.name))
         binding.chipGroup.startLayoutAnimation()
     }
 
     @Suppress("DEPRECATION")
-    private fun createChip(text: String, index: Int): Chip {
+    private fun createChip(text: String): Chip {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
-                if (viewModel.selectedClothes.value!!.size == 5 && button.isChecked) {
-                    button.isChecked = false
-                    showExceedMaximumSelectedToast()
-                    return@setOnCheckedChangeListener
-                }
-
                 if (isChecked) {
-                    viewModel.onChipChecked(index)
+                    viewModel.onChipChecked(text)
                 } else {
-                    viewModel.onChipUnchecked(index)
+                    viewModel.onChipUnchecked(text)
                 }
             }
 
@@ -153,9 +152,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
 
     private fun updateChipSelectedState() {
-        binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
+        binding.chipGroup.children.drop(1).forEach { view ->
             val chip = view as Chip
-            chip.isChecked = isChipSelected(index)
+            chip.isChecked = isChipSelected(chip.text.toString())
         }
     }
 
@@ -167,17 +166,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun isChipSelected(index: Int) = index in viewModel.selectedClothes.value!!
+    private fun isChipSelected(name: String) = name in viewModel.selectedClothes.value!!.map { it.name }
 
     private fun setButtonActivation() {
-        viewModel.selectedClothes.observe(viewLifecycleOwner) {
-            if (viewModel.selectedClothes.value!!.isNotEmpty()) {
-                if (!binding.btnCheck.isEnabled)
-                    setButtonEnabled(true)
-            } else {
-                if (binding.btnCheck.isEnabled)
-                    setButtonDisabled(false)
-            }
+        viewModel.isButtonEnabled.observe(viewLifecycleOwner) {
+            binding.btnCheck.enableWithAnim(it)
         }
     }
 
@@ -212,21 +205,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     override fun onClickYes(text: String) {
-        viewModel.addClothes(text)
-        requireContext().showToast("태그가 추가되었어요!")
-    }
-
-    private fun setButtonEnabled(isEnable: Boolean) {
-        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
-        colorChangeActive.setTarget(binding.btnCheck)
-        colorChangeActive.start()
-        binding.btnCheck.isEnabled = isEnable
-    }
-
-    private fun setButtonDisabled(isEnable: Boolean) {
-        val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
-        colorChange.setTarget(binding.btnCheck)
-        colorChange.start()
-        binding.btnCheck.isEnabled = isEnable
+        lifecycleScope.launchWhenStarted {
+            viewModel.addClothes(text)
+            requireContext().showToast("태그가 추가되었어요!")
+        }
     }
 }
