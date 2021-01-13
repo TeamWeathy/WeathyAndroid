@@ -29,7 +29,7 @@ class RecordActivity : AppCompatActivity() {
         binding = ActivityRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        replaceFragment(binding.fragmentContainer, RecordStartFragment::class.java)
+        replaceFragment(binding.fragmentContainer, RecordStartFragment::class.java, withAnim = false)
     }
 
     fun navigateStartToLocationChange() =

@@ -10,13 +10,13 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionManager
 import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.SimpleEventLiveData
-import team.weathy.util.debugE
 import team.weathy.util.dp
 import team.weathy.util.emit
 import team.weathy.util.setOnDebounceClickListener
@@ -119,7 +119,6 @@ class HomeFragment : Fragment() {
                     val marginBetweenCards = 24.dp * 2
 
                     shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
-                    debugE(shouldDisableThirdScene)
                 }
             }
         }
@@ -152,9 +151,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun showHelpPopup() {
-        isHelpPopupShowing = true
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
-        binding.exitExplanation.alpha = 1f
+        isHelpPopupShowing = true
         binding.dim.alpha = 1f
         binding.dim.isClickable = true
         binding.dim.isFocusable = true
@@ -162,9 +161,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun hideHelpPopup() {
-        isHelpPopupShowing = false
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
-        binding.exitExplanation.alpha = 0f
+        isHelpPopupShowing = false
         binding.dim.alpha = 0f
         binding.dim.isClickable = false
         binding.dim.isFocusable = false

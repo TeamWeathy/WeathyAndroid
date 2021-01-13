@@ -21,6 +21,7 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
 import team.weathy.util.debugE
+import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.setOnDebounceClickListener
 
 @FlowPreview
@@ -43,6 +44,7 @@ class SearchFragment : Fragment() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
+            requireActivity().hideKeyboard()
             mainViewModel.changeMenu(HOME)
             isEnabled = false
         }

@@ -224,10 +224,9 @@
                     style="@style/ImageButton.size48.padding19"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="85dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/today_weathy"
-                    app:layout_constraintStart_toStartOf="@id/today_weathy"
+                    app:layout_constraintStart_toEndOf="@id/today_weathy"
                     app:layout_constraintTop_toTopOf="@id/today_weathy" />
 
 
@@ -245,6 +244,34 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/weathy_explanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0"
+                android:clickable="false"
+                android:elevation="10dp"
+                app:layout_constraintStart_toStartOf="@id/container_weather"
+                app:layout_constraintTop_toBottomOf="@id/container_weather">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/main_help_box_help" />
+
+                <ImageButton
+                    android:id="@+id/exit_explanation"
+                    style="@style/ImageButton.size48.padding19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_close_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <View
                 android:id="@+id/dim"
                 android:layout_width="match_parent"
@@ -254,30 +281,6 @@
                 android:elevation="9dp"
                 tools:visibility="gone" />
 
-            <ImageButton
-                android:id="@+id/exit_explanation"
-                style="@style/ImageButton.size48.padding19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:alpha="0"
-                android:elevation="10dp"
-                android:src="@drawable/ic_close_small"
-                app:layout_constraintEnd_toEndOf="@id/weathy_explanation"
-                app:layout_constraintTop_toTopOf="@id/weathy_explanation" />
-
-            <ImageView
-                android:id="@+id/weathy_explanation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0"
-                android:clickable="false"
-                android:elevation="10dp"
-                android:src="@drawable/main_help_box_help"
-                app:layout_constraintStart_toStartOf="@id/today_weathy"
-                app:layout_constraintTop_toBottomOf="@id/today_weathy" />
 
             <include
                 vm="@{vm}"
