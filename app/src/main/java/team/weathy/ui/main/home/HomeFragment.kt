@@ -13,8 +13,10 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
-import team.weathy.util.*
-import team.weathy.util.extensions.getColor
+import team.weathy.util.AutoClearedValue
+import team.weathy.util.PixelRatio
+import team.weathy.util.dp
+import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
 
@@ -140,14 +142,12 @@ class HomeFragment : Fragment() {
         binding.weathyExplanation.alpha = 1f
         binding.exitExplanation.alpha = 1f
         binding.dim.alpha = 1f
-        binding.bottomNav.setBackgroundResource(R.color.transparent)
         binding.dim.isClickable = true
         binding.dim.isFocusable = true
         binding.container.isInteractionEnabled = false
     }
 
     private fun hideHelpPopup() {
-        binding.bottomNav.setBackgroundResource(R.drawable.main_box_bottomblur)
         isHelpPopupShowing = false
         binding.weathyExplanation.alpha = 0f
         binding.exitExplanation.alpha = 0f

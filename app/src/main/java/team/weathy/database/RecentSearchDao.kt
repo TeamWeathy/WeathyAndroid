@@ -19,7 +19,7 @@ interface RecentSearchCodeDao {
     suspend fun drop()
 
     @Query("DELETE FROM RecentSearchCode WHERE :code == code")
-    suspend fun delete(code: Int)
+    suspend fun delete(code: Long)
 
     @Transaction
     suspend fun add(item: RecentSearchCode) {

@@ -3,13 +3,14 @@ package team.weathy.api.mock
 import com.thedeanda.lorem.LoremIpsum
 import team.weathy.api.FetchCalendarPreviewRes
 import team.weathy.model.entity.CalendarPreview
-import team.weathy.model.entity.Climate
 import team.weathy.model.entity.DailyWeather
 import team.weathy.model.entity.Date
 import team.weathy.model.entity.HourlyWeather
+import team.weathy.model.entity.HourlyWeather.Climate
 import team.weathy.model.entity.Region
 import team.weathy.model.entity.Temperature
 import team.weathy.model.entity.User
+import team.weathy.model.entity.Weather
 import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloset
@@ -19,14 +20,13 @@ import kotlin.random.Random
 
 object MockGenerator {
     fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
-    fun region(code: Int = Random.nextInt(), name: String = LoremIpsum.getInstance().city) = Region(code, name)
-    fun climate(iconId: Int = 1, description: String = LoremIpsum.getInstance().name) = Climate(iconId, description)
+    fun region(code: Long = Random.nextLong(), name: String = LoremIpsum.getInstance().city) = Region(code, name)
     fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
     fun temperature() = Temperature(Random.nextInt(0, 20), Random.nextInt(-20, 0))
-    fun dailyWeather(code: Int = Random.nextInt(), regionName: String = LoremIpsum.getInstance().city) =
+    fun dailyWeather(code: Long = Random.nextLong(), regionName: String = LoremIpsum.getInstance().city) =
         DailyWeather(date(), temperature())
 
-    fun hourlyWeather() = HourlyWeather("time", 17, climate(), 5)
+    fun hourlyWeather() = HourlyWeather("time", 17, Climate(Weather.values().random(), "description"), 5)
 
     fun weahtyCloset() = WeathyCloset(
         WeathyClothes(1, (0 until Random.nextInt(2, 7)).map {

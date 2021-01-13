@@ -119,7 +119,7 @@ class SearchViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun removeRecentSearchCode(code: Int) = launchCatch({
+    private fun removeRecentSearchCode(code: Long) = launchCatch({
         recentSearchCodeDao.delete(code)
     })
 }

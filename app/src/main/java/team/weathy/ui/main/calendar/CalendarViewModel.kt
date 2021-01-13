@@ -15,7 +15,6 @@ import team.weathy.api.CalendarAPI
 import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.CalendarPreview
-import team.weathy.model.entity.Weather
 import team.weathy.model.entity.Weathy
 import team.weathy.util.dateString
 import team.weathy.util.debugE
@@ -51,7 +50,7 @@ class CalendarViewModel @ViewModelInject constructor(
         it?.region?.name ?: ""
     }
     val weathyWeatherIcon = curWeathy.map {
-        Weather.withId(it?.hourlyWeather?.climate?.iconId).iconId
+        it?.hourlyWeather?.climate?.weather?.iconId
     }
     val weathyClimateDescription = curWeathy.map {
         it?.hourlyWeather?.climate?.description ?: ""

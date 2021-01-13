@@ -55,12 +55,8 @@ class HomeViewModel @ViewModelInject constructor(
         val (month, day, weekOfDay) = it.dailyWeather.date
         "${LocalDate.now().year} ${month}월 ${day}일"
     }
-
-    //    val weathyLocation = recommendedWeathy.map {
-    //        it?.dailyWeather?.region?.name ?: ""
-    //    }
     val weathyWeatherIcon = recommendedWeathy.map {
-        Weather.withId(it?.hourlyWeather?.climate?.iconId).iconId
+        it?.hourlyWeather?.climate?.weather?.iconId
     }
     val weathyClimateDescription = recommendedWeathy.map {
         it?.hourlyWeather?.climate?.description ?: ""
@@ -91,6 +87,34 @@ class HomeViewModel @ViewModelInject constructor(
     }
     val weathyEtcClothes = recommendedWeathy.map {
         it?.closet?.etc?.clothes?.joinToString(" . ") { it.name } ?: ""
+    }
+
+
+    val extraRainRepresentation = extraWeathers.map {
+        it ?: return@map ""
+        it.rain.weatherRain.representation
+    }
+    val extraRainValue = extraWeathers.map {
+        it ?: return@map ""
+        "${it.rain.value}mm"
+    }
+
+    val extraHumidityRepresentation = extraWeathers.map {
+        it ?: return@map ""
+        it.humidity.weatherHumidity.representation
+    }
+    val extraHumidityValue = extraWeathers.map {
+        it ?: return@map ""
+        "${it.humidity.value}%"
+    }
+
+    val extraWindRepresentation = extraWeathers.map {
+        it ?: return@map ""
+        it.wind.weatherWind.representation
+    }
+    val extraWindValue = extraWeathers.map {
+        it ?: return@map ""
+        "${it.wind.value}m/s"
     }
     // endregion
 
@@ -123,7 +147,8 @@ class HomeViewModel @ViewModelInject constructor(
     private fun collectCurrentWeather() = viewModelScope.launch {
         currentWeather.asFlow().collect { weather ->
             weather ?: return@collect
-            val code = weather.region.code
+            //            val code = weather.region.code FIXME
+            val code = 2800000000 // 인천 광역시 MOCK
             val dateString = LocalDate.now().dateString
             val dateHourString = LocalDateTime.now().dateHourString
 
