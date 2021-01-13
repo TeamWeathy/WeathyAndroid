@@ -4,38 +4,78 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewPropertyAnimator
+import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
+import androidx.core.view.updateLayoutParams
+import androidx.databinding.BindingAdapter
+import team.weathy.R
 import team.weathy.databinding.ItemHourlyWeatherBinding
 import team.weathy.model.entity.HourlyWeather
 import team.weathy.util.OnChangeProp
+import team.weathy.util.dp
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.padZero
 import java.time.LocalDateTime
 
 class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    LinearLayout(context, attrs) {
+    FrameLayout(context, attrs) {
 
     private val curTime = LocalDateTime.now()
 
-    private val weatherItems = (0 until ITEM_COUNT).map {
+    private val scrollView = HorizontalScrollView(context).apply {
+        setPadding(12.dp, 0, 12.dp, 0)
+        clipToPadding = false
+        layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        clipChildren = false
+        isHorizontalScrollBarEnabled = false
+    }
+    private val linearLayout = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+    }
+
+    private val initialTimeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
+    private val weatherItems = (0 until ITEM_COUNT).map { index ->
         ItemHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
-            it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
+            it.root.layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT)
+
+            val isToday = index == 0
+            it.hour.isInvisible = isToday
+            it.todayCircle.isInvisible = !isToday
+
+            it.hour.text = initialTimeTexts[index]
         }
+    }
+
+    private val leftBlur = View(context).apply {
+        setBackgroundResource(R.drawable.blur_white_left_right)
+    }
+    private val rightBlur = View(context).apply {
+        setBackgroundResource(R.drawable.blur_white_right_left)
     }
 
     private val textAnimators: MutableList<Animator> = mutableListOf()
     private val viewAnimators: MutableList<ViewPropertyAnimator> = mutableListOf()
 
     var weathers: List<HourlyWeather> by OnChangeProp(listOf()) {
+        val timeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
         it.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
                 icon.setImageResource(weather.climate.weather.iconId)
                 pop.text = "${weather.pop}%°"
                 temp.text = "${weather.temperature}°"
+
+                hour.text = timeTexts[index]
             }
         }
 
@@ -44,35 +84,49 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     var position: Int by OnChangeProp(0) { pos ->
-        val timeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it + pos * 7) % 24}시".padZero(3) }
-
         weatherItems.forEachIndexed { index, binding ->
             val isToday = pos == 0 && index == 0
-            binding.hour.isInvisible = isToday
-            binding.todayCircle.isInvisible = !isToday
 
-            binding.hour.text = timeTexts[index]
         }
     }
 
     init {
-        initContainer()
         addViews()
         resetAnimation()
-    }
-
-    private fun initContainer() {
-        clipChildren = false
-        orientation = HORIZONTAL
-        weightSum = 7f
+        adjustViewWidths()
     }
 
     private fun addViews() {
+        addView(scrollView)
+        scrollView.addView(linearLayout)
         weatherItems.forEach {
-            addView(it.root)
+            linearLayout.addView(it.root)
         }
+        addView(leftBlur)
+        addView(rightBlur)
     }
 
+    private fun adjustViewWidths() {
+        doOnLayout {
+            val paddingHorizon = 24.dp
+            val containerWidth = it.width
+            val itemWidth = (containerWidth - paddingHorizon * 2) / 7f
+            linearLayout.children.forEach {
+                it.updateLayoutParams {
+                    this.width = itemWidth.toInt()
+                }
+            }
+
+            scrollView.doOnLayout {
+                leftBlur.layoutParams = LayoutParams(12.dp, it.height).apply {
+                    gravity = Gravity.LEFT
+                }
+                rightBlur.layoutParams = LayoutParams(12.dp, it.height).apply {
+                    gravity = Gravity.RIGHT
+                }
+            }
+        }
+    }
 
 
     private var isAnimDone = false
@@ -122,6 +176,12 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     companion object {
-        private const val ITEM_COUNT = 7
+        private const val ITEM_COUNT = 24
+
+        @JvmStatic
+        @BindingAdapter("hourlyWeathers")
+        fun HourlyWeatherView.setHourlyWeathers(weathers: List<HourlyWeather>) {
+            this.weathers = weathers
+        }
     }
 }

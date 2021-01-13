@@ -16,9 +16,7 @@ import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
-import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.dp
-import team.weathy.util.emit
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
@@ -50,10 +48,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    private val onResetAnimation = SimpleEventLiveData()
-    private val onStartAnimation = SimpleEventLiveData()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
@@ -87,12 +81,12 @@ class HomeFragment : Fragment() {
                 when (curId) {
                     R.layout.scene_home_first -> {
                         isFirstSceneShowing = true
-                        onResetAnimation.emit()
+                        binding.hourlyView.resetAnimation()
                         binding.weeklyView.resetAnimation()
                     }
                     R.layout.scene_home_second -> {
                         isFirstSceneShowing = false
-                        onStartAnimation.emit()
+                        binding.hourlyView.startAnimation()
                         binding.weeklyView.startAnimation()
 
                         if (shouldDisableThirdScene) {
@@ -121,10 +115,6 @@ class HomeFragment : Fragment() {
                     shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
                 }
             }
-        }
-
-        binding.hourlyPager.also {
-            it.adapter = HomeHourlyPagerAdapter(onResetAnimation, onStartAnimation, viewLifecycleOwner)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)

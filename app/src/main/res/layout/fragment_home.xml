@@ -407,7 +407,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="78dp"
                 android:clipToPadding="false"
-                android:paddingHorizontal="24dp"
                 android:paddingVertical="16dp"
                 app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 app:layout_constraintRight_toRightOf="@id/guide_right"
@@ -420,6 +419,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:layout_marginHorizontal="24dp"
                         android:id="@+id/hourly_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -430,6 +430,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <View
+                        android:layout_marginHorizontal="24dp"
                         android:id="@+id/divider"
                         android:layout_width="31dp"
                         android:layout_height="1dp"
@@ -438,9 +439,10 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/hourly_label" />
 
-                    <androidx.viewpager2.widget.ViewPager2
+                    <team.weathy.view.HourlyWeatherView
                         hourlyWeathers="@{vm.hourlyWeathers}"
-                        android:id="@+id/hourlyPager"
+                        android:id="@+id/hourlyView"
+                        android:paddingHorizontal="12dp"
                         android:layout_marginTop="21dp"
                         android:layout_width="match_parent"
                         app:layout_constraintBottom_toBottomOf="parent"
