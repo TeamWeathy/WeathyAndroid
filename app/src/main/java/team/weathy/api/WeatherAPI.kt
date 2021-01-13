@@ -1,6 +1,7 @@
 package team.weathy.api
 
 import com.google.gson.annotations.SerializedName
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import team.weathy.model.entity.DailyWeatherWithInDays
@@ -58,7 +59,7 @@ interface WeatherAPI {
         @Query("lon") lon: Double? = null,
         @Query("code") code: Long? = null,
         @Query("date") dateOrHourStr: DateOrDateHourString,
-    ): WeatherDailyHourlyRes
+    ): Response<WeatherDailyHourlyRes>
 
     @GET("weather/forecast/hourly")
     suspend fun fetchWeatherWithIn24Hours(
