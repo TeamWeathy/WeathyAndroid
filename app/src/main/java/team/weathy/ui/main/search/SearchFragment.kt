@@ -18,6 +18,7 @@ import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordViewModel
+import team.weathy.ui.record.start.RecordStartViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
 import team.weathy.util.debugE
@@ -40,7 +41,7 @@ class SearchFragment : Fragment() {
     /**
      * This ViewModel is not initialized when fromRecord == false or null
      */
-    private val recordViewModel by activityViewModels<RecordViewModel>()
+    private val recordStartViewModel by activityViewModels<RecordStartViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -86,7 +87,7 @@ class SearchFragment : Fragment() {
         viewModel.onItemClicked(position)
         debugE(weather)
         if (fromRecord) {
-            recordViewModel.onLocationChanged(weather)
+            recordStartViewModel.onLocationChanged(weather)
         } else {
             mainViewModel.onLocationChanged(weather)
         }
