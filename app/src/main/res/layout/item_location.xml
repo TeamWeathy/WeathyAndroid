@@ -32,8 +32,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:onClick="@{() -> on_click.invoke()}"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="163dp"
+        android:layout_height="163dp"
         tools:layout_height="163dp"
         tools:layout_width="match_parent">
 
@@ -77,6 +76,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/weatherImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintHeight_percent="0.8"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    tools:src="@drawable/main_img_clearsky_day" />
+
                 <TextView
                     android:id="@+id/datetime"
                     android:layout_width="match_parent"
@@ -86,7 +96,7 @@
                     android:maxLines="1"
                     android:textColor="@color/sub_grey_1"
                     android:text="@{datetime_text}"
-                    tools:text="12월 20일 일요일 오후 4시"
+                    tools:text="12월 20일 일요일 • 오후 4시"
                     android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,13 +114,6 @@
                     android:textSize="17sp"
                     app:layout_constraintTop_toBottomOf="@id/datetime" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/search_img_sunnycloud"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"

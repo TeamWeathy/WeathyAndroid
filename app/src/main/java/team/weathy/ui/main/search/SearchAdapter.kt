@@ -112,6 +112,7 @@ class SearchAdapter(
             binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
             binding.highTemp = "${item.daily.temperature.maxTemp}°"
             binding.lowTemp = "${item.daily.temperature.minTemp}°"
+            binding.weatherImage.setImageResource(item.hourly.climate.weather.bigIconId)
 
             binding.executePendingBindings()
         }

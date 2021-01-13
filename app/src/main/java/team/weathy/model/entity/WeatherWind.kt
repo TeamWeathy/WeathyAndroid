@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 
 @JsonAdapter(WeatherWindSerializer::class)
 enum class WeatherWind(val id: Int, val representation: String) {
-    LEVEL1(1, "안붐"), LEVEL2(2, "조금붐"), LEVEL3(3, "보통"), LEVEL4(4, "조금많이붐"), LEVEL5(5, "많이붐"),
+    LEVEL1(1, "매우 약함"), LEVEL2(2, "약함"), LEVEL3(3, "보통"), LEVEL4(4, "다소 강함"), LEVEL5(5, "강함"), LEVEL6(6, "매우 강함")
 
     ;
 

@@ -20,6 +20,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            visibilityWithAnim="@{vm.recommendedWeathy != null}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="26dp"
@@ -238,5 +239,21 @@
                 tools:text="목도리" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            visibilityWithAnim="@{vm.recommendedWeathy == null}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/round_corner_35dp"
+            android:backgroundTint="#FAFAFA"
+            android:scaleType="fitCenter"
+            android:src="@drawable/main_img_empty"
+            tools:alpha="0.2" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            visibilityWithAnim="@{vm.loadingRecommendedWeathy}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </team.weathy.view.WeathyCardView>
 </layout>

@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 
 @JsonAdapter(WeatherHumiditySerializer::class)
 enum class WeatherHumidity(val id: Int, val representation: String) {
-    LEVEL1(1, "안습함"), LEVEL2(2, "조금습함"), LEVEL3(3, "보통"), LEVEL4(4, "조금많이습합"), LEVEL5(5, "많이습함"),
+    LEVEL1(1, "매우 건조"), LEVEL2(2, "건조"), LEVEL3(3, "적정"), LEVEL4(4, "습함"), LEVEL5(5, "매우 습함"),
 
     ;
 

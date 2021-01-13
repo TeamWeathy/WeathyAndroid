@@ -1,5 +1,6 @@
 package team.weathy.api.mock
 
+import retrofit2.Response
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDailyHourlyRes
 import team.weathy.api.WeatherDetailRes
@@ -22,11 +23,13 @@ import javax.inject.Inject
 class MockWeatherAPI @Inject constructor() : WeatherAPI {
     override suspend fun fetchWeatherByLocation(
         lat: Double?, lon: Double?, code: Long?, dateOrHourStr: DateOrDateHourString
-    ): WeatherDailyHourlyRes {
-        return WeatherDailyHourlyRes(
-            OverviewWeather(
-                MockGenerator.region(), MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
-            ), "message"
+    ): Response<WeatherDailyHourlyRes> {
+        return Response.success(
+            WeatherDailyHourlyRes(
+                OverviewWeather(
+                    MockGenerator.region(), MockGenerator.dailyWeather(), MockGenerator.hourlyWeather()
+                ), "message"
+            )
         )
     }
 

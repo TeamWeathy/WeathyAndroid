@@ -1,5 +1,6 @@
 package team.weathy.api
 
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -32,23 +33,23 @@ data class EditWeathyReq(
 
 interface WeathyAPI {
     @GET("users/$USER_ID_PATH_SEGMENT/weathy/recommend")
-    fun fetchRecommendedWeathy(
+    suspend fun fetchRecommendedWeathy(
         @Query("code") code: Long, @Query("date") date: DateString
-    ): WeathyRes
+    ): Response<WeathyRes?>
 
     @GET("weathy")
-    fun fetchWeathyWithDate(
+    suspend fun fetchWeathyWithDate(
         @Query("date") date: DateString
     ): WeathyRes
 
     @POST("weathy")
-    fun createWeathy(@Body req: CreateWeathyReq): MessageRes
+    suspend fun createWeathy(@Body req: CreateWeathyReq): MessageRes
 
     @PUT("weathy/{weathyId}")
-    fun editWeathy(@Path("weathyId") weathyId: Int, @Body req: EditWeathyReq): MessageRes
+    suspend fun editWeathy(@Path("weathyId") weathyId: Int, @Body req: EditWeathyReq): MessageRes
 
     @DELETE("weathy/{weathyId}")
-    fun deleteWeathy(
+    suspend fun deleteWeathy(
         @Path("weathyId") weathyId: Int
     ): MessageRes
 }

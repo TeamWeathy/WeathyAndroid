@@ -11,6 +11,7 @@ import team.weathy.util.UniqueIdentifier
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+
 const val USER_ID_PATH_SEGMENT = "__USER_ID_PATH_SEGMENT__"
 
 class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
@@ -31,9 +32,9 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
 
-    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT) && uniqueId.exist) {
+    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT)) {
         val idx = pathSegments().indexOf(USER_ID_PATH_SEGMENT)
-        newBuilder().setPathSegment(idx, uniqueId.id!!).build()
+        newBuilder().setPathSegment(idx, uniqueId.userId.toString()).build()
     } else {
         this
     }
@@ -47,8 +48,8 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     }
 
     private val apiRetrofit =
-        Retrofit.Builder().baseUrl("http://15.164.146.132:3000")
-            .addConverterFactory(GsonConverterFactory.create(gson)).client(okHttpClient).build()
+        Retrofit.Builder().baseUrl("http://15.164.146.132:3000").addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient).build()
 
     fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
 }

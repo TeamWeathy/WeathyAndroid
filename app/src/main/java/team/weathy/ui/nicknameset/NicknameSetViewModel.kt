@@ -35,7 +35,8 @@ class NicknameSetViewModel @ViewModelInject constructor(
         launchCatch({
             userAPI.createUser(CreateUserReq(uniqueId.generate(), nickname.value ?: ""))
         }, loading = _loadingSubmit, onSuccess = {
-            uniqueId.save(it.user.id.toString())
+            uniqueId.saveUserId(it.user.id)
+            uniqueId.saveId(newUniqueId)
             uniqueId.saveToken(it.token)
             onSuccess.emit()
         }, onFailure = {
