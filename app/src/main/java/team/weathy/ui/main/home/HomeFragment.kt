@@ -16,6 +16,7 @@ import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.SimpleEventLiveData
+import team.weathy.util.debugE
 import team.weathy.util.dp
 import team.weathy.util.emit
 import team.weathy.util.setOnDebounceClickListener
@@ -67,6 +68,9 @@ class HomeFragment : Fragment() {
 
 
         binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
+        binding.downArrow setOnDebounceClickListener {
+            binding.container.transitionToEnd()
+        }
         binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         binding.topBlur.pivotY = 0f
@@ -115,6 +119,7 @@ class HomeFragment : Fragment() {
                     val marginBetweenCards = 24.dp * 2
 
                     shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+                    debugE(shouldDisableThirdScene)
                 }
             }
         }
