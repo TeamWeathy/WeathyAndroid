@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="team.weathy.ui.record.start.RecordStartViewModel" />
+            type="team.weathy.ui.record.RecordViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,52 +31,14 @@
 
             <TextView
                 style="@style/RecordTitleText"
-                android:id="@+id/tv_title"
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
-                android:text="@{vm.dateTitle}"
-                tools:text="1월 1일"
+                android:layout_marginTop="32dp"
+                tools:text="1월 1일\nasd"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                style="@style/RecordTitleText"
-                android:id="@+id/tv_title2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="의 "
-                app:layout_constraintTop_toTopOf="@id/tv_title"
-                app:layout_constraintStart_toEndOf="@id/tv_title" />
-
-            <TextView
-                style="@style/RecordTitleText"
-                android:id="@+id/tv_title3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="웨디"
-                android:textColor="@color/mint_icon"
-                android:fontFamily="@font/notosans_medium"
-                app:layout_constraintTop_toTopOf="@id/tv_title2"
-                app:layout_constraintStart_toEndOf="@id/tv_title2" />
-
-            <TextView
-                style="@style/RecordTitleText"
-                android:id="@+id/tv_title4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="를"
-                app:layout_constraintTop_toTopOf="@id/tv_title3"
-                app:layout_constraintStart_toEndOf="@id/tv_title3" />
-
-            <TextView
-                style="@style/RecordTitleText"
-                android:id="@+id/tv_title5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="기록해볼까요?"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                app:layout_constraintStart_toStartOf="@id/tv_title" />
 
             <ImageView
                 android:id="@+id/step1"
@@ -118,8 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="기록할 위치와 날씨를 확인해 주세요."
-                app:layout_constraintTop_toBottomOf="@id/tv_title5"
-                app:layout_constraintStart_toStartOf="@id/tv_title5" />
+                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintLeft_toLeftOf="@id/date"
+                />
 
             <team.weathy.view.WeathyCardView
                 android:id="@+id/cv_record"
@@ -149,7 +112,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="@{vm.regionText}"
                         tools:text="서울 서초구"
                         android:textColor="@color/main_grey"
                         android:textSize="17sp"
@@ -163,7 +125,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
                         android:layout_marginStart="25dp"
-                        android:text="@{vm.dateText}"
                         tools:text="1월 1일 금요일"
                         android:textColor="@color/sub_grey_1"
                         android:textSize="15sp"
@@ -177,7 +138,6 @@
                         android:layout_marginEnd="2dp"
                         android:fontFamily="@font/roboto_light"
                         android:letterSpacing="-0.05"
-                        android:text="@{vm.maxTempText}"
                         tools:text="20°"
                         android:textColor="@color/red_temp"
                         android:textSize="40sp"
@@ -205,7 +165,6 @@
                         android:layout_marginTop="95dp"
                         android:layout_marginEnd="25dp"
                         android:fontFamily="@font/roboto_light"
-                        android:text="@{vm.minTempText}"
                         tools:text="-20°"
                         android:textColor="@color/blue_temp"
                         android:textSize="40sp"

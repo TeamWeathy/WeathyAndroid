@@ -9,15 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.dialog.DateDialog
 import team.weathy.dialog.DateDialog.OnClickListener
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
+import team.weathy.ui.record.RecordActivity
+import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.debugE
+import team.weathy.util.isSameDay
+import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
+import java.time.LocalDateTime
 
+@FlowPreview
 @AndroidEntryPoint
 class CalendarFragment : Fragment(), OnClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
@@ -46,6 +52,8 @@ class CalendarFragment : Fragment(), OnClickListener {
         configureCalendarView()
 
         registerBackPressCallback()
+
+        setOnRecordClickListener()
     }
 
     private fun configureCalendarView() {
@@ -90,5 +98,15 @@ class CalendarFragment : Fragment(), OnClickListener {
 
     override fun onClick(date: LocalDate) {
         binding.calendarView.curDate = date
+    }
+
+    private fun setOnRecordClickListener() = binding.record setOnDebounceClickListener {
+        navigateRecordAtCurDate()
+    }
+
+    private fun navigateRecordAtCurDate() {
+        RecordViewModel.lastRecordNavigationTime = LocalDateTime.now()
+        val selectedDate = viewModel.selectedDate.value!!
+        startActivity(RecordActivity.newIntent(requireContext(), selectedDate))
     }
 }

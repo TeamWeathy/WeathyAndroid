@@ -4,25 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import team.weathy.api.WeatherAPI
+import team.weathy.R
 import team.weathy.databinding.FragmentRecordStartBinding
-import team.weathy.di.Api
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.extensions.launchCatch
+import team.weathy.util.extensions.font
+import team.weathy.util.extensions.getColor
+import team.weathy.util.monthDayFormat
 import team.weathy.util.setOnDebounceClickListener
-import javax.inject.Inject
 
 @AndroidEntryPoint
 @FlowPreview
 class RecordStartFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordStartBinding>()
-    private val viewModel by activityViewModels<RecordStartViewModel>()
+    private val viewModel by activityViewModels<RecordViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = FragmentRecordStartBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
@@ -31,6 +34,7 @@ class RecordStartFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         configureStartNavigation()
+        configureDate()
     }
 
     private fun configureStartNavigation() {
@@ -42,6 +46,20 @@ class RecordStartFragment : Fragment() {
         }
         binding.btnStart setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateStartToClothesSelect()
+        }
+    }
+
+    private fun configureDate() {
+        binding.date.text = buildSpannedString {
+            append("${viewModel.date.monthDayFormat}의 ")
+
+            color(getColor(R.color.mint_icon)) {
+                font(ResourcesCompat.getFont(requireContext(), R.font.notosans_medium)) {
+                    append("웨디")
+                }
+            }
+
+            append("를\n${if (viewModel.edit) "수정" else "기록"}해볼까요?")
         }
     }
 }

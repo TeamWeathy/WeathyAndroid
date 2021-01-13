@@ -88,6 +88,10 @@ val LocalDate.dayOfWeekIndex: Int
 val LocalDate.dateString: DateString
     get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
 
+fun LocalDate.isSameDay(date: LocalDate): Boolean {
+    return year == date.year && month == date.month && dayOfMonth == date.dayOfMonth
+}
+
 /** 1997-04-04T23 */
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"

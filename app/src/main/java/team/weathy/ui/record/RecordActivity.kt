@@ -1,5 +1,7 @@
 package team.weathy.ui.record
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import team.weathy.ui.record.start.RecordStartFragment
 import team.weathy.ui.record.weatherrating.RecordWeatherRatingFragment
 import team.weathy.util.extensions.popFragmentIfExist
 import team.weathy.util.extensions.replaceFragment
+import java.time.LocalDate
 
 @FlowPreview
 @AndroidEntryPoint
@@ -54,4 +57,18 @@ class RecordActivity : AppCompatActivity() {
     fun popClothesDelete() = popFragmentIfExist(RecordClothesDeleteFragment::class.java)
 
     fun popWeatherRating() = popFragmentIfExist(RecordWeatherRatingFragment::class.java)
+
+    companion object {
+        const val EXTRA_DATE = "date"
+        const val EXTRA_EDIT = "edit"
+
+        fun newIntent(context: Context, date: LocalDate? = null, edit: Boolean = false): Intent {
+            return Intent(context, RecordActivity::class.java).apply {
+                date?.let {
+                    putExtra(EXTRA_DATE, date)
+                    putExtra(EXTRA_EDIT, edit)
+                }
+            }
+        }
+    }
 }
