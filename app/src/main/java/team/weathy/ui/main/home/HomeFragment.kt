@@ -62,9 +62,7 @@ class HomeFragment : Fragment() {
 
 
         binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
-        binding.downArrow setOnDebounceClickListener {
-            binding.container.transitionToEnd()
-        }
+
         binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         binding.topBlur.pivotY = 0f
