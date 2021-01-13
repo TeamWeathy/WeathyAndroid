@@ -8,15 +8,18 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.ui.main.calendar.YearMonthFormat
-import team.weathy.util.convertWeeklyIndexToFirstDateOfWeek
+import team.weathy.util.convertWeeklyIndexToFirstDateOfWeekCalendar
+import team.weathy.util.debugE
 import team.weathy.util.weekOfMonth
 import team.weathy.util.yearMonthFormat
 import team.weathy.view.calendar.WeeklyAdapter.WeeklyHolder
+import java.time.LocalDate
 
 class WeeklyAdapter(
     private val animLiveData: LiveData<Float>,
     private val data: LiveData<Map<YearMonthFormat, List<CalendarPreview?>>>,
     private val lifecycleOwner: LifecycleOwner,
+    private val onClickDateListener: (date: LocalDate) -> Unit,
 ) : RecyclerView.Adapter<WeeklyHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyHolder {
         return WeeklyHolder(WeeklyView(parent.context).apply {
@@ -38,15 +41,17 @@ class WeeklyAdapter(
                 view.animValue = it
             }
             data.observe(lifecycleOwner) {
-                val weekOfMonth = view.firstDateOfWeek.weekOfMonth - 1
-                view.data = it[view.firstDateOfWeek.yearMonthFormat]?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
+                val weekOfMonth = view.firstDateInCalendar.weekOfMonth - 1
+                view.data =
+                    it[view.firstDateInCalendar.yearMonthFormat]?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
             }
+            view.onClickDateListener = onClickDateListener
         }
 
         fun bind(position: Int) {
-            val date = convertWeeklyIndexToFirstDateOfWeek(position)
+            val date = convertWeeklyIndexToFirstDateOfWeekCalendar(position)
             val weekOfMonth = date.weekOfMonth - 1
-            view.firstDateOfWeek = date
+            view.firstDateInCalendar = date
             view.data = data.value?.get(date.yearMonthFormat)?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
         }
     }
