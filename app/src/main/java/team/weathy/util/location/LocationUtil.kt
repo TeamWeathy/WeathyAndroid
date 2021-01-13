@@ -15,11 +15,13 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import team.weathy.model.entity.OverviewWeather
+import team.weathy.util.SPUtil
 import team.weathy.util.debugE
 import java.util.*
+import javax.inject.Inject
 
 @SuppressLint("MissingPermission")
-class LocationUtil(app: Application) : DefaultLifecycleObserver {
+class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
     private val geoCoder = Geocoder(app, Locale.KOREA)
 
@@ -41,6 +43,8 @@ class LocationUtil(app: Application) : DefaultLifecycleObserver {
 
     override fun onCreate(owner: LifecycleOwner) {
         registerLocationListener()
+
+        _isOtherPlaceSelected.value = spUtil.isOtherPlaceSelected
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
@@ -74,13 +78,16 @@ class LocationUtil(app: Application) : DefaultLifecycleObserver {
     }
 
     fun selectPlace(weather: OverviewWeather) {
+        spUtil.lastSelectedLocationCode = weather.region.code
         selectedWeatherLocation.value = weather
     }
 
     fun selectOtherPlace(weather: OverviewWeather) {
+        selectPlace(weather)
+
         unregisterLocationListener()
         _isLocationAvailable.value = false
+        spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
-        selectedWeatherLocation.value = weather
     }
 }

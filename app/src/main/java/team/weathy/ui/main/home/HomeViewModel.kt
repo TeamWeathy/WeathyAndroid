@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -15,7 +16,9 @@ import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.DailyWeatherWithInDays
 import team.weathy.model.entity.HourlyWeather
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.Weathy
+import team.weathy.util.SPUtil
 import team.weathy.util.dateHourString
 import team.weathy.util.dateString
 import team.weathy.util.debugE
@@ -27,16 +30,18 @@ import java.time.LocalDateTime
 class HomeViewModel @ViewModelInject constructor(
     private val locationUtil: LocationUtil,
     @Api private val weatherAPI: WeatherAPI,
-    @Api private val weathyAPI: WeathyAPI
+    @Api private val weathyAPI: WeathyAPI,
+    private val spUtil: SPUtil,
 ) : ViewModel() {
-    val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
+    private val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
 
     val currentWeather = locationUtil.selectedWeatherLocation.asLiveData(viewModelScope.coroutineContext)
     val loadingWeather = MutableLiveData(true)
 
-    val isLocationAvailable = locationUtil.isLocationAvailable.asLiveData(viewModelScope.coroutineContext)
+    val isOtherPlaceSelected = locationUtil.isOtherPlaceSelected.asLiveData(viewModelScope.coroutineContext)
 
     val recommendedWeathy = MutableLiveData<Weathy?>(null)
+    val loadingRecommendedWeathy = MutableLiveData(true)
 
     val hourlyWeathers = MutableLiveData<List<HourlyWeather>>(listOf())
     val dailyWeathers = MutableLiveData<List<DailyWeatherWithInDays?>>(listOf())
@@ -119,20 +124,35 @@ class HomeViewModel @ViewModelInject constructor(
     // endregion
 
     init {
-        collectLastLocationForFetchByLocation()
-        collectCurrentWeather()
+        viewModelScope.launch {
+            collectCurrentWeatherAndFetch()
+        }
+
+        viewModelScope.launch {
+            if (spUtil.lastSelectedLocationCode != 0L && spUtil.isOtherPlaceSelected) {
+                fetchWeatherWithCode(spUtil.lastSelectedLocationCode)?.let {
+                    locationUtil.selectOtherPlace(it)
+                }
+            }
+
+            collectLocationAvailabilityAndFetch()
+        }
     }
 
-    private fun collectLastLocationForFetchByLocation() = viewModelScope.launch {
-        locationUtil.lastLocation.collect {
-            it ?: return@collect
+    private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
+        locationUtil.isLocationAvailable.zip(locationUtil.isOtherPlaceSelected) { a, b ->
+            a to b
+        }.collect { (locationAvailable, otherPlaceSelected) ->
+            if (!locationAvailable || otherPlaceSelected) return@collect
+
+            val location = locationUtil.lastLocation.value!!
 
             loadingWeather.value = true
             kotlin.runCatching {
                 lastFetchDateTime.value = LocalDateTime.now()
 
                 weatherAPI.fetchWeatherByLocation(
-                    it.latitude, it.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                    location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
                 )
             }.onSuccess { res ->
                 val weather = res.body()?.weather ?: return@onSuccess
@@ -144,13 +164,19 @@ class HomeViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun collectCurrentWeather() = viewModelScope.launch {
+    private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {
+        return weatherAPI.fetchWeatherByLocation(code = code, dateOrHourStr = LocalDateTime.now().dateHourString)
+            .body()?.weather
+    }
+
+    private suspend fun collectCurrentWeatherAndFetch() {
         currentWeather.asFlow().collect { weather ->
             weather ?: return@collect
             val code = weather.region.code
             val dateString = LocalDate.now().dateString
             val dateHourString = LocalDateTime.now().dateHourString
 
+            loadingRecommendedWeathy.value = true
             kotlin.runCatching {
                 weathyAPI.fetchRecommendedWeathy(
                     code, dateString
@@ -160,6 +186,7 @@ class HomeViewModel @ViewModelInject constructor(
             }.onFailure {
                 debugE(it)
             }
+            loadingRecommendedWeathy.value = false
 
             kotlin.runCatching {
                 weatherAPI.fetchWeatherWithIn24Hours(code, dateHourString)
