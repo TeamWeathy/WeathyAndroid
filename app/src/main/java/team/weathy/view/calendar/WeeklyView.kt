@@ -15,13 +15,12 @@ import team.weathy.util.OnChangeProp
 import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
-import team.weathy.util.getWeekTexts
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
 
 class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
-    var date: LocalDate by OnChangeProp(LocalDate.now()) {
+    var firstDateOfWeek: LocalDate by OnChangeProp(LocalDate.now()) {
         updateUIWithDate()
     }
     var data: List<CalendarPreview?>? by OnChangeProp(null) {
@@ -31,7 +30,7 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val today = LocalDate.now()
 
     private val isTodayInCurrentWeek
-        get() = date.year == today.year && date.month == today.month && date.weekOfMonth == today.weekOfMonth
+        get() = firstDateOfWeek.year == today.year && firstDateOfWeek.month == today.month && firstDateOfWeek.weekOfMonth == today.weekOfMonth
 
     private val calendarItems = (0..6).map {
         ViewCalendarWeeklyItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
@@ -71,7 +70,9 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun updateUIWithDate() {
-        val texts = getWeekTexts(date)
+        val texts = (0..6).map {
+            firstDateOfWeek.plusDays(it.toLong()).dayOfMonth
+        }
         calendarItems.forEachIndexed { idx, binding ->
             val isFuture = isTodayInCurrentWeek && texts[idx] > today.dayOfMonth
 

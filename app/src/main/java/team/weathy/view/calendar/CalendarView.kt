@@ -49,7 +49,7 @@ import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.convertDateToMonthlyIndex
 import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDate
-import team.weathy.util.convertWeeklyIndexToDate
+import team.weathy.util.convertWeeklyIndexToFirstDateOfWeek
 import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.emit
 import team.weathy.util.extensions.clamp
@@ -247,7 +247,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertWeeklyIndexToDate(position)
+                    val newDate = convertWeeklyIndexToFirstDateOfWeek(position)
                     if (!isExpanded && curDate != newDate) {
                         curDate = newDate
                     }
