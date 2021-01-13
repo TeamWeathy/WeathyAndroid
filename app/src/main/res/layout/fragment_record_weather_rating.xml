@@ -69,6 +69,7 @@
             android:layout_marginStart="26dp"
             android:text="날씨"
             android:textColor="@color/mint_icon"
+            android:fontFamily="@font/notosans_medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -125,8 +126,10 @@
 
                         <ImageView
                             android:id="@+id/img_emoji"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.14"
                             android:layout_marginStart="30dp"
                             android:layout_marginVertical="18dp"
                             android:src="@drawable/record_img_veryhot"
@@ -140,9 +143,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="17dp"
                             android:layout_marginStart="17dp"
+                            android:fontFamily="@font/notosans_medium"
                             android:text="너무 더워요"
                             android:textSize="17sp"
-                            android:textColor="@color/imoji_veryhot_text"
+                            android:textColor="@color/pink"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji"/>
 
@@ -150,243 +154,245 @@
                             android:id="@+id/tv_sub_review"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="18dp"
                             android:text="훨씬 얇게 입을걸 그랬어요."
                             android:textColor="@color/sub_grey_6"
                             android:textSize="16sp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review"
-                            app:layout_constraintStart_toStartOf="@id/tv_review"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="@id/tv_review" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </team.weathy.view.WeathyCardView>
 
-            <team.weathy.view.WeathyCardView
-                android:id="@+id/cv_review2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:weathy_radius="20dp"
-                app:weathy_disable_shadow="true"
-                app:weathy_stroke_width="1dp"
-                app:weathy_stroke_color="@color/sub_grey_7"
-                app:layout_constraintTop_toBottomOf="@id/cv_review"
-                app:cardUseCompatPadding="true">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <team.weathy.view.WeathyCardView
+                    android:id="@+id/cv_review2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:weathy_radius="20dp"
+                    app:weathy_disable_shadow="true"
+                    app:weathy_stroke_width="1dp"
+                    app:weathy_stroke_color="@color/sub_grey_7"
+                    app:layout_constraintTop_toBottomOf="@id/cv_review"
+                    app:cardUseCompatPadding="true">
 
-                    <ImageView
-                        android:id="@+id/img_emoji2"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginVertical="18dp"
-                        android:src="@drawable/record_img_hot"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_review2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginStart="17dp"
-                        android:text="더워요"
-                        android:textSize="17sp"
-                        android:textColor="@color/imoji_hot_text"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img_emoji2"/>
+                        <ImageView
+                            android:id="@+id/img_emoji2"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.14"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginVertical="18dp"
+                            android:src="@drawable/record_img_hot"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/tv_sub_review2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp"
-                        android:text="좀 더 가볍게 입을걸 그랬어요."
-                        android:textColor="@color/sub_grey_6"
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_review2"
-                        app:layout_constraintStart_toStartOf="@id/tv_review2"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <TextView
+                            android:id="@+id/tv_review2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginStart="17dp"
+                            android:fontFamily="@font/notosans_medium"
+                            android:text="더워요"
+                            android:textSize="17sp"
+                            android:textColor="@color/imoji_hot_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/img_emoji2"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tv_sub_review2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="좀 더 가볍게 입을걸 그랬어요."
+                            android:textColor="@color/sub_grey_6"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_review2"
+                            app:layout_constraintStart_toStartOf="@id/tv_review2" />
 
-            </team.weathy.view.WeathyCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <team.weathy.view.WeathyCardView
-                android:id="@+id/cv_review3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:weathy_radius="20dp"
-                app:weathy_disable_shadow="true"
-                app:weathy_stroke_width="1dp"
-                app:weathy_stroke_color="@color/sub_grey_7"
-                app:layout_constraintTop_toBottomOf="@id/cv_review2"
-                app:cardUseCompatPadding="true">
+                </team.weathy.view.WeathyCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <team.weathy.view.WeathyCardView
+                    android:id="@+id/cv_review3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:weathy_radius="20dp"
+                    app:weathy_disable_shadow="true"
+                    app:weathy_stroke_width="1dp"
+                    app:weathy_stroke_color="@color/sub_grey_7"
+                    app:layout_constraintTop_toBottomOf="@id/cv_review2"
+                    app:cardUseCompatPadding="true">
 
-                    <ImageView
-                        android:id="@+id/img_emoji3"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginVertical="18dp"
-                        android:src="@drawable/record_img_good"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_review3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginStart="17dp"
-                        android:text="적당해요"
-                        android:textSize="17sp"
-                        android:textColor="@color/imoji_good_text"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img_emoji3"/>
+                        <ImageView
+                            android:id="@+id/img_emoji3"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.14"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginVertical="18dp"
+                            android:src="@drawable/record_img_good"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/tv_sub_review3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp"
-                        android:text="딱 적당하게 입었어요."
-                        android:textColor="@color/sub_grey_6"
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_review3"
-                        app:layout_constraintStart_toStartOf="@id/tv_review3"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <TextView
+                            android:id="@+id/tv_review3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/notosans_medium"
+                            android:text="적당해요"
+                            android:textColor="@color/imoji_good_text"
+                            android:textSize="17sp"
+                            app:layout_constraintStart_toEndOf="@id/img_emoji3"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tv_sub_review3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="딱 적당하게 입었어요."
+                            android:textColor="@color/sub_grey_6"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_review3"
+                            app:layout_constraintStart_toStartOf="@id/tv_review3" />
 
-            </team.weathy.view.WeathyCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <team.weathy.view.WeathyCardView
-                android:id="@+id/cv_review4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:weathy_radius="20dp"
-                app:weathy_disable_shadow="true"
-                app:weathy_stroke_width="1dp"
-                app:weathy_stroke_color="@color/sub_grey_7"
-                app:layout_constraintTop_toBottomOf="@id/cv_review3"
-                app:cardUseCompatPadding="true">
+                </team.weathy.view.WeathyCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <team.weathy.view.WeathyCardView
+                    android:id="@+id/cv_review4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:weathy_radius="20dp"
+                    app:weathy_disable_shadow="true"
+                    app:weathy_stroke_width="1dp"
+                    app:weathy_stroke_color="@color/sub_grey_7"
+                    app:layout_constraintTop_toBottomOf="@id/cv_review3"
+                    app:cardUseCompatPadding="true">
 
-                    <ImageView
-                        android:id="@+id/img_emoji4"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginVertical="18dp"
-                        android:src="@drawable/record_img_cold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_review4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginStart="17dp"
-                        android:text="추워요"
-                        android:textSize="17sp"
-                        android:textColor="@color/imoji_cold_text"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img_emoji4"/>
+                        <ImageView
+                            android:id="@+id/img_emoji4"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.14"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginVertical="18dp"
+                            android:src="@drawable/record_img_cold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/tv_sub_review4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp"
-                        android:text="좀 더 따뜻하게 입을걸 그랬어요."
-                        android:textColor="@color/sub_grey_6"
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_review4"
-                        app:layout_constraintStart_toStartOf="@id/tv_review4"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <TextView
+                            android:id="@+id/tv_review4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginStart="17dp"
+                            android:fontFamily="@font/notosans_medium"
+                            android:text="추워요"
+                            android:textSize="17sp"
+                            android:textColor="@color/imoji_cold_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/img_emoji4"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tv_sub_review4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="좀 더 따뜻하게 입을걸 그랬어요."
+                            android:textColor="@color/sub_grey_6"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_review4"
+                            app:layout_constraintStart_toStartOf="@id/tv_review4" />
 
-            </team.weathy.view.WeathyCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <team.weathy.view.WeathyCardView
-                android:id="@+id/cv_review5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="13dp"
-                app:weathy_radius="20dp"
-                app:weathy_disable_shadow="true"
-                app:weathy_stroke_width="1dp"
-                app:weathy_stroke_color="@color/sub_grey_7"
-                app:layout_constraintTop_toBottomOf="@id/cv_review4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:cardUseCompatPadding="true">
+                </team.weathy.view.WeathyCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <team.weathy.view.WeathyCardView
+                    android:id="@+id/cv_review5"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="13dp"
+                    app:weathy_radius="20dp"
+                    app:weathy_disable_shadow="true"
+                    app:weathy_stroke_width="1dp"
+                    app:weathy_stroke_color="@color/sub_grey_7"
+                    app:layout_constraintTop_toBottomOf="@id/cv_review4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:cardUseCompatPadding="true">
 
-                    <ImageView
-                        android:id="@+id/img_emoji5"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginVertical="18dp"
-                        android:src="@drawable/record_img_verycold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_review5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginStart="17dp"
-                        android:text="너무 추워요"
-                        android:textSize="17sp"
-                        android:textColor="@color/imoji_verycold_text"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img_emoji5"/>
+                        <ImageView
+                            android:id="@+id/img_emoji5"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.14"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginVertical="18dp"
+                            android:src="@drawable/record_img_verycold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/tv_sub_review5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp"
-                        android:text="훨씬 두껍게 입을걸 그랬어요."
-                        android:textColor="@color/sub_grey_6"
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_review5"
-                        app:layout_constraintStart_toStartOf="@id/tv_review5"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <TextView
+                            android:id="@+id/tv_review5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginStart="17dp"
+                            android:fontFamily="@font/notosans_medium"
+                            android:text="너무 추워요"
+                            android:textSize="17sp"
+                            android:textColor="@color/imoji_verycold_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/img_emoji5"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tv_sub_review5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="훨씬 두껍게 입을걸 그랬어요."
+                            android:textColor="@color/sub_grey_6"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_review5"
+                            app:layout_constraintStart_toStartOf="@id/tv_review5" />
 
-            </team.weathy.view.WeathyCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </team.weathy.view.WeathyCardView>
 
-    </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <Button
             android:id="@+id/btn_check"
@@ -399,6 +405,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

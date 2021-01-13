@@ -79,12 +79,9 @@ class SearchViewModel @ViewModelInject constructor(
 
     suspend fun onItemClicked(position: Int) {
         kotlin.runCatching {
-            if (showRecently.value == false) {
-                searchResult.value?.get(position)?.region?.code?.let {
-                    debugE(it)
-                    recentSearchCodeDao.add(RecentSearchCode(it))
-                    getRecentSearchCodesAndFetch()
-                }
+            searchResult.value?.get(position)?.region?.code?.let {
+                recentSearchCodeDao.add(RecentSearchCode(it))
+                getRecentSearchCodesAndFetch()
             }
         }
     }
@@ -98,15 +95,16 @@ class SearchViewModel @ViewModelInject constructor(
         }.onSuccess {
             recentlySearchResult.value = it
         }.onFailure {
+            debugE(it)
         }
 
         loading.value = false
     }
 
-    private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.map {
+    private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.mapNotNull {
         weatherAPI.fetchWeatherByLocation(
             code = it.code, dateOrHourStr = LocalDateTime.now().dateHourString
-        ).weather!!
+        ).body()?.weather
     }
 
     fun onItemRemoved(position: Int) {

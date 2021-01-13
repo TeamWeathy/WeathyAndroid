@@ -88,33 +88,47 @@ val LocalDate.dayOfWeekIndex: Int
 val LocalDate.dateString: DateString
     get() = this.format(DateTimeFormatter.ISO_LOCAL_DATE)
 
+fun LocalDate.isSameDay(date: LocalDate): Boolean {
+    return year == date.year && month == date.month && dayOfMonth == date.dayOfMonth
+}
+
 /** 1997-04-04T23 */
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
 
 /**
- * 04월 04일 월요일 . 오전 1시
+ * 04월 04일 월요일 • 오전 1시
  */
 val LocalDateTime.koFormat: String
-    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 . ${hour.koFormat}"
+    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 • ${hour.koFormat}"
 
 /** 4월 4일 금요일 */
 val LocalDate.koFormat: String
     get() = "${monthValue}월 ${dayOfMonth}일 ${dayOfWeek.koFormat}요일"
 
-fun convertMonthlyIndexToDate(index: Int): LocalDate {
+/** 4월 4일*/
+val LocalDate.monthDayFormat: String
+    get() = "${monthValue}월 ${dayOfMonth}일"
+
+fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
     val cur = LocalDate.now()
 
     val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
-    return cur.minusMonths(diffMonth.toLong())
+    val monthSubtracted = cur.minusMonths(diffMonth.toLong())
+    val firstDateOfMonth = monthSubtracted.withDayOfMonth(1)
+    val startIdx = firstDateOfMonth.dayOfWeekIndex
+
+    return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
 }
 
-fun convertWeeklyIndexToDate(index: Int): LocalDate {
+fun convertWeeklyIndexToFirstDateOfWeekCalendar(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
+    val weekSubtracted = cur.minusWeeks(diffWeek.toLong())
+    val startIdx = weekSubtracted.dayOfWeekIndex
 
-    return cur.minusWeeks(diffWeek.toLong())
+    return weekSubtracted.minusDays(startIdx.toLong())
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
@@ -128,8 +142,13 @@ fun convertDateToMonthlyIndex(date: LocalDate): Int {
 
 fun convertDateToWeeklyIndex(date: LocalDate): Int {
     val now = LocalDate.now()
+    val nowDayOfWeekIndex = now.dayOfWeekIndex
+    val nowFirstDayOfWeek = now.minusDays(nowDayOfWeekIndex.toLong())
 
-    val weekDiff = ChronoUnit.WEEKS.between(date, now).toInt()
+    val dateDayOfWeekIndex = date.dayOfWeekIndex
+    val dateFirstDayOfWeek = date.minusDays(dateDayOfWeekIndex.toLong())
+
+    val weekDiff = dateFirstDayOfWeek.until(nowFirstDayOfWeek, ChronoUnit.WEEKS).toInt()
 
     return WeeklyAdapter.MAX_ITEM_COUNT - weekDiff - 1
 }
@@ -137,34 +156,6 @@ fun convertDateToWeeklyIndex(date: LocalDate): Int {
 
 fun calculateRequiredRow(date: LocalDate): Int {
     return (date.lengthOfMonth() + date.withDayOfMonth(1).dayOfWeekIndex - 1) / 7 + 1
-}
-
-fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
-    val result = MutableList(42) { 0 }
-
-    val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
-
-    // 1 ~ 7 (MON ~ SUN)
-    val startDayIndex = date.withDayOfMonth(1).dayOfWeekIndex
-    val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
-
-    for (i in 0 until startDayIndex) {
-        result[i] = previousMonthEndDay - (startDayIndex - i) + 1
-    }
-    for (i in startDayIndex..endDayIndex) {
-        result[i] = i - startDayIndex + 1
-    }
-    for (i in (endDayIndex + 1)..41) {
-        result[i] = i - endDayIndex
-    }
-
-    return Triple(result, startDayIndex, endDayIndex)
-}
-
-fun getWeekTexts(date: LocalDate): List<Int> {
-    val (_result) = getMonthTexts(date)
-
-    return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
 }
 
 fun getStartDateStringInCalendar(year: Int, month: Int): DateString {

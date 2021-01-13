@@ -5,21 +5,20 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
-import team.weathy.model.entity.Category
-import team.weathy.model.entity.Clothes
-import team.weathy.model.entity.ClothesCloset
+import team.weathy.model.entity.ClothCategory
+import team.weathy.model.entity.WeathyCloset
 
 
 data class ClothesRes(
-    val closet: ClothesCloset, val message: String
+    val closet: WeathyCloset, val message: String
 )
 
 data class CreateClothesReq(
-    val category: Category, val name: String
+    val category: ClothCategory, val name: String
 )
 
 data class CreateClothesRes(
-    @SerializedName("clothesList") val list: List<Clothes>, @SerializedName("message") val message: String
+    @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
 )
 
 data class DeleteClothesReq(

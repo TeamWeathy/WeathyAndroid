@@ -20,7 +20,6 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
-import team.weathy.util.debugE
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.setOnDebounceClickListener
 
@@ -84,7 +83,6 @@ class SearchFragment : Fragment() {
 
     private fun onItemClicked(position: Int, weather: OverviewWeather) = lifecycleScope.launchWhenStarted {
         viewModel.onItemClicked(position)
-        debugE(weather)
         if (fromRecord) {
             recordViewModel.onLocationChanged(weather)
         } else {

@@ -46,7 +46,18 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <View
-        android:id="@+id/circle_small"
+        android:id="@+id/circleGrey"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/day"
+        app:layout_constraintLeft_toLeftOf="@id/day"
+        app:layout_constraintRight_toRightOf="@id/day"
+        app:layout_constraintTop_toTopOf="@id/day" />
+
+    <View
+        android:id="@+id/circleMint"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:background="@drawable/circle"
@@ -55,6 +66,7 @@
         app:layout_constraintLeft_toLeftOf="@id/day"
         app:layout_constraintRight_toRightOf="@id/day"
         app:layout_constraintTop_toTopOf="@id/day" />
+
 
     <TextView
         android:id="@+id/day"

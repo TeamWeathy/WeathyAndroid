@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
         binding.weeklyCard.doOnLayout {
             binding.hourlyCard.doOnLayout {
                 binding.detailCard.doOnLayout {
-                    val screenHeight = pixelRatio.screenHeight - 25.dp
+                    val screenHeight = pixelRatio.screenHeight
                     val marginTop = 78.dp
                     val marginBottom = 96.dp
                     val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height

@@ -9,6 +9,8 @@ import javax.inject.Inject
 interface SPUtil {
     val sharedPreferences: SharedPreferences
     var isFirstLaunch: Boolean
+    var isOtherPlaceSelected: Boolean
+    var lastSelectedLocationCode: Long
 
     companion object {
         const val SP_NAME = "DO_NOT_CHANGE_THIS"
@@ -37,6 +39,18 @@ class SPUtilImpl @Inject constructor(context: Application) : SPUtil {
         }
         set(_) {
             sharedPreferences.edit().putBoolean("isFirstLaunch", false).commit()
+        }
+
+    override var isOtherPlaceSelected: Boolean
+        get() = sharedPreferences.getBoolean("isOtherPlaceSelected", true)
+        set(value) {
+            sharedPreferences.edit().putBoolean("isOtherPlaceSelected", value).commit()
+        }
+
+    override var lastSelectedLocationCode: Long
+        get() = sharedPreferences.getLong("lastSelectedLocationCode", 0L)
+        set(value) {
+            sharedPreferences.edit().putLong("lastSelectedLocationCode", value).commit()
         }
 
 }

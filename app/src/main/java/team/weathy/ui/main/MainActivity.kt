@@ -11,10 +11,12 @@ import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.record.RecordActivity
+import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.setOnDebounceClickListener
+import java.time.LocalDateTime
 
 @FlowPreview
 @AndroidEntryPoint
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeMenu(CALENDAR)
         }
         binding.fab setOnDebounceClickListener {
-            startActivity(Intent(this, RecordActivity::class.java))
+            navigateRecordAtToday()
         }
     }
 
@@ -144,5 +146,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateSearch() {
         binding.fragmentPager.setCurrentItem(2, false)
+    }
+
+    private fun navigateRecordAtToday() {
+        RecordViewModel.lastRecordNavigationTime = LocalDateTime.now()
+        startActivity(RecordActivity.newIntent(this))
     }
 }

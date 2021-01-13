@@ -19,27 +19,36 @@ import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.util.OnChangeProp
 import team.weathy.util.calculateRequiredRow
-import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
-import team.weathy.util.getMonthTexts
 import team.weathy.util.margin
+import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
     private val today = LocalDate.now()
-    private var todayIndex = 0
-    var date: LocalDate by OnChangeProp(LocalDate.now()) {
+    private var todayIndexInViews = -1
+    private var curDateIndexInViews = -1
+
+    var firstDatesInCalednarAndMonth: Pair<LocalDate, LocalDate> by OnChangeProp(LocalDate.now() to LocalDate.now()) {
         updateUIWithDate()
     }
+    val firstDateInCalendar
+        get() = firstDatesInCalednarAndMonth.first
+    val firstDateInMonth
+        get() = firstDatesInCalednarAndMonth.second
+
     var data: List<CalendarPreview?>? by OnChangeProp(null) {
         updateUIWithData()
     }
 
-    private val isTodayInCurrentMonth
-        get() = date.year == today.year && date.month == today.month
+    var selectedDate: LocalDate by OnChangeProp(LocalDate.now()) {
+        updateUIWithCurDate()
+    }
+
+    var onClickDateListener: ((date: LocalDate) -> Unit)? = null
 
     var animValue: Float by OnChangeProp(0f) {
         adjustUIsWithAnimValue()
@@ -76,9 +85,13 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-    private val calendarItems = (1..42).map {
+    private val calendarItems = (1..42).map { idx ->
         ViewCalendarItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.id = ViewCompat.generateViewId()
+            root setOnDebounceClickListener {
+                val date = firstDateInCalendar.plusDays(idx.toLong() - 1L)
+                onClickDateListener?.invoke(date)
+            }
         }
     }
     private val dividerGenerator = {
@@ -119,14 +132,23 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     private fun updateUIWithDate() {
-        val (texts, startDayIndex, endDayIndex) = getMonthTexts(date)
-        todayIndex = if (isTodayInCurrentMonth) today.dayOfMonth + (7 - startDayIndex) + 2 else -1
+        val dates = (0..41).map {
+            firstDateInCalendar.plusDays(it.toLong())
+        }
+
+        // today index + previous month day count
+        todayIndexInViews = today.dayOfMonth - 1
+        if (firstDateInCalendar.month != firstDateInMonth.month) {
+            todayIndexInViews += dates.count { it.monthValue == firstDateInCalendar.monthValue }
+        }
+        // set todayIndexInViews to -1 if today is not in this month
+        if (today.year != firstDateInMonth.year || today.month != firstDateInMonth.month) todayIndexInViews = -1
 
         innerLinearLayouts.forEach {
             it.removeAllViews()
         }
         outerLinearLayout.removeAllViews()
-        val requiredRow = calculateRequiredRow(date)
+        val requiredRow = calculateRequiredRow(firstDateInMonth)
         val rowHeight = when (requiredRow) {
             4 -> px(ITEM_HEIGHT_4ROW_DP)
             5 -> px(ITEM_HEIGHT_5ROW_DP)
@@ -149,19 +171,21 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
             repeat(7) { column ->
                 val idx = row * 7 + column
+                val date = dates[idx]
 
                 val item = calendarItems[idx]
 
-                item.day.text = texts[idx].toString()
+                item.day.text = dates[idx].dayOfMonth.toString()
 
-                val isInCurrentMonthRange = !(idx < startDayIndex || idx > endDayIndex)
-                val isFuture = isTodayInCurrentMonth && texts[idx] > today.dayOfMonth
-                val shouldBeDisabled = !isInCurrentMonthRange || isFuture
+                val isDateNotInThisMonth = date !in (firstDateInMonth..firstDateInMonth.plusDays(
+                    firstDateInMonth.lengthOfMonth().toLong() - 1L
+                ))
+                val isFuture = date > today
 
-                item.root.alpha = if (shouldBeDisabled) .3f else 1f
+                item.root.alpha = if (isDateNotInThisMonth || isFuture) .3f else 1f
 
-                item.circleSmall.isVisible = idx == todayIndex
-                item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndex))
+                item.circleMint.isVisible = idx == todayIndexInViews
+                item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndexInViews))
 
                 item.tempLow.margin.bottom = coldestViewMarginBottom
 
@@ -171,6 +195,18 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                     )
                 )
             }
+        }
+    }
+
+    private fun updateUIWithCurDate() {
+        val dates = (0..41).map {
+            firstDateInCalendar.plusDays(it.toLong())
+        }
+        curDateIndexInViews =
+            dates.indexOfFirst { it.year == selectedDate.year && it.month == selectedDate.month && it.dayOfMonth == selectedDate.dayOfMonth }
+
+        calendarItems.forEachIndexed { idx, item ->
+            item.circleGrey.isVisible = idx == curDateIndexInViews
         }
     }
 
@@ -188,7 +224,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             }
         }
     }
-
 
     private fun getDayTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
         if (isToday) return Color.WHITE
@@ -212,13 +247,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         val itemsExceptFirstLine = calendarItems.subList(7, calendarItems.size)
         itemsExceptFirstLine.forEach { binding ->
             binding.root.translationY = animValue * 10f
-        }
-
-        if (todayIndex != -1) {
-            calendarItems[todayIndex].run {
-                circleSmall.scaleX = (animValue + 0.3f).clamp(0.5f, 1.0f)
-                circleSmall.scaleY = (animValue + 0.3f).clamp(0.5f, 1.0f)
-            }
         }
     }
 

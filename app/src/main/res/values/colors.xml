@@ -32,10 +32,10 @@
     <color name="blue_temp">#3b9bd1</color>
     <color name="sub_grey_8">#afafaf</color>
     <color name="imoji_cold_text">#00a3ff</color>
-    <color name="imoji_good_text">#3aa391</color>
+    <color name="imoji_good_text">#3fccb5</color>
     <color name="white">#ffffff</color>
     <color name="imoji_veryhot_text">#d26a63</color>
-    <color name="imoji_hot_text">#ff9c54</color>
+    <color name="imoji_hot_text">#ffc85e</color>
     <color name="sub_grey_3">#dadada</color>
     <color name="imoji_verycold_text">#967fd4</color>
     <color name="imoji_good">#aae2d7</color>

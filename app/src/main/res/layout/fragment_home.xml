@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:src="@{vm.isLocationAvailable ? @drawable/ic_gps_shadow : @drawable/ic_otherplace_shadow}"
+                    android:src="@{!vm.isOtherPlaceSelected ? @drawable/ic_gps_shadow : @drawable/ic_otherplace_shadow}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

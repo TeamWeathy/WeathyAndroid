@@ -46,10 +46,11 @@ import team.weathy.ui.main.calendar.YearMonthFormat
 import team.weathy.util.AnimUtil
 import team.weathy.util.OnChangeProp
 import team.weathy.util.SimpleEventLiveData
+import team.weathy.util.calculateRequiredRow
 import team.weathy.util.convertDateToMonthlyIndex
 import team.weathy.util.convertDateToWeeklyIndex
-import team.weathy.util.convertMonthlyIndexToDate
-import team.weathy.util.convertWeeklyIndexToDate
+import team.weathy.util.convertMonthlyIndexToDateToFirstDateOfMonthCalendar
+import team.weathy.util.convertWeeklyIndexToFirstDateOfWeekCalendar
 import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.emit
 import team.weathy.util.extensions.clamp
@@ -66,21 +67,36 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
+    var onDateChangeListener: ((date: LocalDate) -> Unit)? = null
+    var onSelectedDateChangeListener: ((date: LocalDate) -> Unit)? = null
+
+    private val curDateLiveData = MutableLiveData(LocalDate.now())
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
-        onCurDateChanged()
+         onCurDateChanged()
     }
+
+    private val selectedDateLiveData = MutableLiveData(LocalDate.now())
+    var selectedDate: LocalDate by OnChangeProp(LocalDate.now()) {
+        selectedDateLiveData.value = it
+        onSelectedDateChangeListener?.invoke(it)
+        curDate = it
+        invalidate()
+    }
+    private var rowCount = 4
+
     private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
     var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
         dataLiveData.value = it
     }
 
-    var onDateChangeListener: OnDateChangeListener? = null
     var onClickYearMonthText: (() -> Unit)? = null
 
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
     private val isTodayInCurrentWeek
         get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
+    private val isSelectedInCurrentWeek
+        get() = selectedDate.year == curDate.year && selectedDate.month == curDate.month && selectedDate.weekOfMonth == curDate.weekOfMonth
 
 
     private val animLiveData = MutableLiveData(0f)
@@ -127,6 +143,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         setOnDebounceClickListener {
             curDate = today
+            selectedDate = today
         }
 
         layoutParams = LayoutParams(px(32), px(32)).apply {
@@ -211,16 +228,25 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = MonthlyAdapter(
-                animLiveData, scrollEnabled, onScrollToTop, dataLiveData, fragmentViewLifecycleOwner
-            )
+                animLiveData,
+                scrollEnabled,
+                onScrollToTop,
+                dataLiveData,
+                selectedDateLiveData,
+                fragmentViewLifecycleOwner,
+            ) {
+                selectedDate = it
+            }
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertMonthlyIndexToDate(position)
-                    if (isExpanded && curDate != newDate) {
-                        curDate = newDate
+                    val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
+                        position
+                    )
+                    if (isExpanded && curDate != firstDateOfMonth) {
+                        curDate = firstDateOfMonth
                     }
                 }
             })
@@ -236,7 +262,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 height = px(WeeklyView.ITEM_HEIGHT_DP)
             }
 
-            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner)
+            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner) {
+                selectedDate = it
+            }
             setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
 
             setPageTransformer { page, position ->
@@ -247,7 +275,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertWeeklyIndexToDate(position)
+                    val newDate = convertWeeklyIndexToFirstDateOfWeekCalendar(position)
                     if (!isExpanded && curDate != newDate) {
                         curDate = newDate
                     }
@@ -317,10 +345,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun onCurDateChanged() {
+        curDateLiveData.value = curDate
+        rowCount = calculateRequiredRow(curDate)
+
         setYearMonthTextWithDate(curDate)
         selectPagerItemsWithDate(curDate)
 
-        onDateChangeListener?.onChange(curDate)
+        onDateChangeListener?.invoke(curDate)
         changeWeekTextsColor()
         notifyScrollToTop()
         invalidate()
@@ -351,6 +382,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
     }
+    private val greyCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.sub_grey_5)
+        setShadowLayer(12f, 0f, 0f, getColor(R.color.sub_grey_5))
+    }
     private val capsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
         setShadowLayer(12f, 0f, 0f, getColor(R.color.main_mint))
@@ -369,28 +404,42 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         )
 
         // capsule
-        if (isTodayInCurrentWeek) {
-            val widthWithoutPadding = width - paddingHorizontal * 2f
-            val rawWidth = widthWithoutPadding / 7f
-            val maxWidth = pxFloat(42)
-            val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
-            val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
-            val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
-            val capsuleWidthRadius = capsuleWidth / 2f
+        val widthWithoutPadding = width - paddingHorizontal * 2f
+        val rawWidth = widthWithoutPadding / 7f
+        val maxWidth = pxFloat(42)
+        val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
+        val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
+        val capsuleHeight = pxFloat(64)
+        val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
+        val capsuleWidthRadius = capsuleWidth / 2f
+        val capsuleTop = pxFloat(72)
 
+        val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
+
+        if (isSelectedInCurrentWeek) {
+            canvas.drawRoundRect(
+                greyCapsuleLeft,
+                capsuleTop,
+                greyCapsuleLeft + capsuleWidth,
+                capsuleTop + capsuleHeight,
+                capsuleWidthRadius,
+                capsuleWidthRadius,
+                greyCapsulePaint
+            )
+        }
+
+        if (isTodayInCurrentWeek) {
             canvas.drawRoundRect(
                 capsuleLeft,
-                pxFloat(72),
+                capsuleTop,
                 capsuleLeft + capsuleWidth,
-                pxFloat(72) + capsuleHeight,
+                capsuleTop + capsuleHeight,
                 capsuleWidthRadius,
                 capsuleWidthRadius,
                 capsulePaint,
             )
         }
     }
-
 
     private var springAnim: SpringAnimation? = null
     private var tracker: VelocityTracker? = null
@@ -456,6 +505,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun animCapsulePaintAlpha() {
         capsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
+        greyCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
 
     private fun animPagersAlpha() {
@@ -478,15 +528,25 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun enableTouchWeeklyPagerOnly() {
         weeklyViewPager?.isUserInputEnabled = true
         monthlyViewPager?.isUserInputEnabled = false
+
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(monthlyViewPager, 0)
+            addView(weeklyViewPager, 1)
+        }
     }
 
     private fun enableTouchMonthlyPagerOnly() {
         weeklyViewPager?.isUserInputEnabled = false
         monthlyViewPager?.isUserInputEnabled = true
-    }
 
-    fun interface OnDateChangeListener {
-        fun onChange(date: LocalDate)
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(weeklyViewPager, 0)
+            addView(monthlyViewPager, 1)
+        }
     }
 
     companion object {

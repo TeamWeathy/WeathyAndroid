@@ -85,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:text="어떤 옷"
                 android:textColor="@color/mint_icon"
+                android:fontFamily="@font/notosans_medium"
                 app:layout_constraintStart_toStartOf="@id/tv_nick_name"
                 app:layout_constraintTop_toBottomOf="@id/tv_nick_name" />
 
@@ -363,8 +364,10 @@
                     android:id="@+id/chip_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clipChildren="false"
                     android:layoutAnimation="@anim/layout_animation_fade_in"
                     app:chipSpacingHorizontal="8dp"
+                    android:minHeight="120dp"
                     app:chipSpacingVertical="1.5dp">
 
                     <ImageButton
@@ -373,8 +376,7 @@
                         android:layout_height="39dp"
                         android:background="?selectableItemBackgroundBorderless"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/record_btn_addtag"
-                        android:translationY="4dp" />
+                        android:src="@drawable/record_btn_addtag" />
 
                 </com.google.android.material.chip.ChipGroup>
 

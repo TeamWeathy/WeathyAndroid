@@ -44,8 +44,8 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
     }
 
-    private val initialTimeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
-    private val weatherItems = (0 until ITEM_COUNT).map { index ->
+    private val initialTimeTexts = (0 until MAX_ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
+    private val weatherItems = (0 until MAX_ITEM_COUNT).map { index ->
         ItemHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
             it.root.layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT)
 
@@ -67,11 +67,18 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     private val textAnimators: MutableList<Animator> = mutableListOf()
     private val viewAnimators: MutableList<ViewPropertyAnimator> = mutableListOf()
 
-    var weathers: List<HourlyWeather> by OnChangeProp(listOf()) {
-        val timeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
-        it.forEachIndexed { index, weather ->
+    var weathers: List<HourlyWeather> by OnChangeProp(listOf()) { weathers ->
+        linearLayout.removeAllViews()
+
+        weatherItems.forEachIndexed { index, binding ->
+            if (index < weathers.size) linearLayout.addView(binding.root)
+        }
+        adjustViewWidths()
+
+        val timeTexts = (0 until MAX_ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
+        weathers.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
-                icon.setImageResource(weather.climate.weather.iconId)
+                icon.setImageResource(weather.climate.weather.smallIconId)
                 pop.text = "${weather.pop}%°"
                 temp.text = "${weather.temperature}°"
 
@@ -93,15 +100,11 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     init {
         addViews()
         resetAnimation()
-        adjustViewWidths()
     }
 
     private fun addViews() {
         addView(scrollView)
         scrollView.addView(linearLayout)
-        weatherItems.forEach {
-            linearLayout.addView(it.root)
-        }
         addView(leftBlur)
         addView(rightBlur)
     }
@@ -176,7 +179,7 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     companion object {
-        private const val ITEM_COUNT = 24
+        private const val MAX_ITEM_COUNT = 24
 
         @JvmStatic
         @BindingAdapter("hourlyWeathers")

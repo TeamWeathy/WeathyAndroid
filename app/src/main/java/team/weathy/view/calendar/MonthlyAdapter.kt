@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.ui.main.calendar.YearMonthFormat
 import team.weathy.util.SimpleEventLiveData
-import team.weathy.util.convertMonthlyIndexToDate
+import team.weathy.util.convertMonthlyIndexToDateToFirstDateOfMonthCalendar
 import team.weathy.util.yearMonthFormat
 import team.weathy.view.calendar.MonthlyAdapter.MonthlyHolder
+import java.time.LocalDate
 
 class MonthlyAdapter(
     private val animLiveData: LiveData<Float>,
     private val scrollEnabled: LiveData<Boolean>,
     private val onScrollToTop: SimpleEventLiveData,
     private val data: LiveData<Map<YearMonthFormat, List<CalendarPreview?>>>,
+    private val selectedDate: LiveData<LocalDate>,
     private val lifecycleOwner: LifecycleOwner,
+    private val onClickDateListener: (date: LocalDate) -> Unit,
 ) : RecyclerView.Adapter<MonthlyHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthlyHolder {
@@ -47,15 +50,22 @@ class MonthlyAdapter(
                 view.scrollToTop()
             }
             data.observe(lifecycleOwner) {
-                view.data = it[view.date.yearMonthFormat]
+                view.data = it[view.firstDateInMonth.yearMonthFormat]
             }
+            selectedDate.observe(lifecycleOwner) {
+                view.selectedDate = it
+            }
+            view.onClickDateListener = onClickDateListener
         }
 
         fun bind(position: Int) {
-            val date = convertMonthlyIndexToDate(position)
+            val (firstDateOfMonthInCalendar, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
+                position
+            )
 
-            view.date = date
-            view.data = data.value?.get(date.yearMonthFormat)
+            view.firstDatesInCalednarAndMonth = firstDateOfMonthInCalendar to firstDateOfMonth
+
+            view.data = data.value?.get(firstDateOfMonth.yearMonthFormat)
         }
     }
 
