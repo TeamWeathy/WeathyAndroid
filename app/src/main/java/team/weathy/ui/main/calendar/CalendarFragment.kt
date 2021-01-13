@@ -12,11 +12,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.databinding.FragmentCalendarBinding
 import team.weathy.dialog.DateDialog
 import team.weathy.dialog.DateDialog.OnClickListener
-import team.weathy.ui.main.MainMenu.CALENDAR
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.view.calendar.CalendarView
+import team.weathy.util.debugE
 import java.time.LocalDate
 
 @AndroidEntryPoint
@@ -55,13 +54,22 @@ class CalendarFragment : Fragment(), OnClickListener {
                 DateDialog.newInstance(binding.calendarView.curDate).show(childFragmentManager, null)
             }
 
-            onDateChangeListener = CalendarView.OnDateChangeListener {
+            onDateChangeListener = {
                 viewModel.onCurDateChanged(it)
+            }
+
+            onSelectedDateChangeListener = {
+                viewModel.onSelectedDateChanged(it)
             }
         }
 
         viewModel.curDate.observe(viewLifecycleOwner) {
             binding.calendarView.curDate = it
+
+        }
+
+        viewModel.selectedDate.observe(viewLifecycleOwner) {
+            binding.calendarView.selectedDate = it
             binding.container.startLayoutAnimation()
             binding.scrollView.smoothScrollTo(0, 0)
         }

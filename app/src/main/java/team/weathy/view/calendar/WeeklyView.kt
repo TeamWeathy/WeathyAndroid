@@ -13,14 +13,17 @@ import team.weathy.databinding.ViewCalendarWeeklyItemBinding
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dayOfWeekIndex
+import team.weathy.util.debugE
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
+import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
 
 class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
-    var firstDateOfWeek: LocalDate by OnChangeProp(LocalDate.now()) {
+    var firstDateInCalendar: LocalDate by OnChangeProp(LocalDate.now()) {
+        debugE("firstDateInCalendar $it")
         updateUIWithDate()
     }
     var data: List<CalendarPreview?>? by OnChangeProp(null) {
@@ -29,8 +32,7 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private val today = LocalDate.now()
 
-    private val isTodayInCurrentWeek
-        get() = firstDateOfWeek.year == today.year && firstDateOfWeek.month == today.month && firstDateOfWeek.weekOfMonth == today.weekOfMonth
+    var onClickDateListener: ((date: LocalDate) -> Unit)? = null
 
     private val calendarItems = (0..6).map {
         ViewCalendarWeeklyItemBinding.inflate(LayoutInflater.from(context), null, false).apply {
@@ -50,6 +52,7 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         configureContainer()
         addCalendarItems()
         updateUIWithDate()
+        setOnDateClickListener()
     }
 
     private fun configureContainer() {
@@ -57,6 +60,15 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         orientation = HORIZONTAL
         weightSum = 7f
         setBackgroundColor(Color.TRANSPARENT)
+    }
+
+    private fun setOnDateClickListener() {
+        calendarItems.forEachIndexed { idx, binding ->
+            binding.root setOnDebounceClickListener {
+                val date = firstDateInCalendar.plusDays(idx.toLong())
+                onClickDateListener?.invoke(date)
+            }
+        }
     }
 
     private fun addCalendarItems() {
@@ -70,8 +82,11 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun updateUIWithDate() {
+        val isTodayInCurrentWeek =
+            firstDateInCalendar.year == today.year && firstDateInCalendar.month == today.month && firstDateInCalendar.weekOfMonth == today.weekOfMonth
+
         val texts = (0..6).map {
-            firstDateOfWeek.plusDays(it.toLong()).dayOfMonth
+            firstDateInCalendar.plusDays(it.toLong()).dayOfMonth
         }
         calendarItems.forEachIndexed { idx, binding ->
             val isFuture = isTodayInCurrentWeek && texts[idx] > today.dayOfMonth

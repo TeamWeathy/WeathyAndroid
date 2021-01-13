@@ -35,15 +35,18 @@ class CalendarViewModel @ViewModelInject constructor(
     private val _curDate = MutableLiveData(LocalDate.now())
     val curDate: LiveData<LocalDate> = _curDate
 
+    private val _selectedDate = MutableLiveData(LocalDate.now())
+    val selectedDate: LiveData<LocalDate> = _selectedDate
+
     private val _calendarData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
     val calendarData: LiveData<Map<YearMonthFormat, List<CalendarPreview?>>> = _calendarData
 
     private val _isMoreMenuShowing = MutableLiveData(false)
     val isMoreMenuShowing: LiveData<Boolean> = _isMoreMenuShowing
 
-    private val _curWeathy = MutableLiveData<Weathy?>(null)
-    val curWeathy: LiveData<Weathy?> = _curWeathy
-    val weathyDate = curDate.map {
+    private val selectedWeathy = MutableLiveData<Weathy?>(null)
+    val curWeathy: LiveData<Weathy?> = selectedWeathy
+    val weathyDate = selectedDate.map {
         it.koFormat
     }
     val weathyLocation = curWeathy.map {
@@ -84,7 +87,7 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     init {
-        collectCurDateFlow()
+        collectSelectedFlow()
         collectYearMonthFlow()
     }
 
@@ -97,38 +100,47 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     fun onCurDateChanged(date: LocalDate) {
-        if (_curDate.value!!.year == date.year && _curDate.value!!.monthValue == date.monthValue && _curDate.value!!.dayOfMonth == date.dayOfMonth) {
+        val current = curDate.value!!
+        if (current.year == date.year && current.monthValue == date.monthValue && current.dayOfMonth == date.dayOfMonth) {
             return
         }
         _curDate.value = date
     }
 
-    private fun collectCurDateFlow() {
+    fun onSelectedDateChanged(date: LocalDate) {
+        val selected = selectedDate.value!!
+        if (selected.year == date.year && selected.monthValue == date.monthValue && selected.dayOfMonth == date.dayOfMonth) {
+            return
+        }
+        _selectedDate.value = date
+    }
+
+    private fun collectSelectedFlow() {
         viewModelScope.launch {
             _curDate.asFlow().collect {
-                fetchCurDateWeathy()
+                fetchSelectedDateWeathy()
             }
         }
     }
 
-    private fun fetchCurDateWeathy() {
-        debugE("fetchCurDateWeathy ${_curDate.value!!.dateString}")
+    private fun fetchSelectedDateWeathy() {
+        debugE("fetchSelectedDateWeathy ${selectedDate.value!!.dateString}")
         launchCatch({
-            weathyAPI.fetchWeathyWithDate(_curDate.value!!.dateString)
+            weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
         }, onSuccess = {
-            _curWeathy.value = it.weathy
+            selectedWeathy.value = it.weathy
         })
     }
 
     private fun collectYearMonthFlow() = viewModelScope.launch {
-        _curDate.asFlow().map { it.yearMonthFormat }.distinctUntilChanged().collect {
+        curDate.asFlow().map { it.yearMonthFormat }.distinctUntilChanged().collect {
             fetchMonthlyDataIfNeeded()
         }
     }
 
     private fun fetchMonthlyDataIfNeeded() {
-        debugE("fetchMonthlyDataIfNeeded ${_curDate.value!!.dateString}")
-        val date = _curDate.value!!
+        debugE("fetchMonthlyDataIfNeeded ${curDate.value!!.dateString}")
+        val date = curDate.value!!
         if (!_calendarData.value!!.containsKey(date.yearMonthFormat)) {
             launchCatch({
                 val s = getStartDateStringInCalendar(date.year, date.monthValue)
