@@ -10,30 +10,50 @@ import android.view.ViewPropertyAnimator
 import android.widget.LinearLayout
 import androidx.core.view.isInvisible
 import team.weathy.databinding.ItemHourlyWeatherBinding
+import team.weathy.model.entity.HourlyWeather
+import team.weathy.util.OnChangeProp
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.padZero
 import java.time.LocalDateTime
-import kotlin.random.Random
 
 class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
     private val curTime = LocalDateTime.now()
-    private val timeTexts = (0 until ITEM_COUNT).map { "${curTime.hour + it}시".padZero(3) }
 
-    private val weatherItems = (0 until ITEM_COUNT).map { idx ->
+    private val weatherItems = (0 until ITEM_COUNT).map {
         ItemHourlyWeatherBinding.inflate(LayoutInflater.from(context), this, false).also {
-            it.hour.text = timeTexts[idx]
-
             it.root.layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
-
-            it.hour.isInvisible = idx == 0
-            it.todayCircle.isInvisible = idx != 0
         }
     }
 
     private val textAnimators: MutableList<Animator> = mutableListOf()
     private val viewAnimators: MutableList<ViewPropertyAnimator> = mutableListOf()
+
+    var weathers: List<HourlyWeather> by OnChangeProp(listOf()) {
+        it.forEachIndexed { index, weather ->
+            weatherItems.getOrNull(index)?.run {
+                icon.setImageResource(weather.climate.weather.iconId)
+                pop.text = "${weather.pop}%°"
+                temp.text = "${weather.temperature}°"
+            }
+        }
+
+        resetAnimation()
+        startAnimation()
+    }
+
+    var position: Int by OnChangeProp(0) { pos ->
+        val timeTexts = (0 until ITEM_COUNT).map { "${(curTime.hour + it + pos * 7) % 24}시".padZero(3) }
+
+        weatherItems.forEachIndexed { index, binding ->
+            val isToday = pos == 0 && index == 0
+            binding.hour.isInvisible = isToday
+            binding.todayCircle.isInvisible = !isToday
+
+            binding.hour.text = timeTexts[index]
+        }
+    }
 
     init {
         initContainer()
@@ -76,7 +96,9 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     fun startAnimation() {
         if (isAnimDone) return
         isAnimDone = true
-        weatherItems.forEach { binding ->
+        weatherItems.forEachIndexed { idx, binding ->
+            val temperature = weathers.getOrNull(idx)?.temperature ?: return@forEachIndexed
+
             binding.pop.animate().alpha(1f).translationY(0f).setDuration(1200L).setStartDelay(500L).apply {
                 withEndAction { isAnimDone = true }
                 viewAnimators.add(this)
@@ -86,8 +108,7 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 viewAnimators.add(this)
             }.start()
 
-            val dest = Random.nextInt(-20, 20)
-            ValueAnimator.ofInt(0, dest).apply {
+            ValueAnimator.ofInt(0, temperature).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.temp.text = "${value}°"
