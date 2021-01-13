@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.util.EventLiveData
 import team.weathy.util.debugE
 import team.weathy.util.extensions.updateList
@@ -139,7 +140,7 @@ class RecordViewModel : ViewModel() {
         return selectedClothesCount
     }
 
-    fun onLocationChanged() {
+    fun onLocationChanged(weather: OverviewWeather) {
         debugE("hi")
     }
 }

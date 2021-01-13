@@ -6,16 +6,17 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
+import androidx.databinding.BindingAdapter
 import team.weathy.R
 import team.weathy.databinding.ItemWeeklyWeatherBinding
+import team.weathy.model.entity.DailyWeatherWithInDays
+import team.weathy.util.OnChangeProp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.getFont
 import team.weathy.util.extensions.px
 import team.weathy.util.koFormat
 import java.time.LocalDateTime
-import kotlin.random.Random
 
 class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
@@ -38,6 +39,18 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private val animators: MutableList<Animator> = mutableListOf()
+
+    var weathers: List<DailyWeatherWithInDays> by OnChangeProp(listOf()) {
+        it.forEachIndexed { index, weather ->
+            weatherItems.getOrNull(index)?.run {
+                icon.setImageResource(weather.climate.weather.iconId)
+                tempHigh.text = "${weather.temperature.maxTemp}°"
+                tempLow.text = "${weather.temperature.minTemp}°"
+            }
+        }
+        resetAnimation()
+        startAnimation()
+    }
 
     init {
         initContainer()
@@ -84,11 +97,10 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         val duration1 = 600L
         val duration2 = 1100L
 
-        weatherItems.forEach { binding ->
-            val lowDest = Random.nextInt(-20, 0)
-            val highDest = Random.nextInt(0, 20)
+        weatherItems.forEachIndexed { idx, binding ->
+            val weather = weathers.getOrNull(idx) ?: return@forEachIndexed
 
-            ValueAnimator.ofInt(0, lowDest).apply {
+            ValueAnimator.ofInt(0, weather.temperature.minTemp).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.tempLow.text = "${value}°"
@@ -99,7 +111,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 animators.add(this)
             }
 
-            ValueAnimator.ofInt(0, highDest).apply {
+            ValueAnimator.ofInt(0, weather.temperature.maxTemp).apply {
                 addUpdateListener {
                     val value = it.animatedValue as Int
                     binding.tempHigh.text = "${value}°"
@@ -153,5 +165,11 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
 
     companion object {
         private const val ITEM_COUNT = 7
+
+        @JvmStatic
+        @BindingAdapter("weeklyWeathers")
+        fun WeeklyWeatherView.setWeeklyWeathers(weathers: List<DailyWeatherWithInDays>) {
+            this.weathers = weathers
+        }
     }
 }

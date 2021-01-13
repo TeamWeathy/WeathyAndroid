@@ -10,11 +10,14 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionManager
 import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
-import team.weathy.util.*
-import team.weathy.util.extensions.getColor
+import team.weathy.util.AutoClearedValue
+import team.weathy.util.PixelRatio
+import team.weathy.util.dp
+import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
 
@@ -46,9 +49,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+        FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,6 +62,9 @@ class HomeFragment : Fragment() {
 
 
         binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
+        binding.downArrow setOnDebounceClickListener {
+            binding.container.transitionToEnd()
+        }
         binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         binding.topBlur.pivotY = 0f
@@ -107,11 +112,7 @@ class HomeFragment : Fragment() {
                     val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
                     val marginBetweenCards = 24.dp * 2
 
-                    debugE(screenHeight)
-                    debugE("${binding.weeklyCard.height} ${binding.hourlyCard.height} ${binding.detailCard.height}")
-
                     shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
-                    debugE(shouldDisableThirdScene)
                 }
             }
         }
@@ -140,21 +141,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun showHelpPopup() {
-        isHelpPopupShowing = true
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
-        binding.exitExplanation.alpha = 1f
+        isHelpPopupShowing = true
         binding.dim.alpha = 1f
-        binding.bottomNav.setBackgroundResource(R.color.transparent)
         binding.dim.isClickable = true
         binding.dim.isFocusable = true
         binding.container.isInteractionEnabled = false
     }
 
     private fun hideHelpPopup() {
-        binding.bottomNav.setBackgroundResource(R.drawable.main_box_bottomblur)
-        isHelpPopupShowing = false
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
-        binding.exitExplanation.alpha = 0f
+        isHelpPopupShowing = false
         binding.dim.alpha = 0f
         binding.dim.isClickable = false
         binding.dim.isFocusable = false

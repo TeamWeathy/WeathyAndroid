@@ -26,7 +26,7 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
             val baseRequest = it.request()
             val builder = baseRequest.newBuilder()
 
-            it.proceed(builder.url(baseRequest.url().fillUserId()).addHeaders().build())
+            it.proceed(builder.url(baseRequest.url().fillUserId()).addHeaders(uniqueId.loadToken()).build())
         }
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
@@ -38,13 +38,17 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
         this
     }
 
-    private fun Request.Builder.addHeaders() =
+    private fun Request.Builder.addHeaders(token: String?): Request.Builder {
         addHeader("Content-Type", "application/json").addHeader("Accept", "application/json")
-            .addHeader("x-access-token", "JWT 123" /*TODO*/)
+        token?.let {
+            addHeader("x-access-token", "${uniqueId.loadToken()}")
+        }
+        return this
+    }
 
     private val apiRetrofit =
-        Retrofit.Builder().baseUrl("https://www.google.com" /*TODO*/).addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient).build()
+        Retrofit.Builder().baseUrl("http://15.164.146.132:3000")
+            .addConverterFactory(GsonConverterFactory.create(gson)).client(okHttpClient).build()
 
     fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
 }

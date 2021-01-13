@@ -1,183 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="team.weathy.ui.main.home.HomeViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/pop_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_min="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/pop_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-
-            android:src="@drawable/ic_clearsky_day"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/pop_label"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pop_container"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="강수량"
-            android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toBottomOf="@id/pop_image" />
-
-        <TextView
-            android:id="@+id/pop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="보통"
-            android:textColor="@color/sub_grey_1"
-            android:textSize="15dp"
-            app:layout_constraintTop_toBottomOf="@id/pop_label" />
-
-        <TextView
-            android:id="@+id/pop_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="15mm"
-            android:textColor="@color/sub_grey_6"
-            android:textSize="11dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pop"
-            tools:ignore="InOrMmUsage" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_min="100dp">
+
+            <ImageView
+                android:id="@+id/pop_image"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+
+                android:src="@drawable/ic_clearsky_day"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pop_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="강수량"
+                android:textColor="@color/sub_grey_6"
+                app:layout_constraintTop_toBottomOf="@id/pop_image" />
+
+            <TextView
+                android:id="@+id/pop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="@{vm.extraRainRepresentation}"
+                android:textColor="@color/sub_grey_1"
+                android:textSize="15dp"
+                app:layout_constraintTop_toBottomOf="@id/pop_label"
+                tools:text="보통" />
+
+            <TextView
+                android:id="@+id/pop_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@{vm.extraRainValue}"
+                android:textColor="@color/sub_grey_6"
+                android:textSize="11dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pop"
+                tools:ignore="InOrMmUsage"
+                tools:text="15mm" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/humidity_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/wind_container"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/pop_container"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/humidity_image"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clearsky_day"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/humidity_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="습도"
+
+                android:textColor="@color/sub_grey_6"
+                app:layout_constraintTop_toBottomOf="@id/humidity_image" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="@{vm.extraHumidityRepresentation}"
+                android:textColor="@color/sub_grey_1"
+
+                android:textSize="15dp"
+                app:layout_constraintTop_toBottomOf="@id/humidity_label"
+                tools:text="건조" />
+
+            <TextView
+                android:id="@+id/humidity_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@{vm.extraHumidityValue}"
+                android:textColor="@color/sub_grey_6"
+                android:textSize="11dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/humidity"
+                tools:ignore="InOrMmUsage"
+                tools:text="30%" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wind_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_min="100dp">
+
+            <ImageView
+                android:id="@+id/wind_image"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clearsky_day"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/wind_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="풍속"
+                android:textColor="@color/sub_grey_6"
+                app:layout_constraintTop_toBottomOf="@id/wind_image" />
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="@{vm.extraWindRepresentation}"
+                android:textColor="@color/sub_grey_1"
+                android:textSize="15dp"
+                app:layout_constraintTop_toBottomOf="@id/wind_label"
+                tools:text="다소강함" />
+
+            <TextView
+                android:id="@+id/wind_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@{vm.extraWindValue}"
+                android:textColor="@color/sub_grey_6"
+                android:textSize="11dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wind"
+                tools:ignore="InOrMmUsage"
+                tools:text="12m/s" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/humidity_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/wind_container"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pop_container"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/humidity_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_clearsky_day"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/humidity_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="습도"
-            android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toBottomOf="@id/humidity_image" />
-
-        <TextView
-            android:id="@+id/humidity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="건조"
-            android:textColor="@color/sub_grey_1"
-            android:textSize="15dp"
-            app:layout_constraintTop_toBottomOf="@id/humidity_label" />
-
-        <TextView
-            android:id="@+id/humidity_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="30%"
-            android:textColor="@color/sub_grey_6"
-            android:textSize="11dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/humidity"
-            tools:ignore="InOrMmUsage" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintWidth_min="100dp"
-        android:id="@+id/wind_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/wind_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_clearsky_day"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/wind_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="풍속"
-            android:textColor="@color/sub_grey_6"
-            app:layout_constraintTop_toBottomOf="@id/wind_image" />
-
-        <TextView
-            android:id="@+id/wind"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:fontFamily="@font/notosans_medium"
-            android:gravity="center"
-            android:text="다소강함"
-            android:textColor="@color/sub_grey_1"
-            android:textSize="15dp"
-            app:layout_constraintTop_toBottomOf="@id/wind_label" />
-
-        <TextView
-            android:id="@+id/wind_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="12m/s"
-            android:textColor="@color/sub_grey_6"
-            android:textSize="11dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wind"
-            tools:ignore="InOrMmUsage" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

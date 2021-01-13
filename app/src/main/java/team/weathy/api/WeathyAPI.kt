@@ -17,14 +17,14 @@ data class WeathyRes(
 data class CreateWeathyReq(
     val userId: Int,
     val dateStr: DateString,
-    val code: Int,
+    val code: Long,
     val clothes: List<Int>,
     val stampId: Int,
     val feedback: String,
 )
 
 data class EditWeathyReq(
-    val code: Int,
+    val code: Long,
     val clothes: List<Int>,
     val stampId: Int,
     val feedback: String,
@@ -33,7 +33,7 @@ data class EditWeathyReq(
 interface WeathyAPI {
     @GET("users/$USER_ID_PATH_SEGMENT/weathy/recommend")
     fun fetchRecommendedWeathy(
-        @Query("code") code: Int, @Query("date") date: DateString
+        @Query("code") code: Long, @Query("date") date: DateString
     ): WeathyRes
 
     @GET("weathy")
