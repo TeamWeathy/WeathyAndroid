@@ -2,15 +2,12 @@ package team.weathy.api
 
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.weathy.util.FlipperUtil
 import team.weathy.util.UniqueIdentifier
-import team.weathy.util.debugE
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -35,9 +32,9 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
 
-    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT) && uniqueId.exist) {
+    private fun HttpUrl.fillUserId() = if (toString().contains(USER_ID_PATH_SEGMENT)) {
         val idx = pathSegments().indexOf(USER_ID_PATH_SEGMENT)
-        newBuilder().setPathSegment(idx, uniqueId.id!!).build()
+        newBuilder().setPathSegment(idx, uniqueId.userId.toString()).build()
     } else {
         this
     }

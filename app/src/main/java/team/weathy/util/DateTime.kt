@@ -97,10 +97,10 @@ val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
 
 /**
- * 04월 04일 월요일 . 오전 1시
+ * 04월 04일 월요일 • 오전 1시
  */
 val LocalDateTime.koFormat: String
-    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 . ${hour.koFormat}"
+    get() = "${monthValue.padZero()}월 ${dayOfMonth.padZero()}일 ${dayOfWeek.koFormat}요일 • ${hour.koFormat}"
 
 /** 4월 4일 금요일 */
 val LocalDate.koFormat: String

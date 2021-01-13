@@ -53,7 +53,7 @@ class CalendarViewModel @ViewModelInject constructor(
         it?.region?.name ?: ""
     }
     val weathyWeatherIcon = curWeathy.map {
-        it?.hourlyWeather?.climate?.weather?.iconId
+        it?.hourlyWeather?.climate?.weather?.smallIconId
     }
     val weathyClimateDescription = curWeathy.map {
         it?.hourlyWeather?.climate?.description ?: ""

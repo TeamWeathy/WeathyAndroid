@@ -18,7 +18,6 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.isSameDay
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -105,8 +104,8 @@ class CalendarFragment : Fragment(), OnClickListener {
     }
 
     private fun navigateRecordAtCurDate() {
-        RecordViewModel.lastRecordNavigationTime = LocalDateTime.now()
         val selectedDate = viewModel.selectedDate.value!!
-        startActivity(RecordActivity.newIntent(requireContext(), selectedDate))
+        RecordViewModel.lastRecordNavigationTime = selectedDate.atTime(LocalDateTime.now().hour, 0)
+        startActivity(RecordActivity.newIntent(requireContext()))
     }
 }

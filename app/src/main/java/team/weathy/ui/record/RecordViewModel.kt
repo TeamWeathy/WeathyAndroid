@@ -7,25 +7,44 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import kotlinx.coroutines.FlowPreview
 import team.weathy.api.ClothesAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.OverviewWeather
-import team.weathy.ui.record.RecordActivity.Companion.EXTRA_DATE
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
 import team.weathy.util.EventLiveData
 import team.weathy.util.extensions.updateList
 import team.weathy.util.extensions.updateSet
-import java.time.LocalDate
+import team.weathy.util.location.LocationUtil
+import team.weathy.util.monthDayFormat
 import java.time.LocalDateTime
 
 @FlowPreview
 class RecordViewModel @ViewModelInject constructor(
     @Api private val clothesAPI: ClothesAPI,
+    locationUtil: LocationUtil,
     @Assisted private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    val date = savedStateHandle.get<LocalDate>(EXTRA_DATE) ?: LocalDate.now()
+
+    // region RECORD START
+    val date = lastRecordNavigationTime
     val edit = savedStateHandle.get<Boolean>(EXTRA_EDIT) ?: false
+
+    val weather = MutableLiveData(locationUtil.selectedWeatherLocation.value!!)
+    val weatherDate = date.toLocalDate().monthDayFormat
+    val weatherRegion = weather.map { it.region.name }
+    val weatherIcon = weather.map { it.hourly.climate.weather.bigIconId }
+    val tempHigh = weather.map { "${it.daily.temperature.maxTemp}°" }
+    val tempLow = weather.map { "${it.daily.temperature.minTemp}°" }
+
+    fun onLocationChanged(weather: OverviewWeather) {
+        this.weather.value = weather
+    }
+
+    // endregion
+
+    // region CLOTHES SELECT/DELETE
 
     private val _choicedClothesTabIndex = MutableLiveData(0)
     val choicedClothesTabIndex: LiveData<Int> = _choicedClothesTabIndex
@@ -71,11 +90,6 @@ class RecordViewModel @ViewModelInject constructor(
     }
 
     val onChipCheckedFailed = EventLiveData<Int>()
-
-
-    //    val regionText = currentWeather.map { it?.region?.name ?: "" }
-    //    val maxTempText = currentWeather.map { "${it?.daily?.temperature?.maxTemp ?: 0}°" }
-    //    val minTempText = currentWeather.map { "${it?.daily?.temperature?.minTemp ?: 0}°" }
 
     fun changeSelectedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
@@ -129,9 +143,7 @@ class RecordViewModel @ViewModelInject constructor(
         return selectedClothesCount
     }
 
-    fun onLocationChanged(weather: OverviewWeather) {
-
-    }
+    // endregion
 
     companion object {
         var lastRecordNavigationTime: LocalDateTime = LocalDateTime.now()

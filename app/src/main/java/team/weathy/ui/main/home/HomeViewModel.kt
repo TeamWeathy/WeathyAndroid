@@ -44,7 +44,7 @@ class HomeViewModel @ViewModelInject constructor(
     val loadingRecommendedWeathy = MutableLiveData(true)
 
     val hourlyWeathers = MutableLiveData<List<HourlyWeather>>(listOf())
-    val dailyWeathers = MutableLiveData<List<DailyWeatherWithInDays?>>(listOf())
+    val dailyWeathers = MutableLiveData<List<DailyWeatherWithInDays>>(listOf())
     val extraWeathers = MutableLiveData<ExtraWeather>()
 
     // region UI
@@ -61,7 +61,7 @@ class HomeViewModel @ViewModelInject constructor(
         "${LocalDate.now().year} ${month}월 ${day}일"
     }
     val weathyWeatherIcon = recommendedWeathy.map {
-        it?.hourlyWeather?.climate?.weather?.iconId
+        it?.hourlyWeather?.climate?.weather?.smallIconId
     }
     val weathyClimateDescription = recommendedWeathy.map {
         it?.hourlyWeather?.climate?.description ?: ""
@@ -197,7 +197,7 @@ class HomeViewModel @ViewModelInject constructor(
             kotlin.runCatching {
                 weatherAPI.fetchWeatherWithIn7Days(code, dateHourString)
             }.onSuccess {
-                dailyWeathers.value = it.list
+                dailyWeathers.value = it.list.filterNotNull()
             }
 
             kotlin.runCatching {

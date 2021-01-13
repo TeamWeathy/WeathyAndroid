@@ -51,7 +51,7 @@ class RecordStartFragment : Fragment() {
 
     private fun configureDate() {
         binding.date.text = buildSpannedString {
-            append("${viewModel.date.monthDayFormat}의 ")
+            append("${viewModel.date.toLocalDate().monthDayFormat}의 ")
 
             color(getColor(R.color.mint_icon)) {
                 font(ResourcesCompat.getFont(requireContext(), R.font.notosans_medium)) {

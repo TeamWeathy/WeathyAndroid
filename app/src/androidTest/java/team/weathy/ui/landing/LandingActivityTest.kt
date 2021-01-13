@@ -49,7 +49,7 @@ class LandingActivityTest {
             get() = isUniqueIdExist
 
         override fun generate() = ""
-        override fun save(uuid: String) = false
+        override fun saveId(uuid: String) = false
     }
 
     @Before

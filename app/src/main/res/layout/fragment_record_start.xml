@@ -87,7 +87,7 @@
             <team.weathy.view.WeathyCardView
                 android:id="@+id/cv_record"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="163dp"
                 android:layout_marginTop="42dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub"
                 app:weathy_disable_shadow="true"
@@ -100,14 +100,17 @@
 
                     <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/search_img_sunnycloud"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        srcResource="@{vm.weatherIcon}"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintHeight_percent="0.8"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_location" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:src="@drawable/main_img_clearsky_day" />
 
                     <TextView
+                        android:text="@{vm.weatherRegion}"
                         android:id="@+id/tv_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -120,6 +123,7 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_date" />
 
                     <TextView
+                        android:text="@{vm.weatherDate}"
                         android:id="@+id/tv_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,6 +143,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:letterSpacing="-0.05"
                         tools:text="20°"
+                        android:text="@{vm.tempHigh}"
                         android:textColor="@color/red_temp"
                         android:textSize="40sp"
                         app:layout_constraintEnd_toStartOf="@id/temp"
@@ -159,10 +164,11 @@
                         app:layout_constraintTop_toTopOf="@id/low_temp" />
 
                     <TextView
+                        android:text="@{vm.tempLow}"
                         android:id="@+id/low_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="95dp"
+                        android:layout_marginBottom="21dp"
                         android:layout_marginEnd="25dp"
                         android:fontFamily="@font/roboto_light"
                         tools:text="-20°"
@@ -170,7 +176,8 @@
                         android:textSize="40sp"
                         android:letterSpacing="-0.05"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>

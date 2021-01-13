@@ -24,7 +24,7 @@ data class WithIn24HoursRes(
 )
 
 data class WithIn7DaysRes(
-    @SerializedName("dailyWeatherList") val list: List<DailyWeatherWithInDays>, val message: String
+    @SerializedName("dailyWeatherList") val list: List<DailyWeatherWithInDays?>, val message: String
 )
 
 data class WeatherDetailRes(

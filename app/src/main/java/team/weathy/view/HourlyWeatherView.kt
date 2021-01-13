@@ -78,7 +78,7 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         val timeTexts = (0 until MAX_ITEM_COUNT).map { "${(curTime.hour + it) % 24}시".padZero(3) }
         weathers.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
-                icon.setImageResource(weather.climate.weather.iconId)
+                icon.setImageResource(weather.climate.weather.smallIconId)
                 pop.text = "${weather.pop}%°"
                 temp.text = "${weather.temperature}°"
 
