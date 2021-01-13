@@ -51,7 +51,7 @@ class SettingActivity : AppCompatActivity() {
     private fun pushNotifSwitchAct() {
         binding.pushNotifSwitch.setOnCheckedChangeListener { _, onSwitch ->
             if (onSwitch) {
-                showToast("위치 정보 제공에 동의하셨습니다.")
+                showToast(" 현재 위치에 따라 날씨를 알려드릴게요!")
             }
         }
     }

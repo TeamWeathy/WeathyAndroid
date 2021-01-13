@@ -1,6 +1,7 @@
 package team.weathy.ui.record.weatherrating
 
-import android.annotation.SuppressLint
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,8 @@ class RecordWeatherRatingFragment : Fragment() {
     private fun setReviewClickListener(cvReview: Array<WeathyCardView>, position: Int, button: Button) {
         cvReview[position] setOnDebounceClickListener {
             setBackgroundEnableListener(cvReview[position])
-            setButtonEnableListener(button)
+            if (!button.isEnabled)
+                setButtonEnableListener(button)
             for (i in cvReview.indices)
                 if (i != position)
                     setBackgroundDisableListener(cvReview[i])
@@ -57,9 +59,10 @@ class RecordWeatherRatingFragment : Fragment() {
         cvReview.strokeColor = getColor(R.color.main_mint)
     }
 
-    @SuppressLint("ResourceType")
     private fun setButtonEnableListener(button: Button) {
-        button.setBackgroundColor(getColor(R.color.main_mint))
+        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        colorChangeActive.setTarget(button)
+        colorChangeActive.start()
         button.isEnabled = true
     }
 

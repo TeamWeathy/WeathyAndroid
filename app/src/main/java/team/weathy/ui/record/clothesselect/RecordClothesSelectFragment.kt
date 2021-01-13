@@ -1,11 +1,14 @@
 package team.weathy.ui.record.clothesselect
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isInvisible
@@ -65,6 +68,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
         constraintLayout.setOnClickListener {
             viewModel.changeSelectedClothesTabIndex(index)
+            binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
         }
     }
 
@@ -124,6 +128,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setOnCheckedChangeListener { button, isChecked ->
+                if (viewModel.selectedClothes.value!!.size == 5 && button.isChecked) {
+                    button.isChecked = false
+                    showExceedMaximumSelectedToast()
+                    return@setOnCheckedChangeListener
+                }
+
                 if (isChecked) {
                     viewModel.onChipChecked(index)
                 } else {
@@ -140,7 +150,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는")
+    private fun showExceedMaximumSelectedToast() = requireContext().showToast("태그는 카테고리당 5개만 선택할 수 있어요.")
 
     private fun updateChipSelectedState() {
         binding.chipGroup.children.drop(1).forEachIndexed { index, view ->
@@ -162,11 +172,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setButtonActivation() {
         viewModel.selectedClothes.observe(viewLifecycleOwner) {
             if (viewModel.selectedClothes.value!!.isNotEmpty()) {
-                binding.btnCheck.isEnabled = true
-                binding.btnCheck.setBackgroundColor(getColor(R.color.main_mint))
+                if (!binding.btnCheck.isEnabled)
+                    setButtonEnabled(true)
             } else {
-                binding.btnCheck.isEnabled = false
-                binding.btnCheck.setBackgroundColor(getColor(R.color.sub_grey_3))
+                if (binding.btnCheck.isEnabled)
+                    setButtonDisabled(false)
             }
         }
     }
@@ -203,5 +213,19 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         viewModel.addClothes(text)
+    }
+
+    private fun setButtonEnabled(isEnable: Boolean) {
+        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        colorChangeActive.setTarget(binding.btnCheck)
+        colorChangeActive.start()
+        binding.btnCheck.isEnabled = isEnable
+    }
+
+    private fun setButtonDisabled(isEnable: Boolean) {
+        val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
+        colorChange.setTarget(binding.btnCheck)
+        colorChange.start()
+        binding.btnCheck.isEnabled = isEnable
     }
 }
