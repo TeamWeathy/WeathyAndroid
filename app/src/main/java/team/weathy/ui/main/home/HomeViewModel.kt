@@ -191,7 +191,7 @@ class HomeViewModel @ViewModelInject constructor(
             kotlin.runCatching {
                 weatherAPI.fetchWeatherWithIn24Hours(code, dateHourString)
             }.onSuccess {
-                hourlyWeathers.value = it.list
+                hourlyWeathers.value = it.list.filterNotNull()
             }
 
             kotlin.runCatching {

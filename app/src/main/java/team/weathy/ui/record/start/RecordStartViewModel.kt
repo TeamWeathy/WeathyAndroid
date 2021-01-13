@@ -45,8 +45,8 @@ class RecordStartViewModel @ViewModelInject constructor(
 					it.latitude, it.longitude, dateOrHourStr = lastFetchDate.value!!.dateString
 				)
 			}.onSuccess { res ->
-				res.weather ?: return@onSuccess
-				locationUtil.selectPlace(res.weather)
+//				res.weather ?: return@onSuccess
+//				locationUtil.selectPlace(res.weather)
 			}.onFailure {
 
 			}

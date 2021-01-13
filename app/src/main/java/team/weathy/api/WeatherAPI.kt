@@ -20,7 +20,7 @@ data class WeatherDailyHourlyRes(
 )
 
 data class WithIn24HoursRes(
-    @SerializedName("hourlyWeatherList") val list: List<HourlyWeather>, val message: String,
+    @SerializedName("hourlyWeatherList") val list: List<HourlyWeather?>, val message: String,
 )
 
 data class WithIn7DaysRes(
