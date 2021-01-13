@@ -1,119 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutNickname"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.nicknamechange.NicknameChangeActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageButton
-        android:id="@+id/exit_nickname_change_btn"
-        style="@style/ImageButton.size48.icon20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="22dp"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/change_nickname_txt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:text="닉네임 변경"
-        android:textColor="@color/main_grey"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@id/exit_nickname_change_btn"
-        app:layout_constraintTop_toBottomOf="@id/exit_nickname_change_btn" />
+        <variable
+            name="vm"
+            type="team.weathy.ui.nicknamechange.NicknameChangeViewModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/enter_nickname_to_change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:fontFamily="@font/notosans_regular"
-        android:text="변경할 닉네임을 입력해주세요."
-        android:textColor="@color/sub_grey_6"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/change_nickname_txt2"
-        app:layout_constraintTop_toBottomOf="@id/change_nickname_txt2" />
-
-    <EditText
-        android:id="@+id/nickname_edit"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="44sp"
-        android:layout_marginEnd="34dp"
-        android:background="@drawable/edit_border"
-        android:hint="부메랑"
-        android:maxLength="6"
-        android:paddingStart="22dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/sub_grey_8"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_nickname_to_change" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/change_nickname_btn"
-        style="@style/RoundButton.Mint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="25dp"
-        android:enabled="false"
-        android:fontFamily="@font/notosans_medium"
-        android:text="변경하기"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageButton
+            android:id="@+id/exit_nickname_change_btn"
+            style="@style/ImageButton.size48.icon20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/num_of_characters1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="13sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/num_of_characters2"
-        app:layout_constraintEnd_toStartOf="@id/num_of_characters2"
-        app:layout_constraintTop_toTopOf="@id/num_of_characters2" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="29dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="-2sp"
+            android:maxLines="4"
+            android:text="닉네임 변경"
+            android:textColor="@color/main_grey"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="@id/exit_nickname_change_btn"
+            app:layout_constraintTop_toBottomOf="@id/exit_nickname_change_btn" />
 
-    <TextView
-        android:id="@+id/num_of_characters2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="26dp"
-        android:text="/6"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="13sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nickname_edit" />
+        <TextView
+            android:id="@+id/body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="변경할 닉네임을 입력해주세요."
+            android:textColor="@color/sub_grey_6"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title"/>
 
-    <ImageButton
-        android:id="@+id/delete_nickname_btn"
-        style="@style/ImageButton.size32.icon20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:enabled="false"
-        android:src="@drawable/ic_textdelete"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@id/nickname_edit"
-        app:layout_constraintTop_toTopOf="@id/nickname_edit" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:layout_marginHorizontal="26dp"
+            app:counterTextColor="@color/main_mint"
+            app:layout_constraintTop_toBottomOf="@id/body">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nicnkname_edit"
+                style="@style/TextInputEditText"
+                android:hint="부메랑"
+                android:maxLength="6"
+                android:text="@={vm.nickname}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/delete_nickname_btn"
+            style="@style/ImageButton.size32.icon20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:src="@drawable/ic_textdelete"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/textInputLayout"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout" />
+
+        <TextView
+            android:id="@+id/maxLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/6"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            app:layout_constraintRight_toRightOf="@id/textInputLayout"
+            app:layout_constraintTop_toTopOf="@id/countLength" />
+
+        <TextView
+            android:id="@+id/countLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text='@{vm.nickname.length() + ""}'
+            android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
+            android:textSize="13sp"
+            app:layout_constraintRight_toLeftOf="@id/maxLength"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout"
+            tools:text="0"
+            tools:textColor="@color/sub_grey_6" />
+
+        <Button
+            android:id="@+id/submit"
+            style="@style/RoundButton.Mint"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            android:clickable="@{!vm.loadingSubmit}"
+            android:enabled="@{vm.isSubmitEnabled}"
+            android:onDebounceClick="@{() -> vm.onSubmit()}"
+            android:text='@{vm.loadingSubmit ? "" : "변경하기"}'
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            style="@style/Indicator.White"
+            android:visibility="@{vm.loadingSubmit}"
+            app:layout_constraintBottom_toBottomOf="@id/submit"
+            app:layout_constraintLeft_toLeftOf="@id/submit"
+            app:layout_constraintRight_toRightOf="@id/submit"
+            app:layout_constraintTop_toTopOf="@id/submit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
