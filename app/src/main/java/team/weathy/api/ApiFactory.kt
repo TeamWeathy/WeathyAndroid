@@ -2,14 +2,18 @@ package team.weathy.api
 
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
+import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.weathy.util.FlipperUtil
 import team.weathy.util.UniqueIdentifier
+import team.weathy.util.debugE
 import javax.inject.Inject
 import kotlin.reflect.KClass
+
 
 const val USER_ID_PATH_SEGMENT = "__USER_ID_PATH_SEGMENT__"
 
@@ -47,8 +51,8 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     }
 
     private val apiRetrofit =
-        Retrofit.Builder().baseUrl("http://15.164.146.132:3000")
-            .addConverterFactory(GsonConverterFactory.create(gson)).client(okHttpClient).build()
+        Retrofit.Builder().baseUrl("http://15.164.146.132:3000").addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient).build()
 
     fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
 }

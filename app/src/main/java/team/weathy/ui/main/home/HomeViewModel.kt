@@ -15,10 +15,10 @@ import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.DailyWeatherWithInDays
 import team.weathy.model.entity.HourlyWeather
-import team.weathy.model.entity.Weather
 import team.weathy.model.entity.Weathy
 import team.weathy.util.dateHourString
 import team.weathy.util.dateString
+import team.weathy.util.debugE
 import team.weathy.util.koFormat
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
@@ -135,8 +135,8 @@ class HomeViewModel @ViewModelInject constructor(
                     it.latitude, it.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
                 )
             }.onSuccess { res ->
-                res.weather ?: return@onSuccess
-                locationUtil.selectPlace(res.weather)
+                val weather = res.body()?.weather ?: return@onSuccess
+                locationUtil.selectPlace(weather)
             }.onFailure {
 
             }
@@ -147,8 +147,7 @@ class HomeViewModel @ViewModelInject constructor(
     private fun collectCurrentWeather() = viewModelScope.launch {
         currentWeather.asFlow().collect { weather ->
             weather ?: return@collect
-            //            val code = weather.region.code FIXME
-            val code = 2800000000 // 인천 광역시 MOCK
+            val code = weather.region.code
             val dateString = LocalDate.now().dateString
             val dateHourString = LocalDateTime.now().dateHourString
 
@@ -157,7 +156,9 @@ class HomeViewModel @ViewModelInject constructor(
                     code, dateString
                 )
             }.onSuccess { res ->
-                recommendedWeathy.value = res.weathy
+                recommendedWeathy.value = res.body()?.weathy
+            }.onFailure {
+                debugE(it)
             }
 
             kotlin.runCatching {
