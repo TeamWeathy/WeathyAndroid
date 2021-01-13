@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.ui.main.calendar.YearMonthFormat
-import team.weathy.util.convertWeeklyIndexToDate
+import team.weathy.util.convertWeeklyIndexToFirstDateOfWeek
 import team.weathy.util.weekOfMonth
 import team.weathy.util.yearMonthFormat
 import team.weathy.view.calendar.WeeklyAdapter.WeeklyHolder
@@ -38,15 +38,15 @@ class WeeklyAdapter(
                 view.animValue = it
             }
             data.observe(lifecycleOwner) {
-                val weekOfMonth = view.date.weekOfMonth - 1
-                view.data = it[view.date.yearMonthFormat]?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
+                val weekOfMonth = view.firstDateOfWeek.weekOfMonth - 1
+                view.data = it[view.firstDateOfWeek.yearMonthFormat]?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
             }
         }
 
         fun bind(position: Int) {
-            val date = convertWeeklyIndexToDate(position)
+            val date = convertWeeklyIndexToFirstDateOfWeek(position)
             val weekOfMonth = date.weekOfMonth - 1
-            view.date = date
+            view.firstDateOfWeek = date
             view.data = data.value?.get(date.yearMonthFormat)?.subList(weekOfMonth * 7, (weekOfMonth + 1) * 7)
         }
     }

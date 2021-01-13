@@ -113,12 +113,14 @@ fun convertMonthlyIndexToDate(index: Int): LocalDate {
     return cur.minusMonths(diffMonth.toLong())
 }
 
-fun convertWeeklyIndexToDate(index: Int): LocalDate {
+fun convertWeeklyIndexToFirstDateOfWeek(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
+    val weekSubtracted = cur.minusWeeks(diffWeek.toLong())
+    val startIdx = weekSubtracted.dayOfWeekIndex
 
-    return cur.minusWeeks(diffWeek.toLong())
+    return weekSubtracted.minusDays(startIdx.toLong())
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
