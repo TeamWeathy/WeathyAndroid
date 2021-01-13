@@ -41,7 +41,7 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         if (attrs != null) {
             getStyleableAttrs(attrs)
         }
-
+        elevation = if (disableShadow) 0f else px(8).toFloat()
         updateUI()
     }
 
@@ -63,10 +63,5 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
             strokeColor = ColorStateList.valueOf(this@WeathyCardView.strokeColor)
         }
         setShadowColorIfAvailable(shadowColor)
-
-        elevation = if (disableShadow) 0f else px(8).toFloat()
-
-
-        invalidate()
     }
 }

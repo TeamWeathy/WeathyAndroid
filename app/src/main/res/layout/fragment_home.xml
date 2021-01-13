@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="vm"
             type="team.weathy.ui.main.home.HomeViewModel" />
@@ -24,196 +23,272 @@
             app:crossfade="0" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
+            android:layout_height="match_parent"
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingHorizontal="26dp"
+            android:clipChildren="false"
             app:layoutDescription="@xml/home_motion">
 
-            <TextView
-                android:id="@+id/datetime"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                android:text="12월 20일 일요일 . 오후 4시"
-                android:textColor="@color/sub_grey_1"
-                android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="26dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="26dp" />
 
             <ImageView
-                android:id="@+id/gps_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_gps_shadow"
-                android:translationX="-8dp"
-                app:layout_constraintBottom_toTopOf="@+id/weather_image"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/datetime" />
+                android:id="@+id/topBlur"
+                android:elevation="9dp"
+                android:outlineProvider="none"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="78dp"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/mainscroll_box_topblur_morning" />
 
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_medium"
-                android:text="서울 도봉구"
-                android:textColor="@color/main_grey"
-                android:textSize="20sp"
-                android:translationX="-8dp"
-                app:layout_constraintBottom_toBottomOf="@id/gps_image"
-                app:layout_constraintLeft_toRightOf="@id/gps_image"
-                app:layout_constraintTop_toTopOf="@id/gps_image" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:elevation="12dp"
+                android:outlineProvider="none"
+                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    android:id="@+id/datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginTop="21dp"
+                    android:text="@{vm.datetimeText}"
+                    tools:text="12월 20일 일요일 . 오후 4시"
+                    android:textColor="@color/sub_grey_1"
+                    android:textSize="15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <ImageView
                 android:id="@+id/weather_image"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="55dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/main_img_fewclouds"
-                app:layout_constraintBottom_toTopOf="@+id/nickname"
-                app:layout_constraintEnd_toStartOf="@+id/current_temp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gps_image"
-                app:layout_constraintWidth_max="400dp" />
-
-            <TextView
-                android:id="@+id/current_temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="21dp"
-                android:fontFamily="@font/roboto_light"
-                android:text="-20°"
-                android:textColor="@color/sub_grey_1"
-                android:textSize="50sp"
-                app:layout_constraintStart_toEndOf="@id/weather_image"
-                app:layout_constraintTop_toTopOf="@id/weather_image" />
-
-            <TextView
-                android:id="@+id/max_temp_today"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:fontFamily="@font/roboto_light"
-                android:text="20°"
-                android:textColor="@color/red_temp"
-                android:textSize="23sp"
-                app:layout_constraintStart_toStartOf="@id/current_temp"
-                app:layout_constraintTop_toBottomOf="@id/current_temp" />
-
-            <TextView
-                android:id="@+id/slash_temp_today"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light"
-                android:text="/"
-                android:textColor="@color/temp_bar"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="@id/max_temp_today"
-                app:layout_constraintEnd_toStartOf="@id/min_temp_today"
-                app:layout_constraintStart_toEndOf="@id/max_temp_today"
-                app:layout_constraintTop_toTopOf="@id/max_temp_today" />
-
-            <TextView
-                android:id="@+id/min_temp_today"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light"
-                android:text="-20°"
-                android:textColor="@color/blue_temp"
-                android:textSize="23sp"
-                app:layout_constraintBottom_toBottomOf="@id/slash_temp_today"
-                app:layout_constraintEnd_toEndOf="@id/current_temp"
-                app:layout_constraintLeft_toRightOf="@id/slash_temp_today"
-                app:layout_constraintTop_toTopOf="@id/slash_temp_today" />
-
-            <TextView
-                android:id="@+id/today_feeling"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="8dp"
-                android:text="조금 흐리지만\n햇살이 따스해요:)"
-                android:textColor="@color/black_0.58"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@id/current_temp"
-                app:layout_constraintStart_toStartOf="@id/current_temp"
-                app:layout_constraintTop_toBottomOf="@id/max_temp_today" />
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/header"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintWidth_percent="0.55" />
 
 
-            <TextView
-                android:id="@+id/nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="희지님이 기억하는"
-                android:textColor="@color/main_grey"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/today_weathy"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weather_image" />
-
-            <TextView
-                android:id="@+id/today_weathy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_weather"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="21dp"
-                android:fontFamily="@font/notosans_medium"
-                android:text="오늘의 웨디"
-                android:textColor="@color/main_grey"
-                android:textSize="21sp"
-                app:layout_constraintBottom_toTopOf="@+id/recommended"
-                app:layout_constraintStart_toStartOf="@id/nickname"
-                app:layout_constraintTop_toBottomOf="@+id/nickname" />
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                app:layout_constraintBottom_toTopOf="@id/recommended"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
+                app:layout_constraintTop_toBottomOf="@id/datetime"
+                app:layout_constraintVertical_bias="0.0">
 
-            <ImageButton
-                android:id="@+id/weathy_question"
-                style="@style/ImageButton.size48.padding19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="85dp"
-                android:src="@drawable/ic_help"
-                app:layout_constraintBottom_toBottomOf="@id/today_weathy"
-                app:layout_constraintStart_toStartOf="@id/today_weathy"
-                app:layout_constraintTop_toTopOf="@id/today_weathy" />
+                <ImageView
+                    android:id="@+id/gps_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:src="@{vm.isLocationAvailable ? @drawable/ic_gps_shadow : @drawable/ic_otherplace_shadow}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:alpha="0"
-                android:background="@color/transparent_black"
-                android:elevation="9dp"
-                android:layout_marginLeft="-26dp"
-                android:layout_marginRight="-26dp"
-                android:id="@+id/dim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <ImageView
-                android:clickable="false"
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:fontFamily="@font/notosans_medium"
+                    tools:text="서울 도봉구"
+                    android:text="@{vm.regionText}"
+                    android:textColor="@color/main_grey"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/gps_image"
+                    app:layout_constraintLeft_toRightOf="@id/gps_image"
+                    app:layout_constraintTop_toTopOf="@id/gps_image" />
+
+                <TextView
+                    android:id="@+id/current_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="55dp"
+                    android:fontFamily="@font/roboto_light"
+                    tools:text="-20°"
+                    android:text="@{vm.curTempText}"
+                    android:textColor="@color/sub_grey_1"
+                    android:textSize="50sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/gps_image" />
+
+                <TextView
+                    android:id="@+id/max_temp_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:fontFamily="@font/roboto_light"
+                    tools:text="-20°"
+                    android:text="@{vm.maxTempText}"
+                    android:textColor="@color/red_temp"
+                    android:textSize="23sp"
+                    app:layout_constraintEnd_toStartOf="@id/slash_temp_today"
+                    app:layout_constraintTop_toBottomOf="@id/current_temp" />
+
+                <TextView
+                    android:id="@+id/slash_temp_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="/"
+                    android:textColor="@color/temp_bar"
+                    android:textSize="15sp"
+                    android:layout_marginRight="4dp"
+                    app:layout_constraintBottom_toBottomOf="@id/max_temp_today"
+                    app:layout_constraintEnd_toStartOf="@id/min_temp_today"
+                    app:layout_constraintTop_toTopOf="@id/max_temp_today" />
+
+                <TextView
+                    android:id="@+id/min_temp_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_light"
+                    tools:text="-20°"
+                    android:text="@{vm.minTempText}"
+                    android:textColor="@color/blue_temp"
+                    android:textSize="23sp"
+                    app:layout_constraintBottom_toBottomOf="@id/slash_temp_today"
+                    app:layout_constraintEnd_toEndOf="@id/current_temp"
+                    app:layout_constraintTop_toTopOf="@id/slash_temp_today" />
+
+                <TextView
+                    android:layout_marginRight="24dp"
+                    android:id="@+id/today_feeling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:lineSpacingExtra="-2dp"
+                    tools:text="조금 흐리지만\n햇살이 따스해요:)"
+                    android:text="@{vm.descriptionText}"
+                    android:textColor="@color/black_0.58"
+                    android:textSize="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/max_temp_today" />
+
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="희지님이 기억하는"
+                    android:textColor="@color/main_grey"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/today_weathy"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/today_weathy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_medium"
+                    android:text="오늘의 웨디"
+                    android:textColor="@color/main_grey"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/nickname" />
+
+                <ImageButton
+                    android:id="@+id/weathy_question"
+                    style="@style/ImageButton.size48.padding19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_help"
+                    app:layout_constraintBottom_toBottomOf="@id/today_weathy"
+                    app:layout_constraintStart_toEndOf="@id/today_weathy"
+                    app:layout_constraintTop_toTopOf="@id/today_weathy" />
+
+
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.loadingWeather}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/weathy_explanation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:alpha="0"
+                android:clickable="false"
                 android:elevation="10dp"
-                android:src="@drawable/main_help_box_help"
-                app:layout_constraintStart_toStartOf="@id/today_weathy"
-                app:layout_constraintTop_toBottomOf="@id/today_weathy" />
+                app:layout_constraintStart_toStartOf="@id/container_weather"
+                app:layout_constraintTop_toBottomOf="@id/container_weather">
 
-            <ImageButton
-                android:id="@+id/exit_explanation"
-                style="@style/ImageButton.size48.padding19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/main_help_box_help" />
+
+                <ImageButton
+                    android:id="@+id/exit_explanation"
+                    style="@style/ImageButton.size48.padding19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_close_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/dim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:alpha="0"
-                android:elevation="10dp"
-                android:src="@drawable/ic_close_small"
-                app:layout_constraintEnd_toEndOf="@id/weathy_explanation"
-                app:layout_constraintTop_toTopOf="@id/weathy_explanation" />
+                android:background="@color/transparent_black"
+                android:elevation="9dp"
+                tools:visibility="gone" />
+
 
             <include
+                vm="@{vm}"
                 android:id="@+id/recommended"
                 layout="@layout/layout_home_recommended_weathy"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="121dp"
                 app:layout_constraintBottom_toBottomOf="parent" />
@@ -228,100 +303,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recommended" />
 
-            <team.weathy.view.WeathyCardView
-                android:id="@+id/hourlyCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="78dp"
-                android:clipToPadding="false"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:weathy_shadow_color="@color/home_card_shadow"
-                tools:alpha="1"
-                tools:translationY="0dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/hourly_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosans_medium"
-                        android:text="시간대별 날씨"
-                        android:textColor="@color/main_grey"
-                        android:textSize="17sp"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="31dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/sub_grey_7"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/hourly_label" />
-
-                    <team.weathy.view.HourlyWeatherView
-                        android:id="@+id/hourlyView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="21dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </team.weathy.view.WeathyCardView>
 
             <team.weathy.view.WeathyCardView
-                android:id="@+id/weeklyCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="16dp"
-                app:layout_constraintTop_toBottomOf="@id/hourlyCard"
-                app:weathy_shadow_color="@color/home_card_shadow">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/weekly_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosans_medium"
-                        android:text="주간 날씨"
-                        android:textColor="@color/main_grey"
-                        android:textSize="17sp"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/divider2"
-                        android:layout_width="31dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/sub_grey_7"
-                        app:layout_constraintLeft_toLeftOf="parent"
-
-                        app:layout_constraintTop_toBottomOf="@id/weekly_label" />
-
-                    <team.weathy.view.WeeklyWeatherView
-                        android:id="@+id/weeklyView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="21dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider2" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </team.weathy.view.WeathyCardView>
-
-            <team.weathy.view.WeathyCardView
+                android:layout_width="0dp"
                 android:id="@+id/detailCard"
-                android:layout_width="match_parent"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
+                tools:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingHorizontal="24dp"
@@ -353,10 +341,10 @@
                         app:layout_constraintTop_toBottomOf="@id/detailLabel" />
 
                     <include
+                        vm="@{vm}"
                         layout="@layout/layout_home_weather_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="21dp"
                         app:layout_constraintTop_toBottomOf="@id/divider3" />
 
@@ -364,13 +352,116 @@
 
             </team.weathy.view.WeathyCardView>
 
+            <team.weathy.view.WeathyCardView
+                android:id="@+id/weeklyCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="16dp"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
+                app:layout_constraintTop_toBottomOf="@id/hourlyCard"
+                app:weathy_shadow_color="@color/home_card_shadow"
+                tools:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/weekly_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="주간 날씨"
+                        android:textColor="@color/main_grey"
+                        android:textSize="17sp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="31dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/sub_grey_7"
+                        app:layout_constraintLeft_toLeftOf="parent"
+
+                        app:layout_constraintTop_toBottomOf="@id/weekly_label" />
+
+                    <team.weathy.view.WeeklyWeatherView
+                        weeklyWeathers="@{vm.dailyWeathers}"
+                        android:id="@+id/weeklyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="21dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider2" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </team.weathy.view.WeathyCardView>
+
+            <team.weathy.view.WeathyCardView
+                android:id="@+id/hourlyCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="78dp"
+                android:clipToPadding="false"
+                android:paddingVertical="16dp"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
+                app:layout_constraintTop_toTopOf="parent"
+                app:weathy_shadow_color="@color/home_card_shadow"
+                tools:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_marginHorizontal="24dp"
+                        android:id="@+id/hourly_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_medium"
+                        android:text="시간대별 날씨"
+                        android:textColor="@color/main_grey"
+                        android:textSize="17sp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_marginHorizontal="24dp"
+                        android:id="@+id/divider"
+                        android:layout_width="31dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/sub_grey_7"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/hourly_label" />
+
+                    <team.weathy.view.HourlyWeatherView
+                        hourlyWeathers="@{vm.hourlyWeathers}"
+                        android:id="@+id/hourlyView"
+                        android:paddingHorizontal="12dp"
+                        android:layout_marginTop="21dp"
+                        android:layout_width="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </team.weathy.view.WeathyCardView>
+
             <ImageView
+                android:elevation="10dp"
+                android:outlineProvider="none"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 android:id="@+id/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/mainscroll_img_logo"
-                app:layout_constraintLeft_toLeftOf="parent"
+                tools:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.motion.widget.MotionLayout>
     </FrameLayout>

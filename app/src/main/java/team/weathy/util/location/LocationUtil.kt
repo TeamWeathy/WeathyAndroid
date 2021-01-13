@@ -7,18 +7,19 @@ import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.util.debugE
 import java.util.*
 
 @SuppressLint("MissingPermission")
-class LocationUtil (private val app: Application) : DefaultLifecycleObserver {
+class LocationUtil(app: Application) : DefaultLifecycleObserver {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
     private val geoCoder = Geocoder(app, Locale.KOREA)
 
@@ -28,17 +29,21 @@ class LocationUtil (private val app: Application) : DefaultLifecycleObserver {
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
-    private val _lastLocation = MutableLiveData<Location>()
-    val lastLocation: LiveData<Location> = _lastLocation
-    private val _isLocationAvailable = MutableLiveData(false)
-    val isLocationAvailable: LiveData<Boolean> = _isLocationAvailable
+    private val _lastLocation = MutableStateFlow<Location?>(null)
+    val lastLocation: StateFlow<Location?> = _lastLocation
+    private val _isLocationAvailable = MutableStateFlow(false)
+    val isLocationAvailable: StateFlow<Boolean> = _isLocationAvailable
 
+    private val _isOtherPlaceSelected: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isOtherPlaceSelected: StateFlow<Boolean> = _isOtherPlaceSelected
 
-    override fun onStart(owner: LifecycleOwner) {
+    val selectedWeatherLocation: MutableStateFlow<OverviewWeather?> = MutableStateFlow(null)
+
+    override fun onCreate(owner: LifecycleOwner) {
         registerLocationListener()
     }
 
-    override fun onStop(owner: LifecycleOwner) {
+    override fun onDestroy(owner: LifecycleOwner) {
         unregisterLocationListener()
     }
 
@@ -66,5 +71,16 @@ class LocationUtil (private val app: Application) : DefaultLifecycleObserver {
         lastLocation.value?.let { location ->
             debugE(geoCoder.getFromLocation(location.latitude, location.longitude, 1).first())
         }
+    }
+
+    fun selectPlace(weather: OverviewWeather) {
+        selectedWeatherLocation.value = weather
+    }
+
+    fun selectOtherPlace(weather: OverviewWeather) {
+        unregisterLocationListener()
+        _isLocationAvailable.value = false
+        _isOtherPlaceSelected.value = true
+        selectedWeatherLocation.value = weather
     }
 }

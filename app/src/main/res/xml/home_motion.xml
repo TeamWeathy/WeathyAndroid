@@ -1,27 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- First <-> Second -->
     <Transition
-        app:duration="300"
+        app:constraintSetStart="@layout/scene_home_first"
         app:constraintSetEnd="@layout/scene_home_second"
-        app:constraintSetStart="@layout/scene_home_first">
+        app:duration="2500">
 
         <OnSwipe
-            app:maxAcceleration="2000"
+            app:dragScale="0.5"
+            app:maxAcceleration="3"
+            app:maxVelocity="3"
             app:dragDirection="dragUp"
             app:touchAnchorSide="top" />
+
+        <KeyFrameSet>
+            <!--            <KeyPosition-->
+            <!--                app:framePosition=""-->
+            <!--                app:keyPositionType="deltaRelative"-->
+            <!--                app:motionTarget="@id/header"-->
+            <!--                app:percentY="0" />-->
+            <KeyPosition
+                app:framePosition="40"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/header"
+                app:percentY="1" />
+
+            <KeyPosition
+                app:framePosition="25"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/logo"
+                app:percentY="0" />
+            <KeyPosition
+                app:framePosition="70"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/logo"
+                app:percentY="1" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="25"
+                app:motionTarget="@id/logo" />
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="70"
+                app:motionTarget="@id/logo" />
+
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="90"
+                app:motionTarget="@id/topBlur" />
+
+            <KeyPosition
+                app:framePosition="40"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/weather_image"
+                app:percentY="1" />
+
+            <KeyPosition
+                app:framePosition="40"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/container_weather"
+                app:percentY="1" />
+
+            <KeyPosition
+                app:framePosition="60"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/recommended"
+                app:percentY="1" />
+
+            <KeyPosition
+                app:framePosition="60"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/downArrow"
+                app:percentY="1" />
+
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="10"
+                app:motionTarget="@id/downArrow" />
+            <KeyAttribute
+                android:alpha="0"
+                app:framePosition="20"
+                app:motionTarget="@id/downArrow" />
+
+            <KeyPosition
+                app:framePosition="40"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/hourlyCard"
+                app:percentY="0" />
+            <KeyPosition
+                app:framePosition="85"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/hourlyCard"
+                app:percentY="1" />
+            <KeyPosition
+                app:framePosition="45"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/weeklyCard"
+                app:percentY="0" />
+            <KeyPosition
+                app:framePosition="90"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/weeklyCard"
+                app:percentY="1" />
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/detailCard"
+                app:percentY="0" />
+            <KeyPosition
+                app:framePosition="95"
+                app:keyPositionType="deltaRelative"
+                app:motionTarget="@id/detailCard"
+                app:percentY="1" />
+
+        </KeyFrameSet>
 
     </Transition>
 
     <!-- Second <-> Third -->
     <Transition
         app:autoTransition="none"
-        app:motionInterpolator="linear"
+        app:duration="100"
         app:constraintSetEnd="@layout/scene_home_third"
         app:constraintSetStart="@layout/scene_home_second"
-        app:duration="100"
-        >
+        app:motionInterpolator="linear">
 
         <OnSwipe
             app:maxAcceleration="50"

@@ -13,12 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentSearchBinding
+import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
+import team.weathy.util.debugE
+import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.setOnDebounceClickListener
 
 @FlowPreview
@@ -41,6 +44,7 @@ class SearchFragment : Fragment() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
+            requireActivity().hideKeyboard()
             mainViewModel.changeMenu(HOME)
             isEnabled = false
         }
@@ -72,21 +76,21 @@ class SearchFragment : Fragment() {
     private fun configureList() = binding.list.let { list ->
         list.adapter = SearchAdapter(onItemRemoved = {
             viewModel.onItemRemoved(it)
-        }, onItemClicked = { position ->
-            onItemClicked(position)
+        }, onItemClicked = { position, weather ->
+            onItemClicked(position, weather)
         }, viewModel.showRecently, viewLifecycleOwner)
         list.addItemDecoration(LinearItemDecoration(20))
     }
 
-    private fun onItemClicked(position: Int) = lifecycleScope.launchWhenStarted {
+    private fun onItemClicked(position: Int, weather: OverviewWeather) = lifecycleScope.launchWhenStarted {
         viewModel.onItemClicked(position)
-
+        debugE(weather)
         if (fromRecord) {
-            recordViewModel.onLocationChanged()
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            recordViewModel.onLocationChanged(weather)
         } else {
-            // TODO
+            mainViewModel.onLocationChanged(weather)
         }
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     private fun configureTextFieldSearch() = binding.textField.let { it ->

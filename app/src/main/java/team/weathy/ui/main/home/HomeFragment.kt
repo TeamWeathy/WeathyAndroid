@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionManager
 import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
@@ -17,6 +19,7 @@ import team.weathy.util.PixelRatio
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -46,18 +49,25 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+        FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-//        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         weathyQuestionBtnClick()
         exitExplanationBtnClick()
+
+
+        binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
+        binding.downArrow setOnDebounceClickListener {
+            binding.container.transitionToEnd()
+        }
+        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+
+        binding.topBlur.pivotY = 0f
 
         binding.container.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {
@@ -94,17 +104,17 @@ class HomeFragment : Fragment() {
         })
 
         binding.weeklyCard.doOnLayout {
-            val screenHeight = pixelRatio.screenHeight
-            val marginTop = 100.dp
-            val marginBottom = 96.dp
-            val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
-            val marginBetweenCards = 24.dp * 2
+            binding.hourlyCard.doOnLayout {
+                binding.detailCard.doOnLayout {
+                    val screenHeight = pixelRatio.screenHeight - 25.dp
+                    val marginTop = 78.dp
+                    val marginBottom = 96.dp
+                    val cardHeights = binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
+                    val marginBetweenCards = 24.dp * 2
 
-            shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
-        }
-
-        binding.downArrow setOnDebounceClickListener {
-            binding.container.transitionToState(R.layout.scene_home_second)
+                    shouldDisableThirdScene = marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+                }
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
@@ -131,9 +141,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun showHelpPopup() {
-        isHelpPopupShowing = true
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
-        binding.exitExplanation.alpha = 1f
+        isHelpPopupShowing = true
         binding.dim.alpha = 1f
         binding.dim.isClickable = true
         binding.dim.isFocusable = true
@@ -141,12 +151,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun hideHelpPopup() {
-        isHelpPopupShowing = false
+        TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
-        binding.exitExplanation.alpha = 0f
+        isHelpPopupShowing = false
         binding.dim.alpha = 0f
         binding.dim.isClickable = false
         binding.dim.isFocusable = false
         binding.container.isInteractionEnabled = true
     }
+
 }

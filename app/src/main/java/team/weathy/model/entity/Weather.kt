@@ -24,7 +24,9 @@ enum class Weather(val id: Int, @DrawableRes val iconId: Int) {
     BROKEN_CLOUDS(4, R.drawable.ic_brokenclouds), SHOWER_RAIN(
         9, R.drawable.ic_showerrain
     ),
-    THUNDERSTOME(11, R.drawable.ic_thunderstorm), RAIN(10, R.drawable.ic_rain_day), SNOW(
+    RAIN(10, R.drawable.ic_rain_day), THUNDERSTOME(11, R.drawable.ic_thunderstorm),
+
+    SNOW(
         13, R.drawable.ic_snow
     ),
     MIST(

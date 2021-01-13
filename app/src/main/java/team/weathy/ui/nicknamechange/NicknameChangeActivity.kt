@@ -1,5 +1,7 @@
 package team.weathy.ui.nicknamechange
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -7,7 +9,6 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import team.weathy.R
@@ -38,19 +39,21 @@ class NicknameChangeActivity : AppCompatActivity() {
             binding.numOfCharacters2.text = "/6"
 
             if (length > 0) {
-                binding.changeNicknameBtn.isEnabled = true
                 binding.deleteNicknameBtn.isEnabled = true
                 binding.numOfCharacters1.setTextColor(getColor(R.color.main_mint))
                 binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
                 binding.deleteNicknameBtn.visibility = View.VISIBLE
                 deleteNickname()
                 changeNicknameBtnClick()
+                if (!binding.changeNicknameBtn.isEnabled)
+                    setButtonEnabled(true)
             } else {
-                binding.changeNicknameBtn.isEnabled = false
                 binding.deleteNicknameBtn.isEnabled = false
                 binding.numOfCharacters1.setTextColor(getColor(R.color.sub_grey_6))
                 binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
                 binding.deleteNicknameBtn.visibility = View.INVISIBLE
+                if (binding.changeNicknameBtn.isEnabled)
+                    setButtonDisabled(false)
             }
 
         }
@@ -76,7 +79,7 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun changeNicknameBtnClick() {
         binding.changeNicknameBtn.setOnDebounceClickListener {
-            showToast("닉네임이 변경되었습니다.")
+            showToast("닉네임이 변경되었어요!")
             finish()
         }
     }
@@ -119,5 +122,19 @@ class NicknameChangeActivity : AppCompatActivity() {
             binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
             binding.deleteNicknameBtn.visibility = View.INVISIBLE
         }
+    }
+
+    private fun setButtonEnabled(isEnable: Boolean) {
+        val colorChangeActive = AnimatorInflater.loadAnimator(this, R.animator.color_change_active_anim) as AnimatorSet
+        colorChangeActive.setTarget(binding.changeNicknameBtn)
+        colorChangeActive.start()
+        binding.changeNicknameBtn.isEnabled = isEnable
+    }
+
+    private fun setButtonDisabled(isEnable: Boolean) {
+        val colorChange = AnimatorInflater.loadAnimator(this, R.animator.color_change_anim) as AnimatorSet
+        colorChange.setTarget(binding.changeNicknameBtn)
+        colorChange.start()
+        binding.changeNicknameBtn.isEnabled = isEnable
     }
 }
