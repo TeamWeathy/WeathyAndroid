@@ -117,7 +117,7 @@ class CalendarViewModel @ViewModelInject constructor(
 
     private fun collectSelectedFlow() {
         viewModelScope.launch {
-            _curDate.asFlow().collect {
+            selectedDate.asFlow().collect {
                 fetchSelectedDateWeathy()
             }
         }

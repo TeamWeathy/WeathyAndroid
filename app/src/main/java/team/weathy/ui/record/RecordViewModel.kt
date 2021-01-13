@@ -71,9 +71,9 @@ class RecordViewModel @ViewModelInject constructor(
         )
     val clothes = MediatorLiveData<List<WeathyCloth>>().apply {
         value = clothesTriple[0].first.value!!
-        clothesTriple.forEach {
-            addSource(it.first) { list ->
-                value = list
+        clothesTriple.forEachIndexed { idx, (clohtes) ->
+            addSource(clohtes) { list ->
+                if (choicedClothesTabIndex.value == idx) value = list
             }
         }
         addSource(choicedClothesTabIndex) {
@@ -82,9 +82,9 @@ class RecordViewModel @ViewModelInject constructor(
     }
     val selectedClothes = MediatorLiveData<Set<WeathyCloth>>().apply {
         value = clothesTriple[0].second.value!!
-        clothesTriple.forEach {
-            addSource(it.second) { set ->
-                value = set
+        clothesTriple.forEachIndexed { idx, (_, selected) ->
+            addSource(selected) { set ->
+                if (choicedClothesTabIndex.value == idx) value = set
             }
         }
         addSource(choicedClothesTabIndex) {
@@ -93,9 +93,9 @@ class RecordViewModel @ViewModelInject constructor(
     }
     val selectedClothesForDelete = MediatorLiveData<Set<WeathyCloth>>().apply {
         value = clothesTriple[0].third.value!!
-        clothesTriple.forEach {
-            addSource(it.third) { set ->
-                value = set
+        clothesTriple.forEachIndexed { idx, (_, _, selectedForDelete) ->
+            addSource(selectedForDelete) { set ->
+                if (choicedClothesTabIndex.value == idx) value = set
             }
         }
         addSource(choicedClothesTabIndex) {
@@ -198,14 +198,11 @@ class RecordViewModel @ViewModelInject constructor(
             clothesTriple[2].first.value = it.outer.clothes
             clothesTriple[3].first.value = it.etc.clothes
 
-            clothesTriple.forEach { (_, selected, _) ->
+            clothesTriple.forEach { (clothes, selected, _) ->
                 selected.updateSet {
-                    removeIf { it.id in deletedClothIds }
+                    removeIf { it !in clothes.value!! }
                 }
             }
-
-            clothes.value = clothesTriple[choicedClothesTabIndex.value!!].first.value!!
-            selectedClothes.value = clothesTriple[choicedClothesTabIndex.value!!].second.value!!
         }).join()
     }
 

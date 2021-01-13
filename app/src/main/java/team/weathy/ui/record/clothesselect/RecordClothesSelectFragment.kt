@@ -159,10 +159,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun updateTabTexts() {
-        (layouts[viewModel.choicedClothesTabIndex.value!!].getChildAt(1) as? TextView)?.run {
-            text = viewModel.selectedClothes.value!!.size.toString()
-            if (viewModel.selectedClothes.value!!.isNotEmpty()) setTextColor(getColor(R.color.mint_icon))
-            else setTextColor(getColor(R.color.sub_grey_6))
+        layouts.map { it.getChildAt(1) as TextView }.forEachIndexed { idx, textView ->
+            val selected = viewModel.clothesTriple[idx].second.value!!
+
+            textView.text = selected.size.toString()
+            if (selected.isNotEmpty()) textView.setTextColor(getColor(R.color.mint_icon))
+            else textView.setTextColor(getColor(R.color.sub_grey_6))
         }
     }
 
