@@ -221,12 +221,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginRight="24dp"
                     android:lineSpacingExtra="-2dp"
                     android:text="@{vm.descriptionText}"
                     android:textColor="@color/black_0.58"
                     android:textSize="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/current_temp"
+                    app:layout_goneMarginRight="26dp"
+                    app:layout_constraintLeft_toLeftOf="@id/max_temp_today"
                     app:layout_constraintTop_toBottomOf="@id/max_temp_today"
                     tools:text="조금 흐리지만\n햇살이 따스해요:)" />
 
