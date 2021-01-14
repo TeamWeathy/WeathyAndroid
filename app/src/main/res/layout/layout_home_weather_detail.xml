@@ -29,7 +29,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
 
-                android:src="@drawable/ic_clearsky_day"
+                android:src="@drawable/ic_rainfall"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +89,7 @@
                 android:id="@+id/humidity_image"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_clearsky_day"
+                android:src="@drawable/ic_humidity"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -151,7 +151,7 @@
                 android:id="@+id/wind_image"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_clearsky_day"
+                android:src="@drawable/ic_wiindspeed"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
