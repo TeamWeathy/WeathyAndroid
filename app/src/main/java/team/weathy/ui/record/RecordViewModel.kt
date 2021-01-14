@@ -13,6 +13,7 @@ import team.weathy.api.ClothesAPI
 import team.weathy.api.CreateClothesReq
 import team.weathy.api.CreateWeathyReq
 import team.weathy.api.DeleteClothesReq
+import team.weathy.api.EditWeathyReq
 import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.ClothCategory
@@ -22,11 +23,15 @@ import team.weathy.model.entity.ClothCategory.OUTER
 import team.weathy.model.entity.ClothCategory.TOP
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.WeatherStamp
+import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
+import team.weathy.util.AppEvent
 import team.weathy.util.EventLiveData
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.dateString
+import team.weathy.util.emit
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
@@ -252,28 +257,44 @@ class RecordViewModel @ViewModelInject constructor(
     // region WEATHER DETAIL
 
     val feedback = MutableLiveData("")
+    val onRecordSuccess = SimpleEventLiveData()
+    val onRecordEdited = SimpleEventLiveData()
+    val onRecordFailed = SimpleEventLiveData()
 
-    suspend fun submit(includeFeedback: Boolean) {
+    val feedbackFocused = MutableLiveData(false)
+    val isSubmitButtonEnabled = feedback.map { it.isNotBlank() }
+
+    fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
         val date = this.date.toLocalDate().dateString
         val code = weather.value?.region?.code ?: 0L
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
         val stampId = selectedWeatherRating.value?.id ?: 0
 
+        val feedbackReq = if (includeFeedback) feedback.value!! else ""
+
         launchCatch({
-            weathyAPI.createWeathy(
-                CreateWeathyReq(
-                    userId, date, code, clothes, stampId, if (includeFeedback) feedback.value!! else ""
+            if (edit) {
+                weathyAPI.editWeathy(lastEditWeathy?.id ?: 0, EditWeathyReq(code, clothes, stampId, feedbackReq))
+            } else {
+                weathyAPI.createWeathy(
+                    CreateWeathyReq(
+                        userId, date, code, clothes, stampId, feedbackReq
+                    )
                 )
-            )
+            }
         }, onSuccess = {
-            it.message
-        }).join()
+            AppEvent.onWeathyUpdated.emit()
+            onRecordSuccess.emit()
+        }, onFailure = {
+            onRecordFailed.emit()
+        })
     }
 
     // endregion
 
     companion object {
+        var lastEditWeathy: Weathy? = null
         var lastRecordNavigationTime: LocalDateTime = LocalDateTime.now()
     }
 }

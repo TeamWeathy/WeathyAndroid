@@ -16,8 +16,11 @@ import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Weathy
+import team.weathy.util.AppEvent
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.dateString
 import team.weathy.util.debugE
+import team.weathy.util.emit
 import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateMap
 import team.weathy.util.getEndDateStringInCalendar
@@ -75,6 +78,9 @@ class CalendarViewModel @ViewModelInject constructor(
     val weathyStampRepresentation = curWeathy.map {
         it?.stampId?.representationPast
     }
+    val weathyStampTextColor = curWeathy.map {
+        it?.stampId?.colorRes
+    }
     val weathyTopClothes = curWeathy.map {
         it?.closet?.top?.clothes?.joinToString(" . ") { it.name } ?: ""
     }
@@ -94,10 +100,23 @@ class CalendarViewModel @ViewModelInject constructor(
     init {
         collectSelectedFlow()
         collectYearMonthFlow()
+        observeAppEvents()
+    }
+
+    fun closeMoreMenu() {
+        _isMoreMenuShowing.value = false
+    }
+
+    fun openMoreMenu() {
+        _isMoreMenuShowing.value = true
     }
 
     fun onClickMoreMenu() {
-        _isMoreMenuShowing.value = !isMoreMenuShowing.value!!
+        if (_isMoreMenuShowing.value == true) {
+            closeMoreMenu()
+        } else {
+            openMoreMenu()
+        }
     }
 
     fun onClickContainer() {
@@ -124,8 +143,23 @@ class CalendarViewModel @ViewModelInject constructor(
         }
     }
 
+    private fun collectYearMonthFlow() = viewModelScope.launch {
+        curDate.asFlow().map { it.yearMonthFormat }.distinctUntilChanged().collect {
+            fetchCurrentMonthDataIfNeeded()
+        }
+    }
+
+    private fun observeAppEvents() {
+        viewModelScope.launch {
+            AppEvent.onWeathyUpdated.collect {
+                debugE("weathyUpdated")
+                launch { fetchCurrentMonthData() }
+                launch { fetchSelectedDateWeathy() }
+            }
+        }
+    }
+
     private fun fetchSelectedDateWeathy() {
-//        debugE("fetchSelectedDateWeathy ${selectedDate.value!!.dateString}")
         launchCatch({
             weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
         }, onSuccess = {
@@ -135,25 +169,42 @@ class CalendarViewModel @ViewModelInject constructor(
         })
     }
 
-    private fun collectYearMonthFlow() = viewModelScope.launch {
-        curDate.asFlow().map { it.yearMonthFormat }.distinctUntilChanged().collect {
-            fetchMonthlyDataIfNeeded()
+    private fun fetchCurrentMonthDataIfNeeded() {
+        val date = curDate.value!!
+        if (!calendarData.value!!.containsKey(date.yearMonthFormat)) {
+            fetchCurrentMonthData()
         }
     }
 
-    private fun fetchMonthlyDataIfNeeded() {
-//        debugE("fetchMonthlyDataIfNeeded ${curDate.value!!.dateString}")
+    private fun fetchCurrentMonthData() {
         val date = curDate.value!!
-        if (!calendarData.value!!.containsKey(date.yearMonthFormat)) {
-            launchCatch({
-                val s = getStartDateStringInCalendar(date.year, date.monthValue)
-                val e = getEndDateStringInCalendar(date.year, date.monthValue)
-                calendarAPI.fetchCalendarPreview(s, e)
-            }, onSuccess = { (list) ->
-                _calendarData.updateMap {
-                    this[date.yearMonthFormat] = list
-                }
-            })
-        }
+        launchCatch({
+            val s = getStartDateStringInCalendar(date.year, date.monthValue)
+            val e = getEndDateStringInCalendar(date.year, date.monthValue)
+            calendarAPI.fetchCalendarPreview(s, e)
+        }, onSuccess = { (list) ->
+            _calendarData.updateMap {
+                this[date.yearMonthFormat] = list
+            }
+        })
+    }
+
+    val onDeleteSuccess = SimpleEventLiveData()
+    val onDeleteFailed = SimpleEventLiveData()
+
+    fun delete() {
+        closeMoreMenu()
+
+        val weathy = curWeathy.value ?: return
+
+        launchCatch({
+            weathyAPI.deleteWeathy(weathy.id)
+        }, onSuccess = {
+            onDeleteSuccess.emit()
+            AppEvent.onWeathyUpdated.emit()
+        }, onFailure = {
+            onDeleteFailed.emit()
+            debugE(it)
+        })
     }
 }

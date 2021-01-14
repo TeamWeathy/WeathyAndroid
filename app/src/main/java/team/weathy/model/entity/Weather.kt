@@ -11,50 +11,171 @@ import team.weathy.api.ApiSerializer
 import java.lang.reflect.Type
 
 @JsonAdapter(WeatherSerizlier::class)
-enum class Weather(val id: Int, @DrawableRes val smallIconId: Int, @DrawableRes val bigIconId: Int, @DrawableRes val mediumIconId: Int) {
+enum class Weather(
+    val id: Int,
+    @DrawableRes val smallIconId: Int,
+    @DrawableRes val bigIconId: Int,
+    @DrawableRes val mediumIconId: Int,
+    @DrawableRes val firstHomeBackgroundId: Int,
+    @DrawableRes val secondHomeBackgroundId: Int,
+    val backgroundAnimation: BackgroundAnimation? = null,
+) {
     CLEAR_SKY(
-        1, R.drawable.ic_clearsky_day, R.drawable.main_img_clearsky_day, R.drawable.record_img_clearsky_day
+        1,
+        R.drawable.ic_clearsky_day,
+        R.drawable.main_img_clearsky_day,
+        R.drawable.record_img_clearsky_day,
+        R.drawable.mainscroll_bg_morning,
+        R.drawable.mainscroll_box_topblur_morning
     ),
     FEW_CLOUDS(
-        2, R.drawable.ic_fewclouds_day, R.drawable.main_img_fewclouds_day, R.drawable.record_img_fewclouds_day
+        2,
+        R.drawable.ic_fewclouds_day,
+        R.drawable.main_img_fewclouds_day,
+        R.drawable.record_img_fewclouds_day,
+        R.drawable.mainscroll_bg_morning,
+        R.drawable.mainscroll_box_topblur_morning,
     ),
     SCATTERED_CLOUDS(
-        3, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_day, R.drawable.record_img_scatteredclouds
+        3,
+        R.drawable.ic_scatteredclouds,
+        R.drawable.main_img_scatteredclouds_day,
+        R.drawable.record_img_scatteredclouds,
+        R.drawable.mainscroll_bg_morning,
+        R.drawable.mainscroll_box_topblur_morning,
     ),
-    BROKEN_CLOUDS(4, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_day, R.drawable.record_img_brokenclouds), SHOWER_RAIN(
-        9, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_day, R.drawable.record_img_showerrain_day
+    BROKEN_CLOUDS(
+        4,
+        R.drawable.ic_brokenclouds,
+        R.drawable.main_img_brokenclouds_day,
+        R.drawable.record_img_brokenclouds,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
     ),
-    RAIN(10, R.drawable.ic_rain_day, R.drawable.main_img_rain_day, R.drawable.record_img_rain), THUNDERSTOME(
-        11, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_day, R.drawable.record_img_thunderstorm
+    SHOWER_RAIN(
+        9,
+        R.drawable.ic_showerrain,
+        R.drawable.main_img_showerrain_day,
+        R.drawable.record_img_showerrain_day,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
+        BackgroundAnimation.RAIN,
+    ),
+    RAIN(
+        10,
+        R.drawable.ic_rain_day,
+        R.drawable.main_img_rain_day,
+        R.drawable.record_img_rain,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
+        BackgroundAnimation.RAIN,
+    ),
+    THUNDERSTOME(
+        11,
+        R.drawable.ic_thunderstorm,
+        R.drawable.main_img_thunderstorm_day,
+        R.drawable.record_img_thunderstorm,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
     ),
 
     SNOW(
-        13, R.drawable.ic_snow, R.drawable.main_img_snow_day, R.drawable.record_img_snow
+        13,
+        R.drawable.ic_snow,
+        R.drawable.main_img_snow_day,
+        R.drawable.record_img_snow,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
+        BackgroundAnimation.SNOW,
     ),
     MIST(
-        50, R.drawable.ic_mist, R.drawable.main_img_mist_day, R.drawable.record_img_mist
+        50,
+        R.drawable.ic_mist,
+        R.drawable.main_img_mist_day,
+        R.drawable.record_img_mist,
+        R.drawable.mainscroll_bg_snowrain,
+        R.drawable.mainscroll_box_topblur_snowrain,
     ),
     CLEAR_SKY_NIGHT(
-        101, R.drawable.ic_clearsky_night, R.drawable.main_img_clearsky_night, R.drawable.record_img_clearsky_night
+        101,
+        R.drawable.ic_clearsky_night,
+        R.drawable.main_img_clearsky_night,
+        R.drawable.record_img_clearsky_night,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ),
     FEW_CLOUDS_NIGHT(
-        102, R.drawable.ic_fewclouds_night, R.drawable.main_img_fewclouds_night, R.drawable.record_img_fewclouds_night
+        102,
+        R.drawable.ic_fewclouds_night,
+        R.drawable.main_img_fewclouds_night,
+        R.drawable.record_img_fewclouds_night,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ),
     SCATTERED_CLOUDS_NIGHT(
-        103, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_night, R.drawable.record_img_scatteredclouds
+        103,
+        R.drawable.ic_scatteredclouds,
+        R.drawable.main_img_scatteredclouds_night,
+        R.drawable.record_img_scatteredclouds,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ),
     BROKEN_CLOUDS_NIGHT(
-        104, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_night, R.drawable.record_img_brokenclouds
+        104,
+        R.drawable.ic_brokenclouds,
+        R.drawable.main_img_brokenclouds_night,
+        R.drawable.record_img_brokenclouds,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ),
     SHOWER_RAIN_NIGHT(
-        109, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_night, R.drawable.record_img_showerrain_night
+        109,
+        R.drawable.ic_showerrain,
+        R.drawable.main_img_showerrain_night,
+        R.drawable.record_img_showerrain_night,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
+        BackgroundAnimation.RAIN,
     ),
-    THUNDERSTOME_NIGHT(111, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_night, R.drawable.record_img_thunderstorm), RAIN_NIGHT(
-        110, R.drawable.ic_rain_night, R.drawable.main_img_rain_night, R.drawable.record_img_rain
+    THUNDERSTOME_NIGHT(
+        111,
+        R.drawable.ic_thunderstorm,
+        R.drawable.main_img_thunderstorm_night,
+        R.drawable.record_img_thunderstorm,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ),
-    SNOW_NIGHT(113, R.drawable.ic_snow, R.drawable.main_img_snow_night, R.drawable.record_img_snow), MIST_NIGHT(
-        150, R.drawable.ic_mist, R.drawable.main_img_mist_night, R.drawable.record_img_mist
+    RAIN_NIGHT(
+        110,
+        R.drawable.ic_rain_night,
+        R.drawable.main_img_rain_night,
+        R.drawable.record_img_rain,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
+        BackgroundAnimation.RAIN,
+    ),
+    SNOW_NIGHT(
+        113,
+        R.drawable.ic_snow,
+        R.drawable.main_img_snow_night,
+        R.drawable.record_img_snow,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
+        BackgroundAnimation.SNOW,
+    ),
+    MIST_NIGHT(
+        150,
+        R.drawable.ic_mist,
+        R.drawable.main_img_mist_night,
+        R.drawable.record_img_mist,
+        R.drawable.mainscroll_bg_night,
+        R.drawable.mainscroll_box_topblur_night,
     ), ;
+
+
+    enum class BackgroundAnimation {
+        RAIN, SNOW
+    }
 
     companion object {
         fun withId(id: Int?): Weather {

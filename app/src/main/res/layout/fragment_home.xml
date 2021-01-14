@@ -14,31 +14,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
-            android:id="@+id/bg"
+        <ImageView
+            android:id="@+id/bg_first"
+            srcResource="@{vm.weatherSecondBackground}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/main_bg_snowrain"
-            app:altSrc="@drawable/mainscroll_box_topblur_snowrain"
-            app:crossfade="0" />
+            android:scaleType="centerCrop" />
 
-        <!--        <com.jetradarmobile.snowfall.SnowfallView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            app:snowflakeAlphaMax="255"-->
-        <!--            app:snowflakeAlphaMin="150"-->
-        <!--            app:snowflakeAngleMax="5"-->
-        <!--            app:snowflakeImage="@drawable/snow"-->
-        <!--            app:snowflakeSizeMax="44dp"-->
-        <!--            app:snowflakeSizeMin="16dp"-->
-        <!--            app:snowflakeSpeedMax="4"-->
-        <!--            app:snowflakeSpeedMin="2"-->
-        <!--            app:snowflakesAlreadyFalling="false"-->
-        <!--            app:snowflakesFadingEnabled="true"-->
-        <!--            app:snowflakesNum="90" />-->
+        <ImageView
+            android:id="@+id/bg_second"
+            srcResource="@{vm.weatherFirstBackground}"
+            android:alpha="0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
 
         <team.weathy.util.snowfall.SnowfallView
+            android:id="@+id/snowFall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:snowflakeAlphaMax="255"
+            app:snowflakeAlphaMin="150"
+            app:snowflakeAngleMax="5"
+            app:snowflakeImage="@drawable/snow"
+            app:snowflakeSizeMax="44dp"
+            app:snowflakeSizeMin="16dp"
+            app:snowflakeSpeedMax="4"
+            app:snowflakeSpeedMin="2"
+            app:snowflakesAlreadyFalling="false"
+            app:snowflakesFadingEnabled="true"
+            app:snowflakesNum="90" />
+
+        <team.weathy.util.snowfall.SnowfallView
+            android:id="@+id/rainFall"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:snowflakeAlphaMax="255"
@@ -84,7 +95,7 @@
                 android:elevation="9dp"
                 android:outlineProvider="none"
                 android:scaleType="fitXY"
-                android:src="@drawable/mainscroll_box_topblur_snowrain"
+                srcResource="@{vm.weatherSecondBackground}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,7 +127,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="55dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/main_img_snow_night"
+                srcResource="@{vm.weatherIcon}"
+                tools:src="@drawable/main_img_snow_night"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/header"

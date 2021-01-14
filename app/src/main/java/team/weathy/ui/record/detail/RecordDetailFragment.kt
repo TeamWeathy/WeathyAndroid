@@ -1,27 +1,21 @@
 package team.weathy.ui.record.detail
 
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
-import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
@@ -44,31 +38,10 @@ class RecordDetailFragment : Fragment() {
         }
 
         binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
-            setCountVisibility(hasFocus)
+            viewModel.feedbackFocused.value = hasFocus
         }
 
-        configureStartNavigation()
-    }
-
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(string: Editable?) {
-            val length = string.toString().length
-            binding.tvTextLength2.text = "$length"
-
-            if (length > 0) {
-                if (!binding.btnConfirm.isEnabled) setButtonEnabled(true)
-                setTextActivation(getColor(R.color.main_mint), R.drawable.edit_border_active)
-            } else {
-                if (binding.btnConfirm.isEnabled) setButtonDisabled(false)
-                setTextActivation(getColor(R.color.sub_grey_6), R.drawable.edit_border)
-            }
-        }
-
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
+        configureSubmitBehaviors()
     }
 
     private fun hideKeyboard() {
@@ -76,7 +49,7 @@ class RecordDetailFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(binding.etDetail.windowToken, 0)
     }
 
-    private fun configureStartNavigation() {
+    private fun configureSubmitBehaviors() {
         binding.close setOnDebounceClickListener {
             submit(false)
         }
@@ -86,36 +59,25 @@ class RecordDetailFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback {
             submit(false)
         }
+
+        viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디에 내용이 추가되었어요!")
+            requireActivity().finish()
+        }
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+        viewModel.onRecordFailed.observe(viewLifecycleOwner) {
+            requireContext().showToast("내용 추가가 실패했어요!")
+        }
+
+        viewModel.isSubmitButtonEnabled.observe(viewLifecycleOwner) {
+            binding.btnConfirm.enableWithAnim(it)
+        }
     }
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
-        requireContext().showToast("웨디에 내용이 추가되었어요!")
-        requireActivity().finish()
-    }
-
-    private fun setCountVisibility(hasFocus: Boolean) {
-        binding.tvTextLength.isVisible = hasFocus
-        binding.tvTextLength2.isVisible = hasFocus
-    }
-
-    private fun setButtonEnabled(isEnable: Boolean) {
-        val colorChangeActive =
-            AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
-        colorChangeActive.setTarget(binding.btnConfirm)
-        colorChangeActive.start()
-        binding.btnConfirm.isEnabled = isEnable
-    }
-
-    private fun setButtonDisabled(isEnable: Boolean) {
-        val colorChange = AnimatorInflater.loadAnimator(context, R.animator.color_change_anim) as AnimatorSet
-        colorChange.setTarget(binding.btnConfirm)
-        colorChange.start()
-        binding.btnConfirm.isEnabled = isEnable
-    }
-
-    private fun setTextActivation(color: Int, drawable: Int) {
-        binding.tvTextLength2.setTextColor(color)
-        binding.etDetail.setBackgroundResource(drawable)
     }
 }

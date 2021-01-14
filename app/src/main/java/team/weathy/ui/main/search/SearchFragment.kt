@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.MainMenu.HOME
@@ -21,7 +23,9 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.LinearItemDecoration
 import team.weathy.util.extensions.hideKeyboard
+import team.weathy.util.location.LocationUtil
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
 @FlowPreview
 @AndroidEntryPoint
@@ -30,6 +34,9 @@ class SearchFragment : Fragment() {
         get() = arguments?.getBoolean("fromRecord") ?: false
     private var binding by AutoClearedValue<FragmentSearchBinding>()
     private val viewModel by viewModels<SearchViewModel>()
+
+    @Inject
+    lateinit var locationUtil: LocationUtil
 
     /**
      * This ViewModel is not initialized when fromRecord == true
@@ -65,6 +72,16 @@ class SearchFragment : Fragment() {
             handleMainMenuChange()
         } else {
             fetchRecentSearchLocations() // fetch
+        }
+
+
+        if (!fromRecord) {
+            lifecycleScope.launchWhenStarted {
+                locationUtil.selectedWeatherLocation.collect {
+                    it ?: return@collect
+                    binding.background.setImageResource(it.hourly.climate.weather.firstHomeBackgroundId)
+                }
+            }
         }
     }
 
@@ -103,6 +120,12 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         onBackPressedCallback.isEnabled = true
+        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun handleMainMenuChange() {
