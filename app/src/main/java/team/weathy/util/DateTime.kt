@@ -104,6 +104,10 @@ fun LocalDate.isAvailable(): Boolean {
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
 
+/** 1997-04-04 */
+val LocalDateTime.dateString: DateString
+    get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}"
+
 /**
  * 04월 04일 월요일 • 오전 1시
  */

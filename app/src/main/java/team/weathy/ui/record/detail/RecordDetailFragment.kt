@@ -12,15 +12,31 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
+import team.weathy.api.CreateClothesReq
+import team.weathy.api.CreateWeathyReq
+import team.weathy.api.USER_ID_PATH_SEGMENT
+import team.weathy.api.WeathyAPI
 import team.weathy.databinding.FragmentRecordDetailBinding
-import team.weathy.util.AutoClearedValue
+import team.weathy.di.Api
+import team.weathy.model.entity.ClothCategory
+import team.weathy.ui.record.RecordViewModel
+import team.weathy.util.*
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.showToast
-import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RecordDetailFragment : Fragment() {
+    @Inject
+    @Api
+    lateinit var weathyAPI: WeathyAPI
     private var binding by AutoClearedValue<FragmentRecordDetailBinding>()
+    private val viewModel by activityViewModels<RecordViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordDetailBinding.inflate(layoutInflater, container, false).also { binding = it }.root
@@ -73,6 +89,7 @@ class RecordDetailFragment : Fragment() {
             requireActivity().finish()
         }
         binding.btnConfirm setOnDebounceClickListener {
+            onSubmit()
             requireContext().showToast("웨디에 내용이 추가되었어요!")
         }
     }
@@ -99,5 +116,21 @@ class RecordDetailFragment : Fragment() {
     private fun setTextActivation(color: Int, drawable: Int) {
         binding.tvTextLength2.setTextColor(color)
         binding.etDetail.setBackgroundResource(drawable)
+    }
+
+    @FlowPreview
+    private fun onSubmit() {
+        val userId = UniqueIdentifier.
+        val date = viewModel.date.dateString
+        val code =
+        val clothes =
+        val stampId = viewModel.selectedWeatherRatingIndex.value!! + 1
+        val feedback = binding.etDetail.text.toString()
+
+        launchCatch({
+            weathyAPI.createWeathy(CreateWeathyReq(userId, date, code, clothes, stampId, feedback))
+        }, onSuccess = {
+            it.message
+        })
     }
 }

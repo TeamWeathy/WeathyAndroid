@@ -49,7 +49,7 @@ class RecordViewModel @ViewModelInject constructor(
     }
     val weatherIcon = weather.map {
         it ?: return@map null
-        it.hourly.climate.weather.bigIconId
+        it.hourly.climate.weather.mediumIconId
     }
     val tempHigh = weather.map {
         it ?: return@map ""
@@ -227,6 +227,17 @@ class RecordViewModel @ViewModelInject constructor(
         return selectedClothesCount
     }
 
+    // endregion
+
+    // region WEATHER RATING
+    private val _selectedWeatherRatingIndex = MutableLiveData(-1)
+    val selectedWeatherRatingIndex: LiveData<Int> = _selectedWeatherRatingIndex
+
+    fun changeSelectedWeatherRatingIndex(tab: Int) {
+        if (selectedWeatherRatingIndex.value != tab) {
+            _selectedWeatherRatingIndex.value = tab
+        }
+    }
     // endregion
 
     companion object {
