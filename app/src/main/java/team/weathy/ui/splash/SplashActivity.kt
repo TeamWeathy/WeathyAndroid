@@ -1,5 +1,7 @@
 package team.weathy.ui.splash
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -30,17 +32,21 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navigateNextScreen()
+        binding.lottie.addAnimatorListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                navigateNextScreen()
+            }
+        })
     }
 
     private fun navigateNextScreen() {
-        when {
-            spUtil.isFirstLaunch -> navigateLanding()
-            !uniqueId.exist -> navigateNicknameSet()
-            else -> navigateMain()
-        }
+//        when {
+//            spUtil.isFirstLaunch -> navigateLanding()
+//            !uniqueId.exist -> navigateNicknameSet()
+//            else -> navigateMain()
+//        }
         //        navigateMain()
-        //                navigateLanding()
+                        navigateLanding()
         finish()
     }
 

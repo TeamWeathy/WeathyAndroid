@@ -15,17 +15,10 @@
 
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05" />
-
         <TextView
             android:id="@+id/title_normal"
             android:layout_width="wrap_content"
-            android:layout_marginTop="77dp"
+            android:layout_marginTop="130dp"
             android:text="@{item.titleNormal}"
             android:textColorHint="@color/main_grey"
             android:textSize="23dp"
@@ -34,7 +27,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/title_highlight"
-            app:layout_constraintTop_toBottomOf="@id/guide1"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="날씨를" />
 
         <TextView
