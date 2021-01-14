@@ -126,7 +126,7 @@
         <item name="chipStrokeColor">@color/chip_select_stroke</item>
         <item name="chipStrokeWidth">1.5dp</item>
         <item name="chipCornerRadius">19.5dp</item>
-        <item name="rippleColor">@color/main_mint</item>
+        <item name="rippleColor">@color/transparent</item>
         <item name="chipMinHeight">39dp</item>
         <item name="textStartPadding">11dp</item>
         <item name="textEndPadding">9dp</item>
@@ -138,7 +138,7 @@
         <item name="android:textColor">@color/chip_delete_text</item>
         <item name="chipStrokeColor">@color/chip_delete_stroke</item>
         <item name="chipStrokeWidth">1dp</item>
-        <item name="rippleColor">@color/pink</item>
+        <item name="rippleColor">@color/transparent</item>
     </style>
 
     <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
@@ -187,11 +187,11 @@
     <style name="RoundBottomSheet" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_top_round_20</item>
     </style>
-  
+
     <style name="RoundBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/RoundBottomSheet</item>
     </style>
-  
+
     <style name="ImageView">
         <item name="android:background">@color/image_view_background</item>
         <item name="android:layout_width">20dp</item>
