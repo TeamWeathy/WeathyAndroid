@@ -23,6 +23,7 @@ import team.weathy.model.entity.ClothCategory.OUTER
 import team.weathy.model.entity.ClothCategory.TOP
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.WeatherStamp
+import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
 import team.weathy.util.AppEvent
@@ -274,7 +275,7 @@ class RecordViewModel @ViewModelInject constructor(
 
         launchCatch({
             if (edit) {
-                weathyAPI.editWeathy(lastEditWeathyId, EditWeathyReq(code, clothes, stampId, feedbackReq))
+                weathyAPI.editWeathy(lastEditWeathy?.id ?: 0, EditWeathyReq(code, clothes, stampId, feedbackReq))
             } else {
                 weathyAPI.createWeathy(
                     CreateWeathyReq(
@@ -293,7 +294,7 @@ class RecordViewModel @ViewModelInject constructor(
     // endregion
 
     companion object {
-        var lastEditWeathyId: Int = -1
+        var lastEditWeathy: Weathy? = null
         var lastRecordNavigationTime: LocalDateTime = LocalDateTime.now()
     }
 }

@@ -127,7 +127,7 @@ class CalendarFragment : Fragment(), OnClickListener {
         val selectedDate = viewModel.selectedDate.value!!
         RecordViewModel.lastRecordNavigationTime = selectedDate.atTime(LocalDateTime.now().hour, 0)
         if (edit) {
-            RecordViewModel.lastEditWeathyId = viewModel.curWeathy.value?.id ?: 0
+            RecordViewModel.lastEditWeathy = viewModel.curWeathy.value
         }
         startActivity(RecordActivity.newIntent(requireContext(), edit))
     }

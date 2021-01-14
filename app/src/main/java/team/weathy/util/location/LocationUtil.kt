@@ -27,6 +27,8 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
     val selectedWeatherLocation: MutableStateFlow<OverviewWeather?> = MutableStateFlow(null)
 
+    private var isRegistered = false
+
     override fun onCreate(owner: LifecycleOwner) {
         registerLocationListener()
 
@@ -52,7 +54,9 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         }
     }
 
-    private fun registerLocationListener() {
+    fun registerLocationListener() {
+        if (isRegistered) return
+
         debugE("registerLocationListener")
         try {
             _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
@@ -64,6 +68,7 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
                 if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
 
             locationManager.requestLocationUpdates(provider, 1000, 1f, locationListener)
+            isRegistered = true
         } catch (e: Throwable) {
             debugE(e)
         }
@@ -73,6 +78,7 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         debugE("unregisterLocationListener")
 
         locationManager.removeUpdates(locationListener)
+        isRegistered = false
     }
 
     fun selectPlace(weather: OverviewWeather) {
