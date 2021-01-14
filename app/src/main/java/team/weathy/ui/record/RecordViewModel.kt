@@ -258,6 +258,9 @@ class RecordViewModel @ViewModelInject constructor(
     val onRecordSuccess = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
 
+    val feedbackFocused = MutableLiveData(false)
+    val isSubmitButtonEnabled = feedback.map { it.isNotBlank() }
+
     fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
         val date = this.date.toLocalDate().dateString

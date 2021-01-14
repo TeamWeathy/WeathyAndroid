@@ -1,15 +1,13 @@
 package team.weathy.util.location
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.location.Location
-import android.os.Looper
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.gms.location.LocationAvailability
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import team.weathy.model.entity.OverviewWeather
@@ -17,14 +15,9 @@ import team.weathy.util.SPUtil
 import team.weathy.util.debugE
 import javax.inject.Inject
 
+@SuppressLint("MissingPermission")
 class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
-    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-
-    private val locationRequest = LocationRequest.create().apply {
-        interval = 60000
-        fastestInterval = 5000
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
+    private val locationManager = app.getSystemService(LocationManager::class.java)
 
     private val _lastLocation = MutableStateFlow<Location?>(null)
     val lastLocation: StateFlow<Location?> = _lastLocation
@@ -44,25 +37,42 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         unregisterLocationListener()
     }
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult?) {
-            result ?: return
-            _lastLocation.value = result.lastLocation
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            _lastLocation.value = location
         }
 
-        override fun onLocationAvailability(result: LocationAvailability?) {
-            result ?: return
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+
+        override fun onProviderEnabled(provider: String) {
+        }
+
+        override fun onProviderDisabled(provider: String) {
         }
     }
 
     private fun registerLocationListener() {
         debugE("registerLocationListener")
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        try {
+            _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            val enabledProviders = locationManager.allProviders.filter {
+                locationManager.isProviderEnabled(it)
+            }
+            val provider =
+                if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
+
+            locationManager.requestLocationUpdates(provider, 1000, 1f, locationListener)
+        } catch (e: Throwable) {
+            debugE(e)
+        }
     }
 
     private fun unregisterLocationListener() {
         debugE("unregisterLocationListener")
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+
+        locationManager.removeUpdates(locationListener)
     }
 
     fun selectPlace(weather: OverviewWeather) {

@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="42dp"
-                android:background="@drawable/edit_border"
+                android:background="@{vm.feedbackFocused ? @drawable/edit_border_active : @drawable/edit_border}"
                 android:gravity="top"
                 android:hint="미래의 나에게 들려주고 싶은 날씨 조언을 적어주세요. (예 : 목도리를 챙길걸 그랬어.)"
                 android:includeFontPadding="false"
@@ -99,29 +99,29 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_sub" />
 
             <TextView
-                android:id="@+id/tv_text_length"
+                android:id="@+id/maxLength"
+                android:layout_marginTop="2dp"
+                android:text="/100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="/100"
+                android:visibility="@{vm.feedbackFocused}"
                 android:textColor="@color/sub_grey_6"
                 android:textSize="13sp"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="@id/et_detail"
                 app:layout_constraintTop_toBottomOf="@id/et_detail" />
 
             <TextView
-                android:id="@+id/tv_text_length2"
+                android:layout_marginTop="2dp"
+                android:text='@{vm.feedback.length() + ""}'
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/sub_grey_6"
+                android:textColor="@{vm.feedback.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
+                android:visibility="@{vm.feedbackFocused}"
                 android:textSize="13sp"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:layout_constraintEnd_toStartOf="@id/tv_text_length"
-                app:layout_constraintTop_toTopOf="@id/tv_text_length" />
+                app:layout_constraintRight_toLeftOf="@id/maxLength"
+                app:layout_constraintTop_toBottomOf="@id/et_detail"
+                tools:text="0"
+                tools:textColor="@color/sub_grey_6" />
 
             <Button
                 android:id="@+id/btn_confirm"
