@@ -29,15 +29,11 @@ class NicknameChangeViewModel @ViewModelInject constructor(
 
     fun onSubmit() {
         onHideKeyboard.emit()
-        val newUniqueId = uniqueId.generate()
 
         launchCatch({
             userAPI.editUser(EditUserReq(nickname.value ?: ""))
         }, loading = _loadingSubmit, onSuccess = {
-            Log.e("nickname", it.user.nickname)
-            uniqueId.deleteNickname()
-            Log.e("nickname", it.user.nickname)
-            uniqueId.saveNickname(it.user.nickname)
+            uniqueId.saveUserNickname(it.user.nickname)
             onSuccess.emit()
         }, onFailure = {
             debugE(it)
