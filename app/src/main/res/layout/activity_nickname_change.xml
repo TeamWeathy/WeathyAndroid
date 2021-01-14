@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_nickname"
         dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -50,24 +51,25 @@
             android:textColor="@color/sub_grey_6"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/title"
-            app:layout_constraintTop_toBottomOf="@id/title"/>
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="42dp"
             android:layout_marginHorizontal="26dp"
-            app:counterTextColor="@color/main_mint"
+            android:layout_marginTop="42dp"
+            app:boxStrokeColor="@{vm.nickname.length() == 0 ? @color/sub_grey_7 : @color/main_mint}"
             app:layout_constraintTop_toBottomOf="@id/body">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nicnkname_edit"
+                android:id="@+id/nickname_edit"
                 style="@style/TextInputEditText"
                 android:hint="부메랑"
                 android:maxLength="6"
                 android:text="@={vm.nickname}" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -77,8 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
-            android:enabled="false"
-            android:src="@drawable/ic_textdelete"
+            android:src="@drawable/btn_delete"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@id/textInputLayout"
             app:layout_constraintTop_toTopOf="@id/textInputLayout" />
@@ -90,6 +91,7 @@
             android:text="/6"
             android:textColor="@color/sub_grey_6"
             android:textSize="13sp"
+            android:visibility="invisible"
             app:layout_constraintRight_toRightOf="@id/textInputLayout"
             app:layout_constraintTop_toTopOf="@id/countLength" />
 
@@ -101,6 +103,7 @@
             android:text='@{vm.nickname.length() + ""}'
             android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
             android:textSize="13sp"
+            android:visibility="invisible"
             app:layout_constraintRight_toLeftOf="@id/maxLength"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout"
             tools:text="0"
@@ -110,6 +113,7 @@
             android:id="@+id/submit"
             style="@style/RoundButton.Mint"
             android:layout_width="match_parent"
+            android:layout_marginHorizontal="26dp"
             android:layout_marginBottom="25dp"
             android:clickable="@{!vm.loadingSubmit}"
             android:enabled="@{vm.isSubmitEnabled}"
