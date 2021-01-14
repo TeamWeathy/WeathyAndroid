@@ -24,9 +24,12 @@ import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
+import team.weathy.util.AppEvent
 import team.weathy.util.EventLiveData
+import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.dateString
+import team.weathy.util.emit
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
@@ -252,8 +255,10 @@ class RecordViewModel @ViewModelInject constructor(
     // region WEATHER DETAIL
 
     val feedback = MutableLiveData("")
+    val onRecordSuccess = SimpleEventLiveData()
+    val onRecordFailed = SimpleEventLiveData()
 
-    suspend fun submit(includeFeedback: Boolean) {
+    fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
         val date = this.date.toLocalDate().dateString
         val code = weather.value?.region?.code ?: 0L
@@ -267,8 +272,11 @@ class RecordViewModel @ViewModelInject constructor(
                 )
             )
         }, onSuccess = {
-            it.message
-        }).join()
+            AppEvent.onWeathyUpdated.emit()
+            onRecordSuccess.emit()
+        }, onFailure = {
+            onRecordFailed.emit()
+        })
     }
 
     // endregion

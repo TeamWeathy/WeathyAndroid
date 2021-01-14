@@ -118,7 +118,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/notosans_medium"
                 android:text="@{vm.weathyStampRepresentation}"
-                android:textColor="@{vm.weathyStampColor}"
+                textColorRes="@{vm.weathyStampColor}"
                 android:textSize="23sp"
                 app:layout_constraintEnd_toEndOf="@id/emoji"
                 app:layout_constraintTop_toBottomOf="@id/emoji"

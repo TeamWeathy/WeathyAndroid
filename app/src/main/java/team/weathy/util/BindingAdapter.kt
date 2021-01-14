@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.ScrollView
+import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import team.weathy.R
+import team.weathy.util.extensions.getColor
 
 @BindingAdapter("url", requireAll = false)
 fun ImageView.loadUrlAsync(url: String?) {
@@ -101,4 +104,12 @@ fun View.setShadowOnScroll(show: Boolean, _siblingDirectParentDepthDiff: Int) {
 @BindingAdapter("android:selected")
 fun View.setSelectedBinding(isSelected: Boolean) {
     this.isSelected = isSelected
+}
+
+@BindingAdapter("textColorRes")
+fun TextView.setTextColorWithResources(@ColorRes id: Int) {
+    if (id == 0x00) return
+    kotlin.runCatching {
+        setTextColor(getColor(id))
+    }
 }

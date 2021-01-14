@@ -1,6 +1,7 @@
 package team.weathy.view.calendar
 
 import android.R.attr
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ImageView.ScaleType.FIT_CENTER
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -52,6 +54,7 @@ import team.weathy.util.convertDateToWeeklyIndex
 import team.weathy.util.convertMonthlyIndexToDateToFirstDateOfMonthCalendar
 import team.weathy.util.convertWeeklyIndexToFirstDateOfWeekCalendar
 import team.weathy.util.dayOfWeekIndex
+import team.weathy.util.dp
 import team.weathy.util.emit
 import team.weathy.util.extensions.clamp
 import team.weathy.util.extensions.getColor
@@ -122,8 +125,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
+        stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.pressed_alpha_state_list_anim)
 
-        layoutParams = LayoutParams(0, WRAP_CONTENT).apply {
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToTop = parentId
             leftToLeft = parentId
             rightToRight = parentId
@@ -131,6 +135,18 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
         setOnDebounceClickListener {
             onClickYearMonthText?.invoke()
+        }
+    }
+
+    private val downArrow = ImageView(context).apply {
+        id = ViewCompat.generateViewId()
+        setImageResource(R.drawable.calendar_btn_arrow)
+        scaleType = FIT_CENTER
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+            topToTop = yearMonthText.id
+            bottomToBottom = yearMonthText.id
+            leftToRight = yearMonthText.id
+            leftMargin = 4.dp
         }
     }
 
@@ -341,6 +357,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun addViews() {
         addView(yearMonthText)
+        addView(downArrow)
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()

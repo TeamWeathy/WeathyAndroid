@@ -17,6 +17,7 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.showToast
 import team.weathy.util.isSameDay
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
@@ -32,7 +33,7 @@ class CalendarFragment : Fragment(), OnClickListener {
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             if (viewModel.isMoreMenuShowing.value == true) {
-                viewModel.onClickMoreMenu()
+                viewModel.closeMoreMenu()
             } else {
                 mainViewModel.changeMenu(HOME)
                 isEnabled = false
@@ -53,6 +54,18 @@ class CalendarFragment : Fragment(), OnClickListener {
         registerBackPressCallback()
 
         setOnRecordClickListener()
+
+        viewModel.onDeleteSuccess.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디가 삭제되었어요.")
+        }
+        viewModel.onDeleteFailed.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디가 삭제가 실패했어요.")
+        }
+
+        binding.edit setOnDebounceClickListener {
+            requireContext().showToast("edit")
+            viewModel.closeMoreMenu()
+        }
     }
 
     private fun configureCalendarView() {
@@ -81,8 +94,11 @@ class CalendarFragment : Fragment(), OnClickListener {
 
         viewModel.selectedDate.observe(viewLifecycleOwner) {
             binding.calendarView.selectedDate = it
-            binding.container.startLayoutAnimation()
             binding.scrollView.smoothScrollTo(0, 0)
+        }
+
+        viewModel.curWeathy.observe(viewLifecycleOwner) {
+            binding.container.startLayoutAnimation()
         }
 
         viewModel.calendarData.observe(viewLifecycleOwner) {

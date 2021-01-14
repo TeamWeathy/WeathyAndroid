@@ -45,6 +45,7 @@ object MockGenerator {
     )
 
     fun weathy() = Weathy(
+        1,
         region(),
         dailyWeather(),
         hourlyWeather(),

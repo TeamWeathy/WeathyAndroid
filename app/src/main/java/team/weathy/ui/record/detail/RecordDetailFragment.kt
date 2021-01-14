@@ -47,7 +47,7 @@ class RecordDetailFragment : Fragment() {
             setCountVisibility(hasFocus)
         }
 
-        configureStartNavigation()
+        configureSubmitBehaviors()
     }
 
     private val textWatcher = object : TextWatcher {
@@ -76,7 +76,7 @@ class RecordDetailFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(binding.etDetail.windowToken, 0)
     }
 
-    private fun configureStartNavigation() {
+    private fun configureSubmitBehaviors() {
         binding.close setOnDebounceClickListener {
             submit(false)
         }
@@ -86,12 +86,18 @@ class RecordDetailFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback {
             submit(false)
         }
+
+        viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디에 내용이 추가되었어요!")
+            requireActivity().finish()
+        }
+        viewModel.onRecordFailed.observe(viewLifecycleOwner) {
+            requireContext().showToast("내용 추가가 실패했어요!")
+        }
     }
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
-        requireContext().showToast("웨디에 내용이 추가되었어요!")
-        requireActivity().finish()
     }
 
     private fun setCountVisibility(hasFocus: Boolean) {

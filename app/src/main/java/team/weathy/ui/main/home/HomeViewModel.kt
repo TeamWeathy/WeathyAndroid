@@ -76,7 +76,7 @@ class HomeViewModel @ViewModelInject constructor(
         it?.stampId?.iconRes
     }
     val weathyStampColor = recommendedWeathy.map {
-        it?.stampId?.colorRes ?: -1
+        it?.stampId?.colorRes
     }
     val weathyStampRepresentation = recommendedWeathy.map {
         it?.stampId?.representationPast

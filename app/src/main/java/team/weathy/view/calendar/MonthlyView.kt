@@ -37,7 +37,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     var firstDatesInCalednarAndMonth: Pair<LocalDate, LocalDate> by OnChangeProp(LocalDate.now() to LocalDate.now()) {
         updateUIWithDate()
     }
-    val firstDateInCalendar
+    private val firstDateInCalendar
         get() = firstDatesInCalednarAndMonth.first
     val firstDateInMonth
         get() = firstDatesInCalednarAndMonth.second
@@ -105,13 +105,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-    private val topBlur = View(context).apply {
-        setBackgroundResource(R.drawable.blur_white_top_down)
-
-        layoutParams = LayoutParams(MATCH_PARENT, px(16)).apply {
-            gravity = Gravity.TOP
-        }
-    }
     private val bottomBlur = View(context).apply {
         setBackgroundResource(R.drawable.blur_white_bottom_up)
 
@@ -123,7 +116,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     init {
         addView(scrollView)
         addOuterLinearLayout()
-        addView(topBlur)
         addView(bottomBlur)
         updateUIWithDate()
     }
@@ -266,6 +258,6 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     companion object {
         const val ITEM_HEIGHT_4ROW_DP = 117
         const val ITEM_HEIGHT_5ROW_DP = 94
-        const val ITEM_HEIGHT_6ROW_DP = 81
+        const val ITEM_HEIGHT_6ROW_DP = 84
     }
 }
