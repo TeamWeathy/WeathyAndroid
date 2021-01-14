@@ -559,6 +559,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
         private const val MIN_HEIGHT_DP = 224
-        private const val EXPAND_MARGIN_BOTTOM_DP = 108
+        private const val EXPAND_MARGIN_BOTTOM_DP = 120
     }
 }
