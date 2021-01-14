@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="team.weathy.ui.main.home.HomeViewModel" />
@@ -43,7 +44,6 @@
             app:snowflakeAlphaMax="255"
             app:snowflakeAlphaMin="150"
             app:snowflakeAngleMax="1"
-            app:snowflakesSameDirection="true"
             app:snowflakeImage="@drawable/rain"
             app:snowflakeSizeMax="130dp"
             app:snowflakeSizeMin="70dp"
@@ -52,14 +52,15 @@
             app:snowflakesAlreadyFalling="false"
             app:snowflakesFadingEnabled="true"
             app:snowflakesImageRatio="0.02"
-            app:snowflakesNum="60" />
+            app:snowflakesNum="60"
+            app:snowflakesSameDirection="true" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:layout_height="match_parent"
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:clipToPadding="false"
+            android:layout_height="match_parent"
             android:clipChildren="false"
+            android:clipToPadding="false"
             app:layoutDescription="@xml/home_motion">
 
             <androidx.constraintlayout.widget.Guideline
@@ -78,13 +79,13 @@
 
             <ImageView
                 android:id="@+id/topBlur"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
                 android:elevation="9dp"
                 android:outlineProvider="none"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_height="78dp"
-                android:layout_width="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/mainscroll_box_topblur_snowrain" />
+                android:src="@drawable/mainscroll_box_topblur_snowrain"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header"
@@ -93,6 +94,7 @@
                 android:elevation="12dp"
                 android:outlineProvider="none"
                 app:layout_constraintTop_toTopOf="parent">
+
                 <TextView
                     android:id="@+id/datetime"
                     android:layout_width="wrap_content"
@@ -100,13 +102,12 @@
                     android:layout_marginLeft="26dp"
                     android:layout_marginTop="21dp"
                     android:text="@{vm.datetimeText}"
-                    tools:text="12월 20일 일요일 . 오후 4시"
                     android:textColor="@color/sub_grey_1"
                     android:textSize="15sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="12월 20일 일요일 . 오후 4시" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <ImageView
                 android:id="@+id/weather_image"
@@ -153,28 +154,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:fontFamily="@font/notosans_medium"
-                    tools:text="서울 도봉구"
                     android:text="@{vm.regionText}"
                     android:textColor="@color/main_grey"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@id/gps_image"
                     app:layout_constraintLeft_toRightOf="@id/gps_image"
-                    app:layout_constraintTop_toTopOf="@id/gps_image" />
+                    app:layout_constraintTop_toTopOf="@id/gps_image"
+                    tools:text="서울 도봉구" />
 
                 <TextView
                     android:id="@+id/current_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="55dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="32dp"
                     android:fontFamily="@font/roboto_light"
-                    tools:text="-20°"
                     android:text="@{vm.curTempText}"
                     android:textColor="@color/sub_grey_1"
                     android:textSize="50sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="@id/gps_image" />
+                    app:layout_constraintTop_toBottomOf="@id/gps_image"
+                    tools:text="-20°" />
 
                 <TextView
                     android:id="@+id/max_temp_today"
@@ -182,22 +183,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:fontFamily="@font/roboto_light"
-                    tools:text="-20°"
                     android:text="@{vm.maxTempText}"
                     android:textColor="@color/red_temp"
                     android:textSize="23sp"
                     app:layout_constraintEnd_toStartOf="@id/slash_temp_today"
-                    app:layout_constraintTop_toBottomOf="@id/current_temp" />
+                    app:layout_constraintTop_toBottomOf="@id/current_temp"
+                    tools:text="-20°" />
 
                 <TextView
                     android:id="@+id/slash_temp_today"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="/"
                     android:textColor="@color/temp_bar"
                     android:textSize="15sp"
-                    android:layout_marginRight="4dp"
                     app:layout_constraintBottom_toBottomOf="@id/max_temp_today"
                     app:layout_constraintEnd_toStartOf="@id/min_temp_today"
                     app:layout_constraintTop_toTopOf="@id/max_temp_today" />
@@ -207,27 +208,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_light"
-                    tools:text="-20°"
                     android:text="@{vm.minTempText}"
                     android:textColor="@color/blue_temp"
                     android:textSize="23sp"
                     app:layout_constraintBottom_toBottomOf="@id/slash_temp_today"
                     app:layout_constraintEnd_toEndOf="@id/current_temp"
-                    app:layout_constraintTop_toTopOf="@id/slash_temp_today" />
+                    app:layout_constraintTop_toTopOf="@id/slash_temp_today"
+                    tools:text="-20°" />
 
                 <TextView
-                    android:layout_marginRight="24dp"
                     android:id="@+id/today_feeling"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginRight="24dp"
                     android:lineSpacingExtra="-2dp"
-                    tools:text="조금 흐리지만\n햇살이 따스해요:)"
                     android:text="@{vm.descriptionText}"
                     android:textColor="@color/black_0.58"
                     android:textSize="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/max_temp_today" />
+                    app:layout_constraintLeft_toLeftOf="@id/current_temp"
+                    app:layout_constraintTop_toBottomOf="@id/max_temp_today"
+                    tools:text="조금 흐리지만\n햇살이 따스해요:)" />
 
 
                 <TextView
@@ -256,11 +257,11 @@
                     style="@style/ImageButton.size48.padding19"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="85dp"
                     android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/today_weathy"
-                    app:layout_constraintStart_toEndOf="@id/today_weathy"
+                    app:layout_constraintStart_toStartOf="@id/today_weathy"
                     app:layout_constraintTop_toTopOf="@id/today_weathy" />
-
 
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -313,17 +314,16 @@
                 android:elevation="9dp"
                 tools:visibility="gone" />
 
-
             <include
-                vm="@{vm}"
                 android:id="@+id/recommended"
                 layout="@layout/layout_home_recommended_weathy"
+                vm="@{vm}"
                 android:layout_width="0dp"
-                app:layout_constraintLeft_toLeftOf="@id/guide_left"
-                app:layout_constraintRight_toRightOf="@id/guide_right"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="121dp"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right" />
 
             <ImageView
                 android:id="@+id/downArrow"
@@ -337,17 +337,17 @@
 
 
             <team.weathy.view.WeathyCardView
-                android:layout_width="0dp"
                 android:id="@+id/detailCard"
-                app:layout_constraintLeft_toLeftOf="@id/guide_left"
-                app:layout_constraintRight_toRightOf="@id/guide_right"
-                tools:visibility="gone"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="16dp"
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintRight_toRightOf="@id/guide_right"
                 app:layout_constraintTop_toBottomOf="@id/weeklyCard"
-                app:weathy_shadow_color="@color/home_card_shadow">
+                app:weathy_shadow_color="@color/home_card_shadow"
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -373,8 +373,8 @@
                         app:layout_constraintTop_toBottomOf="@id/detailLabel" />
 
                     <include
-                        vm="@{vm}"
                         layout="@layout/layout_home_weather_detail"
+                        vm="@{vm}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
@@ -422,8 +422,8 @@
                         app:layout_constraintTop_toBottomOf="@id/weekly_label" />
 
                     <team.weathy.view.WeeklyWeatherView
-                        weeklyWeathers="@{vm.dailyWeathers}"
                         android:id="@+id/weeklyView"
+                        weeklyWeathers="@{vm.dailyWeathers}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
@@ -451,10 +451,10 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_marginHorizontal="24dp"
                         android:id="@+id/hourly_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
                         android:fontFamily="@font/notosans_medium"
                         android:text="시간대별 날씨"
                         android:textColor="@color/main_grey"
@@ -462,39 +462,39 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <View
-                        android:layout_marginHorizontal="24dp"
                         android:id="@+id/divider"
                         android:layout_width="31dp"
                         android:layout_height="1dp"
+                        android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="8dp"
                         android:background="@color/sub_grey_7"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/hourly_label" />
 
                     <team.weathy.view.HourlyWeatherView
-                        hourlyWeathers="@{vm.hourlyWeathers}"
                         android:id="@+id/hourlyView"
-                        android:paddingHorizontal="12dp"
-                        android:layout_marginTop="21dp"
+                        hourlyWeathers="@{vm.hourlyWeathers}"
                         android:layout_width="match_parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="21dp"
+                        android:paddingHorizontal="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </team.weathy.view.WeathyCardView>
 
             <ImageView
-                android:elevation="10dp"
-                android:outlineProvider="none"
-                app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 android:id="@+id/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:outlineProvider="none"
                 android:src="@drawable/mainscroll_img_logo"
-                tools:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintLeft_toLeftOf="@id/guide_left"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
         </androidx.constraintlayout.motion.widget.MotionLayout>
 
 
