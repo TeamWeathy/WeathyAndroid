@@ -58,7 +58,7 @@ import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
-import team.weathy.util.isAvailable
+import team.weathy.util.isFuture
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
@@ -236,7 +236,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 selectedDateLiveData,
                 fragmentViewLifecycleOwner,
             ) {
-                if (it.isAvailable()) selectedDate = it
+                if (!it.isFuture()) selectedDate = it
             }
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
@@ -270,7 +270,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner) {
-                if (it.isAvailable()) selectedDate = it
+                if (!it.isFuture()) selectedDate = it
             }
             setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
 

@@ -22,6 +22,8 @@ import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateMap
 import team.weathy.util.getEndDateStringInCalendar
 import team.weathy.util.getStartDateStringInCalendar
+import team.weathy.util.isFuture
+import team.weathy.util.isPast
 import team.weathy.util.koFormat
 import team.weathy.util.yearMonthFormat
 import java.time.LocalDate
@@ -37,6 +39,9 @@ class CalendarViewModel @ViewModelInject constructor(
 
     private val _selectedDate = MutableLiveData(LocalDate.now())
     val selectedDate: LiveData<LocalDate> = _selectedDate
+
+    private val _isPastThanAvailable = MutableLiveData(false)
+    val isPastThanAvailable: LiveData<Boolean> = _isPastThanAvailable
 
     private val _calendarData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
     val calendarData: LiveData<Map<YearMonthFormat, List<CalendarPreview?>>> = _calendarData
@@ -110,7 +115,9 @@ class CalendarViewModel @ViewModelInject constructor(
     private fun collectSelectedFlow() {
         viewModelScope.launch {
             selectedDate.asFlow().collect {
-                fetchSelectedDateWeathy()
+                _isPastThanAvailable.value = it.isPast()
+
+                if (!it.isPast() && !it.isFuture()) fetchSelectedDateWeathy()
             }
         }
     }
@@ -144,7 +151,6 @@ class CalendarViewModel @ViewModelInject constructor(
                 _calendarData.updateMap {
                     this[date.yearMonthFormat] = list
                 }
-                debugE(calendarData.value!!)
             })
         }
     }
