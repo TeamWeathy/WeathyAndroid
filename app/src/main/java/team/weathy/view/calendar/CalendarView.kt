@@ -58,6 +58,7 @@ import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.pxFloat
 import team.weathy.util.extensions.screenHeight
+import team.weathy.util.isAvailable
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
@@ -235,10 +236,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 selectedDateLiveData,
                 fragmentViewLifecycleOwner,
             ) {
-                selectedDate = it
+                if (it.isAvailable()) selectedDate = it
             }
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
+
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 25f * position
+            }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -263,14 +270,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner) {
-                selectedDate = it
+                if (it.isAvailable()) selectedDate = it
             }
             setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
 
             setPageTransformer { page, position ->
                 page.pivotX = if (position < 0) page.width.toFloat() else 0f
                 page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
+                page.rotationY = 40f * position
             }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {

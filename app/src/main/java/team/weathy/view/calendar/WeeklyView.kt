@@ -16,6 +16,7 @@ import team.weathy.util.dayOfWeekIndex
 import team.weathy.util.debugE
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
+import team.weathy.util.isAvailable
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.util.weekOfMonth
 import java.time.LocalDate
@@ -85,18 +86,15 @@ class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         val isTodayInCurrentWeek =
             firstDateInCalendar.year == today.year && firstDateInCalendar.month == today.month && firstDateInCalendar.weekOfMonth == today.weekOfMonth
 
-        val texts = (0..6).map {
-            firstDateInCalendar.plusDays(it.toLong()).dayOfMonth
-        }
-        calendarItems.forEachIndexed { idx, binding ->
-            val isFuture = isTodayInCurrentWeek && texts[idx] > today.dayOfMonth
+        val dates = (0..6).map { firstDateInCalendar.plusDays(it.toLong()) }
 
-            binding.root.alpha = if (isFuture) .3f else 1f
+        calendarItems.forEachIndexed { idx, binding ->
+            binding.root.alpha = if (!dates[idx].isAvailable()) .3f else 1f
 
             val isToday = isTodayInCurrentWeek && today.dayOfWeekIndex == idx
             binding.day.setTextColor(getDayTextColor(idx % 7, isToday))
 
-            binding.day.text = texts[idx].toString()
+            binding.day.text = dates[idx].dayOfMonth.toString()
         }
     }
 

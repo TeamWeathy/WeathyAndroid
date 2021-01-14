@@ -33,8 +33,6 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
     private val _lastLocation = MutableStateFlow<Location?>(null)
     val lastLocation: StateFlow<Location?> = _lastLocation
-    private val _isLocationAvailable = MutableStateFlow(false)
-    val isLocationAvailable: StateFlow<Boolean> = _isLocationAvailable
 
     private val _isOtherPlaceSelected: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isOtherPlaceSelected: StateFlow<Boolean> = _isOtherPlaceSelected
@@ -59,15 +57,16 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
         override fun onLocationAvailability(result: LocationAvailability?) {
             result ?: return
-            _isLocationAvailable.value = result.isLocationAvailable
         }
     }
 
     private fun registerLocationListener() {
+        debugE("registerLocationListener")
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
     private fun unregisterLocationListener() {
+        debugE("unregisterLocationListener")
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
@@ -86,7 +85,6 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         selectPlace(weather)
 
         unregisterLocationListener()
-        _isLocationAvailable.value = false
         spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
     }
