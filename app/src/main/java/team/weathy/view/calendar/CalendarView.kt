@@ -422,7 +422,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val capsuleTop = pxFloat(72)
 
         val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
-
         if (isSelectedInCurrentWeek) {
             canvas.drawRoundRect(
                 greyCapsuleLeft,

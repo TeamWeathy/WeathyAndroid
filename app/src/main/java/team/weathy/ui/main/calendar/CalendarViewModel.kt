@@ -105,10 +105,12 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     fun onCurDateChanged(date: LocalDate) {
+//        debugE("curDate: $date")
         _curDate.value = date
     }
 
     fun onSelectedDateChanged(date: LocalDate) {
+//        debugE("selectedDate $date")
         _selectedDate.value = date
     }
 
@@ -123,7 +125,7 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     private fun fetchSelectedDateWeathy() {
-        debugE("fetchSelectedDateWeathy ${selectedDate.value!!.dateString}")
+//        debugE("fetchSelectedDateWeathy ${selectedDate.value!!.dateString}")
         launchCatch({
             weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
         }, onSuccess = {
@@ -140,7 +142,7 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     private fun fetchMonthlyDataIfNeeded() {
-        debugE("fetchMonthlyDataIfNeeded ${curDate.value!!.dateString}")
+//        debugE("fetchMonthlyDataIfNeeded ${curDate.value!!.dateString}")
         val date = curDate.value!!
         if (!calendarData.value!!.containsKey(date.yearMonthFormat)) {
             launchCatch({

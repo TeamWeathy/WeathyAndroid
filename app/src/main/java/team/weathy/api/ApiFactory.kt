@@ -4,8 +4,11 @@ import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
+import okhttp3.Protocol.HTTP_1_1
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.weathy.util.FlipperUtil
@@ -29,30 +32,35 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
         val builder = OkHttpClient.Builder().addInterceptor {
             val baseRequest = it.request()
             val builder = baseRequest.newBuilder()
-
             val newRequest = builder.url(baseRequest.url().fillUserId()).addHeaders(uniqueId.loadToken())
 
-            var response = it.proceed(newRequest.build())
+            try {
+                var response = it.proceed(newRequest.build())
 
-            if (response.code() == 401 && uniqueId.id != null) {
-                kotlin.runCatching {
-                    val loginRequestBody = gson.toJson(LoginReq(uniqueId.id!!))
+                if (response.code() == 401 && uniqueId.id != null) {
+                    kotlin.runCatching {
+                        val loginRequestBody = gson.toJson(LoginReq(uniqueId.id!!))
 
-                    val loginRequest = newRequest.build().newBuilder().url("$BASE_URL/auth/login")
-                        .post(RequestBody.create(MediaType.parse(MEDIA_TYPE), loginRequestBody))
-                        .removeHeader(HEADER_TOKEN).build()
-                    val loginResponse = gson.fromJson(it.proceed(loginRequest).body()!!.string(), LoginRes::class.java)
-                    uniqueId.saveToken(loginResponse.token)
-                    it.proceed(newRequest.addHeaders(loginResponse.token).build())
-                }.onSuccess {
-                    response = it
-                }.onFailure {
-                    debugE("토큰 갱신 실패")
+                        val loginRequest = newRequest.build().newBuilder().url("$BASE_URL/auth/login")
+                            .post(RequestBody.create(MediaType.parse(MEDIA_TYPE), loginRequestBody))
+                            .removeHeader(HEADER_TOKEN).build()
+                        val loginResponse =
+                            gson.fromJson(it.proceed(loginRequest).body()!!.string(), LoginRes::class.java)
+                        uniqueId.saveToken(loginResponse.token)
+                        it.proceed(newRequest.addHeaders(loginResponse.token).build())
+                    }.onSuccess {
+                        response = it
+                    }.onFailure {
+                        debugE("토큰 갱신 실패")
+                    }
                 }
+
+
+                response
+            } catch (e: Throwable) {
+                Response.Builder().code(500).protocol(HTTP_1_1).message("Internal Server Error")
+                    .request(newRequest.build()).body(ResponseBody.create(null, "{${e}}")).build()
             }
-
-
-            response
         }
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }

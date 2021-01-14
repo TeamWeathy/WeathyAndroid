@@ -38,6 +38,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
             uniqueId.saveUserId(it.user.id)
             uniqueId.saveId(newUniqueId)
             uniqueId.saveToken(it.token)
+            uniqueId.saveUserNickname(nickname.value ?: "")
             onSuccess.emit()
         }, onFailure = {
             debugE(it)

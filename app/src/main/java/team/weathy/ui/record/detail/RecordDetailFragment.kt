@@ -10,23 +10,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
+import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
+@AndroidEntryPoint
 class RecordDetailFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentRecordDetailBinding>()
+    private val viewModel by activityViewModels<RecordViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordDetailBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.etDetail.addTextChangedListener(textWatcher)
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
@@ -46,12 +56,10 @@ class RecordDetailFragment : Fragment() {
             binding.tvTextLength2.text = "$length"
 
             if (length > 0) {
-                if (!binding.btnConfirm.isEnabled)
-                    setButtonEnabled(true)
+                if (!binding.btnConfirm.isEnabled) setButtonEnabled(true)
                 setTextActivation(getColor(R.color.main_mint), R.drawable.edit_border_active)
             } else {
-                if (binding.btnConfirm.isEnabled)
-                    setButtonDisabled(false)
+                if (binding.btnConfirm.isEnabled) setButtonDisabled(false)
                 setTextActivation(getColor(R.color.sub_grey_6), R.drawable.edit_border)
             }
         }
@@ -70,11 +78,20 @@ class RecordDetailFragment : Fragment() {
 
     private fun configureStartNavigation() {
         binding.close setOnDebounceClickListener {
-            requireActivity().finish()
+            submit(false)
         }
         binding.btnConfirm setOnDebounceClickListener {
-            requireContext().showToast("웨디에 내용이 추가되었어요!")
+            submit(true)
         }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            submit(false)
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
+        requireContext().showToast("웨디에 내용이 추가되었어요!")
+        requireActivity().finish()
     }
 
     private fun setCountVisibility(hasFocus: Boolean) {
@@ -83,7 +100,8 @@ class RecordDetailFragment : Fragment() {
     }
 
     private fun setButtonEnabled(isEnable: Boolean) {
-        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        val colorChangeActive =
+            AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
         colorChangeActive.setTarget(binding.btnConfirm)
         colorChangeActive.start()
         binding.btnConfirm.isEnabled = isEnable

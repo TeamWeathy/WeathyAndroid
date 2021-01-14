@@ -10,8 +10,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
 import team.weathy.ui.main.MainActivity
@@ -19,6 +19,7 @@ import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
 @AndroidEntryPoint
 class NicknameChangeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicknameChangeBinding
@@ -46,12 +47,10 @@ class NicknameChangeActivity : AppCompatActivity() {
 
             if (length > 0) {
                 binding.deleteNicknameBtn.visibility = View.VISIBLE
-                if (!binding.submit.isEnabled)
-                    setButtonEnabled(true)
+                if (!binding.submit.isEnabled) setButtonEnabled(true)
             } else {
                 binding.deleteNicknameBtn.visibility = View.INVISIBLE
-                if (binding.submit.isEnabled)
-                    setButtonDisabled(false)
+                if (binding.submit.isEnabled) setButtonDisabled(false)
             }
         }
 
@@ -76,7 +75,9 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun navigateMain() {
         showToast("닉네임이 변경되었어요!")
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        })
         finish()
     }
 

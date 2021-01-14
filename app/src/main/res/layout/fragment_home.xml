@@ -235,7 +235,7 @@
                     android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="희지님이 기억하는"
+                    tools:text="희지님이 기억하는"
                     android:textColor="@color/main_grey"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/today_weathy"

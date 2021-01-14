@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentCalendarBinding
@@ -28,7 +27,7 @@ import java.time.LocalDateTime
 class CalendarFragment : Fragment(), OnClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
     private val mainViewModel by activityViewModels<MainViewModel>()
-    private val viewModel by viewModels<CalendarViewModel>()
+    private val viewModel by activityViewModels<CalendarViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {

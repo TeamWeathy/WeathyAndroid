@@ -5,11 +5,10 @@ import team.weathy.view.calendar.WeeklyAdapter
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.time.temporal.WeekFields
 import java.util.*
-import java.util.Calendar.*
 
 /**
  * YYYY-MM-DD
@@ -66,10 +65,14 @@ val LocalDate.yearMonthFormat: String
  */
 val LocalDate.weekOfMonth: Int
     get() {
-        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        gc.firstDayOfWeek = SUNDAY
-        gc.minimalDaysInFirstWeek = 1
-        return gc[WEEK_OF_MONTH]
+        // Or use a specific locale, or configure your own rules
+        val weekFields: WeekFields = WeekFields.of(Locale.KOREA)
+        return get(weekFields.weekOfMonth())
+
+        //        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
+        //        gc.firstDayOfWeek = SUNDAY
+        //        gc.minimalDaysInFirstWeek = 1
+        //        return gc[WEEK_OF_MONTH]
     }
 
 /**
@@ -107,6 +110,10 @@ fun LocalDate.isAvailable(): Boolean {
 /** 1997-04-04T23 */
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
+
+/** 1997-04-04 */
+val LocalDateTime.dateString: DateString
+    get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}"
 
 /**
  * 04월 04일 월요일 • 오전 1시
