@@ -87,28 +87,30 @@
 
     <style name="ImageButton.size32">
         <item name="android:background">@drawable/ripple_32</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
     </style>
 
     <style name="ImageButton.size48">
         <item name="android:background">@drawable/ripple_48</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
     </style>
 
     <style name="ImageButton.size32.icon20">
         <item name="android:padding">6dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
     </style>
 
     <style name="ImageButton.size32.icon25">
         <item name="android:padding">3dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+    </style>
+
+    <style name="ImageButton.size48.icon25">
+        <item name="android:padding">11.5dp</item>
     </style>
 
     <style name="ImageButton.size48.icon20">
         <item name="android:padding">14dp</item>
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
     </style>
 
     <style name="ImageButton.size48.padding19">
@@ -116,8 +118,6 @@
         <item name="android:paddingTop">19dp</item>
         <item name="android:paddingStart">19dp</item>
         <item name="android:paddingEnd">18dp</item>
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
     </style>
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">

@@ -15,6 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_left"
             android:layout_width="wrap_content"
@@ -147,6 +153,7 @@
             app:layout_constraintTop_toTopOf="@id/list" />
 
         <ImageView
+            app:layout_constraintVertical_bias="0.35"
             android:visibility="@{vm.showEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

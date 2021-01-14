@@ -58,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
-                style="@style/ImageButton.size32.icon25"
+                style="@style/ImageButton.size48.icon25"
                 android:id="@+id/home"
                 android:src="@drawable/ic_weather_selected"
                 android:tint="@{vm.menu == MainMenu.HOME ? @color/main_mint : @color/sub_grey_4  }"
@@ -69,7 +69,7 @@
 
 
             <ImageButton
-                style="@style/ImageButton.size32.icon25"
+                style="@style/ImageButton.size48.icon25"
                 android:id="@+id/calendar"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_calendar_selected"
