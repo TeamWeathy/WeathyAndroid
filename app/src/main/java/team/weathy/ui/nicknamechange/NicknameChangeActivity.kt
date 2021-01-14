@@ -2,60 +2,56 @@ package team.weathy.ui.nicknamechange
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameChangeBinding
+import team.weathy.ui.main.MainActivity
+import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
-
+@FlowPreview
+@AndroidEntryPoint
 class NicknameChangeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicknameChangeBinding
-
+    private val viewModel by viewModels<NicknameChangeViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityNicknameChangeBinding.inflate(layoutInflater)
+        binding = ActivityNicknameChangeBinding.inflate(layoutInflater).also {
+            it.vm = viewModel
+            it.lifecycleOwner = this
+        }
         setContentView(binding.root)
 
         binding.nicknameEdit.addTextChangedListener(textWatcher)
-        exitNicknameChange()
-        checkBlank()
+        observeViewModel()
+        deleteNickname()
+        exitActivity()
         checkBackground()
+        checkBlank()
     }
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val length = s.toString().length
-            binding.numOfCharacters1.text = "$length"
-            binding.numOfCharacters2.text = "/6"
 
             if (length > 0) {
-                binding.deleteNicknameBtn.isEnabled = true
-                binding.numOfCharacters1.setTextColor(getColor(R.color.main_mint))
-                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
                 binding.deleteNicknameBtn.visibility = View.VISIBLE
-                deleteNickname()
-                changeNicknameBtnClick()
-                if (!binding.changeNicknameBtn.isEnabled)
-                    setButtonEnabled(true)
+                if (!binding.submit.isEnabled) setButtonEnabled(true)
             } else {
-                binding.deleteNicknameBtn.isEnabled = false
-                binding.numOfCharacters1.setTextColor(getColor(R.color.sub_grey_6))
-                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
                 binding.deleteNicknameBtn.visibility = View.INVISIBLE
-                if (binding.changeNicknameBtn.isEnabled)
-                    setButtonDisabled(false)
+                if (binding.submit.isEnabled) setButtonDisabled(false)
             }
-
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -68,20 +64,21 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        if (currentFocus != null) {
-            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+    private fun observeViewModel() {
+        viewModel.onHideKeyboard.observe(this) {
+            hideKeyboard()
         }
-        return super.dispatchTouchEvent(ev)
+        viewModel.onSuccess.observe(this) {
+            navigateMain()
+        }
     }
 
-    private fun changeNicknameBtnClick() {
-        binding.changeNicknameBtn.setOnDebounceClickListener {
-            showToast("닉네임이 변경되었어요!")
-            finish()
-        }
+    private fun navigateMain() {
+        showToast("닉네임이 변경되었어요!")
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        })
+        finish()
     }
 
     private fun deleteNickname() {
@@ -90,51 +87,51 @@ class NicknameChangeActivity : AppCompatActivity() {
         }
     }
 
-    private fun exitNicknameChange() {
+    private fun exitActivity() {
         binding.exitNicknameChangeBtn.setOnDebounceClickListener {
             finish()
-        }
-    }
-
-    private fun setCountVisibility(hasFocus: Boolean) {
-        binding.numOfCharacters1.isVisible = hasFocus
-        binding.numOfCharacters2.isVisible = hasFocus
-    }
-
-    private fun checkBlank() {
-        binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
-            setCountVisibility(hasFocus)
-
-            var getEdit = binding.nicknameEdit.text.toString()
-            if (getEdit.equals("")) {
-                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
-                binding.deleteNicknameBtn.visibility = View.INVISIBLE
-            } else {
-                binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border_active)
-                binding.deleteNicknameBtn.visibility = View.VISIBLE
-            }
         }
     }
 
     private fun checkBackground() {
         binding.layoutNickname.setOnDebounceClickListener {
             binding.nicknameEdit.clearFocus()
-            binding.nicknameEdit.setBackgroundResource(R.drawable.edit_border)
-            binding.deleteNicknameBtn.visibility = View.INVISIBLE
         }
     }
 
+    private fun setCountVisibility(hasFocus: Boolean) {
+        var getEdit = binding.nicknameEdit.text.toString()
+
+        binding.maxLength.isVisible = hasFocus
+        binding.countLength.isVisible = hasFocus
+
+        if (getEdit.equals("")) {
+            binding.deleteNicknameBtn.visibility = View.INVISIBLE
+        } else {
+            binding.deleteNicknameBtn.isVisible = hasFocus
+        }
+    }
+
+    private fun checkBlank() {
+        binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
+            setCountVisibility(hasFocus)
+        }
+    }
+
+
     private fun setButtonEnabled(isEnable: Boolean) {
         val colorChangeActive = AnimatorInflater.loadAnimator(this, R.animator.color_change_active_anim) as AnimatorSet
-        colorChangeActive.setTarget(binding.changeNicknameBtn)
+        colorChangeActive.setTarget(binding.submit)
         colorChangeActive.start()
-        binding.changeNicknameBtn.isEnabled = isEnable
+        binding.submit.isEnabled = isEnable
     }
 
     private fun setButtonDisabled(isEnable: Boolean) {
         val colorChange = AnimatorInflater.loadAnimator(this, R.animator.color_change_anim) as AnimatorSet
-        colorChange.setTarget(binding.changeNicknameBtn)
+        colorChange.setTarget(binding.submit)
         colorChange.start()
-        binding.changeNicknameBtn.isEnabled = isEnable
+        binding.submit.isEnabled = isEnable
     }
 }
+
+

@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesSelectBinding
 import team.weathy.dialog.EditDialog
@@ -23,10 +24,12 @@ import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
 
 @FlowPreview
@@ -34,15 +37,27 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
+    @Inject
+    lateinit var uniqueId: UniqueIdentifier
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentRecordClothesSelectBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setNickname()
         configureClothesSelectNavigation()
         configureTabs()
         configureChips()
         configureAddLogic()
         setButtonActivation()
+    }
+
+    private fun setNickname() {
+        lifecycleScope.launchWhenStarted {
+            uniqueId.userNickname.collect {
+                binding.tvNickName.text = "${it}님"
+            }
+        }
     }
 
     private fun configureClothesSelectNavigation() {

@@ -10,13 +10,16 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.TestEnv
+import team.weathy.util.UniqueIdentifier
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
@@ -29,6 +32,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var pixelRatio: PixelRatio
+
+    @Inject
+    lateinit var uniqueId: UniqueIdentifier
 
     private var shouldDisableThirdScene = false
     private var isHelpPopupShowing = false
@@ -50,6 +56,18 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isFirstSceneShowing = savedInstanceState?.getBoolean("isFirstSceneShowing") ?: true
+        isHelpPopupShowing = savedInstanceState?.getBoolean("isHelpPopupShowing") ?: false
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isFirstSceneShowing", isFirstSceneShowing)
+        outState.putBoolean("isHelpPopupShowing", isHelpPopupShowing)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
@@ -64,10 +82,6 @@ class HomeFragment : Fragment() {
         if (!TestEnv.isInstrumentationTesting) {
             binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
             binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
-        }
-
-        binding.downArrow setOnDebounceClickListener {
-            binding.container.transitionToEnd()
         }
 
         binding.topBlur.pivotY = 0f
@@ -121,19 +135,18 @@ class HomeFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
+        setNicknameText()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        isFirstSceneShowing = savedInstanceState?.getBoolean("isFirstSceneShowing") ?: true
-        isHelpPopupShowing = savedInstanceState?.getBoolean("isHelpPopupShowing") ?: false
+    private fun setNicknameText() {
+        lifecycleScope.launchWhenStarted {
+            uniqueId.userNickname.collect {
+                binding.nickname.text = "${it}님이 기억하는"
+            }
+        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("isFirstSceneShowing", isFirstSceneShowing)
-        outState.putBoolean("isHelpPopupShowing", isHelpPopupShowing)
-    }
 
     private fun weathyQuestionBtnClick() = binding.weathyQuestion.setOnDebounceClickListener {
         showHelpPopup()
