@@ -32,9 +32,16 @@ enum class WeatherStamp(
 
     ;
 
+    val index: Int
+        get() = values().indexOf(this)
+
     companion object {
         fun fromId(id: Int?): WeatherStamp? {
             return values().find { it.id == id }
+        }
+
+        fun fromIndex(index: Int): WeatherStamp? {
+            return values().find { it.index == index }
         }
     }
 }

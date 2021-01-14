@@ -10,31 +10,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
-import team.weathy.api.CreateClothesReq
-import team.weathy.api.CreateWeathyReq
-import team.weathy.api.USER_ID_PATH_SEGMENT
-import team.weathy.api.WeathyAPI
 import team.weathy.databinding.FragmentRecordDetailBinding
-import team.weathy.di.Api
-import team.weathy.model.entity.ClothCategory
 import team.weathy.ui.record.RecordViewModel
-import team.weathy.util.*
+import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.showToast
-import javax.inject.Inject
+import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
 @AndroidEntryPoint
 class RecordDetailFragment : Fragment() {
-    @Inject
-    @Api
-    lateinit var weathyAPI: WeathyAPI
     private var binding by AutoClearedValue<FragmentRecordDetailBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
@@ -42,7 +35,8 @@ class RecordDetailFragment : Fragment() {
         FragmentRecordDetailBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.etDetail.addTextChangedListener(textWatcher)
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
@@ -62,12 +56,10 @@ class RecordDetailFragment : Fragment() {
             binding.tvTextLength2.text = "$length"
 
             if (length > 0) {
-                if (!binding.btnConfirm.isEnabled)
-                    setButtonEnabled(true)
+                if (!binding.btnConfirm.isEnabled) setButtonEnabled(true)
                 setTextActivation(getColor(R.color.main_mint), R.drawable.edit_border_active)
             } else {
-                if (binding.btnConfirm.isEnabled)
-                    setButtonDisabled(false)
+                if (binding.btnConfirm.isEnabled) setButtonDisabled(false)
                 setTextActivation(getColor(R.color.sub_grey_6), R.drawable.edit_border)
             }
         }
@@ -86,12 +78,20 @@ class RecordDetailFragment : Fragment() {
 
     private fun configureStartNavigation() {
         binding.close setOnDebounceClickListener {
-            requireActivity().finish()
+            submit(false)
         }
         binding.btnConfirm setOnDebounceClickListener {
-            onSubmit()
-            requireContext().showToast("웨디에 내용이 추가되었어요!")
+            submit(true)
         }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            submit(false)
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
+        requireContext().showToast("웨디에 내용이 추가되었어요!")
+        requireActivity().finish()
     }
 
     private fun setCountVisibility(hasFocus: Boolean) {
@@ -100,7 +100,8 @@ class RecordDetailFragment : Fragment() {
     }
 
     private fun setButtonEnabled(isEnable: Boolean) {
-        val colorChangeActive = AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
+        val colorChangeActive =
+            AnimatorInflater.loadAnimator(context, R.animator.color_change_active_anim) as AnimatorSet
         colorChangeActive.setTarget(binding.btnConfirm)
         colorChangeActive.start()
         binding.btnConfirm.isEnabled = isEnable
@@ -116,21 +117,5 @@ class RecordDetailFragment : Fragment() {
     private fun setTextActivation(color: Int, drawable: Int) {
         binding.tvTextLength2.setTextColor(color)
         binding.etDetail.setBackgroundResource(drawable)
-    }
-
-    @FlowPreview
-    private fun onSubmit() {
-        val userId = UniqueIdentifier.
-        val date = viewModel.date.dateString
-        val code =
-        val clothes =
-        val stampId = viewModel.selectedWeatherRatingIndex.value!! + 1
-        val feedback = binding.etDetail.text.toString()
-
-        launchCatch({
-            weathyAPI.createWeathy(CreateWeathyReq(userId, date, code, clothes, stampId, feedback))
-        }, onSuccess = {
-            it.message
-        })
     }
 }
