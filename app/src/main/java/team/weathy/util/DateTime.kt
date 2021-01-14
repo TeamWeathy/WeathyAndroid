@@ -96,8 +96,12 @@ fun LocalDate.isFuture(): Boolean {
     return this.isAfter(LocalDate.now())
 }
 
+fun LocalDate.isPast(): Boolean {
+    return isBefore(LocalDate.of(2020, 12, 13))
+}
+
 fun LocalDate.isAvailable(): Boolean {
-    return !isFuture() && !isBefore(LocalDate.of(2020, 12, 13))
+    return !isFuture() && !isPast()
 }
 
 /** 1997-04-04T23 */

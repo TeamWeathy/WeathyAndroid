@@ -18,9 +18,41 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/main_bg_morning"
-            app:altSrc="@drawable/mainscroll_bg_morning"
+            android:src="@drawable/main_bg_snowrain"
+            app:altSrc="@drawable/mainscroll_box_topblur_snowrain"
             app:crossfade="0" />
+
+        <!--        <com.jetradarmobile.snowfall.SnowfallView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            app:snowflakeAlphaMax="255"-->
+        <!--            app:snowflakeAlphaMin="150"-->
+        <!--            app:snowflakeAngleMax="5"-->
+        <!--            app:snowflakeImage="@drawable/snow"-->
+        <!--            app:snowflakeSizeMax="44dp"-->
+        <!--            app:snowflakeSizeMin="16dp"-->
+        <!--            app:snowflakeSpeedMax="4"-->
+        <!--            app:snowflakeSpeedMin="2"-->
+        <!--            app:snowflakesAlreadyFalling="false"-->
+        <!--            app:snowflakesFadingEnabled="true"-->
+        <!--            app:snowflakesNum="90" />-->
+
+        <team.weathy.util.snowfall.SnowfallView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:snowflakeAlphaMax="255"
+            app:snowflakeAlphaMin="150"
+            app:snowflakeAngleMax="1"
+            app:snowflakesSameDirection="true"
+            app:snowflakeImage="@drawable/rain"
+            app:snowflakeSizeMax="130dp"
+            app:snowflakeSizeMin="70dp"
+            app:snowflakeSpeedMax="10"
+            app:snowflakeSpeedMin="7"
+            app:snowflakesAlreadyFalling="false"
+            app:snowflakesFadingEnabled="true"
+            app:snowflakesImageRatio="0.02"
+            app:snowflakesNum="60" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:layout_height="match_parent"
@@ -52,7 +84,7 @@
                 android:layout_height="78dp"
                 android:layout_width="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/mainscroll_box_topblur_morning" />
+                android:src="@drawable/mainscroll_box_topblur_snowrain" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header"
@@ -83,7 +115,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="55dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/main_img_fewclouds"
+                android:src="@drawable/main_img_snow_night"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/header"
@@ -464,6 +496,8 @@
                 tools:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
     </FrameLayout>
 
 

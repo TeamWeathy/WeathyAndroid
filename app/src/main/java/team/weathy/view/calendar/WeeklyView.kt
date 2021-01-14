@@ -13,7 +13,6 @@ import team.weathy.databinding.ViewCalendarWeeklyItemBinding
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.util.OnChangeProp
 import team.weathy.util.dayOfWeekIndex
-import team.weathy.util.debugE
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
 import team.weathy.util.isAvailable
@@ -24,7 +23,6 @@ import java.time.LocalDate
 class WeeklyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
     var firstDateInCalendar: LocalDate by OnChangeProp(LocalDate.now()) {
-        debugE("firstDateInCalendar $it")
         updateUIWithDate()
     }
     var data: List<CalendarPreview?>? by OnChangeProp(null) {
