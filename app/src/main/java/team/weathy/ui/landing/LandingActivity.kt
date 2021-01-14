@@ -8,11 +8,13 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnLayout
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.ActivityLandingBinding
 import team.weathy.ui.main.MainActivity
@@ -23,6 +25,7 @@ import team.weathy.util.extensions.px
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
+@FlowPreview
 @AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLandingBinding
@@ -41,6 +44,7 @@ class LandingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         configurePager()
+        configureLottieAnimations()
 
         reserveMockUpImageLayoutCalculation()
 
@@ -74,6 +78,32 @@ class LandingActivity : AppCompatActivity() {
                 viewModel.onChangedPage(position)
             }
         })
+    }
+
+    private fun configureLottieAnimations() {
+        val lotties = listOf(binding.lottie1, binding.lottie2, binding.lottie3)
+
+        viewModel.pagerIndex.observe(this) { index ->
+            val previousIndex = viewModel.previousPageIndex
+
+            lotties.forEach {
+                it.pauseAnimation()
+            }
+            if (previousIndex > index) {
+                lotties.forEachIndexed { idx, view -> view.isInvisible = previousIndex != idx }
+                lotties[previousIndex].speed = -1f
+
+                if (lotties[index].isAnimating) lotties[previousIndex].progress = 1f
+                lotties[previousIndex].resumeAnimation()
+
+            } else {
+                lotties.forEachIndexed { idx, view -> view.isInvisible = index != idx }
+                lotties[index].speed = 1f
+
+                if (lotties[previousIndex].isAnimating) lotties[index].progress = 0f
+                lotties[index].resumeAnimation()
+            }
+        }
     }
 
     companion object {
