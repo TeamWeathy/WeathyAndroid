@@ -20,14 +20,10 @@ import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.model.entity.Weather.BackgroundAnimation.RAIN
 import team.weathy.model.entity.Weather.BackgroundAnimation.SNOW
+import team.weathy.ui.main.MainActivity
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
-import team.weathy.util.AutoClearedValue
-import team.weathy.util.PixelRatio
-import team.weathy.util.TestEnv
-import team.weathy.util.UniqueIdentifier
-import team.weathy.util.dp
-import team.weathy.util.setOnDebounceClickListener
+import team.weathy.util.*
 import javax.inject.Inject
 
 
@@ -76,7 +72,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+            FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -185,9 +181,9 @@ class HomeFragment : Fragment() {
         binding.weathyExplanation.alpha = 1f
         isHelpPopupShowing = true
         binding.dim.alpha = 1f
-        binding.dim.isClickable = true
-        binding.dim.isFocusable = true
         binding.container.isInteractionEnabled = false
+        (activity as MainActivity).stateButton(false)
+        binding.weathyQuestion.isEnabled = false
     }
 
     private fun hideHelpPopup() {
@@ -195,9 +191,9 @@ class HomeFragment : Fragment() {
         binding.weathyExplanation.alpha = 0f
         isHelpPopupShowing = false
         binding.dim.alpha = 0f
-        binding.dim.isClickable = false
-        binding.dim.isFocusable = false
         binding.container.isInteractionEnabled = true
+        (activity as MainActivity).stateButton(true)
+        binding.weathyQuestion.isEnabled = true
     }
 
 }
