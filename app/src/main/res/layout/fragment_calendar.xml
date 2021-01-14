@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="mainVm"
             type="team.weathy.ui.main.MainViewModel" />
+
         <variable
             name="vm"
             type="team.weathy.ui.main.calendar.CalendarViewModel" />
@@ -23,26 +25,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:visibility="@{vm.curWeathy != null}"
-            tools:alpha="0.5"
             android:id="@+id/scrollView"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="224dp"
+            android:overScrollMode="never"
             android:scrollbars="none"
-            android:layout_marginTop="224dp">
+            android:visibility="@{vm.curWeathy != null}"
+            tools:alpha="0.5">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layoutAnimation="@anim/layout_animation_calendar"
-                android:onClick="@{() -> vm.onClickContainer()}"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layoutAnimation="@null"
+                android:clipToPadding="false"
+                android:layoutAnimation="@anim/layout_animation_calendar"
+                android:onClick="@{() -> vm.onClickContainer()}"
                 android:paddingHorizontal="46dp"
                 android:paddingTop="37dp"
-                android:clipToPadding="false"
-                android:paddingBottom="120dp">
+                android:paddingBottom="120dp"
+                tools:layoutAnimation="@null">
 
                 <TextView
                     android:id="@+id/date"
@@ -50,13 +52,14 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="@{vm.weathyDate}"
-                    android:textSize="13sp"
                     android:textColor="@color/sub_grey_1"
-                    tools:text="12월 21일 월요일"
+                    android:textSize="13sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="12월 21일 월요일" />
 
                 <ImageButton
+                    visibilityWithAnim="@{vm.curWeathy != null}"
                     android:id="@+id/more"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -89,6 +92,7 @@
                         android:weightSum="2">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/edit"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -124,6 +128,8 @@
                             android:background="@color/sub_grey_7" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:onClick="@{() -> vm.delete()}"
+                            android:id="@+id/delete"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -160,13 +166,13 @@
 
                 <ImageView
                     android:id="@+id/weather_icon"
+                    srcResource="@{vm.weathyWeatherIcon}"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginTop="9.5dp"
-                    srcResource="@{vm.weathyWeatherIcon}"
-                    tools:src="@drawable/ic_snow"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/date" />
+                    app:layout_constraintTop_toBottomOf="@id/date"
+                    tools:src="@drawable/ic_snow" />
 
                 <TextView
                     android:id="@+id/climate_description"
@@ -182,11 +188,11 @@
                     tools:text="흐림" />
 
                 <TextView
-                    android:layout_width="0dp"
                     android:id="@+id/location"
-                    android:fontFamily="@font/notosans_medium"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
+                    android:fontFamily="@font/notosans_medium"
                     android:singleLine="true"
                     android:text="@{vm.weathyLocation}"
                     android:textColor="@color/main_grey"
@@ -205,10 +211,10 @@
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.weathyTempHigh}"
-                    app:layout_constraintTop_toBottomOf="@id/climate_description"
                     android:textColor="@color/red_temp"
                     android:textSize="35sp"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/climate_description"
                     tools:text="-4°" />
 
                 <TextView
@@ -231,12 +237,12 @@
                     android:layout_marginLeft="4dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.weathyTempLow}"
-                    tools:text="-4°"
                     android:textColor="@color/blue_temp"
                     android:textSize="35sp"
                     app:layout_constraintBottom_toBottomOf="@id/temp2"
                     app:layout_constraintLeft_toRightOf="@id/temp2"
-                    app:layout_constraintTop_toTopOf="@id/temp2" />
+                    app:layout_constraintTop_toTopOf="@id/temp2"
+                    tools:text="-4°" />
 
                 <ImageView
                     android:id="@+id/emoji"
@@ -245,22 +251,22 @@
                     android:layout_height="42dp"
                     android:layout_marginTop="12dp"
                     android:scaleType="fitCenter"
-                    tools:src="@drawable/img_verycold"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/temp3" />
+                    app:layout_constraintTop_toTopOf="@id/temp3"
+                    tools:src="@drawable/img_verycold" />
 
                 <TextView
                     android:id="@+id/emojiText"
+                    textColorRes="@{vm.weathyStampTextColor}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/notosans_medium"
                     android:text="@{vm.weathyStampRepresentation}"
                     android:textSize="23sp"
-                    android:textColor="@color/imoji_verycold_text"
-                    tools:text="너무 추웠어요"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/emoji" />
+                    app:layout_constraintTop_toBottomOf="@id/emoji"
+                    tools:text="너무 추웠어요" />
 
                 <View
                     android:id="@+id/divider1"
@@ -290,23 +296,23 @@
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
+
                     android:selected="@{true}"
                     android:singleLine="true"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:text="@{vm.weathyTopClothes}"
-                    tools:text="기모맨투맨, 히트텍"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label1"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/label1" />
+                    app:layout_constraintTop_toTopOf="@id/label1"
+                    tools:text="기모맨투맨, 히트텍" />
 
                 <TextView
                     android:id="@+id/label2"
@@ -320,23 +326,23 @@
                     app:layout_constraintTop_toBottomOf="@id/label1" />
 
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
+
                     android:selected="@{true}"
                     android:singleLine="true"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:text="@{vm.weathyBottomClothes}"
-                    tools:text="청바지"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label2"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/label2" />
+                    app:layout_constraintTop_toTopOf="@id/label2"
+                    tools:text="청바지" />
 
                 <TextView
                     android:id="@+id/label3"
@@ -350,23 +356,23 @@
                     app:layout_constraintTop_toBottomOf="@id/label2" />
 
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
+
                     android:selected="@{true}"
                     android:singleLine="true"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:text="@{vm.weathyOuterClothes}"
-                    tools:text="롱패딩"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label3"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/label3" />
+                    app:layout_constraintTop_toTopOf="@id/label3"
+                    tools:text="롱패딩" />
 
                 <TextView
                     android:id="@+id/label4"
@@ -381,23 +387,23 @@
                     app:layout_constraintTop_toBottomOf="@id/label3" />
 
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
+
                     android:selected="@{true}"
                     android:singleLine="true"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:text="@{vm.weathyEtcClothes}"
-                    tools:text="목도리 장갑"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/label4"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/label4" />
+                    app:layout_constraintTop_toTopOf="@id/label4"
+                    tools:text="목도리 장갑" />
 
                 <View
                     android:id="@+id/divider2"
@@ -413,35 +419,36 @@
                     android:layout_marginTop="24dp"
                     android:lineSpacingExtra="3sp"
                     android:text="@{vm.weathyFeedback}"
-                    tools:text="기모랑 히트텍 입고 하나 더 입었어야 했다...\n진짜 바람이 살을 파고드는 것처럼 추운 날이었어"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+                    app:layout_constraintTop_toBottomOf="@id/divider2"
+                    tools:text="기모랑 히트텍 입고 하나 더 입었어야 했다...\n진짜 바람이 살을 파고드는 것처럼 추운 날이었어" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
         <LinearLayout
-            android:layout_marginTop="224dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.curWeathy == null}"
+            android:layout_marginTop="224dp"
             android:gravity="center"
-            app:layout_constraintVertical_bias="0.38"
             android:orientation="vertical"
+            android:visibility="@{vm.curWeathy == null}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.38">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/calendar_img_empty" />
+                android:src="@{!vm.isPastThanAvailable ? @drawable/calendar_img_empty : @drawable/calendar_no_weathy}" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/record"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/sub_grey_5"
@@ -450,7 +457,7 @@
                 android:text="기록하기"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                android:layout_width="wrap_content"
+                android:visibility="@{!vm.isPastThanAvailable}"
                 app:cornerRadius="20dp" />
         </LinearLayout>
 

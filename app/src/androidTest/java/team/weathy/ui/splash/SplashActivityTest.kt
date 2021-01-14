@@ -21,6 +21,7 @@ import team.weathy.di.UniqueIdentifierModule
 import team.weathy.ui.landing.LandingActivity
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
+import team.weathy.util.FakeUniqueIdentifier
 import team.weathy.util.PixelRatio
 import team.weathy.util.SPUtil
 import team.weathy.util.UniqueIdentifier
@@ -31,8 +32,6 @@ import team.weathy.util.getCurrentActivity
 @HiltAndroidTest
 @UninstallModules(PermanentStorageModule::class, UniqueIdentifierModule::class)
 class SplashActivityTest {
-    private var isUniqueIdExist = false
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -42,6 +41,12 @@ class SplashActivityTest {
     @BindValue
     @JvmField
     val spUtil: SPUtil = object : SPUtil {
+        override var isOtherPlaceSelected: Boolean
+            get() = false
+            set(value) {}
+        override var lastSelectedLocationCode: Long
+            get() = 0L
+            set(value) {}
         override val sharedPreferences: SharedPreferences
             get() = ApplicationProvider.getApplicationContext<Application>().getSharedPreferences("hi", 0)
         override var isFirstLaunch: Boolean = false
@@ -49,16 +54,7 @@ class SplashActivityTest {
 
     @BindValue
     @JvmField
-    val uniqueId: UniqueIdentifier = object : UniqueIdentifier {
-        override val id: String
-            get() = ""
-        override val exist: Boolean
-            get() = isUniqueIdExist
-
-        override fun generate(): String = ""
-
-        override fun saveId(uuid: String) = false
-    }
+    val uniqueId: UniqueIdentifier = FakeUniqueIdentifier()
 
     @Before
     fun init() {
@@ -69,29 +65,32 @@ class SplashActivityTest {
     @After
     fun tearDown() {
         spUtil.isFirstLaunch = false
-        isUniqueIdExist = false
+        FakeUniqueIdentifier.exist = false
     }
 
     @Test
     fun test_first_launch_then_navigate_landing() {
         spUtil.isFirstLaunch = true
         ActivityScenario.launch(SplashActivity::class.java)
+        Thread.sleep(6000)
         Truth.assertThat(getCurrentActivity()).isInstanceOf(LandingActivity::class.java)
     }
 
     @Test
     fun test_not_first_launch_and_unique_id_doesnt_exist_then_navigate_nickname_set() {
         spUtil.isFirstLaunch = false
-        isUniqueIdExist = false
+        FakeUniqueIdentifier.exist = false
         ActivityScenario.launch(SplashActivity::class.java)
+        Thread.sleep(6000)
         Truth.assertThat(getCurrentActivity()).isInstanceOf(NicknameSetActivity::class.java)
     }
 
     @Test
     fun test_not_first_launch_and_unique_id_exists_then_navigate_main() {
         spUtil.isFirstLaunch = false
-        isUniqueIdExist = true
+        FakeUniqueIdentifier.exist = true
         ActivityScenario.launch(SplashActivity::class.java)
+        Thread.sleep(6000)
         Truth.assertThat(getCurrentActivity()).isInstanceOf(MainActivity::class.java)
     }
 }

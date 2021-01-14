@@ -1,5 +1,6 @@
 package team.weathy.api
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -17,7 +18,7 @@ data class WeathyRes(
 
 data class CreateWeathyReq(
     val userId: Int,
-    val dateStr: DateString,
+    @SerializedName("date") val dateStr: DateString,
     val code: Long,
     val clothes: List<Int>,
     val stampId: Int,

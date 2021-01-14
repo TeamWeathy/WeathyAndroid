@@ -1,124 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
-    android:id="@+id/layout_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageButton
-        android:id="@+id/close"
-        style="@style/ImageButton.size48.icon20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:padding="14dp"
-        android:src="@drawable/ic_close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+
+        <variable
+            name="vm"
+            type="team.weathy.ui.record.RecordViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_detail"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="26dp"
-        app:layout_constraintTop_toBottomOf="@id/close"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-    <TextView
-        style="@style/RecordTitleText"
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:text="등록이 완료"
-        android:textColor="@color/mint_icon"
-        android:fontFamily="@font/notosans_medium"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        <ImageButton
+            android:id="@+id/close"
+            style="@style/ImageButton.size48.icon20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        style="@style/RecordTitleText"
-        android:id="@+id/tv_title2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="되었어요!"
-        app:layout_constraintTop_toTopOf="@id/tv_title"
-        app:layout_constraintStart_toEndOf="@id/tv_title"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingHorizontal="26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/close">
 
-    <TextView
-        style="@style/RecordTitleText"
-        android:id="@+id/tv_title3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="더 추가할 내용이 있나요?"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintStart_toStartOf="@id/tv_title"/>
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:fontFamily="@font/notosans_medium"
+                android:text="등록이 완료"
+                android:textColor="@color/mint_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        style="@style/RecordSubText"
-        android:id="@+id/tv_sub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="이 웨디는 비슷한 날씨에 나에게 돌아와요."
-        app:layout_constraintTop_toBottomOf="@id/tv_title3"
-        app:layout_constraintStart_toStartOf="@id/tv_title3"/>
+            <TextView
+                android:id="@+id/tv_title2"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="되었어요!"
+                app:layout_constraintStart_toEndOf="@id/tv_title"
+                app:layout_constraintTop_toTopOf="@id/tv_title" />
 
-    <EditText
-        android:id="@+id/et_detail"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="42dp"
-        app:layout_constraintDimensionRatio="309:131"
-        android:paddingHorizontal="22dp"
-        android:paddingTop="19dp"
-        android:paddingBottom="20dp"
-        android:includeFontPadding="false"
-        android:background="@drawable/edit_border"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:hint="미래의 나에게 들려주고 싶은 날씨 조언을 적어주세요. (예 : 목도리를 챙길걸 그랬어.)"
-        android:maxLength="100"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:scrollHorizontally="false"
-        app:layout_constraintTop_toBottomOf="@id/tv_sub"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/tv_title3"
+                style="@style/RecordTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="더 추가할 내용이 있나요?"
+                app:layout_constraintStart_toStartOf="@id/tv_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-    <TextView
-        android:id="@+id/tv_text_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="/100"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="13sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_detail" />
+            <TextView
+                android:id="@+id/tv_sub"
+                style="@style/RecordSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="이 웨디는 비슷한 날씨에 나에게 돌아와요."
+                app:layout_constraintStart_toStartOf="@id/tv_title3"
+                app:layout_constraintTop_toBottomOf="@id/tv_title3" />
 
-    <TextView
-        android:id="@+id/tv_text_length2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="@color/sub_grey_6"
-        android:textSize="13sp"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@id/tv_text_length"
-        app:layout_constraintEnd_toStartOf="@id/tv_text_length"/>
+            <EditText
+                android:id="@+id/et_detail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="42dp"
+                android:background="@{vm.feedbackFocused ? @drawable/edit_border_active : @drawable/edit_border}"
+                android:gravity="top"
+                android:hint="미래의 나에게 들려주고 싶은 날씨 조언을 적어주세요. (예 : 목도리를 챙길걸 그랬어.)"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine"
+                android:maxLength="100"
+                android:paddingHorizontal="22dp"
+                android:paddingTop="19dp"
+                android:paddingBottom="20dp"
+                android:scrollHorizontally="false"
+                android:text="@={vm.feedback}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintDimensionRatio="309:131"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub" />
 
-    <Button
-        style="@style/RoundButton.Grey"
-        android:id="@+id/btn_confirm"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="16dp"
-        android:text="내용 추가하기"
-        android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:id="@+id/maxLength"
+                android:layout_marginTop="2dp"
+                android:text="/100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{vm.feedbackFocused}"
+                android:textColor="@color/sub_grey_6"
+                android:textSize="13sp"
+                app:layout_constraintRight_toRightOf="@id/et_detail"
+                app:layout_constraintTop_toBottomOf="@id/et_detail" />
+
+            <TextView
+                android:layout_marginTop="2dp"
+                android:text='@{vm.feedback.length() + ""}'
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@{vm.feedback.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
+                android:visibility="@{vm.feedbackFocused}"
+                android:textSize="13sp"
+                app:layout_constraintRight_toLeftOf="@id/maxLength"
+                app:layout_constraintTop_toBottomOf="@id/et_detail"
+                tools:text="0"
+                tools:textColor="@color/sub_grey_6" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                style="@style/RoundButton.Grey"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:enabled="false"
+                android:text="내용 추가하기"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

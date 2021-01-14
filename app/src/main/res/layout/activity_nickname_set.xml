@@ -11,7 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        dismissKeyboardOnClick="@{true}"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="24dp">
@@ -50,11 +52,16 @@
             android:layout_width="match_parent"
             android:id="@+id/textInputLayout"
             android:layout_marginTop="42dp"
+            app:endIconDrawable="@drawable/ic_textdelete"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/transparent"
+            app:endIconTintMode="src_over"
             android:layout_height="wrap_content"
             app:counterTextColor="@color/main_mint"
             app:layout_constraintTop_toBottomOf="@id/body">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input"
                 android:maxLength="6"
                 android:text="@={vm.nickname}"
                 style="@style/TextInputEditText"
@@ -62,6 +69,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:visibility="@{vm.focused}"
             android:layout_marginTop="2dp"
             android:id="@+id/maxLength"
             android:layout_width="wrap_content"
@@ -73,6 +81,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <TextView
+            android:visibility="@{vm.focused}"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,6 +94,7 @@
             tools:text="0" />
 
         <Button
+
             android:id="@+id/submit"
             android:clickable="@{!vm.loadingSubmit}"
             android:enabled="@{vm.isSubmitEnabled}"

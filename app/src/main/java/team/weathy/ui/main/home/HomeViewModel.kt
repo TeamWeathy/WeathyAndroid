@@ -48,6 +48,16 @@ class HomeViewModel @ViewModelInject constructor(
     val extraWeathers = MutableLiveData<ExtraWeather>()
 
     // region UI
+    val weatherFirstBackground = currentWeather.map {
+        it?.hourly?.climate?.weather?.firstHomeBackgroundId
+    }
+    val weatherSecondBackground = currentWeather.map {
+        it?.hourly?.climate?.weather?.secondHomeBackgroundId
+    }
+    val weatherIcon = currentWeather.map {
+        it?.hourly?.climate?.weather?.bigIconId
+    }
+
     val datetimeText = lastFetchDateTime.map { it.koFormat }
     val regionText = currentWeather.map { it?.region?.name ?: "" }
     val curTempText = currentWeather.map { "${it?.hourly?.temperature ?: 0}°" }
@@ -76,7 +86,7 @@ class HomeViewModel @ViewModelInject constructor(
         it?.stampId?.iconRes
     }
     val weathyStampColor = recommendedWeathy.map {
-        it?.stampId?.colorRes ?: -1
+        it?.stampId?.colorRes
     }
     val weathyStampRepresentation = recommendedWeathy.map {
         it?.stampId?.representationPast

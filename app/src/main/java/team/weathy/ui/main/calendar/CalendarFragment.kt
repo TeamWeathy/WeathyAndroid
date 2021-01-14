@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.FragmentCalendarBinding
@@ -18,6 +17,7 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.showToast
 import team.weathy.util.isSameDay
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
@@ -28,12 +28,12 @@ import java.time.LocalDateTime
 class CalendarFragment : Fragment(), OnClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
     private val mainViewModel by activityViewModels<MainViewModel>()
-    private val viewModel by viewModels<CalendarViewModel>()
+    private val viewModel by activityViewModels<CalendarViewModel>()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             if (viewModel.isMoreMenuShowing.value == true) {
-                viewModel.onClickMoreMenu()
+                viewModel.closeMoreMenu()
             } else {
                 mainViewModel.changeMenu(HOME)
                 isEnabled = false
@@ -54,6 +54,18 @@ class CalendarFragment : Fragment(), OnClickListener {
         registerBackPressCallback()
 
         setOnRecordClickListener()
+
+        viewModel.onDeleteSuccess.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디가 삭제되었어요.")
+        }
+        viewModel.onDeleteFailed.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디가 삭제가 실패했어요.")
+        }
+
+        binding.edit setOnDebounceClickListener {
+            viewModel.closeMoreMenu()
+            navigateRecordAtCurDate(true)
+        }
     }
 
     private fun configureCalendarView() {
@@ -82,8 +94,11 @@ class CalendarFragment : Fragment(), OnClickListener {
 
         viewModel.selectedDate.observe(viewLifecycleOwner) {
             binding.calendarView.selectedDate = it
-            binding.container.startLayoutAnimation()
             binding.scrollView.smoothScrollTo(0, 0)
+        }
+
+        viewModel.curWeathy.observe(viewLifecycleOwner) {
+            binding.container.startLayoutAnimation()
         }
 
         viewModel.calendarData.observe(viewLifecycleOwner) {
@@ -105,12 +120,15 @@ class CalendarFragment : Fragment(), OnClickListener {
     }
 
     private fun setOnRecordClickListener() = binding.record setOnDebounceClickListener {
-        navigateRecordAtCurDate()
+        navigateRecordAtCurDate(false)
     }
 
-    private fun navigateRecordAtCurDate() {
+    private fun navigateRecordAtCurDate(edit: Boolean) {
         val selectedDate = viewModel.selectedDate.value!!
         RecordViewModel.lastRecordNavigationTime = selectedDate.atTime(LocalDateTime.now().hour, 0)
-        startActivity(RecordActivity.newIntent(requireContext()))
+        if (edit) {
+            RecordViewModel.lastEditWeathy = viewModel.curWeathy.value
+        }
+        startActivity(RecordActivity.newIntent(requireContext(), edit))
     }
 }

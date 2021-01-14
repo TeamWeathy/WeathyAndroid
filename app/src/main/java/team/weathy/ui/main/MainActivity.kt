@@ -10,6 +10,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
+import team.weathy.ui.main.calendar.CalendarViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
@@ -25,6 +26,7 @@ import java.time.LocalDateTime
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<MainViewModel>()
+    private val calendarViewModel by viewModels<CalendarViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeMenu(CALENDAR)
         }
         binding.fab setOnDebounceClickListener {
-            navigateRecordAtToday()
+            if (calendarViewModel.curWeathy.value == null) {
+                navigateRecordAtToday()
+            } else {
+                showToast("웨디는 하루에 하나만 기록할 수 있어요.")
+            }
         }
     }
 

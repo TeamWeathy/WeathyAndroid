@@ -25,10 +25,13 @@ class NicknameSetViewModel @ViewModelInject constructor(
     private val _loadingSubmit = MutableLiveData(false)
     val loadingSubmit: LiveData<Boolean> = _loadingSubmit
 
+    val focused = MutableLiveData(false)
+
     val onHideKeyboard = SimpleEventLiveData()
     val onSuccess = SimpleEventLiveData()
 
     fun onSubmit() {
+        focused.value = false
         onHideKeyboard.emit()
         val newUniqueId = uniqueId.generate()
 
@@ -38,6 +41,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
             uniqueId.saveUserId(it.user.id)
             uniqueId.saveId(newUniqueId)
             uniqueId.saveToken(it.token)
+            uniqueId.saveUserNickname(nickname.value ?: "")
             onSuccess.emit()
         }, onFailure = {
             debugE(it)

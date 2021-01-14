@@ -17,7 +17,7 @@ fun Activity.hideKeyboard() {
     val imm = getSystemService(InputMethodManager::class.java)
 
     imm.hideSoftInputFromWindow(currentFocus?.rootView?.windowToken, 0)
-    currentFocus?.rootView?.findFocus()?.clearFocus()
+    currentFocus?.clearFocus()
 }
 
 fun Context.showToast(message: String) {
