@@ -7,13 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameSetBinding
 import team.weathy.ui.main.MainActivity
+import team.weathy.util.debugE
 import team.weathy.util.extensions.font
 import team.weathy.util.extensions.getFont
 import team.weathy.util.extensions.hideKeyboard
+import team.weathy.util.setOnDebounceClickListener
 
+@FlowPreview
 @AndroidEntryPoint
 class NicknameSetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicknameSetBinding
@@ -30,6 +34,16 @@ class NicknameSetActivity : AppCompatActivity() {
 
         configureTitle()
         observeViewModel()
+        configureInput()
+    }
+
+    private fun configureInput() {
+        binding.root setOnDebounceClickListener {
+            hideKeyboard()
+        }
+        binding.input.setOnFocusChangeListener { _, hasFocus ->
+            viewModel.focused.value = hasFocus
+        }
     }
 
     private fun configureTitle() {
