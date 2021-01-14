@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.view.children
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -112,4 +113,9 @@ fun TextView.setTextColorWithResources(@ColorRes id: Int) {
     kotlin.runCatching {
         setTextColor(getColor(id))
     }
+}
+
+@BindingAdapter("invisible")
+fun View.setInvisibleBinding(isInvisible: Boolean) {
+    this.isInvisible = isInvisible
 }

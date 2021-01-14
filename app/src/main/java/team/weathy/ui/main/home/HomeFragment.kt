@@ -8,7 +8,9 @@ import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionManager
@@ -16,6 +18,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
+import team.weathy.model.entity.Weather.BackgroundAnimation.RAIN
+import team.weathy.model.entity.Weather.BackgroundAnimation.SNOW
+import team.weathy.ui.main.MainMenu.HOME
+import team.weathy.ui.main.MainViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.TestEnv
@@ -29,6 +35,7 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
     private val viewModel by viewModels<HomeViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel>()
 
     @Inject
     lateinit var pixelRatio: PixelRatio
@@ -91,7 +98,10 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
-                if (endId != R.layout.scene_home_third) binding.bg.crossfade = progress
+                if (endId != R.layout.scene_home_third) {
+                    binding.bgFirst.alpha = 1 - progress
+                    binding.bgSecond.alpha = progress
+                }
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
@@ -137,6 +147,20 @@ class HomeFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
         setNicknameText()
+
+        viewModel.currentWeather.observe(viewLifecycleOwner) {
+            it ?: return@observe
+            val weather = it.hourly.climate.weather
+
+            binding.rainFall.isVisible = weather.backgroundAnimation == RAIN
+            binding.snowFall.isVisible = weather.backgroundAnimation == SNOW
+        }
+
+        mainViewModel.menu.observe(viewLifecycleOwner) {
+            if (it != HOME) {
+                hideHelpPopup()
+            }
+        }
     }
 
     private fun setNicknameText() {
