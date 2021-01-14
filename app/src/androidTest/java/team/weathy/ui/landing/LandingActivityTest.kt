@@ -24,6 +24,7 @@ import team.weathy.R.id
 import team.weathy.di.UniqueIdentifierModule
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
+import team.weathy.util.FakeUniqueIdentifier
 import team.weathy.util.PixelRatio
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.getCurrentActivity
@@ -33,8 +34,6 @@ import team.weathy.util.getCurrentActivity
 @HiltAndroidTest
 @UninstallModules(UniqueIdentifierModule::class)
 class LandingActivityTest {
-    private var isUniqueIdExist = false
-
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
@@ -43,14 +42,7 @@ class LandingActivityTest {
 
     @BindValue
     @JvmField
-    val uniqueId: UniqueIdentifier = object : UniqueIdentifier {
-        override val id: String? = null
-        override val exist
-            get() = isUniqueIdExist
-
-        override fun generate() = ""
-        override fun saveId(uuid: String) = false
-    }
+    val uniqueId: UniqueIdentifier = FakeUniqueIdentifier()
 
     @Before
     fun setup() {
@@ -59,12 +51,14 @@ class LandingActivityTest {
 
     @After
     fun tearDown() {
-        isUniqueIdExist = false
+        FakeUniqueIdentifier.id = null
+        FakeUniqueIdentifier.exist = false
     }
 
     @Test
     fun swipe_pagers_and_click_button_then_navigate_nickname_set() {
-        isUniqueIdExist = false
+        FakeUniqueIdentifier.id = null
+        FakeUniqueIdentifier.exist = false
 
         ActivityScenario.launch(LandingActivity::class.java)
 
@@ -78,7 +72,7 @@ class LandingActivityTest {
 
     @Test
     fun swipe_pagers_and_click_button_then_navigate_main() {
-        isUniqueIdExist = true
+        FakeUniqueIdentifier.exist = true
 
         ActivityScenario.launch(LandingActivity::class.java)
 

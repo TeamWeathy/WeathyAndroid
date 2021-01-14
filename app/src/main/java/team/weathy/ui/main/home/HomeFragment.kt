@@ -16,6 +16,7 @@ import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
+import team.weathy.util.TestEnv
 import team.weathy.util.dp
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
@@ -60,12 +61,14 @@ class HomeFragment : Fragment() {
         weathyQuestionBtnClick()
         exitExplanationBtnClick()
 
+        if (!TestEnv.isInstrumentationTesting) {
+            binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
+            binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+        }
 
-        binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
         binding.downArrow setOnDebounceClickListener {
             binding.container.transitionToEnd()
         }
-        binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
 
         binding.topBlur.pivotY = 0f
 
