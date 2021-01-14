@@ -2,12 +2,15 @@ package team.weathy.api
 
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
+import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.weathy.util.FlipperUtil
 import team.weathy.util.UniqueIdentifier
+import team.weathy.util.debugE
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -27,7 +30,29 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
             val baseRequest = it.request()
             val builder = baseRequest.newBuilder()
 
-            it.proceed(builder.url(baseRequest.url().fillUserId()).addHeaders(uniqueId.loadToken()).build())
+            val newRequest = builder.url(baseRequest.url().fillUserId()).addHeaders(uniqueId.loadToken())
+
+            var response = it.proceed(newRequest.build())
+
+            if (response.code() == 401 && uniqueId.id != null) {
+                kotlin.runCatching {
+                    val loginRequestBody = gson.toJson(LoginReq(uniqueId.id!!))
+
+                    val loginRequest = newRequest.build().newBuilder().url("$BASE_URL/auth/login")
+                        .post(RequestBody.create(MediaType.parse(MEDIA_TYPE), loginRequestBody))
+                        .removeHeader(HEADER_TOKEN).build()
+                    val loginResponse = gson.fromJson(it.proceed(loginRequest).body()!!.string(), LoginRes::class.java)
+                    uniqueId.saveToken(loginResponse.token)
+                    it.proceed(newRequest.addHeaders(loginResponse.token).build())
+                }.onSuccess {
+                    response = it
+                }.onFailure {
+                    debugE("토큰 갱신 실패")
+                }
+            }
+
+
+            response
         }
         okHttpClient = FlipperUtil.addFlipperNetworkPlguin(builder).build()
     }
@@ -40,16 +65,22 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     }
 
     private fun Request.Builder.addHeaders(token: String?): Request.Builder {
-        addHeader("Content-Type", "application/json").addHeader("Accept", "application/json")
+        addHeader("Content-Type", MEDIA_TYPE).addHeader("Accept", MEDIA_TYPE)
         token?.let {
-            addHeader("x-access-token", "${uniqueId.loadToken()}")
+            addHeader(HEADER_TOKEN, "${uniqueId.loadToken()}")
         }
         return this
     }
 
     private val apiRetrofit =
-        Retrofit.Builder().baseUrl("http://15.164.146.132:3000").addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient).build()
+        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).client(okHttpClient)
+            .build()
 
     fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
+
+    companion object {
+        private const val BASE_URL = "http://15.164.146.132:3000"
+        private const val MEDIA_TYPE = "application/json"
+        private const val HEADER_TOKEN = "x-access-token"
+    }
 }

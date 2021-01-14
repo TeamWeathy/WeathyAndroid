@@ -42,7 +42,7 @@ class SPUtilImpl @Inject constructor(context: Application) : SPUtil {
         }
 
     override var isOtherPlaceSelected: Boolean
-        get() = sharedPreferences.getBoolean("isOtherPlaceSelected", true)
+        get() = sharedPreferences.getBoolean("isOtherPlaceSelected", false)
         set(value) {
             sharedPreferences.edit().putBoolean("isOtherPlaceSelected", value).commit()
         }

@@ -8,7 +8,7 @@ import team.weathy.util.DateString
 
 
 data class FetchCalendarPreviewRes(
-    @SerializedName("weathyOverviewList") val list: List<CalendarPreview?>,
+    @SerializedName("calendarOverviewList") val list: List<CalendarPreview?>,
     @SerializedName("message") val message: String
 )
 

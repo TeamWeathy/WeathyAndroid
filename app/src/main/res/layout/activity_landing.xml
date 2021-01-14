@@ -19,58 +19,60 @@
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:overScrollMode="never"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_begin="44dp" />
 
-        <ImageView
-            duration="500"
-            android:id="@+id/logo_bg"
-            android:layout_width="87dp"
-            android:layout_height="54dp"
-            android:src="@drawable/onboarding_img_logo_1"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie1"
+            android:layout_width="wrap_content"
+            android:layout_height="220dp"
+            android:scaleType="fitCenter"
+            android:translationY="-40dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide1" />
+            app:lottie_fileName="lottie_landing1.json" />
 
-        <ImageView
-            android:id="@+id/logo_2"
-            visibilityWithAnim="@{vm.pagerIndex >= 1}"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie2"
+            android:layout_height="220dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            android:src="@drawable/ic_onboarding_line_2"
-            app:layout_constraintBottom_toBottomOf="@id/logo_bg"
-            app:layout_constraintLeft_toLeftOf="@id/logo_bg"
-            app:layout_constraintRight_toRightOf="@id/logo_bg"
-            tools:alpha="0.4" />
+            android:scaleType="fitCenter"
+            android:translationY="-40dp"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_fileName="lottie_landing2.json" />
 
-        <ImageView
-            android:id="@+id/logo_3"
-            visibilityWithAnim="@{vm.pagerIndex >= 2}"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie3"
+            android:layout_height="220dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            android:src="@drawable/ic_onboarding_line_3"
-            app:layout_constraintBottom_toBottomOf="@id/logo_bg"
-            app:layout_constraintLeft_toLeftOf="@id/logo_bg"
-            app:layout_constraintRight_toRightOf="@id/logo_bg"
-            tools:alpha="0.2" />
+            android:scaleType="fitCenter"
+            android:translationY="-40dp"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_fileName="lottie_landing3.json" />
 
         <LinearLayout
             android:id="@+id/indicator_container"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginTop="110dp"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/logo_bg">
+            app:layout_constraintTop_toBottomOf="@id/lottie1">
 
             <View
                 android:id="@+id/indicator1"

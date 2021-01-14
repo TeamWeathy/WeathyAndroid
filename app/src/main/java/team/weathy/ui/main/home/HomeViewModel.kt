@@ -53,11 +53,11 @@ class HomeViewModel @ViewModelInject constructor(
     val curTempText = currentWeather.map { "${it?.hourly?.temperature ?: 0}°" }
     val maxTempText = currentWeather.map { "${it?.daily?.temperature?.maxTemp ?: 0}°" }
     val minTempText = currentWeather.map { "${it?.daily?.temperature?.minTemp ?: 0}°" }
-    val descriptionText = currentWeather.map { it?.hourly?.climate?.description?.replace("\\n", "\n") ?: "" }
+    val descriptionText = currentWeather.map { it?.hourly?.climate?.description ?: "" }
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
-        val (month, day, weekOfDay) = it.dailyWeather.date
+        val (month, day) = it.dailyWeather.date
         "${LocalDate.now().year} ${month}월 ${day}일"
     }
     val weathyWeatherIcon = recommendedWeathy.map {
@@ -129,9 +129,13 @@ class HomeViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
-            if (spUtil.lastSelectedLocationCode != 0L && spUtil.isOtherPlaceSelected) {
+            if (spUtil.lastSelectedLocationCode != 0L) {
                 fetchWeatherWithCode(spUtil.lastSelectedLocationCode)?.let {
-                    locationUtil.selectOtherPlace(it)
+                    if (locationUtil.isOtherPlaceSelected.value) {
+                        locationUtil.selectOtherPlace(it)
+                    } else {
+                        locationUtil.selectPlace(it)
+                    }
                 }
             }
 
@@ -140,26 +144,26 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
-        locationUtil.isLocationAvailable.zip(locationUtil.isOtherPlaceSelected) { a, b ->
-            a to b
-        }.collect { (locationAvailable, otherPlaceSelected) ->
-            if (!locationAvailable || otherPlaceSelected) return@collect
+        locationUtil.lastLocation.zip(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
+            .collect { (lastLocation, isOtherPlaceSelected) ->
+                debugE("$lastLocation $isOtherPlaceSelected")
+                if (isOtherPlaceSelected || lastLocation == null) return@collect
 
-            val location = locationUtil.lastLocation.value!!
+                val location = locationUtil.lastLocation.value!!
 
-            loadingWeather.value = true
-            kotlin.runCatching {
-                lastFetchDateTime.value = LocalDateTime.now()
+                loadingWeather.value = true
+                kotlin.runCatching {
+                    lastFetchDateTime.value = LocalDateTime.now()
 
-                weatherAPI.fetchWeatherByLocation(
-                    location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
-                )
-            }.onSuccess { res ->
-                val weather = res.body()?.weather ?: return@onSuccess
-                locationUtil.selectPlace(weather)
-            }.onFailure {
+                    weatherAPI.fetchWeatherByLocation(
+                        location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                    )
+                }.onSuccess { res ->
+                    val weather = res.body()?.weather ?: return@onSuccess
+                    locationUtil.selectPlace(weather)
+                }.onFailure {
 
-            }
+                }
             loadingWeather.value = false
         }
     }

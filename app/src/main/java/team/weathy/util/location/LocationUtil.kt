@@ -1,8 +1,6 @@
 package team.weathy.util.location
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -17,13 +15,10 @@ import kotlinx.coroutines.flow.StateFlow
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.util.SPUtil
 import team.weathy.util.debugE
-import java.util.*
 import javax.inject.Inject
 
-@SuppressLint("MissingPermission")
 class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-    private val geoCoder = Geocoder(app, Locale.KOREA)
 
     private val locationRequest = LocationRequest.create().apply {
         interval = 60000
@@ -33,8 +28,6 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
     private val _lastLocation = MutableStateFlow<Location?>(null)
     val lastLocation: StateFlow<Location?> = _lastLocation
-    private val _isLocationAvailable = MutableStateFlow(false)
-    val isLocationAvailable: StateFlow<Boolean> = _isLocationAvailable
 
     private val _isOtherPlaceSelected: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isOtherPlaceSelected: StateFlow<Boolean> = _isOtherPlaceSelected
@@ -59,34 +52,29 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
         override fun onLocationAvailability(result: LocationAvailability?) {
             result ?: return
-            _isLocationAvailable.value = result.isLocationAvailable
         }
     }
 
     private fun registerLocationListener() {
+        debugE("registerLocationListener")
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
     private fun unregisterLocationListener() {
+        debugE("unregisterLocationListener")
         fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    fun reverseGeocode() {
-        lastLocation.value?.let { location ->
-            debugE(geoCoder.getFromLocation(location.latitude, location.longitude, 1).first())
-        }
     }
 
     fun selectPlace(weather: OverviewWeather) {
         spUtil.lastSelectedLocationCode = weather.region.code
         selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
     }
 
     fun selectOtherPlace(weather: OverviewWeather) {
-        selectPlace(weather)
-
-        unregisterLocationListener()
-        _isLocationAvailable.value = false
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
         spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
     }

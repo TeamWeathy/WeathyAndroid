@@ -103,6 +103,8 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.6"
 
     implementation "com.thedeanda:lorem:2.1"
+
+    implementation 'com.airbnb.android:lottie:3.5.0'
 }
 
 dependencies {

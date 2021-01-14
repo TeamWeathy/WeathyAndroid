@@ -41,12 +41,25 @@ class RecordViewModel @ViewModelInject constructor(
     val date = lastRecordNavigationTime
     val edit = savedStateHandle.get<Boolean>(EXTRA_EDIT) ?: false
 
-    val weather = MutableLiveData(locationUtil.selectedWeatherLocation.value!!)
+    val weather = MutableLiveData<OverviewWeather>(locationUtil.selectedWeatherLocation.value)
     val weatherDate = date.toLocalDate().monthDayFormat
-    val weatherRegion = weather.map { it.region.name }
-    val weatherIcon = weather.map { it.hourly.climate.weather.mediumIconId }
-    val tempHigh = weather.map { "${it.daily.temperature.maxTemp}°" }
-    val tempLow = weather.map { "${it.daily.temperature.minTemp}°" }
+    val weatherRegion = weather.map {
+        it ?: return@map ""
+        it.region.name
+    }
+    val weatherIcon = weather.map {
+        it ?: return@map null
+        it.hourly.climate.weather.bigIconId
+    }
+    val tempHigh = weather.map {
+        it ?: return@map ""
+        "${it.daily.temperature.maxTemp}°"
+    }
+
+    val tempLow = weather.map {
+        it ?: return@map ""
+        "${it.daily.temperature.minTemp}°"
+    }
 
     fun onLocationChanged(weather: OverviewWeather) {
         this.weather.value = weather

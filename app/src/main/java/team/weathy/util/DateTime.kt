@@ -92,6 +92,14 @@ fun LocalDate.isSameDay(date: LocalDate): Boolean {
     return year == date.year && month == date.month && dayOfMonth == date.dayOfMonth
 }
 
+fun LocalDate.isFuture(): Boolean {
+    return this.isAfter(LocalDate.now())
+}
+
+fun LocalDate.isAvailable(): Boolean {
+    return !isFuture() && !isBefore(LocalDate.of(2020, 12, 13))
+}
+
 /** 1997-04-04T23 */
 val LocalDateTime.dateHourString: DateHourString
     get() = "${year}-${monthValue.padZero()}-${dayOfMonth.padZero()}T${hour.padZero()}"
