@@ -14,7 +14,9 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
+import team.weathy.util.PermissionUtil
 import team.weathy.util.dpFloat
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDateTime
 
@@ -32,10 +34,22 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         setContentView(binding.root)
 
+        checkLocationPermission()
+
         configurePager()
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
+    }
+
+    private fun checkLocationPermission() {
+        PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
+            override fun onAnyPermissionsPermanentlyDeined(
+                deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
+            ) {
+                showToast("위치 권한이 영구적으로 거부되었습니다")
+            }
+        })
     }
 
     private fun configurePager() = binding.fragmentPager.let { pager ->
