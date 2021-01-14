@@ -13,6 +13,7 @@ import team.weathy.api.ClothesAPI
 import team.weathy.api.CreateClothesReq
 import team.weathy.api.CreateWeathyReq
 import team.weathy.api.DeleteClothesReq
+import team.weathy.api.EditWeathyReq
 import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.ClothCategory
@@ -256,6 +257,7 @@ class RecordViewModel @ViewModelInject constructor(
 
     val feedback = MutableLiveData("")
     val onRecordSuccess = SimpleEventLiveData()
+    val onRecordEdited = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
 
     val feedbackFocused = MutableLiveData(false)
@@ -268,12 +270,18 @@ class RecordViewModel @ViewModelInject constructor(
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
         val stampId = selectedWeatherRating.value?.id ?: 0
 
+        val feedbackReq = if (includeFeedback) feedback.value!! else ""
+
         launchCatch({
-            weathyAPI.createWeathy(
-                CreateWeathyReq(
-                    userId, date, code, clothes, stampId, if (includeFeedback) feedback.value!! else ""
+            if (edit) {
+                weathyAPI.editWeathy(lastEditWeathyId, EditWeathyReq(code, clothes, stampId, feedbackReq))
+            } else {
+                weathyAPI.createWeathy(
+                    CreateWeathyReq(
+                        userId, date, code, clothes, stampId, feedbackReq
+                    )
                 )
-            )
+            }
         }, onSuccess = {
             AppEvent.onWeathyUpdated.emit()
             onRecordSuccess.emit()
@@ -285,6 +293,7 @@ class RecordViewModel @ViewModelInject constructor(
     // endregion
 
     companion object {
+        var lastEditWeathyId: Int = -1
         var lastRecordNavigationTime: LocalDateTime = LocalDateTime.now()
     }
 }

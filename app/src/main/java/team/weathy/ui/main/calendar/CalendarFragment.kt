@@ -63,8 +63,8 @@ class CalendarFragment : Fragment(), OnClickListener {
         }
 
         binding.edit setOnDebounceClickListener {
-            requireContext().showToast("edit")
             viewModel.closeMoreMenu()
+            navigateRecordAtCurDate(true)
         }
     }
 
@@ -120,12 +120,15 @@ class CalendarFragment : Fragment(), OnClickListener {
     }
 
     private fun setOnRecordClickListener() = binding.record setOnDebounceClickListener {
-        navigateRecordAtCurDate()
+        navigateRecordAtCurDate(false)
     }
 
-    private fun navigateRecordAtCurDate() {
+    private fun navigateRecordAtCurDate(edit: Boolean) {
         val selectedDate = viewModel.selectedDate.value!!
         RecordViewModel.lastRecordNavigationTime = selectedDate.atTime(LocalDateTime.now().hour, 0)
-        startActivity(RecordActivity.newIntent(requireContext()))
+        if (edit) {
+            RecordViewModel.lastEditWeathyId = viewModel.curWeathy.value?.id ?: 0
+        }
+        startActivity(RecordActivity.newIntent(requireContext(), edit))
     }
 }

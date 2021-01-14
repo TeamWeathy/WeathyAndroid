@@ -64,6 +64,10 @@ class RecordDetailFragment : Fragment() {
             requireContext().showToast("웨디에 내용이 추가되었어요!")
             requireActivity().finish()
         }
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
         viewModel.onRecordFailed.observe(viewLifecycleOwner) {
             requireContext().showToast("내용 추가가 실패했어요!")
         }
