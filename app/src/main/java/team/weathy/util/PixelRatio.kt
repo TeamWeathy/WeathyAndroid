@@ -23,10 +23,11 @@ class PixelRatio(private val app: Application) {
 
     @Px
     fun toPixel(dp: Int) = (dp * displayMetrics.density).roundToInt()
+    fun toPixelForFloatDp(dp: Float) = (dp * displayMetrics.density).roundToInt()
 }
 
 val Number.dp: Int
     get() = MainApplication.pixelRatio.toPixel(this.toInt())
 
 val Number.dpFloat: Float
-    get() = MainApplication.pixelRatio.toPixel(this.toInt()).toFloat()
+    get() = MainApplication.pixelRatio.toPixelForFloatDp(this.toFloat()).toFloat()
