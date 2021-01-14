@@ -135,7 +135,7 @@ class CalendarViewModel @ViewModelInject constructor(
     private fun fetchMonthlyDataIfNeeded() {
         debugE("fetchMonthlyDataIfNeeded ${curDate.value!!.dateString}")
         val date = curDate.value!!
-        if (!_calendarData.value!!.containsKey(date.yearMonthFormat)) {
+        if (!calendarData.value!!.containsKey(date.yearMonthFormat)) {
             launchCatch({
                 val s = getStartDateStringInCalendar(date.year, date.monthValue)
                 val e = getEndDateStringInCalendar(date.year, date.monthValue)
@@ -144,6 +144,7 @@ class CalendarViewModel @ViewModelInject constructor(
                 _calendarData.updateMap {
                     this[date.yearMonthFormat] = list
                 }
+                debugE(calendarData.value!!)
             })
         }
     }

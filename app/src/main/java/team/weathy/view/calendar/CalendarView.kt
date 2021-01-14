@@ -241,6 +241,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 25f * position
+            }
+
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
@@ -271,7 +277,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             setPageTransformer { page, position ->
                 page.pivotX = if (position < 0) page.width.toFloat() else 0f
                 page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
+                page.rotationY = 40f * position
             }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {

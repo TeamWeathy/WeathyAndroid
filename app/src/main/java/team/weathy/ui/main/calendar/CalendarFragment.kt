@@ -101,7 +101,7 @@ class CalendarFragment : Fragment(), OnClickListener {
     }
 
     override fun onClick(date: LocalDate) {
-        binding.calendarView.curDate = date
+        binding.calendarView.selectedDate = date
     }
 
     private fun setOnRecordClickListener() = binding.record setOnDebounceClickListener {

@@ -33,6 +33,9 @@ class DateDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.picker.let {
             it.maxDate = Calendar.getInstance().timeInMillis
+            it.minDate = Calendar.getInstance().apply {
+                set(2020, 11, 13)
+            }.timeInMillis
             it.init(date.year, date.monthValue - 1, date.dayOfMonth) { _, _, _, _ ->
 
             }
