@@ -100,18 +100,10 @@ class CalendarViewModel @ViewModelInject constructor(
     }
 
     fun onCurDateChanged(date: LocalDate) {
-        val current = curDate.value!!
-        if (current.year == date.year && current.monthValue == date.monthValue && current.dayOfMonth == date.dayOfMonth) {
-            return
-        }
         _curDate.value = date
     }
 
     fun onSelectedDateChanged(date: LocalDate) {
-        val selected = selectedDate.value!!
-        if (selected.year == date.year && selected.monthValue == date.monthValue && selected.dayOfMonth == date.dayOfMonth) {
-            return
-        }
         _selectedDate.value = date
     }
 
@@ -129,6 +121,8 @@ class CalendarViewModel @ViewModelInject constructor(
             weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
         }, onSuccess = {
             selectedWeathy.value = it.weathy
+        }, onFailure = {
+            selectedWeathy.value = null
         })
     }
 

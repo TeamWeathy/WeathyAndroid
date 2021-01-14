@@ -169,6 +169,7 @@
                     app:layout_constraintTop_toBottomOf="@id/date" />
 
                 <TextView
+                    android:id="@+id/climate_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
@@ -176,7 +177,6 @@
                     android:text="@{vm.weathyClimateDescription}"
                     android:textColor="@color/main_grey"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/weather_icon"
                     app:layout_constraintLeft_toRightOf="@id/weather_icon"
                     app:layout_constraintTop_toTopOf="@id/weather_icon"
                     tools:text="흐림" />
@@ -205,7 +205,7 @@
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.weathyTempHigh}"
-                    app:layout_constraintTop_toBottomOf="@id/weather_icon"
+                    app:layout_constraintTop_toBottomOf="@id/climate_description"
                     android:textColor="@color/red_temp"
                     android:textSize="35sp"
                     app:layout_constraintLeft_toLeftOf="parent"

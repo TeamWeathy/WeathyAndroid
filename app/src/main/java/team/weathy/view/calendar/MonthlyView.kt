@@ -21,6 +21,8 @@ import team.weathy.util.OnChangeProp
 import team.weathy.util.calculateRequiredRow
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
+import team.weathy.util.isAvailable
+import team.weathy.util.isSameDay
 import team.weathy.util.margin
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
@@ -180,9 +182,9 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 val isDateNotInThisMonth = date !in (firstDateInMonth..firstDateInMonth.plusDays(
                     firstDateInMonth.lengthOfMonth().toLong() - 1L
                 ))
-                val isFuture = date > today
+                val isAvailableDate = date.isAvailable()
 
-                item.root.alpha = if (isDateNotInThisMonth || isFuture) .3f else 1f
+                item.root.alpha = if (isDateNotInThisMonth || !isAvailableDate) .3f else 1f
 
                 item.circleMint.isVisible = idx == todayIndexInViews
                 item.day.setTextColor(getDayTextColor(idx % 7, idx == todayIndexInViews))
@@ -202,8 +204,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         val dates = (0..41).map {
             firstDateInCalendar.plusDays(it.toLong())
         }
-        curDateIndexInViews =
-            dates.indexOfFirst { it.year == selectedDate.year && it.month == selectedDate.month && it.dayOfMonth == selectedDate.dayOfMonth }
+        curDateIndexInViews = dates.indexOfFirst { selectedDate.isSameDay(it) }
 
         calendarItems.forEachIndexed { idx, item ->
             item.circleGrey.isVisible = idx == curDateIndexInViews

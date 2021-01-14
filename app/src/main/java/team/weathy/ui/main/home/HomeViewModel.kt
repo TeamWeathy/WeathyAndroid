@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -52,7 +53,7 @@ class HomeViewModel @ViewModelInject constructor(
     val curTempText = currentWeather.map { "${it?.hourly?.temperature ?: 0}°" }
     val maxTempText = currentWeather.map { "${it?.daily?.temperature?.maxTemp ?: 0}°" }
     val minTempText = currentWeather.map { "${it?.daily?.temperature?.minTemp ?: 0}°" }
-    val descriptionText = currentWeather.map { it?.hourly?.climate?.description?.replace("\\n", "\n") ?: "" }
+    val descriptionText = currentWeather.map { it?.hourly?.climate?.description ?: "" }
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
@@ -139,24 +140,26 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
-        locationUtil.isOtherPlaceSelected.collect { isOtherPlaceSelected ->
-            if (isOtherPlaceSelected) return@collect
+        locationUtil.lastLocation.zip(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
+            .collect { (lastLocation, isOtherPlaceSelected) ->
+                debugE("$lastLocation $isOtherPlaceSelected")
+                if (isOtherPlaceSelected || lastLocation == null) return@collect
 
-            val location = locationUtil.lastLocation.value!!
+                val location = locationUtil.lastLocation.value!!
 
-            loadingWeather.value = true
-            kotlin.runCatching {
-                lastFetchDateTime.value = LocalDateTime.now()
+                loadingWeather.value = true
+                kotlin.runCatching {
+                    lastFetchDateTime.value = LocalDateTime.now()
 
-                weatherAPI.fetchWeatherByLocation(
-                    location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
-                )
-            }.onSuccess { res ->
-                val weather = res.body()?.weather ?: return@onSuccess
-                locationUtil.selectPlace(weather)
-            }.onFailure {
+                    weatherAPI.fetchWeatherByLocation(
+                        location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                    )
+                }.onSuccess { res ->
+                    val weather = res.body()?.weather ?: return@onSuccess
+                    locationUtil.selectPlace(weather)
+                }.onFailure {
 
-            }
+                }
             loadingWeather.value = false
         }
     }

@@ -18,6 +18,7 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.isSameDay
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -62,11 +63,15 @@ class CalendarFragment : Fragment(), OnClickListener {
             }
 
             onDateChangeListener = {
-                viewModel.onCurDateChanged(it)
+                if (!viewModel.curDate.value!!.isSameDay(it)) {
+                    viewModel.onCurDateChanged(it)
+                }
             }
 
             onSelectedDateChangeListener = {
-                viewModel.onSelectedDateChanged(it)
+                if (!viewModel.selectedDate.value!!.isSameDay(it)) {
+                    viewModel.onSelectedDateChanged(it)
+                }
             }
         }
 
