@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import team.weathy.R
@@ -33,6 +34,7 @@ import javax.inject.Inject
 
 
 @FlowPreview
+@AndroidEntryPoint
 class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordClothesSelectBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
