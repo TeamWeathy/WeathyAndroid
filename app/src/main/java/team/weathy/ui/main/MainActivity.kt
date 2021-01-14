@@ -172,4 +172,12 @@ class MainActivity : AppCompatActivity() {
         RecordViewModel.lastRecordNavigationTime = LocalDateTime.now()
         startActivity(RecordActivity.newIntent(this))
     }
+
+    fun stateButton(state : Boolean){
+        binding.search.isEnabled = state
+        binding.setting.isEnabled = state
+        binding.home.isEnabled = state
+        binding.calendar.isEnabled = state
+        binding.fab.isEnabled = state
+    }
 }
