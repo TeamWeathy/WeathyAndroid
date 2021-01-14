@@ -11,49 +11,49 @@ import team.weathy.api.ApiSerializer
 import java.lang.reflect.Type
 
 @JsonAdapter(WeatherSerizlier::class)
-enum class Weather(val id: Int, @DrawableRes val smallIconId: Int, @DrawableRes val bigIconId: Int) {
+enum class Weather(val id: Int, @DrawableRes val smallIconId: Int, @DrawableRes val bigIconId: Int, @DrawableRes val mediumIconId: Int) {
     CLEAR_SKY(
-        1, R.drawable.ic_clearsky_day, R.drawable.main_img_clearsky_day
+        1, R.drawable.ic_clearsky_day, R.drawable.main_img_clearsky_day, R.drawable.record_img_clearsky_day
     ),
     FEW_CLOUDS(
-        2, R.drawable.ic_fewclouds_day, R.drawable.main_img_fewclouds_day
+        2, R.drawable.ic_fewclouds_day, R.drawable.main_img_fewclouds_day, R.drawable.record_img_fewclouds_day
     ),
     SCATTERED_CLOUDS(
-        3, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_day
+        3, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_day, R.drawable.record_img_scatteredclouds
     ),
-    BROKEN_CLOUDS(4, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_day), SHOWER_RAIN(
-        9, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_day
+    BROKEN_CLOUDS(4, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_day, R.drawable.record_img_brokenclouds), SHOWER_RAIN(
+        9, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_day, R.drawable.record_img_showerrain_day
     ),
-    RAIN(10, R.drawable.ic_rain_day, R.drawable.main_img_rain_day), THUNDERSTOME(
-        11, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_day
+    RAIN(10, R.drawable.ic_rain_day, R.drawable.main_img_rain_day, R.drawable.record_img_rain), THUNDERSTOME(
+        11, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_day, R.drawable.record_img_thunderstorm
     ),
 
     SNOW(
-        13, R.drawable.ic_snow, R.drawable.main_img_snow_day
+        13, R.drawable.ic_snow, R.drawable.main_img_snow_day, R.drawable.record_img_snow
     ),
     MIST(
-        50, R.drawable.ic_mist, R.drawable.main_img_mist_day
+        50, R.drawable.ic_mist, R.drawable.main_img_mist_day, R.drawable.record_img_mist
     ),
     CLEAR_SKY_NIGHT(
-        101, R.drawable.ic_clearsky_night, R.drawable.main_img_clearsky_night
+        101, R.drawable.ic_clearsky_night, R.drawable.main_img_clearsky_night, R.drawable.record_img_clearsky_night
     ),
     FEW_CLOUDS_NIGHT(
-        102, R.drawable.ic_fewclouds_night, R.drawable.main_img_fewclouds_night
+        102, R.drawable.ic_fewclouds_night, R.drawable.main_img_fewclouds_night, R.drawable.record_img_fewclouds_night
     ),
     SCATTERED_CLOUDS_NIGHT(
-        103, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_night
+        103, R.drawable.ic_scatteredclouds, R.drawable.main_img_scatteredclouds_night, R.drawable.record_img_scatteredclouds
     ),
     BROKEN_CLOUDS_NIGHT(
-        104, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_night
+        104, R.drawable.ic_brokenclouds, R.drawable.main_img_brokenclouds_night, R.drawable.record_img_brokenclouds
     ),
     SHOWER_RAIN_NIGHT(
-        109, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_night
+        109, R.drawable.ic_showerrain, R.drawable.main_img_showerrain_night, R.drawable.record_img_showerrain_night
     ),
-    THUNDERSTOME_NIGHT(111, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_night), RAIN_NIGHT(
-        110, R.drawable.ic_rain_night, R.drawable.main_img_rain_night
+    THUNDERSTOME_NIGHT(111, R.drawable.ic_thunderstorm, R.drawable.main_img_thunderstorm_night, R.drawable.record_img_thunderstorm), RAIN_NIGHT(
+        110, R.drawable.ic_rain_night, R.drawable.main_img_rain_night, R.drawable.record_img_rain
     ),
-    SNOW_NIGHT(113, R.drawable.ic_snow, R.drawable.main_img_snow_night), MIST_NIGHT(
-        150, R.drawable.ic_mist, R.drawable.main_img_mist_night
+    SNOW_NIGHT(113, R.drawable.ic_snow, R.drawable.main_img_snow_night, R.drawable.record_img_snow), MIST_NIGHT(
+        150, R.drawable.ic_mist, R.drawable.main_img_mist_night, R.drawable.record_img_mist
     ), ;
 
     companion object {
