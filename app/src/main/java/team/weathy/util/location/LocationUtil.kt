@@ -1,8 +1,6 @@
 package team.weathy.util.location
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -17,13 +15,10 @@ import kotlinx.coroutines.flow.StateFlow
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.util.SPUtil
 import team.weathy.util.debugE
-import java.util.*
 import javax.inject.Inject
 
-@SuppressLint("MissingPermission")
 class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-    private val geoCoder = Geocoder(app, Locale.KOREA)
 
     private val locationRequest = LocationRequest.create().apply {
         interval = 60000
@@ -70,21 +65,16 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    fun reverseGeocode() {
-        lastLocation.value?.let { location ->
-            debugE(geoCoder.getFromLocation(location.latitude, location.longitude, 1).first())
-        }
-    }
-
     fun selectPlace(weather: OverviewWeather) {
         spUtil.lastSelectedLocationCode = weather.region.code
         selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
     }
 
     fun selectOtherPlace(weather: OverviewWeather) {
-        selectPlace(weather)
-
-        unregisterLocationListener()
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
         spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
     }

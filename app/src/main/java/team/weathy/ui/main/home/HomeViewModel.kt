@@ -129,9 +129,13 @@ class HomeViewModel @ViewModelInject constructor(
         }
 
         viewModelScope.launch {
-            if (spUtil.lastSelectedLocationCode != 0L && spUtil.isOtherPlaceSelected) {
+            if (spUtil.lastSelectedLocationCode != 0L) {
                 fetchWeatherWithCode(spUtil.lastSelectedLocationCode)?.let {
-                    locationUtil.selectOtherPlace(it)
+                    if (locationUtil.isOtherPlaceSelected.value) {
+                        locationUtil.selectOtherPlace(it)
+                    } else {
+                        locationUtil.selectPlace(it)
+                    }
                 }
             }
 
