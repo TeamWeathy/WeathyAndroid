@@ -8,7 +8,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -57,7 +56,7 @@ class HomeViewModel @ViewModelInject constructor(
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
-        val (month, day, weekOfDay) = it.dailyWeather.date
+        val (month, day) = it.dailyWeather.date
         "${LocalDate.now().year} ${month}월 ${day}일"
     }
     val weathyWeatherIcon = recommendedWeathy.map {
@@ -140,10 +139,8 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
-        locationUtil.isLocationAvailable.zip(locationUtil.isOtherPlaceSelected) { a, b ->
-            a to b
-        }.collect { (locationAvailable, otherPlaceSelected) ->
-            if (!locationAvailable || otherPlaceSelected) return@collect
+        locationUtil.isOtherPlaceSelected.collect { isOtherPlaceSelected ->
+            if (isOtherPlaceSelected) return@collect
 
             val location = locationUtil.lastLocation.value!!
 

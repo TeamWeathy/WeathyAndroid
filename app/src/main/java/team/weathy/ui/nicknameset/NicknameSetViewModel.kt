@@ -33,7 +33,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
         val newUniqueId = uniqueId.generate()
 
         launchCatch({
-            userAPI.createUser(CreateUserReq(uniqueId.generate(), nickname.value ?: ""))
+            userAPI.createUser(CreateUserReq(newUniqueId, nickname.value ?: ""))
         }, loading = _loadingSubmit, onSuccess = {
             uniqueId.saveUserId(it.user.id)
             uniqueId.saveId(newUniqueId)

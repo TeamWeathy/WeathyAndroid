@@ -55,6 +55,7 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         override fun onLocationResult(result: LocationResult?) {
             result ?: return
             _lastLocation.value = result.lastLocation
+            _isLocationAvailable.value = true
         }
 
         override fun onLocationAvailability(result: LocationAvailability?) {
