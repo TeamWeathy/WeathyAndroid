@@ -118,16 +118,15 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
+                debugE("onTransitionCompleted")
                 when (curId) {
                     R.layout.scene_home_first -> {
                         isFirstSceneShowing = true
-                        binding.hourlyView.resetAnimation()
-                        binding.weeklyView.resetAnimation()
+                        resetCardAnimations()
                     }
                     R.layout.scene_home_second -> {
                         isFirstSceneShowing = false
-                        binding.hourlyView.startAnimation()
-                        binding.weeklyView.startAnimation()
+                        startCardAnimations()
 
                         if (shouldDisableThirdScene) {
                             binding.container.definedTransitions.last().setEnable(false)
@@ -182,10 +181,20 @@ class HomeFragment : Fragment() {
         }
 
         binding.gpsImage setOnDebounceClickListener {
-            if(locationUtil.isOtherPlaceSelected.value) {
+            if (locationUtil.isOtherPlaceSelected.value) {
                 locationUtil.selectCurrentLocationAsPlace()
             }
         }
+    }
+
+    private fun startCardAnimations() {
+        binding.hourlyView.startAnimation()
+        binding.weeklyView.startAnimation()
+    }
+
+    private fun resetCardAnimations() {
+        binding.hourlyView.resetAnimation()
+        binding.weeklyView.resetAnimation()
     }
 
     private fun setNicknameText() {

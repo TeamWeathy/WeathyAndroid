@@ -85,9 +85,6 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 hour.text = timeTexts[index]
             }
         }
-
-        resetAnimation()
-        startAnimation()
     }
 
     var position: Int by OnChangeProp(0) { pos ->
