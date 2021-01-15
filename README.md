@@ -274,6 +274,10 @@ jobs:
           SLACK_MESSAGE: '에러를 확인해주세요'
 ```
 
+### Instrumentation Test
+
+<img src="image/test.gif" width="500px"/>
+
 ## 사용 라이브러리와 목적
 
 - Glide: url 형태의 이미지를 다운받아 `ImageView`에 표시해주는 용도. 캐시도 자동으로 해줌
@@ -361,6 +365,9 @@ fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalD
 ## 핵심 기능 구현 방법 코드
 
 - 현재 위치 받아오기 (`LocationService`, `FusedLocationProviderClient`, `Geocoder`)
+
+`LocationManager` 를 이용해 간단하게 작성했습니다 코루틴 플로우와 `SharedPreferences` 를 이용해 데이터를 관리합니다.
+
 ***LocationUtil.kt***
 ```kotlin
 @SuppressLint("MissingPermission")
@@ -446,6 +453,11 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 ```
 
 - 커스텀 뷰(`WeathyCardView`)
+
+MaterialShapeDrawable과 ShapeAppearanceModel 을 이용해 MDC 의 기능을 활용했습니다.
+
+<image src="image/WeathyCardView.jpg" width="300px"/>
+
 ***WeathyCardView.kt***
 ```kotlin
 class WeathyCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -501,16 +513,28 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
 }
 ```
 
+- 캘린더 뷰(`CalendarView`)
+
+<img src="image/calendar.gif" width="300px"/>
+
+캘린더에 관련된 모든 뷰들을 관리하는 뷰입니다.
+주별, 월별 두 개의 뷰 페이저를 갖고 있으며 아이템의 개수가 무한개 입니다.
+현재 캘린더에서 보고있는 날짜, 선택된 날짜를 구독하며 그에 맞는 index를 계산하여 현재 위치를 바꾸고 반대로 index가 스와이프로 변환될 때도 보고있는 날짜, 선택된 날짜를 바꾸는 two-way binding 입니다.
+이러한 패턴을 이용하면 두 뷰페이저 끼리도 바인딩이 가능합니다.
+
+내부적으로 날짜 처리는 java.time 을 쓰기 위해 gradle 에서 desugaring 을 설정하고 `LocalDate`, `LocalDateTime` 을 주로 사용합니다.
+
+
+
 ```xml
 <team.weathy.view.calendar.CalendarView
-    curDate="@={vm.curDate}"
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="220dp"
     app:layout_constraintTop_toTopOf="parent" />
 ```
 
-- 캘린더 뷰(`CalendarView`)
+
 ***CalendarView.kt***
 ```kotlin
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -1096,6 +1120,9 @@ fun getEndDateStringInCalendar(year: Int, month: Int): DateString {
 ```
 
 - 권한 허용 유틸리티
+
+`Dexter` 라는 라이브러리를 한번 감싸서 만든 유틸리티 객체이고 권한 허용을 요청하거나 영구적으로 거부되었는 지 확인할 때 쓰입니다.
+
 ***PermissionUtil.kt***
 ```kotlin
 /**
@@ -1190,6 +1217,9 @@ object PermissionUtil {
 ```
 
 - StatusBar 상태 조절 유틸리티
+
+Status bar 색을 변경해야 할 때 사용합니다. Window 객체를 이용합니다.
+
 ***StatusBarUtil.kt***
 ```kotlin
 @Suppress("DEPRECATION")
@@ -1203,6 +1233,10 @@ object StatusBarUtil {
 ```
 
 - Dagger mock api module
+
+두 개의 Qualifier를 만들어서 @Api 를 붙이면 실제 Api가 들어오고 @ApiMock 을 붙이면 Mocking된 가짜 Api가 들어오게 의존성 주입 설정을 했습니다.
+서버가 완성되지 않았을 때 썼습니다.
+
 ***ApiModule.kt***
 ```kotlin
 @Qualifier
@@ -1277,6 +1311,9 @@ abstract class ApiModuleMock {
 ```
 
 - CommonDialog 공통된 다이얼로그 `DialogFragment`
+
+`DialogFragment` 를 이용해 Dialog 를 정의합니다. 인자를 argument 받고, 콜백을 이 Dialog를 호출한 액티비티나 부모 프라그먼트가 콜백 인터페이스를 구현한다면 거기로 보냅니다.
+
 ```kotlin
 @AndroidEntryPoint
 class CommonDialog : DialogFragment() {
@@ -1360,6 +1397,9 @@ class CommonDialog : DialogFragment() {
 ```
 
 - EventLiveData
+
+one time event 를 수신하기 위한 LiveData 입니다.
+
 ```kotlin
 typealias SimpleEventLiveData = EventLiveData<Unit>
 ## 특수 레이아웃
@@ -1388,6 +1428,9 @@ fun SimpleEventLiveData.emit() {
 ```
 
 - AppEvent
+
+SharedFlow 를 이용한 앱내 글로벌한 이벤트 송신/수신자입니다. LiveData는 Flow와 달리 lifecycle 에 영향을 받기 때문에 Flow를 써주어야 ViewModel 에서 적절한 구독이 가능합니다.
+
 
 ```kotlin
 fun SimpleSharedFlow() = MutableSharedFlow<Unit>(1, 0, DROP_OLDEST)
