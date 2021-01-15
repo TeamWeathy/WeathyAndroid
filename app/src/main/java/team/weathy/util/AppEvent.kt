@@ -8,4 +8,5 @@ fun MutableSharedFlow<Unit>.emit() = tryEmit(Unit)
 
 object AppEvent {
     val onWeathyUpdated = SimpleSharedFlow()
+    val onNavigateCurWeathyInCalendar = SimpleSharedFlow()
 }
