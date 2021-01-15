@@ -19,7 +19,7 @@
     </style>
 
     <style name="Theme.Weathy.EditText">
-        <item name="colorPrimary">#b3c4c4c4</item>
+        <item name="colorPrimary">@color/primary</item>
     </style>
 
     <style name="RoundButton" parent="Widget.MaterialComponents.Button">
