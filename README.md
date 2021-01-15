@@ -6,6 +6,7 @@
 ## 목차
 
 - [기여자들](#기여자들-)
+- [각자 맡은 부분 및 역할 작성](#각자-맡은-부분-및-역할-작성)
 - [안드로이드 툴 세팅](#안드로이드-툴-세팅)
   - [Gradle 설정](#gradle-설정)
   - [코드 컨벤션](#코드-컨벤션)
@@ -13,7 +14,6 @@
   - [깃허브 액션, 슬랙봇](#github-action--slack-bot)
 - [사용 라이브러리 & 목적](#사용-라이브러리와-목적)
 - [사용한 기술 스택](#사용한-기술-스택)
-- [각자 맡은 부분 및 역할 작성](#각자-맡은-부분-및-역할-작성)
 - [프로젝트 구조](#프로젝트-구조패키지-분류-이미지)
 - [구현 화면](#구현-화면)
 - [회의록](#회의록-주소)
@@ -35,6 +35,70 @@
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+
+## 각자 맡은 부분 및 역할 작성
+
+명주: 스플래시 화면, 온보딩 화면, 닉네임 설정 화면, 홈 화면, 캘린더 화면, 날씨 검색 화면
+희빈: 날씨 추가 시작 화면, 날씨 추가 옷 선택 화면, 날씨 추가 옷 삭제 화면, 커스텀 Dialog들, 날씨 추가 날씨 선택 화면, 날씨 추가 피드백 작성 화면
+현지: 홈 화면, 설정 화면, 닉네임 변경 화면, 문의하기 화면, 개발자 정보 화면
+
+
+- 스플래시: 명주
+
+<img src="image/splash.gif" width="300px"/>
+
+- 온보딩: 명주
+
+<img src="image/landing.gif" width="300px"/>
+
+- 닉네임 설정: 명주
+
+<img src="image/nicknameset.gif" width="300px"/>
+
+- 홈: 현지, 명주
+ 
+<img src="image/home.gif" width="300px"/>
+
+- 검색: 명주
+
+<img src="image/search.gif" width="300px"/>
+
+- 캘린더: 명주
+
+<img src="image/calendar.gif" width="300px"/>
+
+- 날씨 추가 시작: 희빈
+
+<img src="image/record_start.gif" width="300px"/>
+
+- 날씨 추가 옷 선택
+
+<img src="image/record_select.gif" width="300px"/>
+
+- 날씨 추가 옷 삭제
+
+<img src="image/record_delete.gif" width="300px"/>
+
+- 날씨 추가 날씨 선택
+
+<img src="image/record_rating.gif" width="300px"/>
+
+- 날씨 추가 피드백 작성
+
+<img src="image/record_feedback.gif" width="300px"/>
+
+- 설정: 현지
+
+<img src="image/setting.gif" width="300px"/>
+
+- 닉네임 변경: 현지
+
+<img src="image/nickname_change.gif" width="300px"/>
+
+- 팀 정보: 현지
+
+<img src="image/developers.gif" width="300px"/>
 
 ## 안드로이드 툴 세팅
 
@@ -277,69 +341,6 @@ fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalD
     return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
 }
 ```
-
-## 각자 맡은 부분 및 역할 작성
-
-명주: 스플래시 화면, 온보딩 화면, 닉네임 설정 화면, 홈 화면, 캘린더 화면, 날씨 검색 화면
-희빈: 날씨 추가 시작 화면, 날씨 추가 옷 선택 화면, 날씨 추가 옷 삭제 화면, 커스텀 Dialog들, 날씨 추가 날씨 선택 화면, 날씨 추가 피드백 작성 화면
-현지: 홈 화면, 설정 화면, 닉네임 변경 화면, 문의하기 화면, 개발자 정보 화면
-
-
-- 스플래시: 명주
-
-<img src="image/splash.gif" width="300px"/>
-
-- 온보딩: 명주
-
-<img src="image/landing.gif" width="300px"/>
-
-- 닉네임 설정: 명주
-
-<img src="image/nicknameset.gif" width="300px"/>
-
-- 홈: 현지, 명주
- 
-<img src="image/home.gif" width="300px"/>
-
-- 검색: 명주
-
-<img src="image/search.gif" width="300px"/>
-
-- 캘린더: 명주
-
-<img src="image/calendar.gif" width="300px"/>
-
-- 날씨 추가 시작: 희빈
-
-<img src="image/record_start.gif" width="300px"/>
-
-- 날씨 추가 옷 선택
-
-<img src="image/record_select.gif" width="300px"/>
-
-- 날씨 추가 옷 삭제
-
-<img src="image/record_delete.gif" width="300px"/>
-
-- 날씨 추가 날씨 선택
-
-<img src="image/record_rating.gif" width="300px"/>
-
-- 날씨 추가 피드백 작성
-
-<img src="image/record_feedback.gif" width="300px"/>
-
-- 설정: 현지
-
-<img src="image/setting.gif" width="300px"/>
-
-- 닉네임 변경: 현지
-
-<img src="image/nickname_change.gif" width="300px"/>
-
-- 팀 정보: 현지
-
-<img src="image/developers.gif" width="300px"/>
 
 
 ## 프로젝트 구조(패키지 분류 이미지)
