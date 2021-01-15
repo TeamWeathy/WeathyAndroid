@@ -165,9 +165,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.recommended.root setOnDebounceClickListener {
-            mainViewModel.changeMenu(CALENDAR)
-            calendarViewModel.onCurDateChanged(LocalDate.now())
-            calendarViewModel.onSelectedDateChanged(LocalDate.now())
+            AppEvent.onNavigateCurWeathyInCalendar.emit()
         }
     }
 
