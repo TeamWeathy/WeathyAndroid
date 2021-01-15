@@ -41,6 +41,7 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
+            debugE("lastLocationUpdated $location")
             _lastLocation.value = location
         }
 
@@ -57,28 +58,33 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
     fun registerLocationListener() {
         if (isRegistered) return
 
-        debugE("registerLocationListener")
-        try {
-            _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
+        try {
             val enabledProviders = locationManager.allProviders.filter {
                 locationManager.isProviderEnabled(it)
             }
-            val provider =
-                if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
 
-            locationManager.requestLocationUpdates(provider, 1000, 1f, locationListener)
+            enabledProviders.forEach {
+                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+
+                _lastLocation.value = locationManager.getLastKnownLocation(it)
+                _lastLocation.value = locationManager.getLastKnownLocation(it)
+            }
+
             isRegistered = true
+            debugE("registerLocationListener with provider: $enabledProviders")
         } catch (e: Throwable) {
             debugE(e)
         }
     }
 
     private fun unregisterLocationListener() {
-        debugE("unregisterLocationListener")
+
 
         locationManager.removeUpdates(locationListener)
         isRegistered = false
+        debugE("unregisterLocationListener")
     }
 
     fun selectPlace(weather: OverviewWeather) {

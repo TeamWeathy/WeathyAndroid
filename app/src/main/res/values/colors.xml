@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#B3C4C4C4</color>
     <color name="main_mint">#81E2D2</color>
     <color name="main_mint_shadow">#4bdeae</color>
     <color name="transparent">#00000000</color>
@@ -15,6 +16,10 @@
     <color name="image_view_background">#C4C4C4</color>
     <color name="transparent_black">#1e000000</color>
     <color name="ripple_grey">#22222222</color>
+    <color name="weathy_stroke">#e6e6e6</color>
+    <color name="chip_delete_txt">#f37088</color>
+    <color name="recommended_weathy_bg">#FAFAFA</color>
+    <color name="toast_bg">#99caf1eb</color>
 
     <color name="sub_grey_6">#939393</color>
     <color name="sub_grey_1">#555555</color>

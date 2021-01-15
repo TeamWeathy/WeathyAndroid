@@ -68,7 +68,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:weathy_disable_shadow="true"
             app:weathy_radius="35dp"
-            app:weathy_stroke_color="#E1E1E1"
+            app:weathy_stroke_color="@color/sub_grey_7"
             app:weathy_stroke_width="1dp"
             tools:alpha="0.5">
 

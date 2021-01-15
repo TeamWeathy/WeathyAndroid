@@ -1,8 +1,6 @@
 package team.weathy.util
 
 import androidx.annotation.MainThread
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -30,12 +28,4 @@ class EventLiveData<T> : LiveData<T>() {
 
 fun SimpleEventLiveData.emit() {
     emit(Unit)
-}
-
-fun <T> AppCompatActivity.observeEvent(eventLiveData: EventLiveData<T>, observer: Observer<in T>) {
-    eventLiveData.observe(this, observer)
-}
-
-fun <T> Fragment.observeEvent(eventLiveData: EventLiveData<T>, observer: Observer<in T>) {
-    eventLiveData.observe(viewLifecycleOwner, observer)
 }

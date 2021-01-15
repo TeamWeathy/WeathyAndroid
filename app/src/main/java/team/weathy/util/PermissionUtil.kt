@@ -20,8 +20,8 @@ object PermissionUtil {
     fun requestLocationPermissions(activity: Activity, listener: PermissionListener) {
         requestPermissions(
             activity, listOf(
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
             ), listener
         )
     }
