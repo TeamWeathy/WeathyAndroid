@@ -81,6 +81,24 @@ buildFeatures {
     viewBinding true
 }
 ```
+- 테스트 옵션
+  - 유닛테스트 기본값 반환
+  - 유닛테스트 안드로이드 리소스 포함(Reboletrics)
+```groovy
+testOptions {
+    unitTests.returnDefaultValues = true
+    unitTests {
+        includeAndroidResources = true
+    }
+}
+```
+- 린트 옵션
+  - abortOnError 비활성화
+```groovy
+lintOptions {
+    abortOnError false
+}
+```
 
 ### 코드 컨벤션
 
@@ -123,7 +141,7 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build debug
+    name: InstrumentationTest + Build
     if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && !startsWith(github.ref, 'refs/tags/')"
     steps:
       - name: Checkout repository
@@ -137,10 +155,20 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      #      - uses: actions/setup-java@v1
+      #        with:
+      #          java-version: '1.8'
+
+      #      - name: Android Emulator Runner, Test
+      #        uses: ReactiveCircus/android-emulator-runner@v2.14.2
+      #        with:
+      #          api-level: 29
+      #          script: ./gradlew connectedCheck
+
       - name: Build Release
         if: ${{ contains(github.ref, 'main') }}
         run: ./gradlew assembleRelease
-
       - name: Build Debug
         if: ${{ !contains(github.ref, 'main') }}
         run: ./gradlew assembleDebug
@@ -198,6 +226,9 @@ jobs:
 - Desugar JDK Library: `java.time` 패키지 유틸리티들을 사용하기 위한 desugaring에 사용
 - Flipper: 디버깅에 사용
 - Hilt: 의존성 주입에 사용
+- Room: 로컬 데이터베이스, 최근 검색 위치 저장에 사용
+- LoremIpsum: Mock 데이터 생성에 사용
+- Lottie: 스플래시 애니메이션에 사용
 
 
 ## 사용한 기술 스택
@@ -235,41 +266,63 @@ override fun onDetachedFromWindow() {
 - 날짜 처리 - `java.time.LocalDate`, `java.util.Calendar`
   - Java 8의 패키지이기 때문에 사용하려면 desugaring을 해주어야 함
 ```kotlin
-val LocalDate.weekOfMonth: Int
-    get() {
-        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        gc.firstDayOfWeek = SUNDAY
-        gc.minimalDaysInFirstWeek = 1
-        return gc[WEEK_OF_MONTH]
-    }
+fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
+    val cur = LocalDate.now()
+
+    val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
+    val monthSubtracted = cur.minusMonths(diffMonth.toLong())
+    val firstDateOfMonth = monthSubtracted.withDayOfMonth(1)
+    val startIdx = firstDateOfMonth.dayOfWeekIndex
+
+    return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
+}
 ```
 
 ## 각자 맡은 부분 및 역할 작성
 
-명주: 초반 프로젝트 설정, 커스텀 뷰들 만들기, API 기본 코드 작성
-희빈: 날씨추가 화면 부분에 대한 총괄
-현지: 설정 화면에 대한 총괄 및 홈 화면 UI
+명주: 스플래시 화면, 온보딩 화면, 닉네임 설정 화면, 홈 화면, 캘린더 화면, 날씨 검색 화면
+희빈: 날씨 추가 시작 화면, 날씨 추가 옷 선택 화면, 날씨 추가 옷 삭제 화면, 커스텀 Dialog들, 날씨 추가 날씨 선택 화면, 날씨 추가 피드백 작성 화면
+현지: 홈 화면, 설정 화면, 닉네임 변경 화면, 문의하기 화면, 개발자 정보 화면
 
 
-- 홈: 현지
+- 스플래시: 명주
 
-![](image/home.jpg)
+<img src="image/splash.gif" width="300px"/>
+
+- 온보딩: 명주
+
+<img src="image/landing.gif" width="300px"/>
+
+- 닉네임 설정: 명주
+
+<img src="image/nicknameset.gif" width="300px"/>
+
+- 홈: 현지, 명주
+ 
+<img src="image/home.gif" width="300px"/>
 
 - 검색: 명주
 
-![](image/search.jpg)
-
-- 날씨추가: 희빈
-
-![](image/record.jpg)
-
 - 캘린더: 명주
 
-![](image/calendar.jpg)
+
+- 날씨 추가 시작: 희빈
+
+- 날씨 추가 옷 선택
+
+- 날씨 추가 옷 삭제
+
+- 날씨 추가 날씨 선택
+
+- 날씨 추가 피드백 작성
+
 
 - 설정: 현지
 
-![](image/setting.jpg)
+
+
+
+
 
 ## 프로젝트 구조(패키지 분류 이미지)
 
