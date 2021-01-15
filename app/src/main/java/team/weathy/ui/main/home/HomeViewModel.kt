@@ -11,7 +11,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -152,31 +151,34 @@ class HomeViewModel @ViewModelInject constructor(
                     }
                 }
             }
-            fetchWeatherAfterLocationAvailable()
+            collectLastLocationForWeather()
         }
     }
 
-    private suspend fun fetchWeatherAfterLocationAvailable() {
-        val result = locationUtil.lastLocation.combine(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
+    private suspend fun collectLastLocationForWeather() {
+        locationUtil.lastLocation.combine(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
             .filter { (lastLocation, isOtherPlaceSelected) ->
                 !isOtherPlaceSelected && lastLocation != null
-            }.first()
-        val lastLocation = result.first!!
+            }.collect { (_lastLocation) ->
+                val lastLocation = _lastLocation!!
 
-        loadingWeather.value = true
-        kotlin.runCatching {
-            lastFetchDateTime.value = LocalDateTime.now()
+                loadingWeather.value = true
+                kotlin.runCatching {
+                    lastFetchDateTime.value = LocalDateTime.now()
 
-            weatherAPI.fetchWeatherByLocation(
-                lastLocation.latitude, lastLocation.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
-            )
-        }.onSuccess { res ->
-            val weather = res.body()?.weather ?: return@onSuccess
-            locationUtil.selectPlace(weather)
-        }.onFailure {
+                    weatherAPI.fetchWeatherByLocation(
+                        lastLocation.latitude,
+                        lastLocation.longitude,
+                        dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                    )
+                }.onSuccess { res ->
+                    val weather = res.body()?.weather ?: return@onSuccess
+                    locationUtil.selectPlace(weather)
+                }.onFailure {
 
-        }
-        loadingWeather.value = false
+                }
+                loadingWeather.value = false
+            }
     }
 
     private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {

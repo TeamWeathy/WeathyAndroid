@@ -66,7 +66,7 @@ class UniqueIdentifierImpl @Inject constructor(private val spUtil: SPUtil) : Uni
     }
 
     init {
-        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "") ?: "웨디"
+        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "웨디") ?: "웨디"
     }
 
     companion object {
