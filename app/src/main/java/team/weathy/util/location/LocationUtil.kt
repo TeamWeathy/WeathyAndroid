@@ -65,8 +65,8 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
             }
 
             enabledProviders.forEach {
-                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
-                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 60000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 60000, 1f, locationListener)
 
                 _lastLocation.value = locationManager.getLastKnownLocation(it)
                 _lastLocation.value = locationManager.getLastKnownLocation(it)

@@ -7,8 +7,11 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -27,6 +30,7 @@ import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@FlowPreview
 class HomeViewModel @ViewModelInject constructor(
     private val locationUtil: LocationUtil,
     @Api private val weatherAPI: WeatherAPI,
@@ -148,34 +152,31 @@ class HomeViewModel @ViewModelInject constructor(
                     }
                 }
             }
-
-            collectLocationAvailabilityAndFetch()
+            fetchWeatherAfterLocationAvailable()
         }
     }
 
-    private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
-        locationUtil.lastLocation.zip(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
-            .collect { (lastLocation, isOtherPlaceSelected) ->
-                debugE("$lastLocation $isOtherPlaceSelected")
-                if (isOtherPlaceSelected || lastLocation == null) return@collect
+    private suspend fun fetchWeatherAfterLocationAvailable() {
+        val result = locationUtil.lastLocation.combine(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
+            .filter { (lastLocation, isOtherPlaceSelected) ->
+                !isOtherPlaceSelected && lastLocation != null
+            }.first()
+        val lastLocation = result.first!!
 
-                val location = locationUtil.lastLocation.value!!
+        loadingWeather.value = true
+        kotlin.runCatching {
+            lastFetchDateTime.value = LocalDateTime.now()
 
-                loadingWeather.value = true
-                kotlin.runCatching {
-                    lastFetchDateTime.value = LocalDateTime.now()
+            weatherAPI.fetchWeatherByLocation(
+                lastLocation.latitude, lastLocation.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+            )
+        }.onSuccess { res ->
+            val weather = res.body()?.weather ?: return@onSuccess
+            locationUtil.selectPlace(weather)
+        }.onFailure {
 
-                    weatherAPI.fetchWeatherByLocation(
-                        location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
-                    )
-                }.onSuccess { res ->
-                    val weather = res.body()?.weather ?: return@onSuccess
-                    locationUtil.selectPlace(weather)
-                }.onFailure {
-
-                }
-            loadingWeather.value = false
         }
+        loadingWeather.value = false
     }
 
     private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {
