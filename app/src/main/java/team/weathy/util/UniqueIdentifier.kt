@@ -30,11 +30,15 @@ interface UniqueIdentifier {
 }
 
 class UniqueIdentifierImpl @Inject constructor(private val spUtil: SPUtil) : UniqueIdentifier {
+    // FIXME 시연용
     override val id: String?
-        get() = spUtil.sharedPreferences.getString(KEY, null)
+        get() = TEST_ID
+    //        get() = spUtil.sharedPreferences.getString(KEY, null)
 
+    // FIXME 시연용
     override val userId: Int
-        get() = spUtil.sharedPreferences.getInt(USER_ID, 0)
+        get() = TEST_USER_ID
+    //        get() = spUtil.sharedPreferences.getInt(USER_ID, 0)
 
     override val userNickname = MutableStateFlow("")
 
@@ -56,11 +60,18 @@ class UniqueIdentifierImpl @Inject constructor(private val spUtil: SPUtil) : Uni
         spUtil.sharedPreferences.edit().putString(TOKEN_KEY, token).commit()
     }
 
+    // FIXME 시연용
     override fun loadToken(): String? {
         return spUtil.sharedPreferences.getString(TOKEN_KEY, null)
     }
 
     init {
-        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "") ?: ""
+        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "") ?: "웨디"
+    }
+
+    companion object {
+        // FIXME 시연용
+        private const val TEST_ID = "010-8966-1467"
+        private const val TEST_USER_ID = 50
     }
 }
