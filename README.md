@@ -360,54 +360,84 @@ fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalD
 - 현재 위치 받아오기 (`LocationService`, `FusedLocationProviderClient`, `Geocoder`)
 ***LocationUtil.kt***
 ```kotlin
-class LocationUtil (private val app: Application) : DefaultLifecycleObserver {
-    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-    private val geoCoder = Geocoder(app, Locale.KOREA)
+@SuppressLint("MissingPermission")
+class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
+    private val locationManager = app.getSystemService(LocationManager::class.java)
 
-    private val locationRequest = LocationRequest.create().apply {
-        interval = 60000
-        fastestInterval = 5000
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
+    private val _lastLocation = MutableStateFlow<Location?>(null)
+    val lastLocation: StateFlow<Location?> = _lastLocation
 
-    private val _lastLocation = MutableLiveData<Location>()
-    val lastLocation: LiveData<Location> = _lastLocation
-    private val _isLocationAvailable = MutableLiveData(false)
-    val isLocationAvailable: LiveData<Boolean> = _isLocationAvailable
+    private val _isOtherPlaceSelected: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isOtherPlaceSelected: StateFlow<Boolean> = _isOtherPlaceSelected
 
+    val selectedWeatherLocation: MutableStateFlow<OverviewWeather?> = MutableStateFlow(null)
 
-    override fun onStart(owner: LifecycleOwner) {
+    private var isRegistered = false
+
+    override fun onCreate(owner: LifecycleOwner) {
         registerLocationListener()
+
+        _isOtherPlaceSelected.value = spUtil.isOtherPlaceSelected
     }
 
-    override fun onStop(owner: LifecycleOwner) {
+    override fun onDestroy(owner: LifecycleOwner) {
         unregisterLocationListener()
     }
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult?) {
-            result ?: return
-            _lastLocation.value = result.lastLocation
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            _lastLocation.value = location
         }
 
-        override fun onLocationAvailability(result: LocationAvailability?) {
-            result ?: return
-            _isLocationAvailable.value = result.isLocationAvailable
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+
+        override fun onProviderEnabled(provider: String) {
+        }
+
+        override fun onProviderDisabled(provider: String) {
         }
     }
 
-    private fun registerLocationListener() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+    fun registerLocationListener() {
+        if (isRegistered) return
+
+        debugE("registerLocationListener")
+        try {
+            _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            val enabledProviders = locationManager.allProviders.filter {
+                locationManager.isProviderEnabled(it)
+            }
+            val provider =
+                if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
+
+            locationManager.requestLocationUpdates(provider, 1000, 1f, locationListener)
+            isRegistered = true
+        } catch (e: Throwable) {
+            debugE(e)
+        }
     }
 
     private fun unregisterLocationListener() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        debugE("unregisterLocationListener")
+
+        locationManager.removeUpdates(locationListener)
+        isRegistered = false
     }
 
-    fun reverseGeocode() {
-        lastLocation.value?.let { location ->
-            debugE(geoCoder.getFromLocation(location.latitude, location.longitude, 1).first())
-        }
+    fun selectPlace(weather: OverviewWeather) {
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
+    }
+
+    fun selectOtherPlace(weather: OverviewWeather) {
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = true
+        _isOtherPlaceSelected.value = true
     }
 }
 ```
@@ -434,12 +464,15 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
     var strokeWidth by OnChangeProp(0f) {
         updateUI()
     }
+    var cardBackgroundColor by OnChangeProp(Color.WHITE) {
+        updateUI()
+    }
 
     init {
         if (attrs != null) {
             getStyleableAttrs(attrs)
         }
-
+        elevation = if (disableShadow) 0f else px(8).toFloat()
         updateUI()
     }
 
@@ -450,39 +483,17 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
             disableShadow = arr.getBoolean(R.styleable.WeathyCardView_weathy_disable_shadow, false)
             strokeColor = arr.getColor(R.styleable.WeathyCardView_weathy_stroke_color, Color.TRANSPARENT)
             strokeWidth = arr.getDimension(R.styleable.WeathyCardView_weathy_stroke_width, 0f)
+            cardBackgroundColor = arr.getColor(R.styleable.WeathyCardView_weathy_background_color, Color.WHITE)
         }
     }
 
     private fun updateUI() {
         background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(radius)).apply {
-            fillColor = ColorStateList.valueOf(getColor(R.color.white))
+            fillColor = ColorStateList.valueOf(cardBackgroundColor)
             strokeWidth = this@WeathyCardView.strokeWidth
             strokeColor = ColorStateList.valueOf(this@WeathyCardView.strokeColor)
         }
         setShadowColorIfAvailable(shadowColor)
-
-        elevation = if (disableShadow) 0f else px(8).toFloat()
-
-
-        invalidate()
-    }
-}
-```
-
-- 캘린더 뷰 LocalDate two-way data binding
-```kotlin
-@BindingAdapter("curDate")
-fun CalendarView.setCurDate(date: LocalDate) {
-    if (curDate != date) curDate = date
-}
-
-@InverseBindingAdapter(attribute = "curDate")
-fun CalendarView.getCurDate(): LocalDate = curDate
-
-@BindingAdapter("curDateAttrChanged")
-fun CalendarView.setListener(attrChange: InverseBindingListener) {
-    onDateChangeListener = OnDateChangeListener {
-        attrChange.onChange()
     }
 }
 ```
@@ -500,22 +511,39 @@ fun CalendarView.setListener(attrChange: InverseBindingListener) {
 ***CalendarView.kt***
 ```kotlin
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
+    var onDateChangeListener: ((date: LocalDate) -> Unit)? = null
+    var onSelectedDateChangeListener: ((date: LocalDate) -> Unit)? = null
+
+    private val curDateLiveData = MutableLiveData(LocalDate.now())
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
-        onCurDateChanged()
+         onCurDateChanged()
     }
-    var onDateChangeListener: OnDateChangeListener? = null
+
+    private val selectedDateLiveData = MutableLiveData(LocalDate.now())
+    var selectedDate: LocalDate by OnChangeProp(LocalDate.now()) {
+        selectedDateLiveData.value = it
+        onSelectedDateChangeListener?.invoke(it)
+        curDate = it
+        invalidate()
+    }
+    private var rowCount = 4
+
+    private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
+    var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
+        dataLiveData.value = it
+    }
+
+    var onClickYearMonthText: (() -> Unit)? = null
 
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
     private val isTodayInCurrentWeek
         get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
+    private val isSelectedInCurrentWeek
+        get() = selectedDate.year == curDate.year && selectedDate.month == curDate.month && selectedDate.weekOfMonth == curDate.weekOfMonth
 
 
     private val animLiveData = MutableLiveData(0f)
@@ -525,7 +553,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private val scrollEnabled = MutableLiveData(false)
-    private val onScrollToTop = MutableLiveData<Once<Unit>>()
+    private val onScrollToTop = SimpleEventLiveData()
 
     private val collapsedHeight
         get() = px(MIN_HEIGHT_DP)
@@ -536,16 +564,32 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val yearMonthText = TextView(context).apply {
         id = ViewCompat.generateViewId()
-        textSize = 25f
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
+        stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.pressed_alpha_state_list_anim)
 
-        layoutParams = LayoutParams(0, WRAP_CONTENT).apply {
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToTop = parentId
             leftToLeft = parentId
             rightToRight = parentId
-            topMargin = px(16)
+            topMargin = px(26)
+        }
+        setOnDebounceClickListener {
+            onClickYearMonthText?.invoke()
+        }
+    }
+
+    private val downArrow = ImageView(context).apply {
+        id = ViewCompat.generateViewId()
+        setImageResource(R.drawable.calendar_btn_arrow)
+        scaleType = FIT_CENTER
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+            topToTop = yearMonthText.id
+            bottomToBottom = yearMonthText.id
+            leftToRight = yearMonthText.id
+            leftMargin = 4.dp
         }
     }
 
@@ -559,6 +603,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         setOnDebounceClickListener {
             curDate = today
+            selectedDate = today
         }
 
         layoutParams = LayoutParams(px(32), px(32)).apply {
@@ -566,7 +611,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = yearMonthText.id
             bottomToBottom = yearMonthText.id
             rightToRight = parentId
-            rightMargin = px(30)
+            rightMargin = px(0)
         }
     }
 
@@ -576,7 +621,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
             topToBottom = yearMonthText.id
-            topMargin = px(16)
+            topMargin = px(11)
         }
     }
 
@@ -587,7 +632,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             topToBottom = topDivider.id
-            topMargin = px(20)
+            topMargin = px(16)
         }
     }
     private val weekTexts = (0..6).map {
@@ -601,28 +646,17 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-    private val viewPagerLayoutParams = {
-        LayoutParams(MATCH_PARENT, 0).apply {
-            topToBottom = weekTextLayout.id
-            bottomToBottom = parentId
-            bottomMargin = px(32)
-        }
-    }
-
     private var isExpanded = false
     private fun expand() {
         isExpanded = true
-
         notifyEnableScroll()
         enableTouchMonthlyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 500f) {
+            animValue = it / 500f
         }
 
-        notifyScrollToTop()
-        invalidate()
+        onExpandedChange()
     }
 
     private fun collapse() {
@@ -630,60 +664,94 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         notifyDisableScroll()
         enableTouchWeeklyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 0f) {
+            animValue = it / 500f
         }
 
+        onExpandedChange()
+    }
+
+    private fun onExpandedChange() {
         notifyScrollToTop()
         invalidate()
     }
 
+    private val fragmentViewLifecycleOwner
+        get() = findFragment<Fragment>().viewLifecycleOwner
+
     private val monthlyViewPagerGenerator = {
         ViewPager2(context).apply {
-            layoutParams = viewPagerLayoutParams()
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                bottomToBottom = parentId
+                bottomMargin = px(32)
+            }
 
-            adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+            adapter = MonthlyAdapter(
+                animLiveData,
+                scrollEnabled,
+                onScrollToTop,
+                dataLiveData,
+                selectedDateLiveData,
+                fragmentViewLifecycleOwner,
+            ) {
+                if (!it.isFuture()) selectedDate = it
+            }
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
             setPageTransformer { page, position ->
                 page.pivotX = if (position < 0) page.width.toFloat() else 0f
                 page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
+                page.rotationY = 25f * position
             }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertMonthlyIndexToDate(position)
-                    if (isExpanded && curDate != newDate) {
+                    val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
+                        position
+                    )
+                    if (isExpanded && curDate != firstDateOfMonth) {
+                        curDate = firstDateOfMonth
+                    }
+                }
+            })
+
+            offscreenPageLimit = 1
+        }
+    }
+    private var monthlyViewPager: ViewPager2? = null
+    private val weeklyViewPagerGenerator = {
+        ViewPager2(context).apply {
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                height = px(WeeklyView.ITEM_HEIGHT_DP)
+            }
+
+            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner) {
+                if (!it.isFuture()) selectedDate = it
+            }
+            setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
+
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 40f * position
+            }
+
+            registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val newDate = convertWeeklyIndexToFirstDateOfWeekCalendar(position)
+                    if (!isExpanded && curDate != newDate) {
                         curDate = newDate
                     }
                 }
             })
+
+            offscreenPageLimit = 1
         }
     }
-    private var monthlyViewPager: ViewPager2? = null
-    private val weeklyViewPager = ViewPager2(context).apply {
-        layoutParams = viewPagerLayoutParams()
-
-        adapter = WeeklyAdapter(animLiveData)
-        setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
-
-        setPageTransformer { page, position ->
-            page.pivotX = if (position < 0) page.width.toFloat() else 0f
-            page.pivotY = page.height * 0.5f
-            page.rotationY = 35f * position
-        }
-
-        registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val newDate = convertWeeklyIndexToDate(position)
-                if (!isExpanded && curDate != newDate) {
-                    curDate = newDate
-                }
-            }
-        })
-    }
+    private var weeklyViewPager: ViewPager2? = null
 
     init {
         initContainer()
@@ -694,22 +762,28 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onCurDateChanged()
     }
 
+
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private lateinit var lazyPagerAddJob: Job
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        launch {
-            delay(700L)
-
+        lazyPagerAddJob = scope.launch {
+            if (weeklyViewPager == null) {
+                weeklyViewPager = weeklyViewPagerGenerator()
+                TransitionManager.beginDelayedTransition(this@CalendarView)
+                addView(weeklyViewPager!!, 0)
+            }
+            delay(400)
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
-                onCurDateChanged()
             }
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        job.cancel()
+        lazyPagerAddJob.cancel()
     }
 
     private fun initContainer() {
@@ -726,10 +800,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun addViews() {
         addView(yearMonthText)
+        addView(downArrow)
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()
-        addView(weeklyViewPager)
     }
 
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
@@ -738,17 +812,20 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun onCurDateChanged() {
+        curDateLiveData.value = curDate
+        rowCount = calculateRequiredRow(curDate)
+
         setYearMonthTextWithDate(curDate)
         selectPagerItemsWithDate(curDate)
 
-        onDateChangeListener?.onChange(curDate)
+        onDateChangeListener?.invoke(curDate)
         changeWeekTextsColor()
         notifyScrollToTop()
         invalidate()
     }
 
     private fun setYearMonthTextWithDate(date: LocalDate) {
-        yearMonthText.text = "${date.year} .${date.monthValue.toString().padStart(2, '0')}"
+        yearMonthText.text = "${date.year} .${date.monthValue}"
     }
 
     private fun selectPagerItemsWithDate(date: LocalDate) {
@@ -761,8 +838,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             )
         }
 
-        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
-            weeklyViewPager.setCurrentItem(
+        if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
+            weeklyViewPager?.setCurrentItem(
                 nextWeeklyIndex, false
             )
         }
@@ -771,6 +848,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
+    }
+    private val greyCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.sub_grey_5)
+        setShadowLayer(12f, 0f, 0f, getColor(R.color.sub_grey_5))
     }
     private val capsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
@@ -790,21 +871,35 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         )
 
         // capsule
-        if (isTodayInCurrentMonth) {
-            val widthWithoutPadding = width - paddingHorizontal * 2f
-            val rawWidth = widthWithoutPadding / 7f
-            val maxWidth = pxFloat(42)
-            val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
-            val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
-            val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
-            val capsuleWidthRadius = capsuleWidth / 2f
+        val widthWithoutPadding = width - paddingHorizontal * 2f
+        val rawWidth = widthWithoutPadding / 7f
+        val maxWidth = pxFloat(42)
+        val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
+        val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
+        val capsuleHeight = pxFloat(64)
+        val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
+        val capsuleWidthRadius = capsuleWidth / 2f
+        val capsuleTop = pxFloat(72)
 
+        val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
+        if (isSelectedInCurrentWeek) {
+            canvas.drawRoundRect(
+                greyCapsuleLeft,
+                capsuleTop,
+                greyCapsuleLeft + capsuleWidth,
+                capsuleTop + capsuleHeight,
+                capsuleWidthRadius,
+                capsuleWidthRadius,
+                greyCapsulePaint
+            )
+        }
+
+        if (isTodayInCurrentWeek) {
             canvas.drawRoundRect(
                 capsuleLeft,
-                pxFloat(72),
+                capsuleTop,
                 capsuleLeft + capsuleWidth,
-                pxFloat(72) + capsuleHeight,
+                capsuleTop + capsuleHeight,
                 capsuleWidthRadius,
                 capsuleWidthRadius,
                 capsulePaint,
@@ -812,9 +907,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-    private var expandVelocityTracker: VelocityTracker? = null
-    private var offsetY = 0f
+    private var springAnim: SpringAnimation? = null
+    private var tracker: VelocityTracker? = null
 
     @SuppressLint("Recycle")
     private fun configureExpandGestureHandling() {
@@ -825,14 +919,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         return@setOnTouchListener false
                     }
 
-                    expandVelocityTracker?.clear()
-                    expandVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
-                    expandVelocityTracker?.addMovement(event)
+                    springAnim?.cancel()
 
-                    offsetY = event.y
+                    tracker?.clear()
+                    tracker = tracker ?: VelocityTracker.obtain()
+                    tracker?.addMovement(event)
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    expandVelocityTracker?.apply {
+                    tracker?.apply {
                         addMovement(event)
                         computeCurrentVelocity(1000)
                     }
@@ -840,8 +934,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     animValue = ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    if (expandVelocityTracker!!.yVelocity > 0) expand()
+                    if (tracker!!.yVelocity > 0) expand()
                     else collapse()
+
+                    tracker?.also {
+                        it.recycle()
+                        tracker = null
+                    }
                 }
             }
             true
@@ -872,10 +971,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun animCapsulePaintAlpha() {
         capsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
+        greyCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
 
     private fun animPagersAlpha() {
-        weeklyViewPager.alpha = 1 - animValue
+        weeklyViewPager?.alpha = 1 - animValue
         monthlyViewPager?.alpha = animValue
     }
 
@@ -888,63 +988,63 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun notifyScrollToTop() {
-        onScrollToTop.value = Once(Unit)
+        onScrollToTop.emit()
     }
 
     private fun enableTouchWeeklyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = true
+        weeklyViewPager?.isUserInputEnabled = true
         monthlyViewPager?.isUserInputEnabled = false
+
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(monthlyViewPager, 0)
+            addView(weeklyViewPager, 1)
+        }
     }
 
     private fun enableTouchMonthlyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = false
+        weeklyViewPager?.isUserInputEnabled = false
         monthlyViewPager?.isUserInputEnabled = true
-    }
 
-    fun interface OnDateChangeListener {
-        fun onChange(date: LocalDate)
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(weeklyViewPager, 0)
+            addView(monthlyViewPager, 1)
+        }
     }
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
-        private const val MIN_HEIGHT_DP = 220
+        private const val MIN_HEIGHT_DP = 224
         private const val EXPAND_MARGIN_BOTTOM_DP = 120
     }
 }
 ```
 
 - 날짜 계산 유틸리티
-***LocalDate.kt***
+***DateTime.kt***
 ```kotlin
-val LocalDate.weekOfMonth: Int
-    get() {
-        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        gc.firstDayOfWeek = SUNDAY
-        gc.minimalDaysInFirstWeek = 1
-        return gc[WEEK_OF_MONTH]
-    }
-
-val LocalDate.dayOfWeekValue: Int
-    get() = when (dayOfWeek.value + 1) {
-        8 -> 1
-        else -> dayOfWeek.value + 1
-    }
-val LocalDate.dayOfWeekIndex: Int
-    get() = dayOfWeekValue - 1
-
-fun convertMonthlyIndexToDate(index: Int): LocalDate {
+fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
     val cur = LocalDate.now()
 
     val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
-    return cur.minusMonths(diffMonth.toLong())
+    val monthSubtracted = cur.minusMonths(diffMonth.toLong())
+    val firstDateOfMonth = monthSubtracted.withDayOfMonth(1)
+    val startIdx = firstDateOfMonth.dayOfWeekIndex
+
+    return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
 }
 
-fun convertWeeklyIndexToDate(index: Int): LocalDate {
+fun convertWeeklyIndexToFirstDateOfWeekCalendar(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
+    val weekSubtracted = cur.minusWeeks(diffWeek.toLong())
+    val startIdx = weekSubtracted.dayOfWeekIndex
 
-    return cur.minusWeeks(diffWeek.toLong())
+    return weekSubtracted.minusDays(startIdx.toLong())
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
@@ -958,8 +1058,13 @@ fun convertDateToMonthlyIndex(date: LocalDate): Int {
 
 fun convertDateToWeeklyIndex(date: LocalDate): Int {
     val now = LocalDate.now()
+    val nowDayOfWeekIndex = now.dayOfWeekIndex
+    val nowFirstDayOfWeek = now.minusDays(nowDayOfWeekIndex.toLong())
 
-    val weekDiff = ChronoUnit.WEEKS.between(date, now).toInt()
+    val dateDayOfWeekIndex = date.dayOfWeekIndex
+    val dateFirstDayOfWeek = date.minusDays(dateDayOfWeekIndex.toLong())
+
+    val weekDiff = dateFirstDayOfWeek.until(nowFirstDayOfWeek, ChronoUnit.WEEKS).toInt()
 
     return WeeklyAdapter.MAX_ITEM_COUNT - weekDiff - 1
 }
@@ -969,32 +1074,21 @@ fun calculateRequiredRow(date: LocalDate): Int {
     return (date.lengthOfMonth() + date.withDayOfMonth(1).dayOfWeekIndex - 1) / 7 + 1
 }
 
-fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
-    val result = MutableList(42) { 0 }
+fun getStartDateStringInCalendar(year: Int, month: Int): DateString {
+    val date = LocalDate.of(year, month, 1)
+    val startDayIndex = date.dayOfWeekIndex
 
-    val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
-
-    // 1 ~ 7 (MON ~ SUN)
-    val startDayIndex = date.withDayOfMonth(1).dayOfWeekIndex
-    val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
-
-    for (i in 0 until startDayIndex) {
-        result[i] = previousMonthEndDay - (startDayIndex - i) + 1
-    }
-    for (i in startDayIndex..endDayIndex) {
-        result[i] = i - startDayIndex + 1
-    }
-    for (i in (endDayIndex + 1)..41) {
-        result[i] = i - endDayIndex
-    }
-
-    return Triple(result, startDayIndex, endDayIndex)
+    val startDateInCalendar = date.minusDays(startDayIndex.toLong())
+    return startDateInCalendar.dateString
 }
 
-fun getWeekTexts(date: LocalDate): List<Int> {
-    val (_result) = getMonthTexts(date)
+fun getEndDateStringInCalendar(year: Int, month: Int): DateString {
+    val firstDate = LocalDate.of(year, month, 1)
+    val lastDate = LocalDate.of(year, month, firstDate.lengthOfMonth())
+    val endDayIndex = lastDate.dayOfWeekIndex
 
-    return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
+    val endDateInCalendar = lastDate.plusDays(6 - endDayIndex.toLong())
+    return endDateInCalendar.dateString
 }
 ```
 
@@ -1095,21 +1189,207 @@ object PermissionUtil {
 - StatusBar 상태 조절 유틸리티
 ***StatusBarUtil.kt***
 ```kotlin
+@Suppress("DEPRECATION")
 object StatusBarUtil {
-    fun collapseStatusBar(activity: Activity) {
+    fun changeColor(activity: Activity, @ColorInt color: Int) {
         activity.window?.run {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            statusBarColor = Color.TRANSPARENT
-        }
-
-
-        fun expandStatusBar(activity: Activity) {
-            activity.window?.run {
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                statusBarColor = Color.WHITE
-            }
+            statusBarColor = color
         }
     }
 }
 ```
 
+- Dagger mock api module
+***ApiModule.kt***
+```kotlin
+@Qualifier
+@Retention(BINARY)
+annotation class Api
+
+@Qualifier
+@Retention(BINARY)
+annotation class ApiMock
+
+@Module
+@InstallIn(ApplicationComponent::class)
+class ApiModule {
+    @Provides
+    @Singleton
+    fun provideRetrofitProvider(uniqueId: UniqueIdentifier) = ApiFactory(uniqueId)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideAuth(provider: ApiFactory) = provider.createApi(AuthAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideCalendar(provider: ApiFactory) = provider.createApi(CalendarAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideClothes(provider: ApiFactory) = provider.createApi(ClothesAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideUser(provider: ApiFactory) = provider.createApi(UserAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideWeather(provider: ApiFactory) = provider.createApi(WeatherAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideWeahy(provider: ApiFactory) = provider.createApi(WeathyAPI::class)
+}
+
+@Module
+@InstallIn(ApplicationComponent::class)
+abstract class ApiModuleMock {
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindUser(api: MockUserAPI): UserAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindCalendar(api: MockCalendarAPI): CalendarAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindWeather(api: MockWeatherAPI): WeatherAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindWeathy(api: MockWeathyAPI): WeathyAPI
+}
+```
+
+- CommonDialog 공통된 다이얼로그 `DialogFragment`
+```kotlin
+@AndroidEntryPoint
+class CommonDialog : DialogFragment() {
+    private var binding by AutoClearedValue<DialogCommonBinding>()
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
+
+    private val title: String
+        get() = arguments?.getString("title") ?: ""
+    private val body: String
+        get() = arguments?.getString("body") ?: ""
+    private val btnText: String
+        get() = arguments?.getString("btnText") ?: ""
+    private val color: Int
+        get() = arguments?.getInt("color", getColor(R.color.blue_temp)) ?: getColor(R.color.blue_temp)
+    private val showCancel: Boolean
+        get() = arguments?.getBoolean("showCancel") ?: false
+    private val clickListener: ClickListener?
+        get() = if (parentFragment == null) (activity as? ClickListener) else (parentFragment as? ClickListener)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        DialogCommonBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        isCancelable = false
+        binding.title.text = title
+        binding.body.text = body
+        binding.btn.text = btnText
+        binding.btn setOnDebounceClickListener {
+            clickListener?.onClickYes()
+            dismiss()
+        }
+        binding.title.setTextColor(color)
+        binding.btn.backgroundTintList = ColorStateList.valueOf(color)
+
+        if (showCancel) {
+            binding.btn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                leftMargin = 13.dp
+            }
+            binding.btnCancel.isVisible = true
+            binding.btnCancel setOnDebounceClickListener {
+                clickListener?.onClickNo()
+                dismiss()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val width = (pixelRatio.screenShort * 0.88f).coerceAtMost(pixelRatio.toPixel(309).toFloat())
+        dialog?.window?.run {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setDimAmount(0.2f)
+            setLayout(width.roundToInt(), WRAP_CONTENT)
+        }
+    }
+
+    interface ClickListener {
+        fun onClickYes() {}
+        fun onClickNo() {}
+    }
+
+    companion object {
+        fun newInstance(
+            title: String? = null,
+            body: String? = null,
+            btnText: String? = null,
+            color: Int? = null,
+            showCancel: Boolean = false
+        ) = CommonDialog().apply {
+            arguments = bundleOf(
+                "title" to title, "body" to body, "btnText" to btnText, "color" to color, "showCancel" to showCancel
+            )
+        }
+    }
+}
+```
+
+- EventLiveData
+```kotlin
+typealias SimpleEventLiveData = EventLiveData<Unit>
+
+class EventLiveData<T> : LiveData<T>() {
+    private val pending = AtomicBoolean(false)
+
+    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
+        super.observe(owner) {
+            if (pending.compareAndSet(true, false)) {
+                observer.onChanged(it)
+            }
+        }
+    }
+
+    @MainThread
+    fun emit(value: T) {
+        pending.set(true)
+        setValue(value)
+    }
+}
+
+fun SimpleEventLiveData.emit() {
+    emit(Unit)
+}
+```
+
+- AppEvent
+
+```kotlin
+fun SimpleSharedFlow() = MutableSharedFlow<Unit>(1, 0, DROP_OLDEST)
+fun MutableSharedFlow<Unit>.emit() = tryEmit(Unit)
+
+object AppEvent {
+    val onWeathyUpdated = SimpleSharedFlow()
+}
+```
