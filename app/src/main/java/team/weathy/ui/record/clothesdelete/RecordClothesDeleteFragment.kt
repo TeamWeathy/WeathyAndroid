@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -18,11 +19,13 @@ import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesDeleteBinding
 import team.weathy.dialog.CommonDialog
 import team.weathy.model.entity.WeathyCloth
+import team.weathy.ui.main.MainMenu
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
@@ -35,8 +38,9 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
         FragmentRecordClothesDeleteBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        StatusBarUtil.changeColor(context as Activity, getColor(R.color.pink))
+        changeStatusBarColor(getColor(R.color.pink))
 
+        registerBackPressCallback()
         configureClothesDeleteNavigation()
         configureTabs()
         configureChips()
@@ -45,15 +49,29 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
         viewModel.clearSelectedChipsForDelete()
     }
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            (activity as? RecordActivity)?.popClothesDelete()
+            changeStatusBarColor(getColor(R.color.main_mint))
+        }
+    }
+
+    private fun registerBackPressCallback() =
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
     private fun configureClothesDeleteNavigation() {
         binding.cancel setOnDebounceClickListener {
             (activity as? RecordActivity)?.popClothesDelete()
-            StatusBarUtil.changeColor(context as Activity, getColor(R.color.main_mint))
+            changeStatusBarColor(getColor(R.color.main_mint))
         }
         binding.delete setOnDebounceClickListener {
             (activity as? RecordActivity)?.popClothesDelete()
-            StatusBarUtil.changeColor(context as Activity, getColor(R.color.main_mint))
+            changeStatusBarColor(getColor(R.color.main_mint))
         }
+    }
+
+    private fun changeStatusBarColor(color: Int) {
+        StatusBarUtil.changeColor(context as Activity, color)
     }
 
     private val layouts
