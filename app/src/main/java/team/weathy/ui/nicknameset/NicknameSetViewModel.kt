@@ -22,8 +22,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
         it.length in 1..6
     }
 
-    private val _loadingSubmit = MutableLiveData(false)
-    val loadingSubmit: LiveData<Boolean> = _loadingSubmit
+    val loadingSubmit = MutableLiveData(false)
 
     val focused = MutableLiveData(false)
 
@@ -37,7 +36,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
 
         launchCatch({
             userAPI.createUser(CreateUserReq(newUniqueId, nickname.value ?: ""))
-        }, loading = _loadingSubmit, onSuccess = {
+        }, loading = loadingSubmit, onSuccess = {
             uniqueId.saveUserId(it.user.id)
             uniqueId.saveId(newUniqueId)
             uniqueId.saveToken(it.token)
