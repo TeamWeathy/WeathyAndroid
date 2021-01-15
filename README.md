@@ -6,6 +6,7 @@
 ## 목차
 
 - [기여자들](#기여자들-)
+- [각자 맡은 부분 및 역할 작성](#각자-맡은-부분-및-역할-작성)
 - [안드로이드 툴 세팅](#안드로이드-툴-세팅)
   - [Gradle 설정](#gradle-설정)
   - [코드 컨벤션](#코드-컨벤션)
@@ -13,11 +14,12 @@
   - [깃허브 액션, 슬랙봇](#github-action--slack-bot)
 - [사용 라이브러리 & 목적](#사용-라이브러리와-목적)
 - [사용한 기술 스택](#사용한-기술-스택)
-- [각자 맡은 부분 및 역할 작성](#각자-맡은-부분-및-역할-작성)
 - [프로젝트 구조](#프로젝트-구조패키지-분류-이미지)
 - [구현 화면](#구현-화면)
 - [회의록](#회의록-주소)
 - [핵심 기능 구현 방법 코드](#핵심-기능-구현-방법-코드)
+- [특수 레이아웃](#특수-레이아웃)
+- [도형 및 상태변환](#도형-및-상태변환)
 
 ## 기여자들 ✨
 
@@ -35,6 +37,70 @@
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+
+## 각자 맡은 부분 및 역할 작성
+
+명주: 스플래시 화면, 온보딩 화면, 닉네임 설정 화면, 홈 화면, 캘린더 화면, 날씨 검색 화면
+희빈: 날씨 추가 시작 화면, 날씨 추가 옷 선택 화면, 날씨 추가 옷 삭제 화면, 커스텀 Dialog들, 날씨 추가 날씨 선택 화면, 날씨 추가 피드백 작성 화면
+현지: 홈 화면, 설정 화면, 닉네임 변경 화면, 문의하기 화면, 개발자 정보 화면
+
+
+- 스플래시: 명주
+
+<img src="image/splash.gif" width="300px"/>
+
+- 온보딩: 명주
+
+<img src="image/landing.gif" width="300px"/>
+
+- 닉네임 설정: 명주
+
+<img src="image/nicknameset.gif" width="300px"/>
+
+- 홈: 현지, 명주
+ 
+<img src="image/home.gif" width="300px"/>
+
+- 검색: 명주
+
+<img src="image/search.gif" width="300px"/>
+
+- 캘린더: 명주
+
+<img src="image/calendar.gif" width="300px"/>
+
+- 날씨 추가 시작: 희빈
+
+<img src="image/record_start.gif" width="300px"/>
+
+- 날씨 추가 옷 선택
+
+<img src="image/record_select.gif" width="300px"/>
+
+- 날씨 추가 옷 삭제
+
+<img src="image/record_delete.gif" width="300px"/>
+
+- 날씨 추가 날씨 선택
+
+<img src="image/record_rating.gif" width="300px"/>
+
+- 날씨 추가 피드백 작성
+
+<img src="image/record_feedback.gif" width="300px"/>
+
+- 설정: 현지
+
+<img src="image/setting.gif" width="300px"/>
+
+- 닉네임 변경: 현지
+
+<img src="image/nickname_change.gif" width="300px"/>
+
+- 팀 정보: 현지
+
+<img src="image/developers.gif" width="300px"/>
 
 ## 안드로이드 툴 세팅
 
@@ -81,6 +147,24 @@ buildFeatures {
     viewBinding true
 }
 ```
+- 테스트 옵션
+  - 유닛테스트 기본값 반환
+  - 유닛테스트 안드로이드 리소스 포함(Reboletrics)
+```groovy
+testOptions {
+    unitTests.returnDefaultValues = true
+    unitTests {
+        includeAndroidResources = true
+    }
+}
+```
+- 린트 옵션
+  - abortOnError 비활성화
+```groovy
+lintOptions {
+    abortOnError false
+}
+```
 
 ### 코드 컨벤션
 
@@ -123,7 +207,7 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build debug
+    name: InstrumentationTest + Build
     if: "!contains(toJSON(github.event.commits.*.message), '[skip action]') && !startsWith(github.ref, 'refs/tags/')"
     steps:
       - name: Checkout repository
@@ -137,10 +221,20 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      #      - uses: actions/setup-java@v1
+      #        with:
+      #          java-version: '1.8'
+
+      #      - name: Android Emulator Runner, Test
+      #        uses: ReactiveCircus/android-emulator-runner@v2.14.2
+      #        with:
+      #          api-level: 29
+      #          script: ./gradlew connectedCheck
+
       - name: Build Release
         if: ${{ contains(github.ref, 'main') }}
         run: ./gradlew assembleRelease
-
       - name: Build Debug
         if: ${{ !contains(github.ref, 'main') }}
         run: ./gradlew assembleDebug
@@ -180,6 +274,10 @@ jobs:
           SLACK_MESSAGE: '에러를 확인해주세요'
 ```
 
+### Instrumentation Test
+
+<img src="image/test.gif" width="500px"/>
+
 ## 사용 라이브러리와 목적
 
 - Glide: url 형태의 이미지를 다운받아 `ImageView`에 표시해주는 용도. 캐시도 자동으로 해줌
@@ -198,6 +296,10 @@ jobs:
 - Desugar JDK Library: `java.time` 패키지 유틸리티들을 사용하기 위한 desugaring에 사용
 - Flipper: 디버깅에 사용
 - Hilt: 의존성 주입에 사용
+- Room: 로컬 데이터베이스, 최근 검색 위치 저장에 사용
+- LoremIpsum: Mock 데이터 생성에 사용
+- Lottie: 스플래시 애니메이션에 사용
+- [Snowfall](https://github.com/JetradarMobile/android-snowfall) 코드 가져와서 수정해서 사용: 눈, 비 내리는 애니메이션
 
 
 ## 사용한 기술 스택
@@ -235,41 +337,18 @@ override fun onDetachedFromWindow() {
 - 날짜 처리 - `java.time.LocalDate`, `java.util.Calendar`
   - Java 8의 패키지이기 때문에 사용하려면 desugaring을 해주어야 함
 ```kotlin
-val LocalDate.weekOfMonth: Int
-    get() {
-        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        gc.firstDayOfWeek = SUNDAY
-        gc.minimalDaysInFirstWeek = 1
-        return gc[WEEK_OF_MONTH]
-    }
+fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
+    val cur = LocalDate.now()
+
+    val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
+    val monthSubtracted = cur.minusMonths(diffMonth.toLong())
+    val firstDateOfMonth = monthSubtracted.withDayOfMonth(1)
+    val startIdx = firstDateOfMonth.dayOfWeekIndex
+
+    return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
+}
 ```
 
-## 각자 맡은 부분 및 역할 작성
-
-명주: 초반 프로젝트 설정, 커스텀 뷰들 만들기, API 기본 코드 작성
-희빈: 날씨추가 화면 부분에 대한 총괄
-현지: 설정 화면에 대한 총괄 및 홈 화면 UI
-
-
-- 홈: 현지
-
-![](image/home.jpg)
-
-- 검색: 명주
-
-![](image/search.jpg)
-
-- 날씨추가: 희빈
-
-![](image/record.jpg)
-
-- 캘린더: 명주
-
-![](image/calendar.jpg)
-
-- 설정: 현지
-
-![](image/setting.jpg)
 
 ## 프로젝트 구조(패키지 분류 이미지)
 
@@ -286,61 +365,99 @@ val LocalDate.weekOfMonth: Int
 ## 핵심 기능 구현 방법 코드
 
 - 현재 위치 받아오기 (`LocationService`, `FusedLocationProviderClient`, `Geocoder`)
+
+`LocationManager` 를 이용해 간단하게 작성했습니다 코루틴 플로우와 `SharedPreferences` 를 이용해 데이터를 관리합니다.
+
 ***LocationUtil.kt***
 ```kotlin
-class LocationUtil (private val app: Application) : DefaultLifecycleObserver {
-    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-    private val geoCoder = Geocoder(app, Locale.KOREA)
+@SuppressLint("MissingPermission")
+class LocationUtil @Inject constructor(app: Application, private val spUtil: SPUtil) : DefaultLifecycleObserver {
+    private val locationManager = app.getSystemService(LocationManager::class.java)
 
-    private val locationRequest = LocationRequest.create().apply {
-        interval = 60000
-        fastestInterval = 5000
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
+    private val _lastLocation = MutableStateFlow<Location?>(null)
+    val lastLocation: StateFlow<Location?> = _lastLocation
 
-    private val _lastLocation = MutableLiveData<Location>()
-    val lastLocation: LiveData<Location> = _lastLocation
-    private val _isLocationAvailable = MutableLiveData(false)
-    val isLocationAvailable: LiveData<Boolean> = _isLocationAvailable
+    private val _isOtherPlaceSelected: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isOtherPlaceSelected: StateFlow<Boolean> = _isOtherPlaceSelected
 
+    val selectedWeatherLocation: MutableStateFlow<OverviewWeather?> = MutableStateFlow(null)
 
-    override fun onStart(owner: LifecycleOwner) {
+    private var isRegistered = false
+
+    override fun onCreate(owner: LifecycleOwner) {
         registerLocationListener()
+
+        _isOtherPlaceSelected.value = spUtil.isOtherPlaceSelected
     }
 
-    override fun onStop(owner: LifecycleOwner) {
+    override fun onDestroy(owner: LifecycleOwner) {
         unregisterLocationListener()
     }
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult?) {
-            result ?: return
-            _lastLocation.value = result.lastLocation
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            _lastLocation.value = location
         }
 
-        override fun onLocationAvailability(result: LocationAvailability?) {
-            result ?: return
-            _isLocationAvailable.value = result.isLocationAvailable
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+
+        override fun onProviderEnabled(provider: String) {
+        }
+
+        override fun onProviderDisabled(provider: String) {
         }
     }
 
-    private fun registerLocationListener() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+    fun registerLocationListener() {
+        if (isRegistered) return
+
+        debugE("registerLocationListener")
+        try {
+            _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            val enabledProviders = locationManager.allProviders.filter {
+                locationManager.isProviderEnabled(it)
+            }
+            val provider =
+                if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
+
+            locationManager.requestLocationUpdates(provider, 1000, 1f, locationListener)
+            isRegistered = true
+        } catch (e: Throwable) {
+            debugE(e)
+        }
     }
 
     private fun unregisterLocationListener() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        debugE("unregisterLocationListener")
+
+        locationManager.removeUpdates(locationListener)
+        isRegistered = false
     }
 
-    fun reverseGeocode() {
-        lastLocation.value?.let { location ->
-            debugE(geoCoder.getFromLocation(location.latitude, location.longitude, 1).first())
-        }
+    fun selectPlace(weather: OverviewWeather) {
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
+    }
+
+    fun selectOtherPlace(weather: OverviewWeather) {
+        spUtil.lastSelectedLocationCode = weather.region.code
+        selectedWeatherLocation.value = weather
+        spUtil.isOtherPlaceSelected = true
+        _isOtherPlaceSelected.value = true
     }
 }
 ```
 
 - 커스텀 뷰(`WeathyCardView`)
+
+MaterialShapeDrawable과 ShapeAppearanceModel 을 이용해 MDC 의 기능을 활용했습니다.
+
+<image src="image/WeathyCardView.jpg" width="300px"/>
+
 ***WeathyCardView.kt***
 ```kotlin
 class WeathyCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -362,12 +479,15 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
     var strokeWidth by OnChangeProp(0f) {
         updateUI()
     }
+    var cardBackgroundColor by OnChangeProp(Color.WHITE) {
+        updateUI()
+    }
 
     init {
         if (attrs != null) {
             getStyleableAttrs(attrs)
         }
-
+        elevation = if (disableShadow) 0f else px(8).toFloat()
         updateUI()
     }
 
@@ -378,72 +498,79 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
             disableShadow = arr.getBoolean(R.styleable.WeathyCardView_weathy_disable_shadow, false)
             strokeColor = arr.getColor(R.styleable.WeathyCardView_weathy_stroke_color, Color.TRANSPARENT)
             strokeWidth = arr.getDimension(R.styleable.WeathyCardView_weathy_stroke_width, 0f)
+            cardBackgroundColor = arr.getColor(R.styleable.WeathyCardView_weathy_background_color, Color.WHITE)
         }
     }
 
     private fun updateUI() {
         background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(radius)).apply {
-            fillColor = ColorStateList.valueOf(getColor(R.color.white))
+            fillColor = ColorStateList.valueOf(cardBackgroundColor)
             strokeWidth = this@WeathyCardView.strokeWidth
             strokeColor = ColorStateList.valueOf(this@WeathyCardView.strokeColor)
         }
         setShadowColorIfAvailable(shadowColor)
-
-        elevation = if (disableShadow) 0f else px(8).toFloat()
-
-
-        invalidate()
     }
 }
 ```
 
-- 캘린더 뷰 LocalDate two-way data binding
-```kotlin
-@BindingAdapter("curDate")
-fun CalendarView.setCurDate(date: LocalDate) {
-    if (curDate != date) curDate = date
-}
+- 캘린더 뷰(`CalendarView`)
 
-@InverseBindingAdapter(attribute = "curDate")
-fun CalendarView.getCurDate(): LocalDate = curDate
+<img src="image/calendar.gif" width="300px"/>
 
-@BindingAdapter("curDateAttrChanged")
-fun CalendarView.setListener(attrChange: InverseBindingListener) {
-    onDateChangeListener = OnDateChangeListener {
-        attrChange.onChange()
-    }
-}
-```
+캘린더에 관련된 모든 뷰들을 관리하는 뷰입니다.
+주별, 월별 두 개의 뷰 페이저를 갖고 있으며 아이템의 개수가 무한개 입니다.
+현재 캘린더에서 보고있는 날짜, 선택된 날짜를 구독하며 그에 맞는 index를 계산하여 현재 위치를 바꾸고 반대로 index가 스와이프로 변환될 때도 보고있는 날짜, 선택된 날짜를 바꾸는 two-way binding 입니다.
+이러한 패턴을 이용하면 두 뷰페이저 끼리도 바인딩이 가능합니다.
+
+내부적으로 날짜 처리는 java.time 을 쓰기 위해 gradle 에서 desugaring 을 설정하고 `LocalDate`, `LocalDateTime` 을 주로 사용합니다.
+
+
 
 ```xml
 <team.weathy.view.calendar.CalendarView
-    curDate="@={vm.curDate}"
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="220dp"
     app:layout_constraintTop_toTopOf="parent" />
 ```
 
-- 캘린더 뷰(`CalendarView`)
+
 ***CalendarView.kt***
 ```kotlin
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
+    var onDateChangeListener: ((date: LocalDate) -> Unit)? = null
+    var onSelectedDateChangeListener: ((date: LocalDate) -> Unit)? = null
+
+    private val curDateLiveData = MutableLiveData(LocalDate.now())
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
-        onCurDateChanged()
+         onCurDateChanged()
     }
-    var onDateChangeListener: OnDateChangeListener? = null
+
+    private val selectedDateLiveData = MutableLiveData(LocalDate.now())
+    var selectedDate: LocalDate by OnChangeProp(LocalDate.now()) {
+        selectedDateLiveData.value = it
+        onSelectedDateChangeListener?.invoke(it)
+        curDate = it
+        invalidate()
+    }
+    private var rowCount = 4
+
+    private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
+    var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
+        dataLiveData.value = it
+    }
+
+    var onClickYearMonthText: (() -> Unit)? = null
 
     private val isTodayInCurrentMonth
         get() = curDate.year == today.year && curDate.month == today.month
     private val isTodayInCurrentWeek
         get() = isTodayInCurrentMonth && curDate.weekOfMonth == today.weekOfMonth
+    private val isSelectedInCurrentWeek
+        get() = selectedDate.year == curDate.year && selectedDate.month == curDate.month && selectedDate.weekOfMonth == curDate.weekOfMonth
 
 
     private val animLiveData = MutableLiveData(0f)
@@ -453,7 +580,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private val scrollEnabled = MutableLiveData(false)
-    private val onScrollToTop = MutableLiveData<Once<Unit>>()
+    private val onScrollToTop = SimpleEventLiveData()
 
     private val collapsedHeight
         get() = px(MIN_HEIGHT_DP)
@@ -464,16 +591,32 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val yearMonthText = TextView(context).apply {
         id = ViewCompat.generateViewId()
-        textSize = 25f
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
+        stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.pressed_alpha_state_list_anim)
 
-        layoutParams = LayoutParams(0, WRAP_CONTENT).apply {
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToTop = parentId
             leftToLeft = parentId
             rightToRight = parentId
-            topMargin = px(16)
+            topMargin = px(26)
+        }
+        setOnDebounceClickListener {
+            onClickYearMonthText?.invoke()
+        }
+    }
+
+    private val downArrow = ImageView(context).apply {
+        id = ViewCompat.generateViewId()
+        setImageResource(R.drawable.calendar_btn_arrow)
+        scaleType = FIT_CENTER
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+            topToTop = yearMonthText.id
+            bottomToBottom = yearMonthText.id
+            leftToRight = yearMonthText.id
+            leftMargin = 4.dp
         }
     }
 
@@ -487,6 +630,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         setOnDebounceClickListener {
             curDate = today
+            selectedDate = today
         }
 
         layoutParams = LayoutParams(px(32), px(32)).apply {
@@ -494,7 +638,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             topToTop = yearMonthText.id
             bottomToBottom = yearMonthText.id
             rightToRight = parentId
-            rightMargin = px(30)
+            rightMargin = px(0)
         }
     }
 
@@ -504,7 +648,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
             topToBottom = yearMonthText.id
-            topMargin = px(16)
+            topMargin = px(11)
         }
     }
 
@@ -515,7 +659,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             topToBottom = topDivider.id
-            topMargin = px(20)
+            topMargin = px(16)
         }
     }
     private val weekTexts = (0..6).map {
@@ -529,28 +673,17 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-    private val viewPagerLayoutParams = {
-        LayoutParams(MATCH_PARENT, 0).apply {
-            topToBottom = weekTextLayout.id
-            bottomToBottom = parentId
-            bottomMargin = px(32)
-        }
-    }
-
     private var isExpanded = false
     private fun expand() {
         isExpanded = true
-
         notifyEnableScroll()
         enableTouchMonthlyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 1f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 500f) {
+            animValue = it / 500f
         }
 
-        notifyScrollToTop()
-        invalidate()
+        onExpandedChange()
     }
 
     private fun collapse() {
@@ -558,60 +691,94 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         notifyDisableScroll()
         enableTouchWeeklyPagerOnly()
 
-        AnimUtil.runSpringAnimation(animValue, 0f, 500f) {
-            animValue = it
+        springAnim = AnimUtil.runSpringAnimation(animValue * 500f, 0f) {
+            animValue = it / 500f
         }
 
+        onExpandedChange()
+    }
+
+    private fun onExpandedChange() {
         notifyScrollToTop()
         invalidate()
     }
 
+    private val fragmentViewLifecycleOwner
+        get() = findFragment<Fragment>().viewLifecycleOwner
+
     private val monthlyViewPagerGenerator = {
         ViewPager2(context).apply {
-            layoutParams = viewPagerLayoutParams()
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                bottomToBottom = parentId
+                bottomMargin = px(32)
+            }
 
-            adapter = MonthlyAdapter(animLiveData, scrollEnabled, onScrollToTop)
+            adapter = MonthlyAdapter(
+                animLiveData,
+                scrollEnabled,
+                onScrollToTop,
+                dataLiveData,
+                selectedDateLiveData,
+                fragmentViewLifecycleOwner,
+            ) {
+                if (!it.isFuture()) selectedDate = it
+            }
             setCurrentItem(MonthlyAdapter.MAX_ITEM_COUNT, false)
             alpha = 0f
 
             setPageTransformer { page, position ->
                 page.pivotX = if (position < 0) page.width.toFloat() else 0f
                 page.pivotY = page.height * 0.5f
-                page.rotationY = 35f * position
+                page.rotationY = 25f * position
             }
 
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val newDate = convertMonthlyIndexToDate(position)
-                    if (isExpanded && curDate != newDate) {
+                    val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
+                        position
+                    )
+                    if (isExpanded && curDate != firstDateOfMonth) {
+                        curDate = firstDateOfMonth
+                    }
+                }
+            })
+
+            offscreenPageLimit = 1
+        }
+    }
+    private var monthlyViewPager: ViewPager2? = null
+    private val weeklyViewPagerGenerator = {
+        ViewPager2(context).apply {
+            layoutParams = LayoutParams(MATCH_PARENT, 0).apply {
+                topToBottom = weekTextLayout.id
+                height = px(WeeklyView.ITEM_HEIGHT_DP)
+            }
+
+            adapter = WeeklyAdapter(animLiveData, dataLiveData, fragmentViewLifecycleOwner) {
+                if (!it.isFuture()) selectedDate = it
+            }
+            setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
+
+            setPageTransformer { page, position ->
+                page.pivotX = if (position < 0) page.width.toFloat() else 0f
+                page.pivotY = page.height * 0.5f
+                page.rotationY = 40f * position
+            }
+
+            registerOnPageChangeCallback(object : OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val newDate = convertWeeklyIndexToFirstDateOfWeekCalendar(position)
+                    if (!isExpanded && curDate != newDate) {
                         curDate = newDate
                     }
                 }
             })
+
+            offscreenPageLimit = 1
         }
     }
-    private var monthlyViewPager: ViewPager2? = null
-    private val weeklyViewPager = ViewPager2(context).apply {
-        layoutParams = viewPagerLayoutParams()
-
-        adapter = WeeklyAdapter(animLiveData)
-        setCurrentItem(WeeklyAdapter.MAX_ITEM_COUNT, false)
-
-        setPageTransformer { page, position ->
-            page.pivotX = if (position < 0) page.width.toFloat() else 0f
-            page.pivotY = page.height * 0.5f
-            page.rotationY = 35f * position
-        }
-
-        registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val newDate = convertWeeklyIndexToDate(position)
-                if (!isExpanded && curDate != newDate) {
-                    curDate = newDate
-                }
-            }
-        })
-    }
+    private var weeklyViewPager: ViewPager2? = null
 
     init {
         initContainer()
@@ -622,22 +789,28 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onCurDateChanged()
     }
 
+
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    private lateinit var lazyPagerAddJob: Job
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        launch {
-            delay(700L)
-
+        lazyPagerAddJob = scope.launch {
+            if (weeklyViewPager == null) {
+                weeklyViewPager = weeklyViewPagerGenerator()
+                TransitionManager.beginDelayedTransition(this@CalendarView)
+                addView(weeklyViewPager!!, 0)
+            }
+            delay(400)
             if (monthlyViewPager == null) {
                 monthlyViewPager = monthlyViewPagerGenerator()
                 addView(monthlyViewPager!!, 0)
-                onCurDateChanged()
             }
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        job.cancel()
+        lazyPagerAddJob.cancel()
     }
 
     private fun initContainer() {
@@ -654,10 +827,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun addViews() {
         addView(yearMonthText)
+        addView(downArrow)
         addView(todayButton)
         addView(topDivider)
         addWeekLayoutAndWeekTexts()
-        addView(weeklyViewPager)
     }
 
     private fun addWeekLayoutAndWeekTexts() = weekTextLayout.also { layout ->
@@ -666,17 +839,20 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun onCurDateChanged() {
+        curDateLiveData.value = curDate
+        rowCount = calculateRequiredRow(curDate)
+
         setYearMonthTextWithDate(curDate)
         selectPagerItemsWithDate(curDate)
 
-        onDateChangeListener?.onChange(curDate)
+        onDateChangeListener?.invoke(curDate)
         changeWeekTextsColor()
         notifyScrollToTop()
         invalidate()
     }
 
     private fun setYearMonthTextWithDate(date: LocalDate) {
-        yearMonthText.text = "${date.year} .${date.monthValue.toString().padStart(2, '0')}"
+        yearMonthText.text = "${date.year} .${date.monthValue}"
     }
 
     private fun selectPagerItemsWithDate(date: LocalDate) {
@@ -689,8 +865,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             )
         }
 
-        if (weeklyViewPager.currentItem != nextWeeklyIndex) {
-            weeklyViewPager.setCurrentItem(
+        if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
+            weeklyViewPager?.setCurrentItem(
                 nextWeeklyIndex, false
             )
         }
@@ -699,6 +875,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
+    }
+    private val greyCapsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = getColor(R.color.sub_grey_5)
+        setShadowLayer(12f, 0f, 0f, getColor(R.color.sub_grey_5))
     }
     private val capsulePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = getColor(R.color.main_mint)
@@ -718,21 +898,35 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         )
 
         // capsule
-        if (isTodayInCurrentMonth) {
-            val widthWithoutPadding = width - paddingHorizontal * 2f
-            val rawWidth = widthWithoutPadding / 7f
-            val maxWidth = pxFloat(42)
-            val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
-            val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
-            val capsuleHeight = pxFloat(64)
-            val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
-            val capsuleWidthRadius = capsuleWidth / 2f
+        val widthWithoutPadding = width - paddingHorizontal * 2f
+        val rawWidth = widthWithoutPadding / 7f
+        val maxWidth = pxFloat(42)
+        val capsuleWidth = rawWidth.coerceAtMost(maxWidth)
+        val capsuleLeftPadding = if (rawWidth >= maxWidth) (rawWidth - maxWidth) / 2f else 0f
+        val capsuleHeight = pxFloat(64)
+        val capsuleLeft = paddingHorizontal + capsuleLeftPadding + today.dayOfWeekIndex * rawWidth
+        val capsuleWidthRadius = capsuleWidth / 2f
+        val capsuleTop = pxFloat(72)
 
+        val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
+        if (isSelectedInCurrentWeek) {
+            canvas.drawRoundRect(
+                greyCapsuleLeft,
+                capsuleTop,
+                greyCapsuleLeft + capsuleWidth,
+                capsuleTop + capsuleHeight,
+                capsuleWidthRadius,
+                capsuleWidthRadius,
+                greyCapsulePaint
+            )
+        }
+
+        if (isTodayInCurrentWeek) {
             canvas.drawRoundRect(
                 capsuleLeft,
-                pxFloat(72),
+                capsuleTop,
                 capsuleLeft + capsuleWidth,
-                pxFloat(72) + capsuleHeight,
+                capsuleTop + capsuleHeight,
                 capsuleWidthRadius,
                 capsuleWidthRadius,
                 capsulePaint,
@@ -740,9 +934,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-
-    private var expandVelocityTracker: VelocityTracker? = null
-    private var offsetY = 0f
+    private var springAnim: SpringAnimation? = null
+    private var tracker: VelocityTracker? = null
 
     @SuppressLint("Recycle")
     private fun configureExpandGestureHandling() {
@@ -753,14 +946,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         return@setOnTouchListener false
                     }
 
-                    expandVelocityTracker?.clear()
-                    expandVelocityTracker = expandVelocityTracker ?: VelocityTracker.obtain()
-                    expandVelocityTracker?.addMovement(event)
+                    springAnim?.cancel()
 
-                    offsetY = event.y
+                    tracker?.clear()
+                    tracker = tracker ?: VelocityTracker.obtain()
+                    tracker?.addMovement(event)
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    expandVelocityTracker?.apply {
+                    tracker?.apply {
                         addMovement(event)
                         computeCurrentVelocity(1000)
                     }
@@ -768,8 +961,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     animValue = ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(0f, 1.2f)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    if (expandVelocityTracker!!.yVelocity > 0) expand()
+                    if (tracker!!.yVelocity > 0) expand()
                     else collapse()
+
+                    tracker?.also {
+                        it.recycle()
+                        tracker = null
+                    }
                 }
             }
             true
@@ -800,10 +998,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private fun animCapsulePaintAlpha() {
         capsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
+        greyCapsulePaint.alpha = (255 - animValue * 255).toInt().clamp(0, 255)
     }
 
     private fun animPagersAlpha() {
-        weeklyViewPager.alpha = 1 - animValue
+        weeklyViewPager?.alpha = 1 - animValue
         monthlyViewPager?.alpha = animValue
     }
 
@@ -816,63 +1015,63 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun notifyScrollToTop() {
-        onScrollToTop.value = Once(Unit)
+        onScrollToTop.emit()
     }
 
     private fun enableTouchWeeklyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = true
+        weeklyViewPager?.isUserInputEnabled = true
         monthlyViewPager?.isUserInputEnabled = false
+
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(monthlyViewPager, 0)
+            addView(weeklyViewPager, 1)
+        }
     }
 
     private fun enableTouchMonthlyPagerOnly() {
-        weeklyViewPager.isUserInputEnabled = false
+        weeklyViewPager?.isUserInputEnabled = false
         monthlyViewPager?.isUserInputEnabled = true
-    }
 
-    fun interface OnDateChangeListener {
-        fun onChange(date: LocalDate)
+        if (weeklyViewPager != null && monthlyViewPager != null) {
+            removeViewAt(0)
+            removeViewAt(0)
+            addView(weeklyViewPager, 0)
+            addView(monthlyViewPager, 1)
+        }
     }
 
     companion object {
         private const val parentId = ConstraintSet.PARENT_ID
-        private const val MIN_HEIGHT_DP = 220
+        private const val MIN_HEIGHT_DP = 224
         private const val EXPAND_MARGIN_BOTTOM_DP = 120
     }
 }
 ```
 
 - 날짜 계산 유틸리티
-***LocalDate.kt***
+***DateTime.kt***
 ```kotlin
-val LocalDate.weekOfMonth: Int
-    get() {
-        val gc = GregorianCalendar.from(atStartOfDay(ZoneId.systemDefault()))
-        gc.firstDayOfWeek = SUNDAY
-        gc.minimalDaysInFirstWeek = 1
-        return gc[WEEK_OF_MONTH]
-    }
-
-val LocalDate.dayOfWeekValue: Int
-    get() = when (dayOfWeek.value + 1) {
-        8 -> 1
-        else -> dayOfWeek.value + 1
-    }
-val LocalDate.dayOfWeekIndex: Int
-    get() = dayOfWeekValue - 1
-
-fun convertMonthlyIndexToDate(index: Int): LocalDate {
+fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalDate, LocalDate> {
     val cur = LocalDate.now()
 
     val diffMonth = MonthlyAdapter.MAX_ITEM_COUNT - index - 1
-    return cur.minusMonths(diffMonth.toLong())
+    val monthSubtracted = cur.minusMonths(diffMonth.toLong())
+    val firstDateOfMonth = monthSubtracted.withDayOfMonth(1)
+    val startIdx = firstDateOfMonth.dayOfWeekIndex
+
+    return firstDateOfMonth.minusDays(startIdx.toLong()) to firstDateOfMonth
 }
 
-fun convertWeeklyIndexToDate(index: Int): LocalDate {
+fun convertWeeklyIndexToFirstDateOfWeekCalendar(index: Int): LocalDate {
     val cur = LocalDate.now()
 
     val diffWeek = WeeklyAdapter.MAX_ITEM_COUNT - index - 1
+    val weekSubtracted = cur.minusWeeks(diffWeek.toLong())
+    val startIdx = weekSubtracted.dayOfWeekIndex
 
-    return cur.minusWeeks(diffWeek.toLong())
+    return weekSubtracted.minusDays(startIdx.toLong())
 }
 
 fun convertDateToMonthlyIndex(date: LocalDate): Int {
@@ -886,8 +1085,13 @@ fun convertDateToMonthlyIndex(date: LocalDate): Int {
 
 fun convertDateToWeeklyIndex(date: LocalDate): Int {
     val now = LocalDate.now()
+    val nowDayOfWeekIndex = now.dayOfWeekIndex
+    val nowFirstDayOfWeek = now.minusDays(nowDayOfWeekIndex.toLong())
 
-    val weekDiff = ChronoUnit.WEEKS.between(date, now).toInt()
+    val dateDayOfWeekIndex = date.dayOfWeekIndex
+    val dateFirstDayOfWeek = date.minusDays(dateDayOfWeekIndex.toLong())
+
+    val weekDiff = dateFirstDayOfWeek.until(nowFirstDayOfWeek, ChronoUnit.WEEKS).toInt()
 
     return WeeklyAdapter.MAX_ITEM_COUNT - weekDiff - 1
 }
@@ -897,36 +1101,28 @@ fun calculateRequiredRow(date: LocalDate): Int {
     return (date.lengthOfMonth() + date.withDayOfMonth(1).dayOfWeekIndex - 1) / 7 + 1
 }
 
-fun getMonthTexts(date: LocalDate): Triple<List<Int>, Int, Int> {
-    val result = MutableList(42) { 0 }
+fun getStartDateStringInCalendar(year: Int, month: Int): DateString {
+    val date = LocalDate.of(year, month, 1)
+    val startDayIndex = date.dayOfWeekIndex
 
-    val previousMonthEndDay = date.minusMonths(1).lengthOfMonth()
-
-    // 1 ~ 7 (MON ~ SUN)
-    val startDayIndex = date.withDayOfMonth(1).dayOfWeekIndex
-    val endDayIndex = startDayIndex + date.lengthOfMonth() - 1
-
-    for (i in 0 until startDayIndex) {
-        result[i] = previousMonthEndDay - (startDayIndex - i) + 1
-    }
-    for (i in startDayIndex..endDayIndex) {
-        result[i] = i - startDayIndex + 1
-    }
-    for (i in (endDayIndex + 1)..41) {
-        result[i] = i - endDayIndex
-    }
-
-    return Triple(result, startDayIndex, endDayIndex)
+    val startDateInCalendar = date.minusDays(startDayIndex.toLong())
+    return startDateInCalendar.dateString
 }
 
-fun getWeekTexts(date: LocalDate): List<Int> {
-    val (_result) = getMonthTexts(date)
+fun getEndDateStringInCalendar(year: Int, month: Int): DateString {
+    val firstDate = LocalDate.of(year, month, 1)
+    val lastDate = LocalDate.of(year, month, firstDate.lengthOfMonth())
+    val endDayIndex = lastDate.dayOfWeekIndex
 
-    return _result.subList((date.weekOfMonth - 1) * 7, date.weekOfMonth * 7)
+    val endDateInCalendar = lastDate.plusDays(6 - endDayIndex.toLong())
+    return endDateInCalendar.dateString
 }
 ```
 
 - 권한 허용 유틸리티
+
+`Dexter` 라는 라이브러리를 한번 감싸서 만든 유틸리티 객체이고 권한 허용을 요청하거나 영구적으로 거부되었는 지 확인할 때 쓰입니다.
+
 ***PermissionUtil.kt***
 ```kotlin
 /**
@@ -1021,23 +1217,285 @@ object PermissionUtil {
 ```
 
 - StatusBar 상태 조절 유틸리티
+
+Status bar 색을 변경해야 할 때 사용합니다. Window 객체를 이용합니다.
+
 ***StatusBarUtil.kt***
 ```kotlin
+@Suppress("DEPRECATION")
 object StatusBarUtil {
-    fun collapseStatusBar(activity: Activity) {
+    fun changeColor(activity: Activity, @ColorInt color: Int) {
         activity.window?.run {
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            statusBarColor = Color.TRANSPARENT
-        }
-
-
-        fun expandStatusBar(activity: Activity) {
-            activity.window?.run {
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                statusBarColor = Color.WHITE
-            }
+            statusBarColor = color
         }
     }
 }
 ```
 
+- Dagger mock api module
+
+두 개의 Qualifier를 만들어서 @Api 를 붙이면 실제 Api가 들어오고 @ApiMock 을 붙이면 Mocking된 가짜 Api가 들어오게 의존성 주입 설정을 했습니다.
+서버가 완성되지 않았을 때 썼습니다.
+
+***ApiModule.kt***
+```kotlin
+@Qualifier
+@Retention(BINARY)
+annotation class Api
+
+@Qualifier
+@Retention(BINARY)
+annotation class ApiMock
+
+@Module
+@InstallIn(ApplicationComponent::class)
+class ApiModule {
+    @Provides
+    @Singleton
+    fun provideRetrofitProvider(uniqueId: UniqueIdentifier) = ApiFactory(uniqueId)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideAuth(provider: ApiFactory) = provider.createApi(AuthAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideCalendar(provider: ApiFactory) = provider.createApi(CalendarAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideClothes(provider: ApiFactory) = provider.createApi(ClothesAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideUser(provider: ApiFactory) = provider.createApi(UserAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideWeather(provider: ApiFactory) = provider.createApi(WeatherAPI::class)
+
+    @Provides
+    @Singleton
+    @Api
+    fun provideWeahy(provider: ApiFactory) = provider.createApi(WeathyAPI::class)
+}
+
+@Module
+@InstallIn(ApplicationComponent::class)
+abstract class ApiModuleMock {
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindUser(api: MockUserAPI): UserAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindCalendar(api: MockCalendarAPI): CalendarAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindWeather(api: MockWeatherAPI): WeatherAPI
+
+    @Singleton
+    @Binds
+    @ApiMock
+    abstract fun bindWeathy(api: MockWeathyAPI): WeathyAPI
+}
+```
+
+- CommonDialog 공통된 다이얼로그 `DialogFragment`
+
+`DialogFragment` 를 이용해 Dialog 를 정의합니다. 인자를 argument 받고, 콜백을 이 Dialog를 호출한 액티비티나 부모 프라그먼트가 콜백 인터페이스를 구현한다면 거기로 보냅니다.
+
+```kotlin
+@AndroidEntryPoint
+class CommonDialog : DialogFragment() {
+    private var binding by AutoClearedValue<DialogCommonBinding>()
+
+    @Inject
+    lateinit var pixelRatio: PixelRatio
+
+    private val title: String
+        get() = arguments?.getString("title") ?: ""
+    private val body: String
+        get() = arguments?.getString("body") ?: ""
+    private val btnText: String
+        get() = arguments?.getString("btnText") ?: ""
+    private val color: Int
+        get() = arguments?.getInt("color", getColor(R.color.blue_temp)) ?: getColor(R.color.blue_temp)
+    private val showCancel: Boolean
+        get() = arguments?.getBoolean("showCancel") ?: false
+    private val clickListener: ClickListener?
+        get() = if (parentFragment == null) (activity as? ClickListener) else (parentFragment as? ClickListener)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        DialogCommonBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        isCancelable = false
+        binding.title.text = title
+        binding.body.text = body
+        binding.btn.text = btnText
+        binding.btn setOnDebounceClickListener {
+            clickListener?.onClickYes()
+            dismiss()
+        }
+        binding.title.setTextColor(color)
+        binding.btn.backgroundTintList = ColorStateList.valueOf(color)
+
+        if (showCancel) {
+            binding.btn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                leftMargin = 13.dp
+            }
+            binding.btnCancel.isVisible = true
+            binding.btnCancel setOnDebounceClickListener {
+                clickListener?.onClickNo()
+                dismiss()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val width = (pixelRatio.screenShort * 0.88f).coerceAtMost(pixelRatio.toPixel(309).toFloat())
+        dialog?.window?.run {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setDimAmount(0.2f)
+            setLayout(width.roundToInt(), WRAP_CONTENT)
+        }
+    }
+
+    interface ClickListener {
+        fun onClickYes() {}
+        fun onClickNo() {}
+    }
+
+    companion object {
+        fun newInstance(
+            title: String? = null,
+            body: String? = null,
+            btnText: String? = null,
+            color: Int? = null,
+            showCancel: Boolean = false
+        ) = CommonDialog().apply {
+            arguments = bundleOf(
+                "title" to title, "body" to body, "btnText" to btnText, "color" to color, "showCancel" to showCancel
+            )
+        }
+    }
+}
+```
+
+- EventLiveData
+
+one time event 를 수신하기 위한 LiveData 입니다.
+
+```kotlin
+typealias SimpleEventLiveData = EventLiveData<Unit>
+## 특수 레이아웃
+
+class EventLiveData<T> : LiveData<T>() {
+    private val pending = AtomicBoolean(false)
+
+    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
+        super.observe(owner) {
+            if (pending.compareAndSet(true, false)) {
+                observer.onChanged(it)
+            }
+        }
+    }
+
+    @MainThread
+    fun emit(value: T) {
+        pending.set(true)
+        setValue(value)
+    }
+}
+
+fun SimpleEventLiveData.emit() {
+    emit(Unit)
+}
+```
+
+- AppEvent
+
+SharedFlow 를 이용한 앱내 글로벌한 이벤트 송신/수신자입니다. LiveData는 Flow와 달리 lifecycle 에 영향을 받기 때문에 Flow를 써주어야 ViewModel 에서 적절한 구독이 가능합니다.
+
+
+```kotlin
+fun SimpleSharedFlow() = MutableSharedFlow<Unit>(1, 0, DROP_OLDEST)
+fun MutableSharedFlow<Unit>.emit() = tryEmit(Unit)
+
+object AppEvent {
+    val onWeathyUpdated = SimpleSharedFlow()
+}
+```
+
+## 특수 레이아웃
+
+- `WeathyCardView.kt` 같은 곳에서 단순하게 frame에 표현할 수 있을 때 `FrameLayout` 사용 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
+
+- `fragment_home.xml` 에서 MotionLayout 사용 (메인 애니메이션 구현 위함) 
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
+
+[모션파일 링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/xml/home_motion.xml)
+
+```xml
+ <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layoutDescription="@xml/home_motion">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="26dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="26dp" />
+
+            <ImageView
+                android:id="@+id/topBlur"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:elevation="9dp"
+                android:outlineProvider="none"
+                android:scaleType="fitXY"
+                srcResource="@{vm.weatherSecondBackground}"
+                app:layout_constraintTop_toTopOf="parent" />
+   ......
+```
+
+## 도형 및 상태변환
+
+- `WeathyCardView` 에서 `MaterialShapeDrawable` 와 `ShapeAppearanceModel` 을 사용해서 둥그란 모서리 표현 
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
+
+- `fragment_home.xml` 에서 팝업은 디자이너가 이미지로 그대로 줬기 때문에 그대로 이미지로 사용
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
+
+- `activity_developer_info.xml` 에서 배경을 그냥 이미지로 처리
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/activity_developer_info.xml)
