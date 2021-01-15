@@ -11,6 +11,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/layout_nickname"
         dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
@@ -54,16 +56,20 @@
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="26dp"
+            android:id="@+id/textInputLayout"
             android:layout_marginTop="42dp"
-            app:boxStrokeColor="@{vm.nickname.length() == 0 ? @color/sub_grey_7 : @color/main_mint}"
+            app:endIconDrawable="@drawable/ic_textdelete"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/transparent"
+            app:endIconTintMode="src_over"
+            android:layout_marginHorizontal="26dp"
+            android:layout_height="wrap_content"
+            app:counterTextColor="@color/main_mint"
             app:layout_constraintTop_toBottomOf="@id/body">
 
-            <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nickname_edit"
                 style="@style/TextInputEditText"
                 android:hint="부메랑"
@@ -72,42 +78,32 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/delete_nickname_btn"
-            style="@style/ImageButton.size32.icon20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/btn_delete"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@id/textInputLayout"
-            app:layout_constraintTop_toTopOf="@id/textInputLayout" />
 
         <TextView
+            android:visibility="@{vm.focused}"
+            android:layout_marginTop="5dp"
             android:id="@+id/maxLength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/6"
             android:textColor="@color/sub_grey_6"
             android:textSize="13sp"
-            android:visibility="invisible"
             app:layout_constraintRight_toRightOf="@id/textInputLayout"
-            app:layout_constraintTop_toTopOf="@id/countLength" />
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <TextView
-            android:id="@+id/countLength"
+            android:visibility="@{vm.focused}"
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:text='@{vm.nickname.length() + ""}'
             android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
             android:textSize="13sp"
-            android:visibility="invisible"
+            tools:textColor="@color/sub_grey_6"
             app:layout_constraintRight_toLeftOf="@id/maxLength"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-            tools:text="0"
-            tools:textColor="@color/sub_grey_6" />
+            tools:text="0" />
+
 
         <Button
             android:id="@+id/submit"
