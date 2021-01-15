@@ -1,5 +1,6 @@
 package team.weathy.ui.main.home
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,6 @@ import team.weathy.model.entity.Weather.BackgroundAnimation.SNOW
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
-import team.weathy.ui.main.calendar.CalendarViewModel
 import team.weathy.util.*
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
@@ -37,7 +37,6 @@ class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
     private val viewModel by viewModels<HomeViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
-    private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     @Inject
     lateinit var pixelRatio: PixelRatio
@@ -93,7 +92,16 @@ class HomeFragment : Fragment() {
 
         if (!TestEnv.isInstrumentationTesting) {
             binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
-            binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+            binding.weatherImage.doOnLayout {
+                ObjectAnimator.ofFloat(binding.weatherImage, "translationY", -0.02f * it.height, 0.02f * it.height)
+                    .apply {
+                        duration = 1000L
+                        repeatMode = ObjectAnimator.REVERSE
+                        repeatCount = ObjectAnimator.INFINITE
+                        setAutoCancel(true)
+                        start()
+                    }
+            }
         }
 
         binding.topBlur.pivotY = 0f
