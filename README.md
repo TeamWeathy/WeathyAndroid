@@ -303,25 +303,43 @@ fun convertMonthlyIndexToDateToFirstDateOfMonthCalendar(index: Int): Pair<LocalD
 
 - 검색: 명주
 
+<img src="image/search.gif" width="300px"/>
+
 - 캘린더: 명주
 
+<img src="image/calendar.gif" width="300px"/>
 
 - 날씨 추가 시작: 희빈
 
+<img src="image/record_start.gif" width="300px"/>
+
 - 날씨 추가 옷 선택
+
+<img src="image/record_select.gif" width="300px"/>
 
 - 날씨 추가 옷 삭제
 
+<img src="image/record_delete.gif" width="300px"/>
+
 - 날씨 추가 날씨 선택
+
+<img src="image/record_rating.gif" width="300px"/>
 
 - 날씨 추가 피드백 작성
 
+<img src="image/record_feedback.gif" width="300px"/>
 
 - 설정: 현지
 
+<img src="image/setting.gif" width="300px"/>
 
+- 닉네임 변경: 현지
 
+<img src="image/nickname_change.gif" width="300px"/>
 
+- 팀 정보: 현지
+
+<img src="image/developers.gif" width="300px"/>
 
 
 ## 프로젝트 구조(패키지 분류 이미지)
