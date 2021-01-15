@@ -195,7 +195,6 @@
 
             <Button
                 android:layout_width="0dp"
-                android:visibility="@{!vm.edit}"
                 style="@style/RoundButton.Mint"
                 android:id="@+id/btn_start"
                 app:layout_constraintLeft_toLeftOf="parent"
