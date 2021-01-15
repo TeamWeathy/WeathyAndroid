@@ -1,6 +1,7 @@
 ############### Application classes that will be serialized/deserialized over Gson
 -keep public class team.weathy.api.** {*;}
 -keep public class team.weathy.model.** {*;}
+-keep public class team.weathy.ui.** {*;}
 ############
 
 
