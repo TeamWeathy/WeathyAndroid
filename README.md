@@ -18,6 +18,8 @@
 - [구현 화면](#구현-화면)
 - [회의록](#회의록-주소)
 - [핵심 기능 구현 방법 코드](#핵심-기능-구현-방법-코드)
+- [특수 레이아웃](#특수-레이아웃)
+- [도형 및 상태변환](#도형-및-상태변환)
 
 ## 기여자들 ✨
 
@@ -293,6 +295,7 @@ jobs:
 - Room: 로컬 데이터베이스, 최근 검색 위치 저장에 사용
 - LoremIpsum: Mock 데이터 생성에 사용
 - Lottie: 스플래시 애니메이션에 사용
+- [Snowfall](https://github.com/JetradarMobile/android-snowfall) 코드 가져와서 수정해서 사용: 눈, 비 내리는 애니메이션
 
 
 ## 사용한 기술 스택
@@ -1359,6 +1362,7 @@ class CommonDialog : DialogFragment() {
 - EventLiveData
 ```kotlin
 typealias SimpleEventLiveData = EventLiveData<Unit>
+## 특수 레이아웃
 
 class EventLiveData<T> : LiveData<T>() {
     private val pending = AtomicBoolean(false)
@@ -1393,3 +1397,60 @@ object AppEvent {
     val onWeathyUpdated = SimpleSharedFlow()
 }
 ```
+
+- `WeathyCardView.kt` 같은 곳에서 단순하게 frame에 표현할 수 있을 때 `FrameLayout` 사용 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
+
+- `fragment_home.xml` 에서 MotionLayout 사용 (메인 애니메이션 구현 위함) 
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
+
+[모션파일 링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/xml/home_motion.xml)
+
+```xml
+ <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layoutDescription="@xml/home_motion">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="26dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="26dp" />
+
+            <ImageView
+                android:id="@+id/topBlur"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:elevation="9dp"
+                android:outlineProvider="none"
+                android:scaleType="fitXY"
+                srcResource="@{vm.weatherSecondBackground}"
+                app:layout_constraintTop_toTopOf="parent" />
+   ......
+```
+
+## 도형 및 상태변환
+
+- `WeathyCardView` 에서 `MaterialShapeDrawable` 와 `ShapeAppearanceModel` 을 사용해서 둥그란 모서리 표현 
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
+
+- `fragment_home.xml` 에서 팝업은 디자이너가 이미지로 그대로 줬기 때문에 그대로 이미지로 사용
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
+
+- `activity_developer_info.xml` 에서 배경을 그냥 이미지로 처리
+
+[링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/activity_developer_info.xml)
