@@ -22,11 +22,11 @@ import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.model.entity.Weather.BackgroundAnimation.RAIN
 import team.weathy.model.entity.Weather.BackgroundAnimation.SNOW
 import team.weathy.ui.main.MainActivity
-import team.weathy.ui.main.MainMenu.CALENDAR
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.main.calendar.CalendarViewModel
 import team.weathy.util.*
+import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -44,6 +44,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var uniqueId: UniqueIdentifier
+
+    @Inject
+    lateinit var locationUtil: LocationUtil
 
     private var shouldDisableThirdScene = false
     private var isHelpPopupShowing = false
@@ -165,7 +168,15 @@ class HomeFragment : Fragment() {
         }
 
         binding.recommended.root setOnDebounceClickListener {
-            AppEvent.onNavigateCurWeathyInCalendar.emit()
+            viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
+                AppEvent.onNavigateCurWeathyInCalendar.tryEmit(LocalDate.of(date.year, date.month, date.day))
+            }
+        }
+
+        binding.gpsImage setOnDebounceClickListener {
+            if(locationUtil.isOtherPlaceSelected.value) {
+                locationUtil.selectCurrentLocationAsPlace()
+            }
         }
     }
 

@@ -58,7 +58,6 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
     fun registerLocationListener() {
         if (isRegistered) return
 
-
         try {
             val enabledProviders = locationManager.allProviders.filter {
                 locationManager.isProviderEnabled(it)
@@ -99,5 +98,11 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         selectedWeatherLocation.value = weather
         spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
+    }
+
+    fun selectCurrentLocationAsPlace() {
+        registerLocationListener()
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
     }
 }

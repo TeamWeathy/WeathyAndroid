@@ -62,11 +62,11 @@ class UniqueIdentifierImpl @Inject constructor(private val spUtil: SPUtil) : Uni
 
     // FIXME 시연용
     override fun loadToken(): String? {
-        return spUtil.sharedPreferences.getString(TOKEN_KEY, null)
+        return spUtil.sharedPreferences.getString(TOKEN_KEY, null) ?: "token"
     }
 
     init {
-        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "") ?: "웨디"
+        userNickname.value = spUtil.sharedPreferences.getString(USER_NICKNAME, "웨디") ?: "웨디"
     }
 
     companion object {

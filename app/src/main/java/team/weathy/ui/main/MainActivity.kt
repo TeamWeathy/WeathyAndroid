@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
 
         lifecycleScope.launchWhenStarted {
-            AppEvent.onNavigateCurWeathyInCalendar.collect {
+            AppEvent.onNavigateCurWeathyInCalendar.collect { date ->
                 viewModel.changeMenu(CALENDAR)
-                calendarViewModel.onCurDateChanged(LocalDate.now())
-                calendarViewModel.onSelectedDateChanged(LocalDate.now())
+                calendarViewModel.onCurDateChanged(date)
+                calendarViewModel.onSelectedDateChanged(date)
             }
         }
     }
