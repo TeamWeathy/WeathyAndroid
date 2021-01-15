@@ -1,3 +1,10 @@
+############### Application classes that will be serialized/deserialized over Gson
+-keep public class team.weathy.api.** {*;}
+-keep public class team.weathy.model.** {*;}
+############
+
+
+
 #----Glide--- start
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
@@ -24,8 +31,7 @@
 -dontwarn sun.misc.**
 #-keep class com.google.gson.stream.** { *; }
 
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { <fields>; }
+
 
 # Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
