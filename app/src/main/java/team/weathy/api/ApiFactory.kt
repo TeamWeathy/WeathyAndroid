@@ -39,8 +39,8 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
 
                 if (response.code() == 401 && uniqueId.id != null) {
                     kotlin.runCatching {
+                        response.close()
                         val loginRequestBody = gson.toJson(LoginReq(uniqueId.id!!))
-
                         val loginRequest = newRequest.build().newBuilder().url("$BASE_URL/auth/login")
                             .post(RequestBody.create(MediaType.parse(MEDIA_TYPE), loginRequestBody))
                             .removeHeader(HEADER_TOKEN).build()
@@ -49,8 +49,10 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
                         uniqueId.saveToken(loginResponse.token)
                         it.proceed(newRequest.removeHeader(HEADER_TOKEN).addHeaders(loginResponse.token).build())
                     }.onSuccess {
+                        debugE(it)
                         response = it
                     }.onFailure {
+                        debugE(it)
                         debugE("토큰 갱신 실패")
                     }
                 }

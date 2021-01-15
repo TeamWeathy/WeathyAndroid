@@ -65,9 +65,7 @@ class LandingActivity : AppCompatActivity() {
                 locationUtil.registerLocationListener()
                 lifecycleScope.launchWhenStarted {
                     delay(3500L)
-
                 }
-
             }
         })
     }
