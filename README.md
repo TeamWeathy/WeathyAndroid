@@ -1118,9 +1118,9 @@ object StatusBarUtil {
 
 ## 특수 레이아웃
 
-### `WeathyCardView.kt` 같은 곳에서 단순하게 frame에 표현할 수 있을 때 `FrameLayout` 사용 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
+- `WeathyCardView.kt` 같은 곳에서 단순하게 frame에 표현할 수 있을 때 `FrameLayout` 사용 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
 
-### `fragment_home.xml` 에서 MotionLayout 사용 (메인 애니메이션 구현 위함) 
+- `fragment_home.xml` 에서 MotionLayout 사용 (메인 애니메이션 구현 위함) 
 
 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
 
@@ -1163,14 +1163,14 @@ object StatusBarUtil {
 
 ## 도형 및 상태변환
 
-### `WeathyCardView` 에서 `MaterialShapeDrawable` 와 `ShapeAppearanceModel` 을 사용해서 둥그란 모서리 표현 
+- `WeathyCardView` 에서 `MaterialShapeDrawable` 와 `ShapeAppearanceModel` 을 사용해서 둥그란 모서리 표현 
 
 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
 
-### `fragment_home.xml` 에서 팝업은 디자이너가 이미지로 그대로 줬기 때문에 그대로 이미지로 사용
+- `fragment_home.xml` 에서 팝업은 디자이너가 이미지로 그대로 줬기 때문에 그대로 이미지로 사용
 
 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/fragment_home.xml)
 
-### `activity_developer_info.xml` 에서 배경을 그냥 이미지로 처리
+- `activity_developer_info.xml` 에서 배경을 그냥 이미지로 처리
 
 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/res/layout/activity_developer_info.xml)
