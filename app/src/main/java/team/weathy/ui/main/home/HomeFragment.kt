@@ -22,7 +22,6 @@ import team.weathy.databinding.FragmentHomeBinding
 import team.weathy.model.entity.Weather.BackgroundAnimation.RAIN
 import team.weathy.model.entity.Weather.BackgroundAnimation.SNOW
 import team.weathy.ui.main.MainActivity
-import team.weathy.ui.main.MainMenu.CALENDAR
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.main.calendar.CalendarViewModel
@@ -165,7 +164,9 @@ class HomeFragment : Fragment() {
         }
 
         binding.recommended.root setOnDebounceClickListener {
-            AppEvent.onNavigateCurWeathyInCalendar.emit()
+            viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
+                AppEvent.onNavigateCurWeathyInCalendar.tryEmit(LocalDate.of(date.year, date.month, date.day))
+            }
         }
     }
 

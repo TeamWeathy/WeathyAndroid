@@ -71,8 +71,8 @@ class HomeViewModel @ViewModelInject constructor(
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
-        val (month, day) = it.dailyWeather.date
-        "${LocalDate.now().year} ${month}월 ${day}일"
+        val (year, month, day) = it.dailyWeather.date
+        "${year}년 ${month}월 ${day}일"
     }
     val weathyWeatherIcon = recommendedWeathy.map {
         it?.hourlyWeather?.climate?.weather?.smallIconId
@@ -96,16 +96,16 @@ class HomeViewModel @ViewModelInject constructor(
         it?.stampId?.representationPast
     }
     val weathyTopClothes = recommendedWeathy.map {
-        it?.closet?.top?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.top?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyBottomClothes = recommendedWeathy.map {
-        it?.closet?.bottom?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.bottom?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyOuterClothes = recommendedWeathy.map {
-        it?.closet?.outer?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.outer?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyEtcClothes = recommendedWeathy.map {
-        it?.closet?.etc?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.etc?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
 
 
