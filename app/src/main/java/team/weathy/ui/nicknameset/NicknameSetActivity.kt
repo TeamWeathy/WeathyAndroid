@@ -81,6 +81,7 @@ class NicknameSetActivity : AppCompatActivity() {
                 locationUtil.registerLocationListener()
 
                 lifecycleScope.launchWhenStarted {
+                    viewModel.loadingSubmit.value = true
                     delay(3000)
                     navigateMain()
                 }
