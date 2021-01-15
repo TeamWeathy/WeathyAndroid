@@ -1398,6 +1398,8 @@ object AppEvent {
 }
 ```
 
+## 특수 레이아웃
+
 - `WeathyCardView.kt` 같은 곳에서 단순하게 frame에 표현할 수 있을 때 `FrameLayout` 사용 [링크](https://github.com/TeamWeathy/WeathyAndroid/blob/main/app/src/main/java/team/weathy/view/WeathyCardView.kt)
 
 - `fragment_home.xml` 에서 MotionLayout 사용 (메인 애니메이션 구현 위함) 
