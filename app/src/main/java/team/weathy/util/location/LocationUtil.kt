@@ -60,17 +60,20 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
 
 
         try {
-            _lastLocation.value = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
             val enabledProviders = locationManager.allProviders.filter {
                 locationManager.isProviderEnabled(it)
             }
-            val provider =
-                if (LocationManager.GPS_PROVIDER in enabledProviders) LocationManager.GPS_PROVIDER else enabledProviders.first()
 
-            locationManager.requestLocationUpdates(provider, 0, 0f, locationListener)
+            enabledProviders.forEach {
+                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+
+                _lastLocation.value = locationManager.getLastKnownLocation(it)
+                _lastLocation.value = locationManager.getLastKnownLocation(it)
+            }
+
             isRegistered = true
-            debugE("registerLocationListener")
+            debugE("registerLocationListener with provider: $enabledProviders")
         } catch (e: Throwable) {
             debugE(e)
         }
