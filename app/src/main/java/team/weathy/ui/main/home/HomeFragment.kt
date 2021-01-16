@@ -175,40 +175,14 @@ class HomeFragment : Fragment() {
             }
         }
 
-        /**
-         * 모션 레이아웃과의 호환을 위해 click 을 직접 구현
-         * WeahtyCardView 는 onInterceptTouchEvent 를 항상 false 반환
-         */
-        var downX = 0f
-        var downY = 0f
-        binding.recommended.root.setOnTouchListener { v, event ->
-            //            binding.container.onTouchEvent(event)
-
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    downX = event.rawX
-                    downY = event.rawY
-                    return@setOnTouchListener true
-                }
-                MotionEvent.ACTION_UP -> {
-                    binding.container.touchAnimateTo(
-                        MotionLayout.TOUCH_UP_COMPLETE, binding.container.targetPosition, binding.container.velocity
-                    )
-
-                    if (abs(downX - event.rawX) < 100 && abs(downY - event.rawY) < 100) {
-
-                        onClickRecommendedWeathy()
-                        return@setOnTouchListener true
-                    }
-                }
-            }
-            false
-        }
-
         binding.gpsImage setOnDebounceClickListener {
             if (locationUtil.isOtherPlaceSelected.value) {
                 locationUtil.selectCurrentLocationAsPlace()
             }
+        }
+
+        binding.recommended.root.setOnClickListener {
+            onClickRecommendedWeathy()
         }
     }
 

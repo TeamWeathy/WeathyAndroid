@@ -45,8 +45,7 @@ class SplashActivity : AppCompatActivity() {
         //            !uniqueId.exist -> navigateNicknameSet()
         //            else -> navigateMain()
         //        }
-        //        navigateLanding()
-        navigateMain()
+        navigateLanding()
         finish()
     }
 
