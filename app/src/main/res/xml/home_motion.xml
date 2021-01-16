@@ -10,8 +10,7 @@
 
         <OnSwipe
             app:dragScale="0.5"
-            app:dragDirection="dragUp"
-            app:touchAnchorSide="top" />
+            app:dragDirection="dragUp" />
 
         <KeyFrameSet>
             <!--            <KeyPosition-->

@@ -87,13 +87,6 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    var position: Int by OnChangeProp(0) { pos ->
-        weatherItems.forEachIndexed { index, binding ->
-            val isToday = pos == 0 && index == 0
-
-        }
-    }
-
     init {
         addViews()
         resetAnimation()

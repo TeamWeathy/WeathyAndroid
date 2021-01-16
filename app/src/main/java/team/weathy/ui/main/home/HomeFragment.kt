@@ -181,9 +181,32 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.recommended.root.setOnClickListener {
-            onClickRecommendedWeathy()
+
+        var downX = 0f
+        var downY = 0f
+        binding.recommended.root.setOnTouchListener { v, event ->
+            val eventTransfer = MotionEvent.obtain(
+                event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
+            )
+            binding.container.onTouchEvent(eventTransfer)
+            eventTransfer.recycle()
+
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.rawX
+                    downY = event.rawY
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (abs(downX - event.rawX) < 100 && abs(downY - event.rawY) < 100) onClickRecommendedWeathy()
+                }
+            }
+
+            true
         }
+
+        //        binding.recommended.root.setOnClickListener {
+        //            onClickRecommendedWeathy()
+        //        }
     }
 
     private fun onClickRecommendedWeathy() {
