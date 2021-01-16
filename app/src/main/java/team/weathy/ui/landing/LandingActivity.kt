@@ -42,8 +42,6 @@ class LandingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        preloadDrawables()
-
         binding = ActivityLandingBinding.inflate(layoutInflater).also {
             it.vm = viewModel
             it.lifecycleOwner = this
@@ -73,19 +71,6 @@ class LandingActivity : AppCompatActivity() {
     // FIXME 시연용
     @Inject
     lateinit var locationUtil: LocationUtil
-
-    private fun preloadDrawables() {
-        listOf(
-            R.drawable.onboarding_img_phone_1,
-            R.drawable.onboarding_img_phone_2,
-            R.drawable.onboarding_img_phone_3,
-            R.drawable.onboarding_img_popup_1,
-            R.drawable.onboarding_img_popup_2,
-            R.drawable.onboarding_img_popup_3
-        ).forEach {
-            getDrawable(it)
-        }
-    }
 
     private fun navigateNextScreen() {
         //        when {

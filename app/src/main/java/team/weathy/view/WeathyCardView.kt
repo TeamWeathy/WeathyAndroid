@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.core.content.res.use
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import team.weathy.R
 import team.weathy.util.OnChangeProp
+import team.weathy.util.debugE
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.px
 import team.weathy.util.extensions.setShadowColorIfAvailable
@@ -43,6 +45,10 @@ class WeathyCardView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
         elevation = if (disableShadow) 0f else px(8).toFloat()
         updateUI()
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        return false
     }
 
     private fun getStyleableAttrs(attr: AttributeSet) {

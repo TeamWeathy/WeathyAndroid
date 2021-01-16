@@ -3,6 +3,7 @@ package team.weathy.ui.main.home
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -29,6 +30,7 @@ import team.weathy.util.*
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.math.abs
 
 
 @FlowPreview
@@ -118,7 +120,6 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
-                debugE("onTransitionCompleted")
                 when (curId) {
                     R.layout.scene_home_first -> {
                         isFirstSceneShowing = true
@@ -174,16 +175,50 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.recommended.root setOnDebounceClickListener {
-            viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
-                AppEvent.onNavigateCurWeathyInCalendar.tryEmit(LocalDate.of(date.year, date.month, date.day))
+        /**
+         * 모션 레이아웃과의 호환을 위해 click 을 직접 구현
+         * WeahtyCardView 는 onInterceptTouchEvent 를 항상 false 반환
+         */
+        var downX = 0f
+        var downY = 0f
+        binding.recommended.root.setOnTouchListener { v, event ->
+            //            binding.container.onTouchEvent(event)
+
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.rawX
+                    downY = event.rawY
+                    return@setOnTouchListener true
+                }
+                MotionEvent.ACTION_UP -> {
+                    binding.container.touchAnimateTo(
+                        MotionLayout.TOUCH_UP_COMPLETE, binding.container.targetPosition, binding.container.velocity
+                    )
+
+                    if (abs(downX - event.rawX) < 100 && abs(downY - event.rawY) < 100) {
+
+                        onClickRecommendedWeathy()
+                        return@setOnTouchListener true
+                    }
+                }
             }
+            false
         }
 
         binding.gpsImage setOnDebounceClickListener {
             if (locationUtil.isOtherPlaceSelected.value) {
                 locationUtil.selectCurrentLocationAsPlace()
             }
+        }
+    }
+
+    private fun onClickRecommendedWeathy() {
+        viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
+            AppEvent.onNavigateCurWeathyInCalendar.tryEmit(
+                LocalDate.of(
+                    date.year, date.month, date.day
+                )
+            )
         }
     }
 
