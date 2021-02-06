@@ -12,16 +12,21 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import team.weathy.R
 import team.weathy.databinding.ActivityLandingBinding
 import team.weathy.ui.main.MainActivity
 import team.weathy.ui.nicknameset.NicknameSetActivity
+import team.weathy.util.PermissionUtil
+import team.weathy.util.PermissionUtil.PermissionListener
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.__TEST__IDLING__
 import team.weathy.util.extensions.px
+import team.weathy.util.location.LocationUtil
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
@@ -51,13 +56,29 @@ class LandingActivity : AppCompatActivity() {
         binding.start setOnDebounceClickListener {
             navigateNextScreen()
         }
+
+        // fIXME
+        PermissionUtil.requestLocationPermissions(this, object : PermissionListener {
+            override fun onPermissionGranted() {
+                locationUtil.registerLocationListener()
+                lifecycleScope.launchWhenStarted {
+                    delay(3500L)
+                }
+            }
+        })
     }
 
+    // FIXME 시연용
+    @Inject
+    lateinit var locationUtil: LocationUtil
+
     private fun navigateNextScreen() {
-        when {
-            !uniqueId.exist -> navigateNicknameSet()
-            else -> navigateMain()
-        }
+        //        when {
+        //            !uniqueId.exist -> navigateNicknameSet()
+        //            else -> navigateMain()
+        //        }
+
+        navigateMain()
         finish()
     }
 

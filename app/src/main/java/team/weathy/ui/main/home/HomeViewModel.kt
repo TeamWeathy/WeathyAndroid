@@ -7,8 +7,10 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeatherDetailRes.ExtraWeather
@@ -27,6 +29,7 @@ import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@FlowPreview
 class HomeViewModel @ViewModelInject constructor(
     private val locationUtil: LocationUtil,
     @Api private val weatherAPI: WeatherAPI,
@@ -67,8 +70,8 @@ class HomeViewModel @ViewModelInject constructor(
 
     val weathyDate = recommendedWeathy.map {
         it ?: return@map ""
-        val (month, day) = it.dailyWeather.date
-        "${LocalDate.now().year} ${month}월 ${day}일"
+        val (year, month, day) = it.dailyWeather.date
+        "${year}년 ${month}월 ${day}일"
     }
     val weathyWeatherIcon = recommendedWeathy.map {
         it?.hourlyWeather?.climate?.weather?.smallIconId
@@ -92,16 +95,16 @@ class HomeViewModel @ViewModelInject constructor(
         it?.stampId?.representationPast
     }
     val weathyTopClothes = recommendedWeathy.map {
-        it?.closet?.top?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.top?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyBottomClothes = recommendedWeathy.map {
-        it?.closet?.bottom?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.bottom?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyOuterClothes = recommendedWeathy.map {
-        it?.closet?.outer?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.outer?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
     val weathyEtcClothes = recommendedWeathy.map {
-        it?.closet?.etc?.clothes?.joinToString(" . ") { it.name } ?: ""
+        it?.closet?.etc?.clothes?.joinToString(" • ") { it.name } ?: ""
     }
 
 
@@ -148,25 +151,25 @@ class HomeViewModel @ViewModelInject constructor(
                     }
                 }
             }
-
-            collectLocationAvailabilityAndFetch()
+            collectLastLocationForWeather()
         }
     }
 
-    private fun collectLocationAvailabilityAndFetch() = viewModelScope.launch {
-        locationUtil.lastLocation.zip(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
-            .collect { (lastLocation, isOtherPlaceSelected) ->
-                debugE("$lastLocation $isOtherPlaceSelected")
-                if (isOtherPlaceSelected || lastLocation == null) return@collect
-
-                val location = locationUtil.lastLocation.value!!
+    private suspend fun collectLastLocationForWeather() {
+        locationUtil.lastLocation.combine(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
+            .filter { (lastLocation, isOtherPlaceSelected) ->
+                !isOtherPlaceSelected && lastLocation != null
+            }.collect { (_lastLocation) ->
+                val lastLocation = _lastLocation!!
 
                 loadingWeather.value = true
                 kotlin.runCatching {
                     lastFetchDateTime.value = LocalDateTime.now()
 
                     weatherAPI.fetchWeatherByLocation(
-                        location.latitude, location.longitude, dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                        lastLocation.latitude,
+                        lastLocation.longitude,
+                        dateOrHourStr = lastFetchDateTime.value!!.dateHourString
                     )
                 }.onSuccess { res ->
                     val weather = res.body()?.weather ?: return@onSuccess
@@ -174,8 +177,8 @@ class HomeViewModel @ViewModelInject constructor(
                 }.onFailure {
 
                 }
-            loadingWeather.value = false
-        }
+                loadingWeather.value = false
+            }
     }
 
     private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {

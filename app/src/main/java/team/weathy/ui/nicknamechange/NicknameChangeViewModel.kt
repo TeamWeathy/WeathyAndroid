@@ -24,10 +24,14 @@ class NicknameChangeViewModel @ViewModelInject constructor(
     }
     private val _loadingSubmit = MutableLiveData(false)
     val loadingSubmit: LiveData<Boolean> = _loadingSubmit
+
+    val focused = MutableLiveData(false)
+
     val onHideKeyboard = SimpleEventLiveData()
     val onSuccess = SimpleEventLiveData()
 
     fun onSubmit() {
+        focused.value = false
         onHideKeyboard.emit()
 
         launchCatch({

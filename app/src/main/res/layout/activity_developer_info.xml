@@ -20,8 +20,8 @@
         style="@style/ImageButton.size48.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

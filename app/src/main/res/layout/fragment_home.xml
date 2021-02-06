@@ -120,22 +120,6 @@
                     tools:text="12월 20일 일요일 . 오후 4시" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/weather_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="55dp"
-                android:scaleType="centerCrop"
-                srcResource="@{vm.weatherIcon}"
-                tools:src="@drawable/main_img_snow_night"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/header"
-                app:layout_constraintVertical_bias="0.1"
-                app:layout_constraintWidth_percent="0.55" />
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_weather"
                 android:layout_width="0dp"
@@ -150,6 +134,19 @@
                 app:layout_constraintRight_toRightOf="@id/guide_right"
                 app:layout_constraintTop_toBottomOf="@id/datetime"
                 app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/weather_image"
+                    srcResource="@{vm.weatherIcon}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/nickname"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/location"
+                    app:layout_constraintWidth_percent="0.55"
+                    tools:src="@drawable/main_img_snow_night" />
 
                 <ImageView
                     android:id="@+id/gps_image"
@@ -271,6 +268,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="85dp"
                     android:src="@drawable/ic_help"
+                    android:enabled="true"
                     app:layout_constraintBottom_toBottomOf="@id/today_weathy"
                     app:layout_constraintStart_toStartOf="@id/today_weathy"
                     app:layout_constraintTop_toTopOf="@id/today_weathy" />

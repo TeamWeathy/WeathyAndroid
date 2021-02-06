@@ -58,15 +58,14 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
     fun registerLocationListener() {
         if (isRegistered) return
 
-
         try {
             val enabledProviders = locationManager.allProviders.filter {
                 locationManager.isProviderEnabled(it)
             }
 
             enabledProviders.forEach {
-                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
-                locationManager.requestLocationUpdates(it, 1000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 60000, 1f, locationListener)
+                locationManager.requestLocationUpdates(it, 60000, 1f, locationListener)
 
                 _lastLocation.value = locationManager.getLastKnownLocation(it)
                 _lastLocation.value = locationManager.getLastKnownLocation(it)
@@ -99,5 +98,11 @@ class LocationUtil @Inject constructor(app: Application, private val spUtil: SPU
         selectedWeatherLocation.value = weather
         spUtil.isOtherPlaceSelected = true
         _isOtherPlaceSelected.value = true
+    }
+
+    fun selectCurrentLocationAsPlace() {
+        registerLocationListener()
+        spUtil.isOtherPlaceSelected = false
+        _isOtherPlaceSelected.value = false
     }
 }

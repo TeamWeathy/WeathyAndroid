@@ -6,8 +6,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameSetBinding
 import team.weathy.ui.main.MainActivity
@@ -77,7 +79,12 @@ class NicknameSetActivity : AppCompatActivity() {
         PermissionUtil.requestLocationPermissions(this, object : PermissionListener {
             override fun onPermissionGranted() {
                 locationUtil.registerLocationListener()
-                navigateMain()
+
+                lifecycleScope.launchWhenStarted {
+                    viewModel.loadingSubmit.value = true
+                    delay(3000)
+                    navigateMain()
+                }
             }
 
             override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {

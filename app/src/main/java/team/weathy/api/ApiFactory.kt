@@ -39,15 +39,15 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
 
                 if (response.code() == 401 && uniqueId.id != null) {
                     kotlin.runCatching {
+                        response.body()?.close()
                         val loginRequestBody = gson.toJson(LoginReq(uniqueId.id!!))
-
                         val loginRequest = newRequest.build().newBuilder().url("$BASE_URL/auth/login")
                             .post(RequestBody.create(MediaType.parse(MEDIA_TYPE), loginRequestBody))
                             .removeHeader(HEADER_TOKEN).build()
                         val loginResponse =
                             gson.fromJson(it.proceed(loginRequest).body()!!.string(), LoginRes::class.java)
                         uniqueId.saveToken(loginResponse.token)
-                        it.proceed(newRequest.addHeaders(loginResponse.token).build())
+                        it.proceed(newRequest.removeHeader(HEADER_TOKEN).addHeaders(loginResponse.token).build())
                     }.onSuccess {
                         response = it
                     }.onFailure {

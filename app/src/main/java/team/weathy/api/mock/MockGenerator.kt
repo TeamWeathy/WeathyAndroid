@@ -22,7 +22,7 @@ import kotlin.random.Random
 object MockGenerator {
     fun user(id: Int = 1, nickname: String = "유저") = User(id, nickname)
     fun region(code: Long = Random.nextLong(), name: String = LoremIpsum.getInstance().city) = Region(code, name)
-    fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(month, day, dayOfWeek)
+    fun date(month: Int = 1, day: Int = 1, dayOfWeek: String = "월요일") = Date(2021, month, day, dayOfWeek)
     fun temperature() = Temperature(Random.nextInt(0, 20), Random.nextInt(-20, 0))
     fun dailyWeather(code: Long = Random.nextLong(), regionName: String = LoremIpsum.getInstance().city) =
         DailyWeather(date(), temperature())
