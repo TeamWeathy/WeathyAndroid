@@ -19,13 +19,11 @@ import team.weathy.R
 import team.weathy.databinding.FragmentRecordClothesDeleteBinding
 import team.weathy.dialog.CommonDialog
 import team.weathy.model.entity.WeathyCloth
-import team.weathy.ui.main.MainMenu
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
@@ -99,7 +97,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
 
     private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
         constraintLayout.setOnClickListener {
-            viewModel.changeSelectedClothesTabIndex(index)
+            viewModel.changeChoicedClothesTabIndex(index)
         }
     }
 
@@ -183,7 +181,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     private fun showDeleteDialog() {
         binding.delete setOnDebounceClickListener {
             CommonDialog.newInstance(
-                "${viewModel.allSelectedClothes()}개 태그를 정말 삭제할까요?",
+                "${viewModel.countAllSelectedClothes()}개 태그를 정말 삭제할까요?",
                 "삭제하면 되돌릴 수 없어요.",
                 "삭제하기",
                 getColor(R.color.pink),

@@ -34,7 +34,6 @@ class RecordDetailFragment : Fragment() {
 
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
-            binding.etDetail.clearFocus()
         }
 
         binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
@@ -46,7 +45,9 @@ class RecordDetailFragment : Fragment() {
 
     private fun hideKeyboard() {
         val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         inputMethodManager.hideSoftInputFromWindow(binding.etDetail.windowToken, 0)
+        binding.etDetail.clearFocus()
     }
 
     private fun configureSubmitBehaviors() {

@@ -33,7 +33,6 @@ class RecordActivity : AppCompatActivity() {
 
         replaceFragment(binding.fragmentContainer, RecordStartFragment::class.java, withAnim = false)
     }
-
     fun navigateStartToLocationChange() =
         replaceFragment(binding.fragmentContainer, SearchFragment.newInstance(true), true)
 

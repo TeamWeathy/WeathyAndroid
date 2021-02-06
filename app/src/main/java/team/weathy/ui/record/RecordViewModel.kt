@@ -67,7 +67,6 @@ class RecordViewModel @ViewModelInject constructor(
         it ?: return@map ""
         "${it.daily.temperature.maxTemp}°"
     }
-
     val tempLow = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.minTemp}°"
@@ -96,8 +95,8 @@ class RecordViewModel @ViewModelInject constructor(
         )
     val clothes = MediatorLiveData<List<WeathyCloth>>().apply {
         value = clothesTriple[0].first.value!!
-        clothesTriple.forEachIndexed { idx, (clohtes) ->
-            addSource(clohtes) { list ->
+        clothesTriple.forEachIndexed { idx, (clothes) ->
+            addSource(clothes) { list ->
                 if (choicedClothesTabIndex.value == idx) value = list
             }
         }
@@ -159,7 +158,7 @@ class RecordViewModel @ViewModelInject constructor(
         }
     }
 
-    fun changeSelectedClothesTabIndex(tab: Int) {
+    fun changeChoicedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
             _choicedClothesTabIndex.value = tab
         }
@@ -193,10 +192,10 @@ class RecordViewModel @ViewModelInject constructor(
         remove(cloth)
     }
 
-    suspend fun addClothes(clothName: String) {
+    suspend fun addClothes(clothName: String): Boolean {
         val (clothes) = clothesTriple[choicedClothesTabIndex.value!!]
-
         val category = selectedCategory
+        var isSuccess = false
 
         launchCatch({
             clothesAPI.createClothes(CreateClothesReq(category, clothName))
@@ -207,7 +206,12 @@ class RecordViewModel @ViewModelInject constructor(
                 OUTER -> it.closet.outer.clothes
                 ETC -> it.closet.etc.clothes
             }
+            isSuccess = true
+        }, onFailure = {
+            isSuccess = false
         }).join()
+
+        return isSuccess
     }
 
     suspend fun deleteClothes() {
@@ -231,7 +235,7 @@ class RecordViewModel @ViewModelInject constructor(
         }).join()
     }
 
-    fun allSelectedClothes(): Int {
+    fun countAllSelectedClothes(): Int {
         var selectedClothesCount = 0
         for (i in 0..3) {
             selectedClothesCount += clothesTriple[i].third.value!!.size

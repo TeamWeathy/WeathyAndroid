@@ -8,8 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import team.weathy.R
 import team.weathy.databinding.ToastCommonBinding
 import kotlin.math.roundToInt
 

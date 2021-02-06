@@ -32,7 +32,6 @@ import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
-
 @FlowPreview
 @AndroidEntryPoint
 class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
@@ -85,7 +84,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
         constraintLayout.setOnClickListener {
-            viewModel.changeSelectedClothesTabIndex(index)
+            viewModel.changeChoicedClothesTabIndex(index)
             binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
         }
     }
@@ -132,7 +131,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-
     private fun removeAllChipsWithoutFirst() {
         while (binding.chipGroup.childCount > 1) {
             binding.chipGroup.removeViewAt(1)
@@ -149,7 +147,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setOnCheckedChangeListener { button, isChecked ->
+            setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     viewModel.onChipChecked(text)
                 } else {
@@ -202,31 +200,29 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         when (viewModel.choicedClothesTabIndex.value) {
             0 -> {
                 EditDialog.newInstance(
-                    "상의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "상의 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             1 -> {
                 EditDialog.newInstance(
-                    "하의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "하의 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             2 -> {
                 EditDialog.newInstance(
-                    "외투 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "외투 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             3 -> {
                 EditDialog.newInstance(
-                    "기타 추가하기", viewModel.clothes.value!!.size.toString()
-                ).show(childFragmentManager, null)
+                    "기타 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
         }
     }
 
     override fun onClickYes(text: String) {
         lifecycleScope.launchWhenStarted {
-            viewModel.addClothes(text)
-            requireContext().showToast("태그가 추가되었어요!")
+            if (viewModel.addClothes(text))
+                requireContext().showToast("'${text}' 태그가 추가되었어요!")
+            else
+                requireContext().showToast("이미 존재하는 태그입니다!")
         }
     }
 }
