@@ -227,7 +227,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             if (viewModel.addClothes(text))
                 requireContext().showToast("'${text}' 태그가 추가되었어요!")
             else
-                requireContext().showToast("이미 존재하는 태그입니다!")
+                requireContext().showToast("이미 있는 옷은 또 등록할 수 없어요.")
         }
     }
 }
