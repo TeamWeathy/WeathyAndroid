@@ -104,11 +104,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
         count1.forEachIndexed { index, textView ->
             if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
-            else textView.setTextColor(getColor(R.color.sub_grey_3))
+            else textView.setTextColor(getColor(R.color.sub_grey_4))
         }
         count2.forEachIndexed { index, textView ->
             if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
-            else textView.setTextColor(getColor(R.color.sub_grey_3))
+            else textView.setTextColor(getColor(R.color.sub_grey_4))
         }
     }
 
@@ -178,8 +178,13 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             val selected = viewModel.clothesTriple[idx].second.value!!
 
             textView.text = selected.size.toString()
-            if (selected.isNotEmpty()) textView.setTextColor(getColor(R.color.mint_icon))
-            else textView.setTextColor(getColor(R.color.sub_grey_6))
+            when (viewModel.choicedClothesTabIndex.value == idx) {
+                true -> {
+                    if (selected.isNotEmpty()) textView.setTextColor(getColor(R.color.mint_icon))
+                    else textView.setTextColor(getColor(R.color.sub_grey_6))
+                }
+                false -> textView.setTextColor(getColor(R.color.sub_grey_4))
+            }
         }
     }
 
