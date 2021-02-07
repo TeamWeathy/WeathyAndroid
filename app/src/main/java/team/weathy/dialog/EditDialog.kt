@@ -28,6 +28,7 @@ import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+@FlowPreview
 @AndroidEntryPoint
 class EditDialog : DialogFragment() {
 	private var binding by AutoClearedValue<DialogEditBinding>()
@@ -54,6 +55,9 @@ class EditDialog : DialogFragment() {
 		binding.btnAdd setOnDebounceClickListener {
 			binding.enter.text?.toString()?.let { it1 -> clickListener?.onClickYes(it1) }
 
+			viewModel.clothes.observe(viewLifecycleOwner) {
+				binding.tagCount.text = viewModel.clothes.value!!.size.toString()
+			}
 			hideKeyboard()
 			binding.enter.setText("")
 		}
