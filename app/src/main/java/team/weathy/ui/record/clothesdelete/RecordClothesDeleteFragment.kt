@@ -23,6 +23,7 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.StatusBarUtil
+import team.weathy.util.dpFloat
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
@@ -148,10 +149,10 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
             setOnCheckedChangeListener { _, isChecked ->
                 chipStrokeWidth = if (isChecked) {
                     viewModel.onChipCheckedForDelete(text)
-                    4.5f
+                    1.5.dpFloat
                 } else {
                     viewModel.onChipUncheckedForDelete(text)
-                    3f
+                    1.dpFloat
                 }
             }
         }
