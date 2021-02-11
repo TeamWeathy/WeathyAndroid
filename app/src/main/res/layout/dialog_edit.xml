@@ -130,7 +130,7 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            style="@style/RoundButton.Cancel.Subgray2"
+            style="@style/RoundButton.Cancel"
             android:layout_width="0dp"
             android:layout_height="47dp"
             android:layout_marginTop="35dp"
