@@ -1,6 +1,5 @@
 package team.weathy.ui.record.clothesselect
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -201,12 +200,13 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             binding.btnCheck.enableWithAnim(it)
             binding.edit.enableWithAnim(it)
             if (viewModel.isButtonEnabled.value!!) {
-
                 binding.editNext.setBackgroundResource(R.drawable.btn_modify_next_active)
                 binding.editNext.setTextColor(getColor(R.color.mint_icon))
+                binding.editNext.isEnabled = true
             } else {
                 binding.editNext.setBackgroundResource(R.drawable.btn_modify_next)
                 binding.editNext.setTextColor(getColor(R.color.sub_grey_6))
+                binding.editNext.isEnabled = false
             }
         }
     }

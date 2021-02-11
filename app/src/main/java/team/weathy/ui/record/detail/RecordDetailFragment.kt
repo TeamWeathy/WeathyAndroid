@@ -41,6 +41,7 @@ class RecordDetailFragment : Fragment() {
         }
 
         configureSubmitBehaviors()
+        configureButton()
     }
 
     private fun hideKeyboard() {
@@ -80,5 +81,13 @@ class RecordDetailFragment : Fragment() {
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
+    }
+
+    private fun configureButton() {
+        if (viewModel.edit) {
+            binding.btnConfirm.text = "수정완료"
+        } else {
+            binding.btnConfirm.text = "내용 추가하기"
+        }
     }
 }
