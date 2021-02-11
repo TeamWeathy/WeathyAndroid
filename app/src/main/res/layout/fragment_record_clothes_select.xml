@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -404,7 +405,32 @@
                 android:layout_marginBottom="16dp"
                 android:enabled="false"
                 android:text="다음"
+                tools:alpha="0.2"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/edit"
+                style="@style/RoundButton.Grey"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="9dp"
+                android:text="수정완료"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/editNext"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editNext"
+                android:background="@drawable/btn_modify_next"
+                android:layout_height="55dp"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="9dp"
+                android:text="다음"
+                style="?android:attr/borderlessButtonStyle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/edit"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

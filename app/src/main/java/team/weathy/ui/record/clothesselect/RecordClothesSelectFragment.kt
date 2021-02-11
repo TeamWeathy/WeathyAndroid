@@ -1,5 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +52,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureTabs()
         configureChips()
         configureAddLogic()
+        configureButton()
         setButtonActivation()
     }
 
@@ -66,6 +69,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             (activity as? RecordActivity)?.popClothesSelect()
         }
         binding.btnCheck setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
+        }
+        binding.editNext setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
     }
@@ -193,6 +199,15 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setButtonActivation() {
         viewModel.isButtonEnabled.observe(viewLifecycleOwner) {
             binding.btnCheck.enableWithAnim(it)
+            binding.edit.enableWithAnim(it)
+            if (viewModel.isButtonEnabled.value!!) {
+
+                binding.editNext.setBackgroundResource(R.drawable.btn_modify_next_active)
+                binding.editNext.setTextColor(getColor(R.color.mint_icon))
+            } else {
+                binding.editNext.setBackgroundResource(R.drawable.btn_modify_next)
+                binding.editNext.setTextColor(getColor(R.color.sub_grey_6))
+            }
         }
     }
 
@@ -219,6 +234,18 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
                 EditDialog.newInstance(
                     "기타 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
+        }
+    }
+
+    private fun configureButton() {
+        if (viewModel.edit) {
+            binding.btnCheck.isVisible = false
+            binding.edit.isVisible = true
+            binding.editNext.isVisible = true
+        } else {
+            binding.btnCheck.isVisible = true
+            binding.edit.isVisible = false
+            binding.editNext.isVisible = false
         }
     }
 
