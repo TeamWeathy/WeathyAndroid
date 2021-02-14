@@ -238,10 +238,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             binding.btnCheck.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true
+            binding.delete.isVisible = false
         } else {
             binding.btnCheck.isVisible = true
             binding.edit.isVisible = false
             binding.editNext.isVisible = false
+            binding.delete.isVisible = true
         }
     }
 
