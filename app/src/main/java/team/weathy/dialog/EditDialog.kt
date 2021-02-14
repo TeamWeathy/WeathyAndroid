@@ -6,9 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
@@ -58,7 +56,6 @@ class EditDialog : DialogFragment() {
 			viewModel.clothes.observe(viewLifecycleOwner) {
 				binding.tagCount.text = viewModel.clothes.value!!.size.toString()
 			}
-			hideKeyboard()
 			binding.enter.setText("")
 		}
 		binding.btnCancel setOnDebounceClickListener {
@@ -68,6 +65,7 @@ class EditDialog : DialogFragment() {
 		}
 		binding.enter.setOnFocusChangeListener { _, hasFocus ->
 			setCountVisibility(hasFocus)
+			setKeyboardMode()
 		}
 		binding.enter.addTextChangedListener {
 			binding.textDeleteBtn.isVisible = !it.isNullOrBlank()
@@ -146,5 +144,9 @@ class EditDialog : DialogFragment() {
 
 		inputMethodManager.hideSoftInputFromWindow(binding.enter.windowToken, 0)
 		binding.enter.clearFocus()
+	}
+
+	private fun setKeyboardMode() {
+		activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 	}
 }
