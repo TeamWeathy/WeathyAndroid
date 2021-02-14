@@ -73,6 +73,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.editNext setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
+        binding.delete setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
+        }
     }
 
     private fun configureTabs() {
@@ -158,13 +161,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
                 } else {
                     viewModel.onChipUnchecked(text)
                 }
-            }
-
-            setOnLongClickListener {
-                val vib = requireContext().getSystemService(Vibrator::class.java)
-                vib.vibrate(100)
-                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-                true
             }
         }
     }

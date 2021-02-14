@@ -429,6 +429,8 @@
             android:layout_marginLeft="9dp"
             android:layout_marginRight="26dp"
             android:text="다음"
+            android:textSize="16sp"
+            android:textColor="@color/sub_grey_6"
             style="?android:attr/borderlessButtonStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
