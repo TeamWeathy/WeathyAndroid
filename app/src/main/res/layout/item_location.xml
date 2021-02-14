@@ -96,7 +96,7 @@
                     android:maxLines="1"
                     android:textColor="@color/sub_grey_1"
                     android:text="@{datetime_text}"
-                    tools:text="12월 20일 일요일 • 오후 4시"
+                    tools:text="12월 20일 일요일 · 오후 4시"
                     android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="parent" />
 
