@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
 import android.os.Bundle
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
+import team.weathy.util.extensions.showTopToast
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 
@@ -250,9 +250,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     override fun onClickYes(text: String) {
         lifecycleScope.launchWhenStarted {
             if (viewModel.addClothes(text))
-                requireContext().showToast("'${text}' 태그가 추가되었어요!")
+                requireContext().showTopToast("태그가 추가되었습니다.")
             else
-                requireContext().showToast("이미 있는 옷은 또 등록할 수 없어요.")
+                requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
         }
     }
 }

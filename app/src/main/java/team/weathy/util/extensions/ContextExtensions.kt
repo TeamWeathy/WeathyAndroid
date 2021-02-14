@@ -27,3 +27,13 @@ fun Context.showToast(message: String) {
         view = binding.root
     }.show()
 }
+
+fun Context.showTopToast(message: String) {
+    val binding = ToastCommonBinding.inflate(LayoutInflater.from(this))
+    binding.text.text = message
+
+    Toast(this).apply {
+        setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, (resources.displayMetrics.density * 63).roundToInt())
+        view = binding.root
+    }.show()
+}
