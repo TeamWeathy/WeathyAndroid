@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,16 +33,23 @@ class RecordDetailFragment : Fragment() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        configureTextField()
+        configureSubmitBehaviors()
+        configureButton()
+    }
+
+    private fun configureTextField() {
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
+            binding.skip.isVisible = true
+            binding.div.isVisible = true
         }
 
         binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
             viewModel.feedbackFocused.value = hasFocus
+            binding.skip.isVisible = false
+            binding.div.isVisible = false
         }
-
-        configureSubmitBehaviors()
-        configureButton()
     }
 
     private fun hideKeyboard() {
@@ -52,7 +60,7 @@ class RecordDetailFragment : Fragment() {
     }
 
     private fun configureSubmitBehaviors() {
-        binding.close setOnDebounceClickListener {
+        binding.skip setOnDebounceClickListener {
             submit(false)
         }
         binding.btnConfirm setOnDebounceClickListener {

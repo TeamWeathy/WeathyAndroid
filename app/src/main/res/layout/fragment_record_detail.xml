@@ -106,7 +106,7 @@
             tools:textColor="@color/sub_grey_6" />
 
         <TextView
-            android:id="@+id/close"
+            android:id="@+id/skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="건너뛰기"
@@ -122,8 +122,8 @@
             android:layout_height="1dp"
             android:layout_marginBottom="22dp"
             android:background="@color/sub_grey_2"
-            app:layout_constraintLeft_toLeftOf="@id/close"
-            app:layout_constraintRight_toRightOf="@id/close"
+            app:layout_constraintLeft_toLeftOf="@id/skip"
+            app:layout_constraintRight_toRightOf="@id/skip"
             app:layout_constraintBottom_toTopOf="@id/btn_confirm"/>
 
        <Button
