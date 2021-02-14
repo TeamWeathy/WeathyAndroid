@@ -186,7 +186,7 @@
             <Button
                 style="@style/RoundButton.Change"
                 android:id="@+id/btn_change"
-                android:layout_width="79dp"
+                android:layout_width="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="변경하기"
                 app:layout_constraintTop_toBottomOf="@id/cv_record"

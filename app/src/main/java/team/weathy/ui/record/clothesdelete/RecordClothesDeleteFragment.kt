@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.children
@@ -74,9 +75,13 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     }
 
     private val layouts
-        get() = listOf(
-            binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc
-        )
+        get() = listOf(binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc)
+
+    private val category
+        get() = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
+
+    private val count
+        get() = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
 
     private fun configureTabs() {
         for (i in 0..3) {
@@ -85,7 +90,9 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
                 setTextColor(getColor(R.color.sub_grey_6))
             }
         }
-        setOnTabClickListeners()
+        setOnTabClickListeners(layouts)
+        setOnTabClickListeners(category)
+        setOnTabClickListeners(count)
         viewModel.choicedClothesTabIndex.observe(viewLifecycleOwner) { tab ->
             selectTab(tab)
         }
@@ -96,16 +103,17 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
         }
     }
 
-    private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
-        constraintLayout.setOnClickListener {
-            viewModel.changeChoicedClothesTabIndex(index)
+    private fun setOnTabClickListeners(list: List<View>) {
+        list.forEachIndexed { index, constraintLayout ->
+            constraintLayout.setOnClickListener {
+                viewModel.changeChoicedClothesTabIndex(index)
+                binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+            }
         }
     }
 
     private fun selectTab(tab: Int) {
         val dividers = listOf(binding.divider, binding.divider2, binding.divider3, binding.divider4)
-        val category = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
-        val count = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
 
         dividers.forEachIndexed { index, view ->
             view.isInvisible = index != tab

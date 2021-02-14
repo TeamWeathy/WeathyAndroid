@@ -79,29 +79,38 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun configureTabs() {
-        setOnTabClickListeners()
+        setOnTabClickListeners(layouts)
+        setOnTabClickListeners(category)
+        setOnTabClickListeners(count1)
+        setOnTabClickListeners(count2)
         viewModel.choicedClothesTabIndex.observe(viewLifecycleOwner) { tab ->
             selectTab(tab)
         }
     }
 
     private val layouts
-        get() = listOf(
-            binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc
-        )
+        get() = listOf(binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc)
 
-    private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
-        constraintLayout.setOnClickListener {
-            viewModel.changeChoicedClothesTabIndex(index)
-            binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+    private val category
+        get() = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
+
+    private val count1
+        get() = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
+
+    private val count2
+        get() = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
+
+    private fun setOnTabClickListeners(list: List<View>) {
+        list.forEachIndexed { index, constraintLayout ->
+            constraintLayout.setOnClickListener {
+                viewModel.changeChoicedClothesTabIndex(index)
+                binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+            }
         }
     }
 
     private fun selectTab(tab: Int) {
         val dividers = listOf(binding.divider, binding.divider2, binding.divider3, binding.divider4)
-        val category = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
-        val count1 = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
-        val count2 = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
 
         dividers.forEachIndexed { index, view ->
             view.isInvisible = index != tab
