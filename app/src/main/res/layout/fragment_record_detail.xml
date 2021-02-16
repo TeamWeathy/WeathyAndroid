@@ -105,6 +105,46 @@
             tools:text="0"
             tools:textColor="@color/sub_grey_6" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/add_image"
+            android:layout_width="73dp"
+            android:layout_height="73dp"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="13dp"
+            app:cardElevation="0dp"
+            app:layout_constraintLeft_toLeftOf="@id/et_detail"
+            app:layout_constraintTop_toBottomOf="@id/et_detail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_record_image"
+                    android:src="@drawable/logo512" />
+
+                <ImageButton
+                    android:id="@+id/delete_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:enabled="false"
+                    android:scaleType="fitCenter"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_textdelete"
+                    app:layout_constraintTop_toTopOf="@id/img_record"
+                    app:layout_constraintRight_toRightOf="@id/img_record"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/skip"
             android:layout_width="wrap_content"
