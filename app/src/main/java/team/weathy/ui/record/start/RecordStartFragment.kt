@@ -70,7 +70,6 @@ class RecordStartFragment : Fragment() {
 
     private fun configureEditStart() {
         if (viewModel.edit) {
-            viewModel.setCurWeathyStart()
             binding.btnStart.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true

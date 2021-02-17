@@ -16,7 +16,6 @@ import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Weathy
-import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AppEvent
 import team.weathy.util.SimpleEventLiveData
 import team.weathy.util.dateString
@@ -31,7 +30,6 @@ import team.weathy.util.isPast
 import team.weathy.util.koFormat
 import team.weathy.util.yearMonthFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 typealias YearMonthFormat = String
 
@@ -54,10 +52,8 @@ class CalendarViewModel @ViewModelInject constructor(
     private val _isMoreMenuShowing = MutableLiveData(false)
     val isMoreMenuShowing: LiveData<Boolean> = _isMoreMenuShowing
 
-    companion object {
-        private val selectedWeathy = MutableLiveData<Weathy?>(null)
-        var curWeathyForEdit: LiveData<Weathy?> = selectedWeathy
-    }
+    private val selectedWeathy = MutableLiveData<Weathy?>(null)
+
     val curWeathy: LiveData<Weathy?> = selectedWeathy
     val weathyDate = selectedDate.map {
         it.koFormat

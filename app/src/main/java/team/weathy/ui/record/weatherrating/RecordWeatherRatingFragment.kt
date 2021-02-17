@@ -101,7 +101,6 @@ class RecordWeatherRatingFragment : Fragment() {
 
     private fun configureEditRating() {
         if (viewModel.edit) {
-            viewModel.setCurWeathyRating()
             binding.btnCheck.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true

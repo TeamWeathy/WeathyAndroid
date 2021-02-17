@@ -25,7 +25,6 @@ import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloth
-import team.weathy.ui.main.calendar.CalendarViewModel
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
 import team.weathy.util.AppEvent
 import team.weathy.util.EventLiveData
@@ -54,13 +53,18 @@ class RecordViewModel @ViewModelInject constructor(
     val date = lastRecordNavigationTime
     val edit = savedStateHandle.get<Boolean>(EXTRA_EDIT) ?: false
 
-    val weather = MutableLiveData<OverviewWeather>(locationUtil.selectedWeatherLocation.value)
+
+    val weather = MutableLiveData<OverviewWeather>(if (edit) lastEditWeathy?.let { weathy ->
+        OverviewWeather(weathy.region, weathy.dailyWeather, weathy.hourlyWeather)
+    }
+    else locationUtil.selectedWeatherLocation.value)
+
     val weatherDate = date.toLocalDate().monthDayFormat
-    var weatherRegion = weather.map {
+    val weatherRegion = weather.map {
         it ?: return@map ""
         it.region.name
     }
-    var weatherIcon = weather.map {
+    val weatherIcon = weather.map {
         it ?: return@map null
         it.hourly.climate.weather.mediumIconId
     }
@@ -68,32 +72,17 @@ class RecordViewModel @ViewModelInject constructor(
         it ?: return@map ""
         "${it.daily.temperature.maxTemp}°"
     }
-    var tempLow = weather.map {
+    val tempLow = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.minTemp}°"
     }
 
-    fun onLocationChanged(weather: OverviewWeather) {
-        this.weather.value = weather
+    init {
+        fetchClothes()
     }
 
-    fun setCurWeathyStart() {
-        weatherRegion = CalendarViewModel.curWeathyForEdit.map {
-            it ?: return@map ""
-            it.region.name
-        }
-        weatherIcon = CalendarViewModel.curWeathyForEdit.map {
-            it ?: return@map null
-            it.hourlyWeather.climate.weather.mediumIconId
-        }
-        tempHigh = CalendarViewModel.curWeathyForEdit.map {
-            it ?: return@map ""
-            "${it.dailyWeather.temperature.maxTemp}°"
-        }
-        tempLow = CalendarViewModel.curWeathyForEdit.map {
-            it ?: return@map ""
-            "${it.dailyWeather.temperature.minTemp}°"
-        }
+    fun onLocationChanged(weather: OverviewWeather) {
+        this.weather.value = weather
     }
 
     // endregion
@@ -156,10 +145,6 @@ class RecordViewModel @ViewModelInject constructor(
     }
 
     val onChipCheckedFailed = EventLiveData<WeathyCloth>()
-
-    init {
-        fetchClothes()
-    }
 
     private fun fetchClothes() {
         launchCatch({
@@ -266,17 +251,13 @@ class RecordViewModel @ViewModelInject constructor(
     // endregion
 
     // region WEATHER RATING
-    private val _selectedWeatherRating = MutableLiveData<WeatherStamp?>(null)
+    private val _selectedWeatherRating = MutableLiveData<WeatherStamp?>(lastEditWeathy?.stampId)
     val selectedWeatherRating: LiveData<WeatherStamp?> = _selectedWeatherRating
 
     fun changeSelectedWeatherRatingIndex(index: Int) {
         if (selectedWeatherRating.value?.index != index) {
             _selectedWeatherRating.value = WeatherStamp.fromIndex(index)
         }
-    }
-
-    fun setCurWeathyRating() {
-        _selectedWeatherRating.value = CalendarViewModel.curWeathyForEdit.value?.stampId
     }
 
     // endregion
@@ -317,6 +298,12 @@ class RecordViewModel @ViewModelInject constructor(
         }, onFailure = {
             onRecordFailed.emit()
         })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        lastEditWeathy = null
     }
 
     // endregion
