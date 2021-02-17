@@ -36,7 +36,7 @@ class RecordStartFragment : Fragment() {
 
         configureStartNavigation()
         configureDate()
-        configureButton()
+        configureEditStart()
     }
 
     private fun configureStartNavigation() {
@@ -68,8 +68,9 @@ class RecordStartFragment : Fragment() {
         }
     }
 
-    private fun configureButton() {
+    private fun configureEditStart() {
         if (viewModel.edit) {
+            viewModel.setCurWeathyStart()
             binding.btnStart.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true

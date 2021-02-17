@@ -25,6 +25,7 @@ import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloth
+import team.weathy.ui.main.calendar.CalendarViewModel
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
 import team.weathy.util.AppEvent
 import team.weathy.util.EventLiveData
@@ -55,25 +56,44 @@ class RecordViewModel @ViewModelInject constructor(
 
     val weather = MutableLiveData<OverviewWeather>(locationUtil.selectedWeatherLocation.value)
     val weatherDate = date.toLocalDate().monthDayFormat
-    val weatherRegion = weather.map {
+    var weatherRegion = weather.map {
         it ?: return@map ""
         it.region.name
     }
-    val weatherIcon = weather.map {
+    var weatherIcon = weather.map {
         it ?: return@map null
         it.hourly.climate.weather.mediumIconId
     }
-    val tempHigh = weather.map {
+    var tempHigh = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.maxTemp}°"
     }
-    val tempLow = weather.map {
+    var tempLow = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.minTemp}°"
     }
 
     fun onLocationChanged(weather: OverviewWeather) {
         this.weather.value = weather
+    }
+
+    fun setCurWeathyStart() {
+        weatherRegion = CalendarViewModel.curWeathyForEdit.map {
+            it ?: return@map ""
+            it.region.name
+        }
+        weatherIcon = CalendarViewModel.curWeathyForEdit.map {
+            it ?: return@map null
+            it.hourlyWeather.climate.weather.mediumIconId
+        }
+        tempHigh = CalendarViewModel.curWeathyForEdit.map {
+            it ?: return@map ""
+            "${it.dailyWeather.temperature.maxTemp}°"
+        }
+        tempLow = CalendarViewModel.curWeathyForEdit.map {
+            it ?: return@map ""
+            "${it.dailyWeather.temperature.minTemp}°"
+        }
     }
 
     // endregion
