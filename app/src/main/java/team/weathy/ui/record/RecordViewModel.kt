@@ -275,6 +275,9 @@ class RecordViewModel @ViewModelInject constructor(
         }
     }
 
+    fun setCurWeathyRating() {
+        _selectedWeatherRating.value = CalendarViewModel.curWeathyForEdit.value?.stampId
+    }
 
     // endregion
 

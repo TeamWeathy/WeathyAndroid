@@ -31,7 +31,7 @@ class RecordWeatherRatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureStartNavigation()
         configureTabs()
-        configureButton()
+        configureEditRating()
     }
 
     private fun configureStartNavigation() {
@@ -99,8 +99,9 @@ class RecordWeatherRatingFragment : Fragment() {
         cvReview.strokeWidth = 1.dpFloat
     }
 
-    private fun configureButton() {
+    private fun configureEditRating() {
         if (viewModel.edit) {
+            viewModel.setCurWeathyRating()
             binding.btnCheck.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true
