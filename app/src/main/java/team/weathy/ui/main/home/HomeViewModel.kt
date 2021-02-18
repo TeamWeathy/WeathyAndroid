@@ -57,6 +57,11 @@ class HomeViewModel @ViewModelInject constructor(
     val weatherSecondBackground = currentWeather.map {
         it?.hourly?.climate?.weather?.secondHomeBackgroundId
     }
+
+    val weatherTopBlur = currentWeather.map{
+        it?.hourly?.climate?.weather?.topBlurId
+    }
+
     val weatherIcon = currentWeather.map {
         it?.hourly?.climate?.weather?.bigIconId
     }

@@ -95,7 +95,7 @@
                 android:elevation="9dp"
                 android:outlineProvider="none"
                 android:scaleType="fitXY"
-                srcResource="@{vm.weatherSecondBackground}"
+                srcResource="@{vm.weatherTopBlur}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
