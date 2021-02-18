@@ -445,7 +445,7 @@
 
             <Button
                 android:id="@+id/edit"
-                style="@style/RoundButton.Grey"
+                style="@style/RoundButton.Mint"
                 android:layout_width="0dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginRight="9dp"

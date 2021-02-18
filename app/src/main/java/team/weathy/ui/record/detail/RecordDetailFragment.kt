@@ -28,6 +28,7 @@ import team.weathy.databinding.FragmentRecordDetailBinding
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.enableWithAnim
+import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
@@ -98,7 +99,7 @@ class RecordDetailFragment : Fragment() {
         }
 
         viewModel.isSubmitButtonEnabled.observe(viewLifecycleOwner) {
-            binding.btnConfirm.enableWithAnim(it!!)
+            if (!viewModel.edit) binding.btnConfirm.enableWithAnim(it!!)
         }
     }
 
@@ -109,6 +110,8 @@ class RecordDetailFragment : Fragment() {
     private fun configureButton() {
         if (viewModel.edit) {
             binding.btnConfirm.text = "수정완료"
+            binding.btnConfirm.setBackgroundColor(getColor(R.color.main_mint))
+            binding.btnConfirm.isEnabled = true
         } else {
             binding.btnConfirm.text = "내용 추가하기"
         }

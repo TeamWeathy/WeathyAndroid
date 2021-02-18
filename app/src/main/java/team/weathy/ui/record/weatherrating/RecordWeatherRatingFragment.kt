@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
@@ -18,6 +19,7 @@ import team.weathy.util.AutoClearedValue
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
 
@@ -102,6 +104,7 @@ class RecordWeatherRatingFragment : Fragment() {
 
     private fun configureEditRating() {
         if (viewModel.edit) {
+            configureModifyBehaviors()
             binding.btnCheck.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true
@@ -110,5 +113,20 @@ class RecordWeatherRatingFragment : Fragment() {
             binding.edit.isVisible = false
             binding.editNext.isVisible = false
         }
+    }
+
+    private fun configureModifyBehaviors() {
+        binding.edit setOnDebounceClickListener {
+            submit(true)
+        }
+
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
     }
 }

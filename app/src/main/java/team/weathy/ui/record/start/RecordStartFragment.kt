@@ -1,7 +1,6 @@
 package team.weathy.ui.record.start
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.core.text.color
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
@@ -20,6 +20,7 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.font
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.monthDayFormat
 import team.weathy.util.setOnDebounceClickListener
 
@@ -71,6 +72,7 @@ class RecordStartFragment : Fragment() {
 
     private fun configureEditStart() {
         if (viewModel.edit) {
+            configureModifyBehaviors()
             binding.btnStart.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true
@@ -79,5 +81,20 @@ class RecordStartFragment : Fragment() {
             binding.edit.isVisible = false
             binding.editNext.isVisible = false
         }
+    }
+
+    private fun configureModifyBehaviors() {
+        binding.edit setOnDebounceClickListener {
+            submit(true)
+        }
+
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
     }
 }

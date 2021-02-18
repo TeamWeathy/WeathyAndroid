@@ -244,6 +244,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private fun configureButton() {
         if (viewModel.edit) {
+            configureModifyBehaviors()
             binding.btnCheck.isVisible = false
             binding.edit.isVisible = true
             binding.editNext.isVisible = true
@@ -263,5 +264,20 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             else
                 requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
         }
+    }
+
+    private fun configureModifyBehaviors() {
+        binding.edit setOnDebounceClickListener {
+            submit(true)
+        }
+
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
     }
 }
