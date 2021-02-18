@@ -46,7 +46,7 @@ class EditDialog : DialogFragment() {
 		DialogEditBinding.inflate(inflater, container, false).also { binding = it }.root
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		setDialogClickListener()
+		showKeyboard()
 
 		binding.title.text = title
 		binding.tagCount.text = viewModel.clothes.value!!.size.toString()
@@ -61,11 +61,11 @@ class EditDialog : DialogFragment() {
 		binding.btnCancel setOnDebounceClickListener {
 			clickListener?.onClickNo()
 
+			hideKeyboard()
 			dismiss()
 		}
 		binding.enter.setOnFocusChangeListener { _, hasFocus ->
 			setCountVisibility(hasFocus)
-			setKeyboardMode()
 		}
 		binding.enter.addTextChangedListener {
 			binding.textDeleteBtn.isVisible = !it.isNullOrBlank()
@@ -96,7 +96,7 @@ class EditDialog : DialogFragment() {
 			setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 			setDimAmount(0.2f)
 			setLayout(width.roundToInt(), WRAP_CONTENT)
-			setGravity(Gravity.TOP)
+			setGravity(Gravity.BOTTOM)
 			attributes.height = (resources.displayMetrics.density * 181).roundToInt()
 		}
 	}
@@ -134,18 +134,16 @@ class EditDialog : DialogFragment() {
 		binding.btnAdd.isEnabled = isEnable
 	}
 
-	private fun setDialogClickListener() {
-		dialog?.setCancelable(false);
-		binding.root setOnDebounceClickListener {
-			hideKeyboard()
-		}
-	}
-
 	private fun hideKeyboard() {
 		val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
 		inputMethodManager.hideSoftInputFromWindow(binding.enter.windowToken, 0)
-		binding.enter.clearFocus()
+	}
+
+	private fun showKeyboard() {
+		val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+		setKeyboardMode()
 	}
 
 	private fun setKeyboardMode() {
