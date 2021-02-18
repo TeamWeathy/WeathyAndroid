@@ -1,6 +1,5 @@
 package team.weathy.ui.record
 
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -289,7 +288,6 @@ class RecordViewModel @ViewModelInject constructor(
         launchCatch({
             if (edit) {
                 weathyAPI.editWeathy(lastEditWeathy?.id ?: 0, EditWeathyReq(code, clothes, stampId, feedbackReq))
-                Log.d("테스트", "${lastEditWeathy?.closet}")
             } else {
                 weathyAPI.createWeathy(
                     CreateWeathyReq(
@@ -300,7 +298,8 @@ class RecordViewModel @ViewModelInject constructor(
         }, onSuccess = {
             AppEvent.onWeathyUpdated.emit()
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(this.date.toLocalDate())
-            onRecordSuccess.emit()
+            if (edit) onRecordEdited.emit()
+            else onRecordSuccess.emit()
         }, onFailure = {
             onRecordFailed.emit()
         })
