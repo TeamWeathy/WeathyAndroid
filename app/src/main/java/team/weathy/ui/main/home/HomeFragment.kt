@@ -252,6 +252,7 @@ class HomeFragment : Fragment() {
         isHelpPopupShowing = true
         binding.dim.alpha = 1f
         binding.container.isInteractionEnabled = false
+        binding.recommended.root.isEnabled = false
         (activity as MainActivity).stateButton(false)
         binding.weathyQuestion.isEnabled = false
     }
@@ -262,6 +263,7 @@ class HomeFragment : Fragment() {
         isHelpPopupShowing = false
         binding.dim.alpha = 0f
         binding.container.isInteractionEnabled = true
+        binding.recommended.root.isEnabled = true
         (activity as MainActivity).stateButton(true)
         binding.weathyQuestion.isEnabled = true
     }

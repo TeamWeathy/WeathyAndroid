@@ -24,9 +24,9 @@
         <ImageView
             android:id="@+id/bg_second"
             srcResource="@{vm.weatherFirstBackground}"
-            android:alpha="0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:alpha="0"
             android:scaleType="centerCrop" />
 
 
@@ -49,9 +49,9 @@
 
         <team.weathy.util.snowfall.SnowfallView
             android:id="@+id/rainFall"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:snowflakeAlphaMax="255"
             app:snowflakeAlphaMin="150"
             app:snowflakeAngleMax="1"
@@ -90,12 +90,12 @@
 
             <ImageView
                 android:id="@+id/topBlur"
+                srcResource="@{vm.weatherTopBlur}"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
                 android:elevation="9dp"
                 android:outlineProvider="none"
                 android:scaleType="fitXY"
-                srcResource="@{vm.weatherTopBlur}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -234,9 +234,9 @@
                     android:text="@{vm.descriptionText}"
                     android:textColor="@color/black_0.58"
                     android:textSize="16dp"
-                    app:layout_goneMarginRight="26dp"
                     app:layout_constraintLeft_toLeftOf="@id/max_temp_today"
                     app:layout_constraintTop_toBottomOf="@id/max_temp_today"
+                    app:layout_goneMarginRight="26dp"
                     tools:text="조금 흐리지만\n햇살이 따스해요:)" />
 
 
@@ -244,11 +244,11 @@
                     android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="희지님이 기억하는"
                     android:textColor="@color/main_grey"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/today_weathy"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="희지님이 기억하는" />
 
                 <TextView
                     android:id="@+id/today_weathy"
@@ -267,8 +267,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="85dp"
-                    android:src="@drawable/ic_help"
                     android:enabled="true"
+                    android:src="@drawable/ic_help"
                     app:layout_constraintBottom_toBottomOf="@id/today_weathy"
                     app:layout_constraintStart_toStartOf="@id/today_weathy"
                     app:layout_constraintTop_toTopOf="@id/today_weathy" />
@@ -352,7 +352,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingHorizontal="24dp"
-                android:paddingTop = "17dp"
+                android:paddingTop="17dp"
                 android:paddingBottom="30dp"
                 app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 app:layout_constraintRight_toRightOf="@id/guide_right"
@@ -401,7 +401,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingHorizontal="24dp"
-                android:paddingTop = "17dp"
+                android:paddingTop="17dp"
                 android:paddingBottom="30dp"
                 app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 app:layout_constraintRight_toRightOf="@id/guide_right"
@@ -451,7 +451,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="78dp"
                 android:clipToPadding="false"
-                android:paddingTop = "17dp"
+                android:paddingTop="17dp"
                 android:paddingBottom="30dp"
                 app:layout_constraintLeft_toLeftOf="@id/guide_left"
                 app:layout_constraintRight_toRightOf="@id/guide_right"
