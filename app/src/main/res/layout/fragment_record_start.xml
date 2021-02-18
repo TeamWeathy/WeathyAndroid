@@ -186,7 +186,7 @@
             <Button
                 style="@style/RoundButton.Change"
                 android:id="@+id/btn_change"
-                android:layout_width="79dp"
+                android:layout_width="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="변경하기"
                 app:layout_constraintTop_toBottomOf="@id/cv_record"
@@ -204,25 +204,27 @@
                 android:text="다음"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-<!--            <Button-->
-            <!--                android:id="@+id/edit"-->
-            <!--                style="@style/RoundButton.Mint"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_marginBottom="16dp"-->
-            <!--                android:text="수정완료"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--                />-->
+            <Button
+                android:id="@+id/edit"
+                style="@style/RoundButton.Mint"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="9dp"
+                android:text="수정완료"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/editNext"/>
 
-            <!--            <Button-->
-            <!--                android:id="@+id/editNext"-->
-            <!--                style="@style/RoundButton.Mint"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_marginBottom="16dp"-->
-            <!--                android:text="다음"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--                />-->
+            <Button
+                android:id="@+id/editNext"
+                style="@style/RoundButton.Cancel.Mint"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="9dp"
+                android:text="다음"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/edit"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

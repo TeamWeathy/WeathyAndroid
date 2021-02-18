@@ -53,7 +53,12 @@ class RecordViewModel @ViewModelInject constructor(
     val date = lastRecordNavigationTime
     val edit = savedStateHandle.get<Boolean>(EXTRA_EDIT) ?: false
 
-    val weather = MutableLiveData<OverviewWeather>(locationUtil.selectedWeatherLocation.value)
+
+    val weather = MutableLiveData<OverviewWeather>(if (edit) lastEditWeathy?.let { weathy ->
+        OverviewWeather(weathy.region, weathy.dailyWeather, weathy.hourlyWeather)
+    }
+    else locationUtil.selectedWeatherLocation.value)
+
     val weatherDate = date.toLocalDate().monthDayFormat
     val weatherRegion = weather.map {
         it ?: return@map ""
@@ -63,14 +68,17 @@ class RecordViewModel @ViewModelInject constructor(
         it ?: return@map null
         it.hourly.climate.weather.mediumIconId
     }
-    val tempHigh = weather.map {
+    var tempHigh = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.maxTemp}°"
     }
-
     val tempLow = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.minTemp}°"
+    }
+
+    init {
+        fetchClothes()
     }
 
     fun onLocationChanged(weather: OverviewWeather) {
@@ -96,8 +104,8 @@ class RecordViewModel @ViewModelInject constructor(
         )
     val clothes = MediatorLiveData<List<WeathyCloth>>().apply {
         value = clothesTriple[0].first.value!!
-        clothesTriple.forEachIndexed { idx, (clohtes) ->
-            addSource(clohtes) { list ->
+        clothesTriple.forEachIndexed { idx, (clothes) ->
+            addSource(clothes) { list ->
                 if (choicedClothesTabIndex.value == idx) value = list
             }
         }
@@ -138,14 +146,16 @@ class RecordViewModel @ViewModelInject constructor(
 
     val onChipCheckedFailed = EventLiveData<WeathyCloth>()
 
-    init {
-        fetchClothes()
-    }
-
     private fun fetchClothes() {
         launchCatch({
             clothesAPI.getClothes().closet
         }, onSuccess = {
+            if (edit) {
+                clothesTriple[0].second.value = lastEditWeathy?.closet?.top?.clothes?.toSet()
+                clothesTriple[1].second.value = lastEditWeathy?.closet?.bottom?.clothes?.toSet()
+                clothesTriple[2].second.value = lastEditWeathy?.closet?.outer?.clothes?.toSet()
+                clothesTriple[3].second.value = lastEditWeathy?.closet?.etc?.clothes?.toSet()
+            }
             clothesTriple[0].first.value = it.top.clothes
             clothesTriple[1].first.value = it.bottom.clothes
             clothesTriple[2].first.value = it.outer.clothes
@@ -159,7 +169,7 @@ class RecordViewModel @ViewModelInject constructor(
         }
     }
 
-    fun changeSelectedClothesTabIndex(tab: Int) {
+    fun changeChoicedClothesTabIndex(tab: Int) {
         if (choicedClothesTabIndex.value != tab) {
             _choicedClothesTabIndex.value = tab
         }
@@ -193,10 +203,10 @@ class RecordViewModel @ViewModelInject constructor(
         remove(cloth)
     }
 
-    suspend fun addClothes(clothName: String) {
+    suspend fun addClothes(clothName: String): Boolean {
         val (clothes) = clothesTriple[choicedClothesTabIndex.value!!]
-
         val category = selectedCategory
+        var isSuccess = false
 
         launchCatch({
             clothesAPI.createClothes(CreateClothesReq(category, clothName))
@@ -207,7 +217,12 @@ class RecordViewModel @ViewModelInject constructor(
                 OUTER -> it.closet.outer.clothes
                 ETC -> it.closet.etc.clothes
             }
+            isSuccess = true
+        }, onFailure = {
+            isSuccess = false
         }).join()
+
+        return isSuccess
     }
 
     suspend fun deleteClothes() {
@@ -231,7 +246,7 @@ class RecordViewModel @ViewModelInject constructor(
         }).join()
     }
 
-    fun allSelectedClothes(): Int {
+    fun countAllSelectedClothes(): Int {
         var selectedClothesCount = 0
         for (i in 0..3) {
             selectedClothesCount += clothesTriple[i].third.value!!.size
@@ -242,7 +257,7 @@ class RecordViewModel @ViewModelInject constructor(
     // endregion
 
     // region WEATHER RATING
-    private val _selectedWeatherRating = MutableLiveData<WeatherStamp?>(null)
+    private val _selectedWeatherRating = MutableLiveData<WeatherStamp?>(lastEditWeathy?.stampId)
     val selectedWeatherRating: LiveData<WeatherStamp?> = _selectedWeatherRating
 
     fun changeSelectedWeatherRatingIndex(index: Int) {
@@ -250,19 +265,16 @@ class RecordViewModel @ViewModelInject constructor(
             _selectedWeatherRating.value = WeatherStamp.fromIndex(index)
         }
     }
-
-
     // endregion
 
     // region WEATHER DETAIL
-
-    val feedback = MutableLiveData("")
+    val feedback = MutableLiveData(if (edit) lastEditWeathy?.feedback else "")
     val onRecordSuccess = SimpleEventLiveData()
     val onRecordEdited = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
 
     val feedbackFocused = MutableLiveData(false)
-    val isSubmitButtonEnabled = feedback.map { it.isNotBlank() }
+    val isSubmitButtonEnabled = feedback.map { it?.isNotBlank() }
 
     fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
@@ -286,10 +298,17 @@ class RecordViewModel @ViewModelInject constructor(
         }, onSuccess = {
             AppEvent.onWeathyUpdated.emit()
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(this.date.toLocalDate())
-            onRecordSuccess.emit()
+            if (edit) onRecordEdited.emit()
+            else onRecordSuccess.emit()
         }, onFailure = {
             onRecordFailed.emit()
         })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        lastEditWeathy = null
     }
 
     // endregion

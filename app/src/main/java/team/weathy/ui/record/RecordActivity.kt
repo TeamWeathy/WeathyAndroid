@@ -3,12 +3,10 @@ package team.weathy.ui.record
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivityRecordBinding
-import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.clothesdelete.RecordClothesDeleteFragment
 import team.weathy.ui.record.clothesselect.RecordClothesSelectFragment
@@ -23,8 +21,6 @@ import team.weathy.util.extensions.replaceFragment
 class RecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecordBinding
 
-    private val viewModel by viewModels<RecordViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +29,6 @@ class RecordActivity : AppCompatActivity() {
 
         replaceFragment(binding.fragmentContainer, RecordStartFragment::class.java, withAnim = false)
     }
-
     fun navigateStartToLocationChange() =
         replaceFragment(binding.fragmentContainer, SearchFragment.newInstance(true), true)
 
@@ -48,8 +43,6 @@ class RecordActivity : AppCompatActivity() {
 
     fun navigateWeatherRatingToDetail() =
         replaceFragment(binding.fragmentContainer, RecordDetailFragment::class.java, true)
-
-    fun replaceDetailToCalendar() = replaceFragment(binding.fragmentContainer, CalendarFragment::class.java, true)
 
     fun popClothesSelect() = popFragmentIfExist(RecordClothesSelectFragment::class.java)
 
