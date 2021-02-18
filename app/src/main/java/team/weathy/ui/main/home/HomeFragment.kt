@@ -250,10 +250,10 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
         isHelpPopupShowing = true
-        binding.dim.alpha = 1f
         binding.container.isInteractionEnabled = false
         binding.recommended.root.isEnabled = false
         (activity as MainActivity).stateButton(false)
+        (activity as MainActivity).onDim()
         binding.weathyQuestion.isEnabled = false
     }
 
@@ -261,10 +261,10 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
         isHelpPopupShowing = false
-        binding.dim.alpha = 0f
         binding.container.isInteractionEnabled = true
         binding.recommended.root.isEnabled = true
         (activity as MainActivity).stateButton(true)
+        (activity as MainActivity).offDim()
         binding.weathyQuestion.isEnabled = true
     }
 

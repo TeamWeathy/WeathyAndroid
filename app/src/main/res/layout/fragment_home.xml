@@ -315,15 +315,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/dim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0"
-                android:background="@color/transparent_black"
-                android:elevation="9dp"
-                tools:visibility="gone" />
-
             <include
                 android:id="@+id/recommended"
                 layout="@layout/layout_home_recommended_weathy"
