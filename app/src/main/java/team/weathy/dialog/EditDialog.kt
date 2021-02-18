@@ -96,6 +96,8 @@ class EditDialog : DialogFragment() {
 			setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 			setDimAmount(0.2f)
 			setLayout(width.roundToInt(), WRAP_CONTENT)
+			setGravity(Gravity.TOP)
+			attributes.height = (resources.displayMetrics.density * 181).roundToInt()
 		}
 	}
 
