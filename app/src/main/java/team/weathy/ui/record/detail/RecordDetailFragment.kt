@@ -98,7 +98,7 @@ class RecordDetailFragment : Fragment() {
         }
 
         viewModel.isSubmitButtonEnabled.observe(viewLifecycleOwner) {
-            binding.btnConfirm.enableWithAnim(it)
+            binding.btnConfirm.enableWithAnim(it!!)
         }
     }
 

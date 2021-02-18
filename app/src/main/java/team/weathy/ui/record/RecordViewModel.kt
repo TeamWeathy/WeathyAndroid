@@ -260,18 +260,16 @@ class RecordViewModel @ViewModelInject constructor(
             _selectedWeatherRating.value = WeatherStamp.fromIndex(index)
         }
     }
-
     // endregion
 
     // region WEATHER DETAIL
-
-    val feedback = MutableLiveData("")
+    val feedback = MutableLiveData(if (edit) lastEditWeathy?.feedback else "")
     val onRecordSuccess = SimpleEventLiveData()
     val onRecordEdited = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
 
     val feedbackFocused = MutableLiveData(false)
-    val isSubmitButtonEnabled = feedback.map { it.isNotBlank() }
+    val isSubmitButtonEnabled = feedback.map { it?.isNotBlank() }
 
     fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
