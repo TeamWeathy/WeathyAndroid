@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.main.calendar.CalendarViewModel
@@ -15,10 +16,12 @@ import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.AnimUtil
+import team.weathy.util.AppEvent
 import team.weathy.util.PermissionUtil
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @FlowPreview
@@ -42,6 +45,14 @@ class MainActivity : AppCompatActivity() {
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
+
+        lifecycleScope.launchWhenStarted {
+            AppEvent.onNavigateCurWeathyInCalendar.collect { date ->
+                viewModel.changeMenu(CALENDAR)
+                calendarViewModel.onCurDateChanged(date)
+                calendarViewModel.onSelectedDateChanged(date)
+            }
+        }
     }
 
     private fun checkLocationPermission() {

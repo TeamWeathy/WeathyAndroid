@@ -285,6 +285,7 @@ class RecordViewModel @ViewModelInject constructor(
             }
         }, onSuccess = {
             AppEvent.onWeathyUpdated.emit()
+            AppEvent.onNavigateCurWeathyInCalendar.tryEmit(this.date.toLocalDate())
             onRecordSuccess.emit()
         }, onFailure = {
             onRecordFailed.emit()

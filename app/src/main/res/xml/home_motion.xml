@@ -6,14 +6,11 @@
     <Transition
         app:constraintSetStart="@layout/scene_home_first"
         app:constraintSetEnd="@layout/scene_home_second"
-        app:duration="2500">
+        app:duration="1500">
 
         <OnSwipe
             app:dragScale="0.5"
-            app:maxAcceleration="3"
-            app:maxVelocity="3"
-            app:dragDirection="dragUp"
-            app:touchAnchorSide="top" />
+            app:dragDirection="dragUp" />
 
         <KeyFrameSet>
             <!--            <KeyPosition-->

@@ -48,8 +48,6 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
                 tempLow.text = "${weather.temperature.minTemp}°"
             }
         }
-        resetAnimation()
-        startAnimation()
     }
 
     init {

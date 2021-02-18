@@ -1,7 +1,9 @@
 package team.weathy.ui.main.home
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -15,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import team.weathy.R
 import team.weathy.databinding.FragmentHomeBinding
@@ -24,9 +27,13 @@ import team.weathy.ui.main.MainActivity
 import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainViewModel
 import team.weathy.util.*
+import team.weathy.util.location.LocationUtil
+import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.math.abs
 
 
+@FlowPreview
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by AutoClearedValue<FragmentHomeBinding>()
@@ -38,6 +45,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var uniqueId: UniqueIdentifier
+
+    @Inject
+    lateinit var locationUtil: LocationUtil
 
     private var shouldDisableThirdScene = false
     private var isHelpPopupShowing = false
@@ -84,7 +94,16 @@ class HomeFragment : Fragment() {
 
         if (!TestEnv.isInstrumentationTesting) {
             binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
-            binding.weatherImage.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim))
+            binding.weatherImage.doOnLayout {
+                ObjectAnimator.ofFloat(binding.weatherImage, "translationY", -0.02f * it.height, 0.02f * it.height)
+                    .apply {
+                        duration = 1000L
+                        repeatMode = ObjectAnimator.REVERSE
+                        repeatCount = ObjectAnimator.INFINITE
+                        setAutoCancel(true)
+                        start()
+                    }
+            }
         }
 
         binding.topBlur.pivotY = 0f
@@ -104,13 +123,11 @@ class HomeFragment : Fragment() {
                 when (curId) {
                     R.layout.scene_home_first -> {
                         isFirstSceneShowing = true
-                        binding.hourlyView.resetAnimation()
-                        binding.weeklyView.resetAnimation()
+                        resetCardAnimations()
                     }
                     R.layout.scene_home_second -> {
                         isFirstSceneShowing = false
-                        binding.hourlyView.startAnimation()
-                        binding.weeklyView.startAnimation()
+                        startCardAnimations()
 
                         if (shouldDisableThirdScene) {
                             binding.container.definedTransitions.last().setEnable(false)
@@ -157,6 +174,59 @@ class HomeFragment : Fragment() {
                 hideHelpPopup()
             }
         }
+
+        binding.gpsImage setOnDebounceClickListener {
+            if (locationUtil.isOtherPlaceSelected.value) {
+                locationUtil.selectCurrentLocationAsPlace()
+            }
+        }
+
+
+        var downX = 0f
+        var downY = 0f
+        binding.recommended.root.setOnTouchListener { v, event ->
+            val eventTransfer = MotionEvent.obtain(
+                event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
+            )
+            binding.container.onTouchEvent(eventTransfer)
+            eventTransfer.recycle()
+
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.rawX
+                    downY = event.rawY
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (abs(downX - event.rawX) < 100 && abs(downY - event.rawY) < 100) onClickRecommendedWeathy()
+                }
+            }
+
+            true
+        }
+
+        //        binding.recommended.root.setOnClickListener {
+        //            onClickRecommendedWeathy()
+        //        }
+    }
+
+    private fun onClickRecommendedWeathy() {
+        viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
+            AppEvent.onNavigateCurWeathyInCalendar.tryEmit(
+                LocalDate.of(
+                    date.year, date.month, date.day
+                )
+            )
+        }
+    }
+
+    private fun startCardAnimations() {
+        binding.hourlyView.startAnimation()
+        binding.weeklyView.startAnimation()
+    }
+
+    private fun resetCardAnimations() {
+        binding.hourlyView.resetAnimation()
+        binding.weeklyView.resetAnimation()
     }
 
     private fun setNicknameText() {

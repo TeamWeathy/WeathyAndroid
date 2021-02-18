@@ -9,6 +9,7 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.annotations.JsonAdapter
 import team.weathy.R
 import team.weathy.api.ApiSerializer
+import team.weathy.model.entity.WeatherStamp.GOOD
 import java.lang.reflect.Type
 
 @JsonAdapter(WeatherStampSerializer::class)
@@ -52,6 +53,6 @@ class WeatherStampSerializer : ApiSerializer<WeatherStamp> {
     }
 
     override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): WeatherStamp? {
-        return WeatherStamp.fromId(json.asInt)
+        return WeatherStamp.fromId(json.asInt) ?: GOOD
     }
 }

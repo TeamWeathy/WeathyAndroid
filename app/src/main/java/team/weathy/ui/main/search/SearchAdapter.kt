@@ -130,10 +130,12 @@ class SearchAdapter(
     }
 
     fun removeItemFromCollection(position: Int) {
-        items.removeAt(position)
-        menuOpens.removeAt(position)
-        notifyItemRemoved(position)
-        onItemRemoved(position)
+        kotlin.runCatching {
+            items.removeAt(position)
+            menuOpens.removeAt(position)
+            notifyItemRemoved(position)
+            onItemRemoved(position)
+        }
     }
 }
 

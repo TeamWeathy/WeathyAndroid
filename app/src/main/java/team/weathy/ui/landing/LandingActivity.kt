@@ -63,9 +63,7 @@ class LandingActivity : AppCompatActivity() {
                 locationUtil.registerLocationListener()
                 lifecycleScope.launchWhenStarted {
                     delay(3500L)
-
                 }
-
             }
         })
     }
@@ -73,6 +71,7 @@ class LandingActivity : AppCompatActivity() {
     // FIXME 시연용
     @Inject
     lateinit var locationUtil: LocationUtil
+
     private fun navigateNextScreen() {
         //        when {
         //            !uniqueId.exist -> navigateNicknameSet()
