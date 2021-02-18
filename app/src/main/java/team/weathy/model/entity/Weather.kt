@@ -26,7 +26,7 @@ enum class Weather(
         R.drawable.main_img_clearsky_day,
         R.drawable.record_img_clearsky_day,
         R.drawable.mainscroll_bg_morning,
-        R.drawable.mainscroll_box_topblur_morning
+        R.drawable.main_bg_morning_sun,
     ),
     FEW_CLOUDS(
         2,
@@ -34,7 +34,7 @@ enum class Weather(
         R.drawable.main_img_fewclouds_day,
         R.drawable.record_img_fewclouds_day,
         R.drawable.mainscroll_bg_morning,
-        R.drawable.mainscroll_box_topblur_morning,
+        R.drawable.main_bg_morning_sun,
     ),
     SCATTERED_CLOUDS(
         3,
@@ -42,7 +42,7 @@ enum class Weather(
         R.drawable.main_img_scatteredclouds_day,
         R.drawable.record_img_scatteredclouds,
         R.drawable.mainscroll_bg_morning,
-        R.drawable.mainscroll_box_topblur_morning,
+        R.drawable.main_bg_morning,
     ),
     BROKEN_CLOUDS(
         4,
@@ -50,7 +50,7 @@ enum class Weather(
         R.drawable.main_img_brokenclouds_day,
         R.drawable.record_img_brokenclouds,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_cloudy,
     ),
     SHOWER_RAIN(
         9,
@@ -58,7 +58,7 @@ enum class Weather(
         R.drawable.main_img_showerrain_day,
         R.drawable.record_img_showerrain_day,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_snowrain_day,
         BackgroundAnimation.RAIN,
     ),
     RAIN(
@@ -67,7 +67,7 @@ enum class Weather(
         R.drawable.main_img_rain_day,
         R.drawable.record_img_rain,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_snowrain_day,
         BackgroundAnimation.RAIN,
     ),
     THUNDERSTOME(
@@ -76,7 +76,7 @@ enum class Weather(
         R.drawable.main_img_thunderstorm_day,
         R.drawable.record_img_thunderstorm,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_cloudy,
     ),
 
     SNOW(
@@ -85,7 +85,7 @@ enum class Weather(
         R.drawable.main_img_snow_day,
         R.drawable.record_img_snow,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_snowrain_day,
         BackgroundAnimation.SNOW,
     ),
     MIST(
@@ -94,7 +94,7 @@ enum class Weather(
         R.drawable.main_img_mist_day,
         R.drawable.record_img_mist,
         R.drawable.mainscroll_bg_snowrain,
-        R.drawable.mainscroll_box_topblur_snowrain,
+        R.drawable.main_bg_cloudy,
     ),
     CLEAR_SKY_NIGHT(
         101,
@@ -102,7 +102,7 @@ enum class Weather(
         R.drawable.main_img_clearsky_night,
         R.drawable.record_img_clearsky_night,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night_star,
     ),
     FEW_CLOUDS_NIGHT(
         102,
@@ -110,7 +110,7 @@ enum class Weather(
         R.drawable.main_img_fewclouds_night,
         R.drawable.record_img_fewclouds_night,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night_star,
     ),
     SCATTERED_CLOUDS_NIGHT(
         103,
@@ -118,7 +118,7 @@ enum class Weather(
         R.drawable.main_img_scatteredclouds_night,
         R.drawable.record_img_scatteredclouds,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night,
     ),
     BROKEN_CLOUDS_NIGHT(
         104,
@@ -126,7 +126,7 @@ enum class Weather(
         R.drawable.main_img_brokenclouds_night,
         R.drawable.record_img_brokenclouds,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night,
     ),
     SHOWER_RAIN_NIGHT(
         109,
@@ -134,7 +134,7 @@ enum class Weather(
         R.drawable.main_img_showerrain_night,
         R.drawable.record_img_showerrain_night,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_snowrain_night,
         BackgroundAnimation.RAIN,
     ),
     THUNDERSTOME_NIGHT(
@@ -143,7 +143,7 @@ enum class Weather(
         R.drawable.main_img_thunderstorm_night,
         R.drawable.record_img_thunderstorm,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night,
     ),
     RAIN_NIGHT(
         110,
@@ -151,7 +151,7 @@ enum class Weather(
         R.drawable.main_img_rain_night,
         R.drawable.record_img_rain,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_snowrain_night,
         BackgroundAnimation.RAIN,
     ),
     SNOW_NIGHT(
@@ -160,7 +160,7 @@ enum class Weather(
         R.drawable.main_img_snow_night,
         R.drawable.record_img_snow,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_snowrain_night,
         BackgroundAnimation.SNOW,
     ),
     MIST_NIGHT(
@@ -169,7 +169,7 @@ enum class Weather(
         R.drawable.main_img_mist_night,
         R.drawable.record_img_mist,
         R.drawable.mainscroll_bg_night,
-        R.drawable.mainscroll_box_topblur_night,
+        R.drawable.main_bg_night,
     ), ;
 
 
