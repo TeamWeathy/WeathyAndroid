@@ -151,6 +151,12 @@ class RecordViewModel @ViewModelInject constructor(
         launchCatch({
             clothesAPI.getClothes().closet
         }, onSuccess = {
+            if (edit) {
+                clothesTriple[0].second.value = lastEditWeathy?.closet?.top?.clothes?.toSet()
+                clothesTriple[1].second.value = lastEditWeathy?.closet?.bottom?.clothes?.toSet()
+                clothesTriple[2].second.value = lastEditWeathy?.closet?.outer?.clothes?.toSet()
+                clothesTriple[3].second.value = lastEditWeathy?.closet?.etc?.clothes?.toSet()
+            }
             clothesTriple[0].first.value = it.top.clothes
             clothesTriple[1].first.value = it.bottom.clothes
             clothesTriple[2].first.value = it.outer.clothes
@@ -283,6 +289,7 @@ class RecordViewModel @ViewModelInject constructor(
         launchCatch({
             if (edit) {
                 weathyAPI.editWeathy(lastEditWeathy?.id ?: 0, EditWeathyReq(code, clothes, stampId, feedbackReq))
+                Log.d("테스트", "${lastEditWeathy?.closet}")
             } else {
                 weathyAPI.createWeathy(
                     CreateWeathyReq(
