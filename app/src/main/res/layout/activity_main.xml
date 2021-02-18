@@ -53,6 +53,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomNav"
+            android:background="@drawable/main_box_bottomblur"
             android:layout_width="match_parent"
             android:layout_height="94dp"
             app:layout_constraintBottom_toBottomOf="parent">
