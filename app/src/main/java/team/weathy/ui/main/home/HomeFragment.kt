@@ -96,13 +96,13 @@ class HomeFragment : Fragment() {
             binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
             binding.weatherImage.doOnLayout {
                 ObjectAnimator.ofFloat(binding.weatherImage, "translationY", -0.02f * it.height, 0.02f * it.height)
-                    .apply {
-                        duration = 1000L
-                        repeatMode = ObjectAnimator.REVERSE
-                        repeatCount = ObjectAnimator.INFINITE
-                        setAutoCancel(true)
-                        start()
-                    }
+                        .apply {
+                            duration = 1000L
+                            repeatMode = ObjectAnimator.REVERSE
+                            repeatCount = ObjectAnimator.INFINITE
+                            setAutoCancel(true)
+                            start()
+                        }
             }
         }
 
@@ -186,7 +186,7 @@ class HomeFragment : Fragment() {
         var downY = 0f
         binding.recommended.root.setOnTouchListener { v, event ->
             val eventTransfer = MotionEvent.obtain(
-                event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
+                    event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
             )
             binding.container.onTouchEvent(eventTransfer)
             eventTransfer.recycle()
@@ -212,9 +212,9 @@ class HomeFragment : Fragment() {
     private fun onClickRecommendedWeathy() {
         viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(
-                LocalDate.of(
-                    date.year, date.month, date.day
-                )
+                    LocalDate.of(
+                            date.year, date.month, date.day
+                    )
             )
         }
     }
