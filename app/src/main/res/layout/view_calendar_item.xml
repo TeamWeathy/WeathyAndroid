@@ -6,49 +6,57 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@color/transparent"
-    tools:layout_height="81dp"
-    tools:layout_width="80dp">
+    tools:layout_height="94dp"
+    tools:layout_width="44dp">
+
+    <TextView
+        android:id="@+id/ic_weather"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/ic_fewclouds_day"
+        android:gravity="center"
+        android:paddingVertical="2dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/temp_high"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/temp_high"
-        android:layout_width="37dp"
-        android:layout_height="23dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/ic_calendar_high"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginBottom="3dp"
         android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:paddingVertical="2dp"
-        android:text="-4°"
-        android:textColor="@color/white"
-        android:textSize="14dp"
+        android:text="20°"
+        android:textColor="@color/red_temp"
+        android:textSize="12dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/temp_low"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <TextView
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/temp_low"
-        android:layout_width="37dp"
-        android:layout_height="23dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/ic_calendar_low"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="11dp"
         android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:paddingVertical="2dp"
-        android:text="-4°"
-        android:textColor="@color/white"
-        android:textSize="14dp"
+        android:text="-20°"
+        android:textColor="@color/blue_temp"
+        android:textSize="12dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/circleGrey"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:background="@drawable/circle"
         android:backgroundTint="@color/sub_grey_5"
         app:layout_constraintBottom_toBottomOf="@id/day"
@@ -58,8 +66,8 @@
 
     <View
         android:id="@+id/circleMint"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:background="@drawable/circle"
         android:backgroundTint="@color/main_mint"
         app:layout_constraintBottom_toBottomOf="@id/day"
@@ -67,19 +75,27 @@
         app:layout_constraintRight_toRightOf="@id/day"
         app:layout_constraintTop_toTopOf="@id/day" />
 
-
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/roboto_medium"
         android:text="21"
         android:textColor="@color/main_grey"
-        android:textSize="16dp"
+        android:textSize="13dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="/"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/temp_high" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
