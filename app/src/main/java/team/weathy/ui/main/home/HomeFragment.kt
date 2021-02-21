@@ -113,10 +113,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
-                if (endId != R.layout.scene_home_third) {
-                    binding.bgFirst.alpha = 1 - progress
-                    binding.bgSecond.alpha = progress
-                }
+
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {

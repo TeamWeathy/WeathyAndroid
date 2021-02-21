@@ -1,12 +1,7 @@
 package team.weathy.ui.main.home
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -20,21 +15,17 @@ import team.weathy.model.entity.DailyWeatherWithInDays
 import team.weathy.model.entity.HourlyWeather
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.Weathy
-import team.weathy.util.SPUtil
-import team.weathy.util.dateHourString
-import team.weathy.util.dateString
-import team.weathy.util.debugE
-import team.weathy.util.koFormat
+import team.weathy.util.*
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 @FlowPreview
 class HomeViewModel @ViewModelInject constructor(
-    private val locationUtil: LocationUtil,
-    @Api private val weatherAPI: WeatherAPI,
-    @Api private val weathyAPI: WeathyAPI,
-    private val spUtil: SPUtil,
+        private val locationUtil: LocationUtil,
+        @Api private val weatherAPI: WeatherAPI,
+        @Api private val weathyAPI: WeathyAPI,
+        private val spUtil: SPUtil,
 ) : ViewModel() {
     private val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
 
@@ -51,14 +42,11 @@ class HomeViewModel @ViewModelInject constructor(
     val extraWeathers = MutableLiveData<ExtraWeather>()
 
     // region UI
-    val weatherFirstBackground = currentWeather.map {
-        it?.hourly?.climate?.weather?.firstHomeBackgroundId
-    }
-    val weatherSecondBackground = currentWeather.map {
-        it?.hourly?.climate?.weather?.secondHomeBackgroundId
+    val weatherBackground = currentWeather.map {
+        it?.hourly?.climate?.weather?.HomeBackgroundId
     }
 
-    val weatherTopBlur = currentWeather.map{
+    val weatherTopBlur = currentWeather.map {
         it?.hourly?.climate?.weather?.topBlurId
     }
 
@@ -162,33 +150,33 @@ class HomeViewModel @ViewModelInject constructor(
 
     private suspend fun collectLastLocationForWeather() {
         locationUtil.lastLocation.combine(locationUtil.isOtherPlaceSelected) { a, b -> a to b }
-            .filter { (lastLocation, isOtherPlaceSelected) ->
-                !isOtherPlaceSelected && lastLocation != null
-            }.collect { (_lastLocation) ->
-                val lastLocation = _lastLocation!!
+                .filter { (lastLocation, isOtherPlaceSelected) ->
+                    !isOtherPlaceSelected && lastLocation != null
+                }.collect { (_lastLocation) ->
+                    val lastLocation = _lastLocation!!
 
-                loadingWeather.value = true
-                kotlin.runCatching {
-                    lastFetchDateTime.value = LocalDateTime.now()
+                    loadingWeather.value = true
+                    kotlin.runCatching {
+                        lastFetchDateTime.value = LocalDateTime.now()
 
-                    weatherAPI.fetchWeatherByLocation(
-                        lastLocation.latitude,
-                        lastLocation.longitude,
-                        dateOrHourStr = lastFetchDateTime.value!!.dateHourString
-                    )
-                }.onSuccess { res ->
-                    val weather = res.body()?.weather ?: return@onSuccess
-                    locationUtil.selectPlace(weather)
-                }.onFailure {
+                        weatherAPI.fetchWeatherByLocation(
+                                lastLocation.latitude,
+                                lastLocation.longitude,
+                                dateOrHourStr = lastFetchDateTime.value!!.dateHourString
+                        )
+                    }.onSuccess { res ->
+                        val weather = res.body()?.weather ?: return@onSuccess
+                        locationUtil.selectPlace(weather)
+                    }.onFailure {
 
+                    }
+                    loadingWeather.value = false
                 }
-                loadingWeather.value = false
-            }
     }
 
     private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {
         return weatherAPI.fetchWeatherByLocation(code = code, dateOrHourStr = LocalDateTime.now().dateHourString)
-            .body()?.weather
+                .body()?.weather
     }
 
     private suspend fun collectCurrentWeatherAndFetch() {
@@ -201,7 +189,7 @@ class HomeViewModel @ViewModelInject constructor(
             loadingRecommendedWeathy.value = true
             kotlin.runCatching {
                 weathyAPI.fetchRecommendedWeathy(
-                    code, dateString
+                        code, dateString
                 )
             }.onSuccess { res ->
                 recommendedWeathy.value = res.body()?.weathy

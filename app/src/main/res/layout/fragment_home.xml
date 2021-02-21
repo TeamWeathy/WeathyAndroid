@@ -16,19 +16,10 @@
 
         <ImageView
             android:id="@+id/bg_first"
-            srcResource="@{vm.weatherSecondBackground}"
+            srcResource="@{vm.weatherBackground}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-
-        <ImageView
-            android:id="@+id/bg_second"
-            srcResource="@{vm.weatherFirstBackground}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0"
-            android:scaleType="centerCrop" />
-
 
         <team.weathy.util.snowfall.SnowfallView
             android:id="@+id/snowFall"
