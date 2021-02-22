@@ -22,7 +22,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,15 +29,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.TedPermission
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
+import team.weathy.dialog.ChoiceDialog
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.enableWithAnim
@@ -53,11 +48,11 @@ import java.util.*
 
 @FlowPreview
 @AndroidEntryPoint
-class RecordDetailFragment : Fragment() {
+class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordDetailBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
-    val REQUEST_IMAGE_CAPTURE = 1 // 사진 촬영 요청코드
+    private val REQUEST_IMAGE_CAPTURE = 1 // 사진 촬영 요청코드
     lateinit var curPhotoPath: String // 문자열 형태의 사진 경로 값
 
     private val PICK_FROM_ALBUM = 100
@@ -141,7 +136,26 @@ class RecordDetailFragment : Fragment() {
 
     private fun configureImage() {
         binding.addImage setOnDebounceClickListener {
-            //checkPermission()
+            showChoiceDialog()
+        }
+    }
+
+    private fun showChoiceDialog() {
+        ChoiceDialog.newInstance(
+            "사진 추가하기",
+            "앨범에서 사진 선택",
+            "카메라 촬영").show(childFragmentManager, null)
+    }
+
+    override fun onClickChoice1() {
+        lifecycleScope.launchWhenStarted {
+            checkPermission()
+        }
+
+    }
+
+    override fun onClickChoice2() {
+        lifecycleScope.launchWhenStarted {
             setPermission()
             takePicture() // 사진 촬영
         }
@@ -191,29 +205,29 @@ class RecordDetailFragment : Fragment() {
             .apply { curPhotoPath = absolutePath }
     }
 
-//    private fun checkPermission() {
-//        var temp = ""
-//
-//        if(ContextCompat.checkSelfPermission
-//            (requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
-//        }
-//
-//        if(ContextCompat.checkSelfPermission
-//            (requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
-//        }
-//
-//        if(!TextUtils.isEmpty(temp)) {
-//            ActivityCompat.requestPermissions(requireActivity(), temp.trim().split(" ").toTypedArray(), 1)
-//        } else {
-//            val intent = Intent(Intent.ACTION_PICK)
-//
-//            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-//            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//            startActivityForResult(intent, PICK_FROM_ALBUM)
-//        }
-//    }
+    private fun checkPermission() {
+        var temp = ""
+
+        if(ContextCompat.checkSelfPermission
+            (requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
+        }
+
+        if(ContextCompat.checkSelfPermission
+            (requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " "
+        }
+
+        if(!TextUtils.isEmpty(temp)) {
+            ActivityCompat.requestPermissions(requireActivity(), temp.trim().split(" ").toTypedArray(), 1)
+        } else {
+            val intent = Intent(Intent.ACTION_PICK)
+
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            startActivityForResult(intent, PICK_FROM_ALBUM)
+        }
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

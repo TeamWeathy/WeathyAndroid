@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.weathy.view.WeathyCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:weathy_disable_shadow="true"
+    app:weathy_radius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="28dp"
+        android:layoutAnimation="@anim/layout_animation_fade_in"
+        tools:layoutAnimation="@null">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/notosans_medium"
+            android:gravity="left"
+            android:text="title"
+            android:textColor="@color/mint_icon"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/choice1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="13dp"
+            android:gravity="left"
+            android:text="choice1"
+            android:textSize="16sp"
+            android:textColor="@color/main_grey"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <TextView
+            android:id="@+id/choice2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="23dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="13dp"
+            android:gravity="left"
+            android:text="choice2"
+            android:textSize="16sp"
+            android:textColor="@color/main_grey"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/choice1"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</team.weathy.view.WeathyCardView>
