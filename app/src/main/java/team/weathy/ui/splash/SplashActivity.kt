@@ -39,13 +39,12 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateNextScreen() {
-        // FIXME 시연용
-        //        when {
-        //            spUtil.isFirstLaunch -> navigateLanding()
-        //            !uniqueId.exist -> navigateNicknameSet()
-        //            else -> navigateMain()
-        //        }
-        navigateLanding()
+         //FIXME 시연용
+                when {
+                    spUtil.isFirstLaunch -> navigateLanding()
+                    !uniqueId.exist -> navigateNicknameSet()
+                    else -> navigateMain()
+                }
         finish()
     }
 
