@@ -61,6 +61,7 @@ class ChoiceDialog : DialogFragment() {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setDimAmount(0.2f)
             setLayout(width.roundToInt(), WRAP_CONTENT)
+            isCancelable = true
         }
     }
 
