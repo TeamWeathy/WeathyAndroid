@@ -28,13 +28,12 @@
 
         <ImageButton
             android:id="@+id/delete"
-            style="@style/ImageButton.size48.icon20"
+            style="@style/ImageButton.size40"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="8dp"
-            android:padding="14dp"
-            android:src="@drawable/ic_back"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/btn_delete_clothes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,9 +115,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="옷은 길게 눌러 삭제하고, +를 눌러 추가할 수 있어요."
+                android:text="+를 눌러 삭제하고, "
                 app:layout_constraintStart_toStartOf="@id/tv_title2"
                 app:layout_constraintTop_toBottomOf="@id/tv_title2" />
+
+            <ImageView
+                android:id="@+id/tv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_text"
+                app:layout_constraintLeft_toRightOf="@id/tv_sub"
+                app:layout_constraintBottom_toBottomOf="@id/tv_sub" />
+
+            <TextView
+                android:id="@+id/tv_sub2"
+                style="@style/RecordSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="를 눌러 삭제할 수 있어요."
+                app:layout_constraintLeft_toRightOf="@id/tv_delete"
+                app:layout_constraintTop_toTopOf="@id/tv_sub"
+                app:layout_constraintBottom_toBottomOf="@id/tv_sub" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_top"

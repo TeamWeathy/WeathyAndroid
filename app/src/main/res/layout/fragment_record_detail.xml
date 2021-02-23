@@ -57,11 +57,39 @@
             app:layout_constraintStart_toStartOf="@id/tv_title3"
             app:layout_constraintTop_toBottomOf="@id/tv_title3" />
 
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:text="텍스트"
+            android:textSize="14sp"
+            android:textColor="@color/sub_grey_1"
+            android:letterSpacing="-0.05"
+            app:layout_constraintTop_toBottomOf="@id/tv_sub"
+            app:layout_constraintLeft_toLeftOf="@id/tv_sub"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="2dp"
+            android:paddingHorizontal="6dp"
+            android:text="선택"
+            android:textSize="10sp"
+            android:textColor="@color/sub_grey_6"
+            android:letterSpacing="-0.05"
+            android:background="@drawable/background_rectangle_radius_30"
+            android:backgroundTint="@color/sub_grey_5"
+            app:layout_constraintLeft_toRightOf="@id/tv_text"
+            app:layout_constraintBottom_toBottomOf="@id/tv_text"/>
+
         <EditText
             android:id="@+id/et_detail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="8dp"
             android:background="@{vm.feedbackFocused ? @drawable/edit_border_active : @drawable/edit_border}"
             android:gravity="top"
             android:hint="미래의 나에게 들려주고 싶은 날씨 조언을 적어주세요. (예 : 목도리를 챙길걸 그랬어.)"
@@ -78,7 +106,7 @@
             app:layout_constraintDimensionRatio="309:131"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_sub" />
+            app:layout_constraintTop_toBottomOf="@id/tv_text" />
 
         <TextView
             android:id="@+id/maxLength"
@@ -105,28 +133,64 @@
             tools:text="0"
             tools:textColor="@color/sub_grey_6" />
 
+        <TextView
+            android:id="@+id/tv_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:text="사진"
+            android:textSize="14sp"
+            android:textColor="@color/sub_grey_1"
+            android:letterSpacing="-0.05"
+            app:layout_constraintTop_toBottomOf="@id/et_detail"
+            app:layout_constraintLeft_toLeftOf="@id/et_detail"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="2dp"
+            android:paddingHorizontal="6dp"
+            android:text="선택"
+            android:textSize="10sp"
+            android:textColor="@color/sub_grey_6"
+            android:letterSpacing="-0.05"
+            android:background="@drawable/background_rectangle_radius_30"
+            android:backgroundTint="@color/sub_grey_5"
+            app:layout_constraintLeft_toRightOf="@id/tv_photo"
+            app:layout_constraintBottom_toBottomOf="@id/tv_photo"/>
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/add_image"
-            android:layout_width="73dp"
-            android:layout_height="73dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.43"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginTop="8dp"
             app:cardCornerRadius="13dp"
             app:cardElevation="0dp"
-            app:layout_constraintLeft_toLeftOf="@id/et_detail"
-            app:layout_constraintTop_toBottomOf="@id/et_detail">
+            app:layout_constraintLeft_toLeftOf="@id/tv_photo"
+            app:layout_constraintTop_toBottomOf="@id/tv_photo">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageButton
+                    android:id="@+id/add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="41dp"
+                    android:src="@drawable/btn_addphoto"
+                    android:background="@drawable/bg_record_image" />
+
                 <ImageView
-                    android:id="@+id/img_record"
+                    android:id="@+id/photo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/bg_record_image"
-                    android:src="@drawable/logo512" />
+                    tools:src="@drawable/btn_addphoto"/>
 
                 <ImageButton
                     android:id="@+id/delete_img"
@@ -139,8 +203,9 @@
                     android:scaleType="fitCenter"
                     android:visibility="invisible"
                     android:src="@drawable/ic_textdelete"
-                    app:layout_constraintTop_toTopOf="@id/img_record"
-                    app:layout_constraintRight_toRightOf="@id/img_record"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:visibility="visible"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

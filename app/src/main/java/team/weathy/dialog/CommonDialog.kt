@@ -37,6 +37,8 @@ class CommonDialog : DialogFragment() {
         get() = arguments?.getString("body") ?: ""
     private val btnText: String
         get() = arguments?.getString("btnText") ?: ""
+    private val btnCancelText: String
+        get() = arguments?.getString("btnCancelText") ?: ""
     private val color: Int
         get() = arguments?.getInt("color", getColor(R.color.blue_temp)) ?: getColor(R.color.blue_temp)
     private val showCancel: Boolean
@@ -66,6 +68,7 @@ class CommonDialog : DialogFragment() {
                 leftMargin = 13.dp
             }
             binding.btnCancel.isVisible = true
+            binding.btnCancel.text = btnCancelText
             binding.btnCancel setOnDebounceClickListener {
                 clickListener?.onClickNo()
                 dismiss()
@@ -94,11 +97,12 @@ class CommonDialog : DialogFragment() {
             title: String? = null,
             body: String? = null,
             btnText: String? = null,
+            btnCancelText: String? = null,
             color: Int? = null,
             showCancel: Boolean = false
         ) = CommonDialog().apply {
             arguments = bundleOf(
-                "title" to title, "body" to body, "btnText" to btnText, "color" to color, "showCancel" to showCancel
+                "title" to title, "body" to body, "btnText" to btnText, "btnCancelText" to btnCancelText,"color" to color, "showCancel" to showCancel
             )
         }
     }

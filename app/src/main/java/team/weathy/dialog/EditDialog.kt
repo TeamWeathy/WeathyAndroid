@@ -97,6 +97,7 @@ class EditDialog : DialogFragment() {
 			setDimAmount(0.2f)
 			setLayout(width.roundToInt(), WRAP_CONTENT)
 			setGravity(Gravity.BOTTOM)
+			isCancelable = false
 			attributes.height = (resources.displayMetrics.density * 181).roundToInt()
 		}
 	}

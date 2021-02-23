@@ -193,6 +193,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
                 "${viewModel.countAllSelectedClothes()}개 태그를 정말 삭제할까요?",
                 "삭제하면 되돌릴 수 없어요.",
                 "삭제하기",
+                "취소",
                 getColor(R.color.pink),
                 true).show(childFragmentManager, null)
         }
