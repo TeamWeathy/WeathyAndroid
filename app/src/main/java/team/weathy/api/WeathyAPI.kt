@@ -2,35 +2,39 @@ package team.weathy.api
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 import team.weathy.model.entity.Weathy
 import team.weathy.util.DateString
+import java.io.File
 
 data class WeathyRes(
     val weathy: Weathy?, val message: String
 )
 
 data class CreateWeathyReq(
-    val userId: Int,
-    @SerializedName("date") val dateStr: DateString,
-    val code: Long,
-    val clothes: List<Int>,
-    val stampId: Int,
-    val feedback: String,
-)
+    val weathy: RecordWeathy, val img: File
+) {
+    data class RecordWeathy(
+        val userId: Int,
+        @SerializedName("date") val dateStr: DateString,
+        val code: Long,
+        val clothes: List<Int>,
+        val stampId: Int,
+        val feedback: String?
+    )
+}
 
 data class EditWeathyReq(
-    val code: Long,
-    val clothes: List<Int>,
-    val stampId: Int,
-    val feedback: String,
-)
+    val weathy: EditWeathy, val img: File
+) {
+    data class EditWeathy(
+        val code: Long,
+        val clothes: List<Int>,
+        val stampId: Int,
+        val feedback: String?,
+        val isDelete: Boolean
+    )
+}
 
 interface WeathyAPI {
     @GET("users/$USER_ID_PATH_SEGMENT/weathy/recommend")
@@ -43,9 +47,11 @@ interface WeathyAPI {
         @Query("date") date: DateString
     ): WeathyRes
 
+    @Multipart
     @POST("weathy")
     suspend fun createWeathy(@Body req: CreateWeathyReq): MessageRes
 
+    @Multipart
     @PUT("weathy/{weathyId}")
     suspend fun editWeathy(@Path("weathyId") weathyId: Int, @Body req: EditWeathyReq): MessageRes
 
