@@ -268,8 +268,8 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK) {
             fileUri = data?.data!!
             Glide.with(this).load(fileUri).into(binding.photo)
-            setDeleteImageButton()
         }
+        setDeleteImageButton()
     }
 
     private fun savePhoto(bitmap: Bitmap) {
