@@ -70,6 +70,13 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         configureImage()
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback {
+            submit(false)
+        }
+    }
+
     private fun configureTextField() {
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
@@ -97,9 +104,6 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         }
         binding.btnConfirm setOnDebounceClickListener {
             submit(true)
-        }
-        requireActivity().onBackPressedDispatcher.addCallback {
-            submit(false)
         }
 
         viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
