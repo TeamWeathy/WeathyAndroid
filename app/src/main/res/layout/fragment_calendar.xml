@@ -128,7 +128,6 @@
                             android:background="@color/sub_grey_7" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:onClick="@{() -> vm.delete()}"
                             android:id="@+id/delete"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
