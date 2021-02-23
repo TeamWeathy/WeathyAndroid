@@ -28,7 +28,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.gun0912.tedpermission.TedPermission
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
@@ -161,21 +160,6 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
     }
 
     private fun setPermission() {
-//        val permission = object : com.gun0912.tedpermission.PermissionListener {
-//            override fun onPermissionGranted() {
-//                Log.d("테스트", "권한이 허용됨")
-//            }
-//            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-//                Log.d("테스트", "권한이 거부됨")
-//            }
-//        }
-//
-//        TedPermission.with(requireContext())
-//            .setPermissionListener(permission)
-//            .setDeniedMessage("권한 승인 어쩌구")
-//            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-//            .check()
-
         var temp = ""
 
         if(ContextCompat.checkSelfPermission

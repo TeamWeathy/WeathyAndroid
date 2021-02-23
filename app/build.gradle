@@ -104,9 +104,6 @@ dependencies {
     implementation "com.thedeanda:lorem:2.1"
 
     implementation 'com.airbnb.android:lottie:3.5.0'
-
-    // 권한 허용
-    implementation 'gun0912.ted:tedpermission:2.2.3'
 }
 
 dependencies {
