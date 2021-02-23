@@ -1,9 +1,11 @@
 package team.weathy.ui.record.start
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -15,9 +17,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordStartBinding
+import team.weathy.dialog.CommonDialog
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.StatusBarUtil
 import team.weathy.util.extensions.font
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
@@ -26,7 +30,7 @@ import team.weathy.util.setOnDebounceClickListener
 
 @AndroidEntryPoint
 @FlowPreview
-class RecordStartFragment : Fragment() {
+class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentRecordStartBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
@@ -43,7 +47,7 @@ class RecordStartFragment : Fragment() {
 
     private fun configureStartNavigation() {
         binding.close setOnDebounceClickListener {
-            requireActivity().finish()
+            showRecordStopDialog()
         }
         binding.btnChange setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateStartToLocationChange()
@@ -53,6 +57,9 @@ class RecordStartFragment : Fragment() {
         }
         binding.editNext setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateStartToClothesSelect()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            showRecordStopDialog()
         }
     }
 
@@ -96,5 +103,21 @@ class RecordStartFragment : Fragment() {
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
+    }
+
+    private fun showRecordStopDialog() {
+        CommonDialog.newInstance(
+            "기록을 중지하고 나갈까요?",
+            "나가면 기록 중인 내용이 사라져요.",
+            "나가기",
+            "계속쓰기",
+            getColor(R.color.main_mint),
+            true).show(childFragmentManager, null)
+    }
+
+    override fun onClickYes() {
+        lifecycleScope.launchWhenStarted {
+            requireActivity().finish()
+        }
     }
 }
