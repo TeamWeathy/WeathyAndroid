@@ -53,6 +53,7 @@ class CalendarViewModel @ViewModelInject constructor(
     val isMoreMenuShowing: LiveData<Boolean> = _isMoreMenuShowing
 
     private val selectedWeathy = MutableLiveData<Weathy?>(null)
+
     val curWeathy: LiveData<Weathy?> = selectedWeathy
     val weathyDate = selectedDate.map {
         it.koFormat
@@ -82,16 +83,16 @@ class CalendarViewModel @ViewModelInject constructor(
         it?.stampId?.colorRes
     }
     val weathyTopClothes = curWeathy.map {
-        it?.closet?.top?.clothes?.joinToString(" • ") { it.name } ?: ""
+        it?.closet?.top?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyBottomClothes = curWeathy.map {
-        it?.closet?.bottom?.clothes?.joinToString(" • ") { it.name } ?: ""
+        it?.closet?.bottom?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyOuterClothes = curWeathy.map {
-        it?.closet?.outer?.clothes?.joinToString(" • ") { it.name } ?: ""
+        it?.closet?.outer?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyEtcClothes = curWeathy.map {
-        it?.closet?.etc?.clothes?.joinToString(" • ") { it.name } ?: ""
+        it?.closet?.etc?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyFeedback = curWeathy.map {
         it?.feedback ?: ""

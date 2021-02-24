@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import team.weathy.R
 import team.weathy.databinding.FragmentCalendarBinding
+import team.weathy.dialog.CommonDialog
 import team.weathy.dialog.DateDialog
 import team.weathy.dialog.DateDialog.OnClickListener
 import team.weathy.ui.main.MainMenu.HOME
@@ -17,6 +20,7 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.isSameDay
 import team.weathy.util.setOnDebounceClickListener
@@ -25,7 +29,7 @@ import java.time.LocalDateTime
 
 @FlowPreview
 @AndroidEntryPoint
-class CalendarFragment : Fragment(), OnClickListener {
+class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener {
     private var binding by AutoClearedValue<FragmentCalendarBinding>()
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by activityViewModels<CalendarViewModel>()
@@ -65,6 +69,9 @@ class CalendarFragment : Fragment(), OnClickListener {
         binding.edit setOnDebounceClickListener {
             viewModel.closeMoreMenu()
             navigateRecordAtCurDate(true)
+        }
+        binding.delete setOnDebounceClickListener {
+            showDeleteWeathyDialog()
         }
     }
 
@@ -130,5 +137,21 @@ class CalendarFragment : Fragment(), OnClickListener {
             RecordViewModel.lastEditWeathy = viewModel.curWeathy.value
         }
         startActivity(RecordActivity.newIntent(requireContext(), edit))
+    }
+
+    private fun showDeleteWeathyDialog() {
+        CommonDialog.newInstance(
+            "이 날의 웨디를 삭제할까요?",
+            "삭제하면 되돌릴 수 없어요.",
+            "삭제하기",
+            "취소",
+            getColor(R.color.pink),
+            true).show(childFragmentManager, null)
+    }
+
+    override fun onClickYes() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.delete()
+        }
     }
 }

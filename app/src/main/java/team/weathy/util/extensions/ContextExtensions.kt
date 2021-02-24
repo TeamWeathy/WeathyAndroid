@@ -8,8 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import team.weathy.R
 import team.weathy.databinding.ToastCommonBinding
 import kotlin.math.roundToInt
 
@@ -26,6 +24,16 @@ fun Context.showToast(message: String) {
 
     Toast(this).apply {
         setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, (resources.displayMetrics.density * 96).roundToInt())
+        view = binding.root
+    }.show()
+}
+
+fun Context.showTopToast(message: String) {
+    val binding = ToastCommonBinding.inflate(LayoutInflater.from(this))
+    binding.text.text = message
+
+    Toast(this).apply {
+        setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, (resources.displayMetrics.density * 63).roundToInt())
         view = binding.root
     }.show()
 }

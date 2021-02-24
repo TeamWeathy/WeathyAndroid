@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,6 +26,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/delete"
+            style="@style/ImageButton.size40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/btn_delete_clothes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -104,16 +115,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="옷은 길게 눌러 삭제하고, +를 눌러 추가할 수 있어요."
+                android:text="+를 눌러 삭제하고, "
                 app:layout_constraintStart_toStartOf="@id/tv_title2"
                 app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_top"
+            <ImageView
+                android:id="@+id/tv_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_text"
+                app:layout_constraintLeft_toRightOf="@id/tv_sub"
+                app:layout_constraintBottom_toBottomOf="@id/tv_sub" />
+
+            <TextView
+                android:id="@+id/tv_sub2"
+                style="@style/RecordSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="를 눌러 삭제할 수 있어요."
+                app:layout_constraintLeft_toRightOf="@id/tv_delete"
+                app:layout_constraintTop_toTopOf="@id/tv_sub"
+                app:layout_constraintBottom_toBottomOf="@id/tv_sub" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_top"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="true"
                 android:paddingVertical="4dp"
                 android:paddingStart="3dp"
@@ -123,38 +152,44 @@
 
                 <TextView
                     android:id="@+id/tv_top"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.55"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="상의"
                     android:textColor="@color/main_grey"
                     android:textSize="18sp"
+                    android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_top_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:gravity="right"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:letterSpacing="-0.08"
                     android:text="0"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_top"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_top_count2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_top_count2"
+                    app:layout_constraintTop_toTopOf="@+id/tv_top_count2"
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <TextView
                     android:id="@+id/tv_top_count2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.24"
+                    android:gravity="left"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="/5"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_top_count"
-                    app:layout_constraintStart_toEndOf="@id/tv_top_count" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,10 +204,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_bottom"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 android:paddingVertical="4dp"
                 android:paddingStart="3dp"
@@ -182,9 +217,11 @@
 
                 <TextView
                     android:id="@+id/tv_bottom"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.55"
+                    android:gravity="center_horizontal"
+                    android:inputType="text"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="하의"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
@@ -193,27 +230,31 @@
 
                 <TextView
                     android:id="@+id/tv_bottom_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:gravity="right"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:letterSpacing="-0.08"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
-                    app:layout_constraintStart_toEndOf="@id/tv_bottom"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_bottom_count2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_bottom_count2"
+                    app:layout_constraintTop_toTopOf="@+id/tv_bottom_count2"
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <TextView
                     android:id="@+id/tv_bottom_count2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.24"
+                    android:gravity="left"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="/5"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_bottom_count"
-                    app:layout_constraintStart_toEndOf="@id/tv_bottom_count" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -229,10 +270,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_outer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 android:paddingVertical="4dp"
                 android:paddingStart="3dp"
@@ -242,9 +283,11 @@
 
                 <TextView
                     android:id="@+id/tv_outer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.55"
+                    android:gravity="center_horizontal"
+                    android:inputType="text"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="외투"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
@@ -253,27 +296,31 @@
 
                 <TextView
                     android:id="@+id/tv_outer_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:gravity="right"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:letterSpacing="-0.08"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_outer"
-                    app:layout_constraintStart_toEndOf="@id/tv_outer"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_outer_count2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_outer_count2"
+                    app:layout_constraintTop_toTopOf="@+id/tv_outer_count2"
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <TextView
                     android:id="@+id/tv_outer_count2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.24"
+                    android:gravity="left"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="/5"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_outer_count"
-                    app:layout_constraintStart_toEndOf="@id/tv_outer_count" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -289,10 +336,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_etc"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:paddingVertical="4dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="5dp"
@@ -301,9 +348,11 @@
 
                 <TextView
                     android:id="@+id/tv_etc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.55"
+                    android:gravity="center_horizontal"
+                    android:inputType="text"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
@@ -312,27 +361,31 @@
 
                 <TextView
                     android:id="@+id/tv_etc_count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:gravity="right"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:letterSpacing="-0.08"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_etc"
-                    app:layout_constraintStart_toEndOf="@id/tv_etc"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_etc_count2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_etc_count2"
+                    app:layout_constraintTop_toTopOf="@+id/tv_etc_count2"
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <TextView
                     android:id="@+id/tv_etc_count2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.24"
+                    android:gravity="left"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="-0.08"
                     android:text="/5"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_etc_count"
-                    app:layout_constraintStart_toEndOf="@id/tv_etc_count" />
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -404,7 +457,34 @@
                 android:layout_marginBottom="16dp"
                 android:enabled="false"
                 android:text="다음"
+                tools:alpha="0.2"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/edit"
+                style="@style/RoundButton.Mint"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="9dp"
+                android:text="수정완료"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/editNext"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editNext"
+                android:background="@drawable/btn_modify_next"
+                android:layout_height="55dp"
+                android:layout_width="0dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="9dp"
+                android:text="다음"
+                android:textSize="16sp"
+                android:textColor="@color/sub_grey_6"
+                style="?android:attr/borderlessButtonStyle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/edit"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

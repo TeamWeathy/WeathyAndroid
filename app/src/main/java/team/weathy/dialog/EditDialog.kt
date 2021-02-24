@@ -2,20 +2,23 @@ package team.weathy.dialog
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.DialogEditBinding
+import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.extensions.getColor
@@ -23,17 +26,17 @@ import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+@FlowPreview
 @AndroidEntryPoint
 class EditDialog : DialogFragment() {
 	private var binding by AutoClearedValue<DialogEditBinding>()
+	private val viewModel by activityViewModels<RecordViewModel>()
 
 	@Inject
 	lateinit var pixelRatio: PixelRatio
 
 	private val title: String
 		get() = arguments?.getString("title") ?: ""
-	private val count: String
-		get() = arguments?.getString("count") ?: ""
 	private val color: Int
 		get() = arguments?.getInt("color", getColor(R.color.blue_temp)) ?: getColor(R.color.blue_temp)
 	private val clickListener: ClickListener?
@@ -43,16 +46,22 @@ class EditDialog : DialogFragment() {
 		DialogEditBinding.inflate(inflater, container, false).also { binding = it }.root
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		showKeyboard()
+
 		binding.title.text = title
-		binding.tagCount.text = count
+		binding.tagCount.text = viewModel.clothes.value!!.size.toString()
 		binding.btnAdd setOnDebounceClickListener {
 			binding.enter.text?.toString()?.let { it1 -> clickListener?.onClickYes(it1) }
 
-			dismiss()
+			viewModel.clothes.observe(viewLifecycleOwner) {
+				binding.tagCount.text = viewModel.clothes.value!!.size.toString()
+			}
+			binding.enter.setText("")
 		}
 		binding.btnCancel setOnDebounceClickListener {
 			clickListener?.onClickNo()
 
+			hideKeyboard()
 			dismiss()
 		}
 		binding.enter.setOnFocusChangeListener { _, hasFocus ->
@@ -87,6 +96,9 @@ class EditDialog : DialogFragment() {
 			setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 			setDimAmount(0.2f)
 			setLayout(width.roundToInt(), WRAP_CONTENT)
+			setGravity(Gravity.BOTTOM)
+			isCancelable = false
+			attributes.height = (resources.displayMetrics.density * 181).roundToInt()
 		}
 	}
 
@@ -98,10 +110,9 @@ class EditDialog : DialogFragment() {
 	companion object {
 		fun newInstance(
 			title: String? = null,
-			count: String? = null,
 			color: Int? = null
 		) = EditDialog().apply {
-			arguments = bundleOf("title" to title, "count" to count, "color" to color)
+			arguments = bundleOf("title" to title, "color" to color)
 		}
 	}
 
@@ -122,5 +133,21 @@ class EditDialog : DialogFragment() {
 		colorChange.setTarget(binding.btnAdd)
 		colorChange.start()
 		binding.btnAdd.isEnabled = isEnable
+	}
+
+	private fun hideKeyboard() {
+		val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+		inputMethodManager.hideSoftInputFromWindow(binding.enter.windowToken, 0)
+	}
+
+	private fun showKeyboard() {
+		val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+		setKeyboardMode()
+	}
+
+	private fun setKeyboardMode() {
+		activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 	}
 }

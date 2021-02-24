@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
 import android.os.Bundle
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -29,9 +29,9 @@ import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
+import team.weathy.util.extensions.showTopToast
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
-
 
 @FlowPreview
 @AndroidEntryPoint
@@ -51,6 +51,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureTabs()
         configureChips()
         configureAddLogic()
+        configureButton()
         setButtonActivation()
     }
 
@@ -69,32 +70,47 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         binding.btnCheck setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
         }
+        binding.editNext setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateClothesSelectToWeatherRating()
+        }
+        binding.delete setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
+        }
     }
 
     private fun configureTabs() {
-        setOnTabClickListeners()
+        setOnTabClickListeners(layouts)
+        setOnTabClickListeners(category)
+        setOnTabClickListeners(count1)
+        setOnTabClickListeners(count2)
         viewModel.choicedClothesTabIndex.observe(viewLifecycleOwner) { tab ->
             selectTab(tab)
         }
     }
 
     private val layouts
-        get() = listOf(
-            binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc
-        )
+        get() = listOf(binding.layoutTop, binding.layoutBottom, binding.layoutOuter, binding.layoutEtc)
 
-    private fun setOnTabClickListeners() = layouts.forEachIndexed { index, constraintLayout ->
-        constraintLayout.setOnClickListener {
-            viewModel.changeSelectedClothesTabIndex(index)
-            binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+    private val category
+        get() = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
+
+    private val count1
+        get() = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
+
+    private val count2
+        get() = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
+
+    private fun setOnTabClickListeners(list: List<View>) {
+        list.forEachIndexed { index, constraintLayout ->
+            constraintLayout.setOnClickListener {
+                viewModel.changeChoicedClothesTabIndex(index)
+                binding.scrollView.fullScroll(ScrollView.FOCUS_UP)
+            }
         }
     }
 
     private fun selectTab(tab: Int) {
         val dividers = listOf(binding.divider, binding.divider2, binding.divider3, binding.divider4)
-        val category = listOf(binding.tvTop, binding.tvBottom, binding.tvOuter, binding.tvEtc)
-        val count1 = listOf(binding.tvTopCount, binding.tvBottomCount, binding.tvOuterCount, binding.tvEtcCount)
-        val count2 = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
 
         dividers.forEachIndexed { index, view ->
             view.isInvisible = index != tab
@@ -105,11 +121,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
         count1.forEachIndexed { index, textView ->
             if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
-            else textView.setTextColor(getColor(R.color.sub_grey_3))
+            else textView.setTextColor(getColor(R.color.sub_grey_4))
         }
         count2.forEachIndexed { index, textView ->
             if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
-            else textView.setTextColor(getColor(R.color.sub_grey_3))
+            else textView.setTextColor(getColor(R.color.sub_grey_4))
         }
     }
 
@@ -132,7 +148,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         }
     }
 
-
     private fun removeAllChipsWithoutFirst() {
         while (binding.chipGroup.childCount > 1) {
             binding.chipGroup.removeViewAt(1)
@@ -149,19 +164,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         return (layoutInflater.inflate(R.layout.view_clothes_select_chip, binding.chipGroup, false) as Chip).apply {
             this.text = text
             layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setOnCheckedChangeListener { button, isChecked ->
+            setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     viewModel.onChipChecked(text)
                 } else {
                     viewModel.onChipUnchecked(text)
                 }
-            }
-
-            setOnLongClickListener {
-                val vib = requireContext().getSystemService(Vibrator::class.java)
-                vib.vibrate(100)
-                (activity as? RecordActivity)?.navigateClothesSelectToClothesDelete()
-                true
             }
         }
     }
@@ -180,8 +188,13 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             val selected = viewModel.clothesTriple[idx].second.value!!
 
             textView.text = selected.size.toString()
-            if (selected.isNotEmpty()) textView.setTextColor(getColor(R.color.mint_icon))
-            else textView.setTextColor(getColor(R.color.sub_grey_6))
+            when (viewModel.choicedClothesTabIndex.value == idx) {
+                true -> {
+                    if (selected.isNotEmpty()) textView.setTextColor(getColor(R.color.mint_icon))
+                    else textView.setTextColor(getColor(R.color.sub_grey_6))
+                }
+                false -> textView.setTextColor(getColor(R.color.sub_grey_4))
+            }
         }
     }
 
@@ -190,6 +203,16 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun setButtonActivation() {
         viewModel.isButtonEnabled.observe(viewLifecycleOwner) {
             binding.btnCheck.enableWithAnim(it)
+            binding.edit.enableWithAnim(it)
+            if (viewModel.isButtonEnabled.value!!) {
+                binding.editNext.setBackgroundResource(R.drawable.btn_modify_next_active)
+                binding.editNext.setTextColor(getColor(R.color.mint_icon))
+                binding.editNext.isEnabled = true
+            } else {
+                binding.editNext.setBackgroundResource(R.drawable.btn_modify_next)
+                binding.editNext.setTextColor(getColor(R.color.sub_grey_6))
+                binding.editNext.isEnabled = false
+            }
         }
     }
 
@@ -202,31 +225,59 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         when (viewModel.choicedClothesTabIndex.value) {
             0 -> {
                 EditDialog.newInstance(
-                    "상의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "상의 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             1 -> {
                 EditDialog.newInstance(
-                    "하의 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "하의 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             2 -> {
                 EditDialog.newInstance(
-                    "외투 추가하기", viewModel.clothes.value!!.size.toString(), getColor(R.color.main_mint)
-                ).show(childFragmentManager, null)
+                    "외투 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
             3 -> {
                 EditDialog.newInstance(
-                    "기타 추가하기", viewModel.clothes.value!!.size.toString()
-                ).show(childFragmentManager, null)
+                    "기타 추가하기", getColor(R.color.main_mint)).show(childFragmentManager, null)
             }
+        }
+    }
+
+    private fun configureButton() {
+        if (viewModel.edit) {
+            configureModifyBehaviors()
+            binding.btnCheck.isVisible = false
+            binding.edit.isVisible = true
+            binding.editNext.isVisible = true
+            binding.delete.isVisible = false
+        } else {
+            binding.btnCheck.isVisible = true
+            binding.edit.isVisible = false
+            binding.editNext.isVisible = false
+            binding.delete.isVisible = true
         }
     }
 
     override fun onClickYes(text: String) {
         lifecycleScope.launchWhenStarted {
-            viewModel.addClothes(text)
-            requireContext().showToast("태그가 추가되었어요!")
+            if (viewModel.addClothes(text))
+                requireContext().showTopToast("태그가 추가되었습니다.")
+            else
+                requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
         }
+    }
+
+    private fun configureModifyBehaviors() {
+        binding.edit setOnDebounceClickListener {
+            submit(true)
+        }
+
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
     }
 }

@@ -1,11 +1,14 @@
 package team.weathy.ui.record.weatherrating
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordWeatherRatingBinding
@@ -16,6 +19,7 @@ import team.weathy.util.AutoClearedValue
 import team.weathy.util.dpFloat
 import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 import team.weathy.view.WeathyCardView
 
@@ -30,6 +34,7 @@ class RecordWeatherRatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureStartNavigation()
         configureTabs()
+        configureEditRating()
     }
 
     private fun configureStartNavigation() {
@@ -37,6 +42,9 @@ class RecordWeatherRatingFragment : Fragment() {
             (activity as? RecordActivity)?.popWeatherRating()
         }
         binding.btnCheck setOnDebounceClickListener {
+            (activity as? RecordActivity)?.navigateWeatherRatingToDetail()
+        }
+        binding.editNext setOnDebounceClickListener {
             (activity as? RecordActivity)?.navigateWeatherRatingToDetail()
         }
     }
@@ -59,6 +67,17 @@ class RecordWeatherRatingFragment : Fragment() {
 
     private fun configureUIWithStamp(_stamp: WeatherStamp?) {
         binding.btnCheck.enableWithAnim(_stamp != null)
+        binding.edit.enableWithAnim(_stamp != null)
+        if (_stamp != null) {
+            binding.editNext.setBackgroundResource(R.drawable.btn_modify_next_active)
+            binding.editNext.setTextColor(getColor(R.color.mint_icon))
+            binding.editNext.isEnabled = true
+        } else {
+            binding.editNext.setBackgroundResource(R.drawable.btn_modify_next)
+            binding.editNext.setTextColor(getColor(R.color.sub_grey_6))
+            binding.editNext.isEnabled = false
+        }
+
         val stamp = _stamp ?: return
 
         cvReview.forEachIndexed { index, card ->
@@ -81,5 +100,33 @@ class RecordWeatherRatingFragment : Fragment() {
         cvReview.elevation = 0f
         cvReview.strokeColor = getColor(R.color.sub_grey_7)
         cvReview.strokeWidth = 1.dpFloat
+    }
+
+    private fun configureEditRating() {
+        if (viewModel.edit) {
+            configureModifyBehaviors()
+            binding.btnCheck.isVisible = false
+            binding.edit.isVisible = true
+            binding.editNext.isVisible = true
+        } else {
+            binding.btnCheck.isVisible = true
+            binding.edit.isVisible = false
+            binding.editNext.isVisible = false
+        }
+    }
+
+    private fun configureModifyBehaviors() {
+        binding.edit setOnDebounceClickListener {
+            submit(true)
+        }
+
+        viewModel.onRecordEdited.observe(viewLifecycleOwner) {
+            requireContext().showToast("웨디 내용이 수정되었어요!")
+            requireActivity().finish()
+        }
+    }
+
+    private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
+        viewModel.submit(includeFeedback)
     }
 }

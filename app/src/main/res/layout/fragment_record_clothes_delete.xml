@@ -61,24 +61,27 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_top"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sub">
 
                 <TextView
                     android:id="@+id/tv_top"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.7"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:text="상의"
                     android:textColor="@color/main_grey"
                     android:textSize="18sp"
+                    android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,12 +89,11 @@
                     android:id="@+id/tv_top_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:text="0"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_top"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,24 +110,27 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_bottom"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 app:layout_constraintStart_toEndOf="@id/layout_top"
                 app:layout_constraintTop_toTopOf="@id/layout_top">
 
                 <TextView
                     android:id="@+id/tv_bottom"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.7"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:text="하의"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
+                    android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,12 +138,11 @@
                     android:id="@+id/tv_bottom_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_bottom"
-                    app:layout_constraintStart_toEndOf="@id/tv_bottom"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -156,24 +160,27 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_outer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
-                android:background="@drawable/bg_clothes_tab"
                 android:focusable="false"
                 app:layout_constraintStart_toEndOf="@id/layout_bottom"
                 app:layout_constraintTop_toTopOf="@id/layout_bottom">
 
                 <TextView
                     android:id="@+id/tv_outer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.7"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:text="외투"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
+                    android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,12 +188,11 @@
                     android:id="@+id/tv_outer_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_outer"
-                    app:layout_constraintStart_toEndOf="@id/tv_outer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -204,24 +210,26 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_etc"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.21"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="17dp"
                 android:paddingVertical="4dp"
-                android:background="@drawable/bg_clothes_tab"
                 app:layout_constraintStart_toEndOf="@id/layout_outer"
                 app:layout_constraintTop_toTopOf="@id/layout_outer">
 
                 <TextView
                     android:id="@+id/tv_etc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.7"
+                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
                     android:textSize="18sp"
-                    android:letterSpacing="-0.08"
+                    android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -229,13 +237,11 @@
                     android:id="@+id/tv_etc_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
                     android:textSize="15sp"
-                    android:letterSpacing="-0.08"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_etc"
-                    app:layout_constraintStart_toEndOf="@id/tv_etc"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
