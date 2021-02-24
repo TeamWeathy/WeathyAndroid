@@ -53,7 +53,7 @@ class AccessDialog : DialogFragment() {
             }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        isCancelable = false
+        isCancelable = true
         binding.title.text = mainTitle
         binding.positionTitle.text = subTitle1
         binding.cameraTitle.text = subTitle2
@@ -62,7 +62,7 @@ class AccessDialog : DialogFragment() {
         binding.detail.text = detail
         binding.btn.text = btnText
         binding.btn setOnDebounceClickListener {
-            clickListener?.onClickYes()
+            clickListener?.navigateMainWithPermissionCheck()
             dismiss()
         }
         binding.title.setTextColor(color)
@@ -81,7 +81,7 @@ class AccessDialog : DialogFragment() {
     }
 
     interface ClickListener {
-        fun onClickYes() {}
+        fun navigateMainWithPermissionCheck(){}
     }
 
     companion object {
