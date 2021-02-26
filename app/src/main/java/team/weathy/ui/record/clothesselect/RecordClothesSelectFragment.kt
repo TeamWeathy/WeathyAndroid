@@ -259,10 +259,13 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     override fun onClickYes(text: String) {
         lifecycleScope.launchWhenStarted {
-            if (viewModel.addClothes(text))
-                requireContext().showTopToast("태그가 추가되었습니다.")
-            else
-                requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
+            if (viewModel.clothes.value!!.size < 50) {
+                if (viewModel.addClothes(text))
+                    requireContext().showTopToast("태그가 추가되었습니다.")
+                else
+                    requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
+            } else
+                requireContext().showTopToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
         }
     }
 
