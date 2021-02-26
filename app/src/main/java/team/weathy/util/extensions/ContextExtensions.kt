@@ -4,6 +4,7 @@ package team.weathy.util.extensions
 
 import android.app.Activity
 import android.content.Context
+import android.text.SpannedString
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
@@ -34,6 +35,16 @@ fun Context.showTopToast(message: String) {
 
     Toast(this).apply {
         setGravity(Gravity.FILL_HORIZONTAL or Gravity.TOP, 0, (resources.displayMetrics.density * 63).roundToInt())
+        view = binding.root
+    }.show()
+}
+
+fun Context.showColorToast(message: SpannedString) {
+    val binding = ToastCommonBinding.inflate(LayoutInflater.from(this))
+    binding.text.text = message
+
+    Toast(this).apply {
+        setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, (resources.displayMetrics.density * 96).roundToInt())
         view = binding.root
     }.show()
 }
