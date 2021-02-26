@@ -57,28 +57,26 @@ class LandingActivity : AppCompatActivity() {
             navigateNextScreen()
         }
 
-        // fIXME
-        PermissionUtil.requestLocationPermissions(this, object : PermissionListener {
-            override fun onPermissionGranted() {
-                locationUtil.registerLocationListener()
-                lifecycleScope.launchWhenStarted {
-                    delay(3500L)
-                }
-            }
-        })
+//        // fIXME
+//        PermissionUtil.requestLocationPermissions(this, object : PermissionListener {
+//            override fun onPermissionGranted() {
+//                locationUtil.registerLocationListener()
+//                lifecycleScope.launchWhenStarted {
+//                    delay(3500L)
+//                }
+//            }
+//        })
     }
-
-    // FIXME 시연용
-    @Inject
-    lateinit var locationUtil: LocationUtil
+//
+//    FIXME 시연용
+//    @Inject
+//    lateinit var locationUtil: LocationUtil
 
     private fun navigateNextScreen() {
-        //        when {
-        //            !uniqueId.exist -> navigateNicknameSet()
-        //            else -> navigateMain()
-        //        }
-
-        navigateMain()
+                when {
+                    !uniqueId.exist -> navigateNicknameSet()
+                    else -> navigateMain()
+                }
         finish()
     }
 

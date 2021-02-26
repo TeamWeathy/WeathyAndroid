@@ -142,6 +142,23 @@
                 app:barrierMargin="8dp"
                 app:constraint_referenced_ids="label1" />
 
+            <ImageView
+                android:id="@+id/camera_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/divider1"
+                app:layout_constraintEnd_toEndOf="@id/emojiText"
+                app:layout_constraintTop_toTopOf="@id/divider1" />
+
+            <ImageView
+                android:id="@+id/text_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/camera_icon"
+                app:layout_constraintEnd_toStartOf="@id/camera_icon"
+                app:layout_constraintTop_toTopOf="@id/camera_icon" />
+
             <TextView
                 android:id="@+id/label1"
                 android:layout_width="wrap_content"

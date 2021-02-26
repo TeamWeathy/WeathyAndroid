@@ -96,13 +96,13 @@ class HomeFragment : Fragment() {
             binding.downArrow.startAnimation(AnimationUtils.loadAnimation(context, R.anim.alpha_repeat))
             binding.weatherImage.doOnLayout {
                 ObjectAnimator.ofFloat(binding.weatherImage, "translationY", -0.02f * it.height, 0.02f * it.height)
-                    .apply {
-                        duration = 1000L
-                        repeatMode = ObjectAnimator.REVERSE
-                        repeatCount = ObjectAnimator.INFINITE
-                        setAutoCancel(true)
-                        start()
-                    }
+                        .apply {
+                            duration = 1000L
+                            repeatMode = ObjectAnimator.REVERSE
+                            repeatCount = ObjectAnimator.INFINITE
+                            setAutoCancel(true)
+                            start()
+                        }
             }
         }
 
@@ -113,10 +113,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
-                if (endId != R.layout.scene_home_third) {
-                    binding.bgFirst.alpha = 1 - progress
-                    binding.bgSecond.alpha = progress
-                }
+
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, curId: Int) {
@@ -186,7 +183,7 @@ class HomeFragment : Fragment() {
         var downY = 0f
         binding.recommended.root.setOnTouchListener { v, event ->
             val eventTransfer = MotionEvent.obtain(
-                event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
+                    event.downTime, event.eventTime, event.action, event.x + 26.dpFloat, event.y + v.y, event.metaState
             )
             binding.container.onTouchEvent(eventTransfer)
             eventTransfer.recycle()
@@ -212,9 +209,9 @@ class HomeFragment : Fragment() {
     private fun onClickRecommendedWeathy() {
         viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(
-                LocalDate.of(
-                    date.year, date.month, date.day
-                )
+                    LocalDate.of(
+                            date.year, date.month, date.day
+                    )
             )
         }
     }
@@ -250,9 +247,10 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
         isHelpPopupShowing = true
-        binding.dim.alpha = 1f
         binding.container.isInteractionEnabled = false
+        binding.recommended.root.isEnabled = false
         (activity as MainActivity).stateButton(false)
+        (activity as MainActivity).onDim()
         binding.weathyQuestion.isEnabled = false
     }
 
@@ -260,9 +258,10 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
         isHelpPopupShowing = false
-        binding.dim.alpha = 0f
         binding.container.isInteractionEnabled = true
+        binding.recommended.root.isEnabled = true
         (activity as MainActivity).stateButton(true)
+        (activity as MainActivity).offDim()
         binding.weathyQuestion.isEnabled = true
     }
 
