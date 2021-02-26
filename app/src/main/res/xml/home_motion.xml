@@ -4,13 +4,13 @@
 
     <!-- First <-> Second -->
     <Transition
-        app:constraintSetStart="@layout/scene_home_first"
         app:constraintSetEnd="@layout/scene_home_second"
+        app:constraintSetStart="@layout/scene_home_first"
         app:duration="1500">
 
         <OnSwipe
-            app:dragScale="0.5"
-            app:dragDirection="dragUp" />
+            app:dragDirection="dragUp"
+            app:dragScale="0.5" />
 
         <KeyFrameSet>
             <!--            <KeyPosition-->
@@ -46,7 +46,7 @@
 
             <KeyAttribute
                 android:alpha="0"
-                app:framePosition="90"
+                app:framePosition="50"
                 app:motionTarget="@id/topBlur" />
 
             <KeyPosition
@@ -120,15 +120,15 @@
     <!-- Second <-> Third -->
     <Transition
         app:autoTransition="none"
-        app:duration="100"
         app:constraintSetEnd="@layout/scene_home_third"
         app:constraintSetStart="@layout/scene_home_second"
+        app:duration="100"
         app:motionInterpolator="linear">
 
         <OnSwipe
+            app:dragDirection="dragUp"
             app:maxAcceleration="50"
             app:maxVelocity="20"
-            app:dragDirection="dragUp"
             app:touchAnchorSide="top" />
 
     </Transition>
