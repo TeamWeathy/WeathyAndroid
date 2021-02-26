@@ -55,7 +55,7 @@ object MockGenerator {
     )
 
     fun calendarPreview() =
-        CalendarPreview(1, WeatherStamp.values().random(), Temperature(Random.nextInt(21), -Random.nextInt(21)))
+        CalendarPreview(1, WeatherStamp.values().random(), Temperature(Random.nextInt(21), -Random.nextInt(21)), Weather.values().random())
 
     fun calendarPreviews(size: Int): FetchCalendarPreviewRes {
         val list = mutableListOf<CalendarPreview?>()

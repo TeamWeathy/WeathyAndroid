@@ -14,7 +14,7 @@
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:layout_marginBottom="3dp"
-        android:background="@drawable/ic_fewclouds_day"
+        tools:background="@drawable/ic_fewclouds_day"
         android:gravity="center"
         android:paddingVertical="2dp"
         android:visibility="gone"

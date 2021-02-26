@@ -206,12 +206,15 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun updateUIWithData() {
         calendarItems.forEachIndexed { index, binding ->
             data?.getOrNull(index)?.let {
+                binding.icWeather.isVisible  = true
                 binding.tempHigh.isVisible = true
                 binding.tempLow.isVisible = true
 
+                binding.icWeather.setBackgroundResource(it.smallIcon.smallIconId)
                 binding.tempHigh.text = it.temperature.maxTemp.toString()
                 binding.tempLow.text = it.temperature.minTemp.toString()
             } ?: run {
+                binding.icWeather.isVisible = false
                 binding.tempHigh.isVisible = false
                 binding.tempLow.isVisible = false
             }
