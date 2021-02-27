@@ -9,6 +9,5 @@ data class Weathy(
     val hourlyWeather: HourlyWeather,
     val closet: WeathyCloset,
     val stampId: WeatherStamp,
-    val feedback: String?,
-    val imgUrl: String?
+    val feedback: String
 )
