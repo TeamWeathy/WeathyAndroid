@@ -30,6 +30,7 @@ class SearchViewModel @ViewModelInject constructor(
     @Api private val weatherAPI: WeatherAPI,
     private val recentSearchCodeDao: RecentSearchCodeDao,
 ) : ViewModel() {
+    val dateHourString = MutableLiveData(LocalDateTime.now().dateHourString)
     val focused = MutableLiveData(false)
     val query = MutableLiveData("")
     val loading = MutableLiveData(false)
@@ -71,7 +72,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun search() {
         launchCatch({
-            weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = LocalDateTime.now().dateHourString)
+            weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateHourString.value!!)
         }, loading, onSuccess = { (list) ->
             searchResult.value = list ?: listOf()
         })
@@ -103,7 +104,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.mapNotNull {
         weatherAPI.fetchWeatherByLocation(
-            code = it.code, dateOrHourStr = LocalDateTime.now().dateHourString
+            code = it.code, dateOrHourStr = dateHourString.value!!
         ).body()?.weather
     }
 
