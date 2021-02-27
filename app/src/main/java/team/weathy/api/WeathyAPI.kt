@@ -1,14 +1,10 @@
 package team.weathy.api
 
 import com.google.gson.annotations.SerializedName
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 import team.weathy.model.entity.Weathy
 import team.weathy.util.DateString
 
@@ -22,14 +18,15 @@ data class CreateWeathyReq(
     val code: Long,
     val clothes: List<Int>,
     val stampId: Int,
-    val feedback: String,
+    val feedback: String?,
 )
 
 data class EditWeathyReq(
     val code: Long,
     val clothes: List<Int>,
     val stampId: Int,
-    val feedback: String,
+    val feedback: String?,
+    val isDelete: Boolean
 )
 
 interface WeathyAPI {
@@ -43,11 +40,20 @@ interface WeathyAPI {
         @Query("date") date: DateString
     ): WeathyRes
 
+    @Multipart
     @POST("weathy")
-    suspend fun createWeathy(@Body req: CreateWeathyReq): MessageRes
+    suspend fun createWeathy(
+        @Part("weathy") weathy: RequestBody,
+        @Part img: MultipartBody.Part?
+    ): MessageIdRes
 
+    @Multipart
     @PUT("weathy/{weathyId}")
-    suspend fun editWeathy(@Path("weathyId") weathyId: Int, @Body req: EditWeathyReq): MessageRes
+    suspend fun editWeathy(
+        @Path("weathyId") weathyId: Int,
+        @Part("weathy") weathy: RequestBody,
+        @Part img: MultipartBody.Part?
+    ): MessageRes
 
     @DELETE("weathy/{weathyId}")
     suspend fun deleteWeathy(
