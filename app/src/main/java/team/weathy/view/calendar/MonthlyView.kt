@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.annotation.IntRange
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -42,7 +43,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     val firstDateInMonth
         get() = firstDatesInCalednarAndMonth.second
 
-    var data: List<CalendarPreview?>? by OnChangeProp(null) {
+    var data: List<CalendarPreview?>? by OnChangeProp(listOf()) {
         updateUIWithData()
     }
 
@@ -206,12 +207,15 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun updateUIWithData() {
         calendarItems.forEachIndexed { index, binding ->
             data?.getOrNull(index)?.let {
+                binding.icWeather.isVisible  = true
                 binding.tempHigh.isVisible = true
                 binding.tempLow.isVisible = true
 
-                binding.tempHigh.text = it.temperature.maxTemp.toString()
-                binding.tempLow.text = it.temperature.minTemp.toString()
+                binding.icWeather.setBackgroundResource(it.climateIconId.smallIconId)
+                binding.tempHigh.text = it.temperature.maxTemp.toString()?.plus("°")
+                binding.tempLow.text = it.temperature.minTemp.toString()?.plus("°")
             } ?: run {
+                binding.icWeather.isVisible = false
                 binding.tempHigh.isVisible = false
                 binding.tempLow.isVisible = false
             }
