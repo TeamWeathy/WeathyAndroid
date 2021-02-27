@@ -181,18 +181,6 @@
                 app:layout_constraintTop_toTopOf="@id/tv_sub"
                 app:layout_constraintBottom_toBottomOf="@id/tv_sub" />
 
-            <TextView
-                android:id="@+id/edit_sub"
-                style="@style/RecordSubText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="수정하기에서는 태그를 삭제할 수 없어요."
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@id/tv_title2"
-                app:layout_constraintTop_toBottomOf="@id/tv_title2"
-                tools:visibility="visible"/>
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_top"
                 android:layout_width="0dp"
