@@ -211,9 +211,9 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 binding.tempHigh.isVisible = true
                 binding.tempLow.isVisible = true
 
-                binding.icWeather.setBackgroundResource(it.smallIcon.smallIconId)
-                binding.tempHigh.text = it.temperature.maxTemp.toString()
-                binding.tempLow.text = it.temperature.minTemp.toString()
+                binding.icWeather.setBackgroundResource(it.climateIconId.smallIconId)
+                binding.tempHigh.text = it.temperature.maxTemp.toString()?.plus("°")
+                binding.tempLow.text = it.temperature.minTemp.toString()?.plus("°")
             } ?: run {
                 binding.icWeather.isVisible = false
                 binding.tempHigh.isVisible = false
