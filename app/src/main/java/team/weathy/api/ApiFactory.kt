@@ -87,7 +87,7 @@ class ApiFactory @Inject constructor(private val uniqueId: UniqueIdentifier) {
     fun <T : Any> createApi(clazz: KClass<T>): T = apiRetrofit.create(clazz.java)
 
     companion object {
-        private const val BASE_URL = "http://15.164.146.132:3000"
+        private const val BASE_URL = "http://15.164.146.132:3001"
         private const val MEDIA_TYPE = "application/json"
         private const val HEADER_TOKEN = "x-access-token"
     }
