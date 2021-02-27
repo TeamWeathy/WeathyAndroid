@@ -9,6 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import team.weathy.R
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
 import team.weathy.ui.main.calendar.CalendarViewModel
@@ -191,4 +192,15 @@ class MainActivity : AppCompatActivity() {
         binding.calendar.isEnabled = state
         binding.fab.isEnabled = state
     }
+
+    fun onDim(){
+        binding.shadowDim.elevation = 8.0f
+        binding.shadowDim.alpha = 1f
+    }
+
+    fun offDim(){
+        binding.shadowDim.elevation = 0.0f
+        binding.shadowDim.alpha = 0f
+    }
+
 }

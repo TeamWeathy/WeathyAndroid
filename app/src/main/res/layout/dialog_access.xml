@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.weathy.view.WeathyCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:weathy_disable_shadow="true"
+    app:weathy_radius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="26dp"
+        android:layoutAnimation="@anim/layout_animation_fade_in"
+        tools:layoutAnimation="@null">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/notosans_medium"
+            android:text="title"
+            android:textColor="@color/main_mint"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ic_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/access_custom_ic_gps"
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <TextView
+            android:id="@+id/position_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="18dp"
+            android:text="position_title"
+            android:textColor="@color/sub_grey_1"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/ic_position"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <ImageView
+            android:id="@+id/position_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/access_custom_ic_option"
+            app:layout_constraintBottom_toBottomOf="@id/position_title"
+            app:layout_constraintStart_toEndOf="@id/position_title"
+            app:layout_constraintTop_toTopOf="@id/position_title" />
+
+        <TextView
+            android:id="@+id/position_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="position_body"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/position_title"
+            app:layout_constraintTop_toBottomOf="@id/position_title"/>
+
+        <ImageView
+            android:id="@+id/ic_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:src="@drawable/access_custom_ic_camera"
+            app:layout_constraintStart_toStartOf="@id/ic_position"
+            app:layout_constraintTop_toBottomOf="@id/ic_position" />
+
+        <TextView
+            android:id="@+id/camera_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:text="camera_title"
+            android:textColor="@color/sub_grey_1"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/position_body"
+            app:layout_constraintTop_toBottomOf="@id/ic_position" />
+
+        <ImageView
+            android:id="@+id/camera_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/access_custom_ic_option"
+            app:layout_constraintBottom_toBottomOf="@id/camera_title"
+            app:layout_constraintStart_toEndOf="@id/camera_title"
+            app:layout_constraintTop_toTopOf="@id/camera_title" />
+
+        <TextView
+            android:id="@+id/camera_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="camera_body"
+            android:textColor="@color/sub_grey_6"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/camera_title"
+            app:layout_constraintTop_toBottomOf="@id/camera_title"/>
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/sub_grey_7"
+            app:layout_constraintTop_toBottomOf="@id/camera_body" />
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:gravity="center"
+            android:text="detail"
+            android:textColor="@color/sub_grey_8"
+            android:textSize="13sp"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <Button
+            android:id="@+id/btn"
+            style="@style/RoundButton.Mint"
+            android:layout_width="0dp"
+            android:layout_height="47dp"
+            android:layout_marginVertical="25dp"
+            android:text="btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</team.weathy.view.WeathyCardView>

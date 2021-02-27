@@ -12,6 +12,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import team.weathy.R
 import team.weathy.databinding.ActivityNicknameSetBinding
+import team.weathy.dialog.AccessDialog
 import team.weathy.ui.main.MainActivity
 import team.weathy.util.PermissionUtil
 import team.weathy.util.PermissionUtil.PermissionListener
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 @FlowPreview
 @AndroidEntryPoint
-class NicknameSetActivity : AppCompatActivity() {
+class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
     private lateinit var binding: ActivityNicknameSetBinding
     private val viewModel by viewModels<NicknameSetViewModel>()
 
@@ -43,6 +44,7 @@ class NicknameSetActivity : AppCompatActivity() {
         configureTitle()
         observeViewModel()
         configureInput()
+//        showAccessDialog()
     }
 
     private fun configureInput() {
@@ -71,11 +73,11 @@ class NicknameSetActivity : AppCompatActivity() {
             hideKeyboard()
         }
         viewModel.onSuccess.observe(this) {
-            navigateMainWithPermissionCheck()
+            showAccessDialog()
         }
     }
 
-    private fun navigateMainWithPermissionCheck() {
+    override fun navigateMainWithPermissionCheck() {
         PermissionUtil.requestLocationPermissions(this, object : PermissionListener {
             override fun onPermissionGranted() {
                 locationUtil.registerLocationListener()
@@ -92,7 +94,7 @@ class NicknameSetActivity : AppCompatActivity() {
             }
 
             override fun onAnyPermissionsPermanentlyDeined(
-                deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
+                    deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
             ) {
                 // TODO
             }
@@ -102,5 +104,17 @@ class NicknameSetActivity : AppCompatActivity() {
     private fun navigateMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    private fun showAccessDialog() {
+        AccessDialog.newInstance(
+                "웨디 앱 접근 권한 안내",
+                "위치정보",
+                "사진/카메라",
+                "현재 위치를 중심으로 날씨 정보를 알려드려요.",
+                "날씨 기록에 사진을 등록할 수 있어요.",
+                "선택 항목은 허용하지 않더라도 앱 이용이 가능해요.",
+                "확인",
+                getColor(R.color.mint_main)).show(supportFragmentManager, null)
     }
 }

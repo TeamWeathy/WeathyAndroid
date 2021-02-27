@@ -1,13 +1,14 @@
 package team.weathy.ui.main.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
+import team.weathy.R
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.MainMenu.HOME
@@ -22,7 +24,11 @@ import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.*
+import team.weathy.util.AutoClearedValue
+import team.weathy.util.LinearItemDecoration
+import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.hideKeyboard
+import team.weathy.util.extensions.showColorToast
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -80,7 +86,7 @@ class SearchFragment : Fragment() {
             lifecycleScope.launchWhenStarted {
                 locationUtil.selectedWeatherLocation.collect {
                     it ?: return@collect
-                    binding.background.setImageResource(it.hourly.climate.weather.firstHomeBackgroundId)
+                    binding.background.setImageResource(it.hourly.climate.weather.HomeBackgroundId)
                 }
             }
         }
@@ -105,6 +111,13 @@ class SearchFragment : Fragment() {
             recordViewModel.onLocationChanged(weather)
         } else {
             mainViewModel.onLocationChanged(weather)
+            requireContext().showColorToast(buildSpannedString {
+                append("지금 ")
+                color(getColor(R.color.mint_icon)) {
+                    append("‘${weather.region.name}’")
+                }
+                append("의 날씨를 확인해보세요!")
+            })
         }
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }

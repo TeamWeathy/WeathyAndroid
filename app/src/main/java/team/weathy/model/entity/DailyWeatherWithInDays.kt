@@ -11,6 +11,6 @@ data class DailyWeatherWithInDays(
     )
 
     data class Climate(
-        @SerializedName("iconId") val weather: Weather
+        @SerializedName("climateIconId") val weather: Weather
     )
 }
