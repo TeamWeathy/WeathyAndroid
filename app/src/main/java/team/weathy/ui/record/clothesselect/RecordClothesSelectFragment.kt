@@ -1,6 +1,7 @@
 package team.weathy.ui.record.clothesselect
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureAddLogic()
         configureButton()
         setButtonActivation()
+        configureEmptyView()
     }
 
     private fun setNickname() {
@@ -99,6 +101,15 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private val count2
         get() = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
+
+    private val emptyView
+        get() = listOf(binding.emptyImg, binding.emptyText1, binding.emptyText2)
+
+    private val recordView
+        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2)
+
+    private val editView
+        get() = listOf(binding.edit, binding.editNext)
 
     private fun setOnTabClickListeners(list: List<View>) {
         list.forEachIndexed { index, constraintLayout ->
@@ -245,24 +256,26 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     private fun configureButton() {
         if (viewModel.edit) {
             configureModifyBehaviors()
-            binding.btnCheck.isVisible = false
-            binding.edit.isVisible = true
-            binding.editNext.isVisible = true
-            binding.delete.isVisible = false
+            editView.forEach { it.isVisible = true }
+            recordView.forEach { it.isVisible = false }
+            binding.tvSub.text = "수정하기에서는 태그를 삭제할 수 없어요."
+
         } else {
-            binding.btnCheck.isVisible = true
-            binding.edit.isVisible = false
-            binding.editNext.isVisible = false
-            binding.delete.isVisible = true
+            editView.forEach { it.isVisible = false }
+            recordView.forEach { it.isVisible = true }
+            binding.tvSub.text = "+를 눌러 삭제하고, "
         }
     }
 
     override fun onClickYes(text: String) {
         lifecycleScope.launchWhenStarted {
-            if (viewModel.addClothes(text))
-                requireContext().showTopToast("태그가 추가되었습니다.")
-            else
-                requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
+            if (viewModel.clothes.value!!.size < 50) {
+                if (viewModel.addClothes(text))
+                    requireContext().showTopToast("태그가 추가되었습니다.")
+                else
+                    requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
+            } else
+                requireContext().showTopToast("태그를 추가하려면 기존 태그를 삭제해주세요.")
         }
     }
 
@@ -279,5 +292,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
+    }
+
+    private fun configureEmptyView() {
+        viewModel.clothesTriple[0].first.observe(viewLifecycleOwner) { clothes ->
+            if (clothes.isEmpty()) emptyView.forEach { it.isVisible = true }
+            else emptyView.forEach { it.isVisible = false }
+        }
     }
 }

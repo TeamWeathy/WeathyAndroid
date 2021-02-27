@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.InputMethodManager
@@ -22,6 +23,7 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.PixelRatio
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.showTopToast
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -54,7 +56,8 @@ class EditDialog : DialogFragment() {
 			binding.enter.text?.toString()?.let { it1 -> clickListener?.onClickYes(it1) }
 
 			viewModel.clothes.observe(viewLifecycleOwner) {
-				binding.tagCount.text = viewModel.clothes.value!!.size.toString()
+				if (viewModel.clothes.value!!.size <= 50)
+					binding.tagCount.text = viewModel.clothes.value!!.size.toString()
 			}
 			binding.enter.setText("")
 		}

@@ -8,7 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.google.gson.Gson
 import kotlinx.coroutines.FlowPreview
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import team.weathy.api.ClothesAPI
 import team.weathy.api.CreateClothesReq
 import team.weathy.api.CreateWeathyReq
@@ -148,7 +152,8 @@ class RecordViewModel @ViewModelInject constructor(
 
     private fun fetchClothes() {
         launchCatch({
-            clothesAPI.getClothes().closet
+            if (edit) clothesAPI.getClothes(weathy_id = lastEditWeathy?.id).closet
+            else clothesAPI.getClothes().closet
         }, onSuccess = {
             if (edit) {
                 clothesTriple[0].second.value = lastEditWeathy?.closet?.top?.clothes?.toSet()
@@ -269,6 +274,8 @@ class RecordViewModel @ViewModelInject constructor(
 
     // region WEATHER DETAIL
     val feedback = MutableLiveData(if (edit) lastEditWeathy?.feedback else "")
+    val img = MutableLiveData<RequestBody>(null)
+    val isDelete = MutableLiveData(false)
     val onRecordSuccess = SimpleEventLiveData()
     val onRecordEdited = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
@@ -283,16 +290,26 @@ class RecordViewModel @ViewModelInject constructor(
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
         val stampId = selectedWeatherRating.value?.id ?: 0
 
-        val feedbackReq = if (includeFeedback) feedback.value!! else ""
+        val feedbackReq = if (includeFeedback) feedback.value!! else null
 
         launchCatch({
+            val gson = Gson()
+
             if (edit) {
-                weathyAPI.editWeathy(lastEditWeathy?.id ?: 0, EditWeathyReq(code, clothes, stampId, feedbackReq))
+                val editWeathyReq = EditWeathyReq(code, clothes, stampId, feedbackReq, isDelete.value!!)
+                val jsonString = gson.toJson(editWeathyReq)
+
+                weathyAPI.editWeathy(lastEditWeathy?.id ?: 0,
+                    weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
+                    img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null
+                )
             } else {
+                val createWeathyReq = CreateWeathyReq(userId, date, code, clothes, stampId, feedbackReq)
+                val jsonString = gson.toJson(createWeathyReq)
+
                 weathyAPI.createWeathy(
-                    CreateWeathyReq(
-                        userId, date, code, clothes, stampId, feedbackReq
-                    )
+                    weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
+                    img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null
                 )
             }
         }, onSuccess = {

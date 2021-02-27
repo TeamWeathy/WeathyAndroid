@@ -7,7 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat.*
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +20,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
@@ -28,8 +31,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
 import team.weathy.dialog.ChoiceDialog
@@ -39,9 +48,7 @@ import team.weathy.util.extensions.enableWithAnim
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -70,17 +77,21 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         configureImage()
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback {
+            submit(false)
+        }
+    }
+
     private fun configureTextField() {
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
-            binding.skip.isVisible = true
-            binding.div.isVisible = true
         }
 
         binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
+            setKeyboardMode()
             viewModel.feedbackFocused.value = hasFocus
-            binding.skip.isVisible = false
-            binding.div.isVisible = false
         }
     }
 
@@ -91,15 +102,16 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         binding.etDetail.clearFocus()
     }
 
+    private fun setKeyboardMode() {
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
     private fun configureSubmitBehaviors() {
         binding.skip setOnDebounceClickListener {
             submit(false)
         }
         binding.btnConfirm setOnDebounceClickListener {
             submit(true)
-        }
-        requireActivity().onBackPressedDispatcher.addCallback {
-            submit(false)
         }
 
         viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
@@ -115,7 +127,15 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         }
 
         viewModel.isSubmitButtonEnabled.observe(viewLifecycleOwner) {
-            if (!viewModel.edit) binding.btnConfirm.enableWithAnim(it!!)
+            toggleSubmitButton()
+        }
+    }
+
+    private fun toggleSubmitButton() {
+        if ((viewModel.isSubmitButtonEnabled.value!! || binding.photo.drawable != null) && !viewModel.edit ) {
+            binding.btnConfirm.enableWithAnim(true)
+        } else {
+            binding.btnConfirm.enableWithAnim(false)
         }
     }
 
@@ -250,8 +270,9 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        lateinit var bitmap: Bitmap
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val bitmap: Bitmap
             val file = File(curPhotoPath)
 
             if (Build.VERSION.SDK_INT < 28) {
@@ -262,28 +283,35 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
                 bitmap = ImageDecoder.decodeBitmap(decode)
                 binding.photo.setImageBitmap(bitmap)
             }
-            savePhoto(bitmap)
+            toggleSubmitButton()
         }
 
         if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK) {
             fileUri = data?.data!!
-            Glide.with(this).load(fileUri).into(binding.photo)
+            Glide.with(this).load(fileUri)
+                .listener(object: RequestListener<Drawable> {
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        binding.photo.setImageDrawable(resource)
+                        toggleSubmitButton()
+                        return true
+                    }
+
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        TODO("Not yet implemented")
+                    }
+                })
+                .into(binding.photo)
+
+            val options = BitmapFactory.Options()
+            val inputStream: InputStream = requireActivity().contentResolver.openInputStream(fileUri!!)!!
+            bitmap = BitmapFactory.decodeStream(inputStream, null, options)!!
         }
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(JPEG, 20, byteArrayOutputStream)
+        viewModel.img.value = RequestBody.create(MediaType.parse("image/jpg"), byteArrayOutputStream.toByteArray())
+        viewModel.isDelete.value = false
+
         setDeleteImageButton()
-    }
-
-    private fun savePhoto(bitmap: Bitmap) {
-        val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/"
-        val timestamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fileName = "${timestamp}.jpeg"
-        val folder = File(folderPath)
-        if (!folder.isDirectory) {
-            folder.mkdirs()
-        }
-
-        val out = FileOutputStream(folderPath + fileName)
-        bitmap.compress(JPEG, 100, out)
-        Log.d("테스트", "사진 저장 완료")
     }
 
     private fun setDeleteImageButton() {
@@ -295,6 +323,9 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
             binding.addImage.isClickable = true
             binding.deleteImg.isEnabled = false
             binding.deleteImg.isVisible = false
+            viewModel.isDelete.value = true
+
+            toggleSubmitButton()
         }
     }
 }
