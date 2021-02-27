@@ -57,4 +57,5 @@
     <color name="date_redday_next">#fac7c6</color>
     <color name="date_saturday_next">#b7d4ee</color>
     <color name="home_card_shadow">#2C5280</color>
+    <color name="statusbar_color">#f2f2f2</color>
 </resources>
