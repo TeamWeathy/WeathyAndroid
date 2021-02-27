@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
@@ -70,17 +71,21 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         configureImage()
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback {
+            submit(false)
+        }
+    }
+
     private fun configureTextField() {
         binding.layoutDetail setOnDebounceClickListener {
             hideKeyboard()
-            binding.skip.isVisible = true
-            binding.div.isVisible = true
         }
 
         binding.etDetail.setOnFocusChangeListener { _, hasFocus ->
+            setKeyboardMode()
             viewModel.feedbackFocused.value = hasFocus
-            binding.skip.isVisible = false
-            binding.div.isVisible = false
         }
     }
 
@@ -91,15 +96,16 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         binding.etDetail.clearFocus()
     }
 
+    private fun setKeyboardMode() {
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
     private fun configureSubmitBehaviors() {
         binding.skip setOnDebounceClickListener {
             submit(false)
         }
         binding.btnConfirm setOnDebounceClickListener {
             submit(true)
-        }
-        requireActivity().onBackPressedDispatcher.addCallback {
-            submit(false)
         }
 
         viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
