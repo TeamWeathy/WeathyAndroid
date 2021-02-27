@@ -9,7 +9,7 @@
     tools:layout_height="94dp"
     tools:layout_width="44dp">
 
-    <TextView
+    <ImageView
         android:id="@+id/ic_weather"
         android:layout_width="23dp"
         android:layout_height="23dp"
