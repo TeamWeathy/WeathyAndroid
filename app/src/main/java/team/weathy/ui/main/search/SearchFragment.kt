@@ -21,11 +21,10 @@ import team.weathy.ui.main.MainMenu.HOME
 import team.weathy.ui.main.MainMenu.SEARCH
 import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordViewModel
-import team.weathy.util.AutoClearedValue
-import team.weathy.util.LinearItemDecoration
+import team.weathy.util.*
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.location.LocationUtil
-import team.weathy.util.setOnDebounceClickListener
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @FlowPreview
@@ -72,6 +71,7 @@ class SearchFragment : Fragment() {
             registerBackPressCallback()
             handleMainMenuChange()
         } else {
+            viewModel.dateHourString.value = recordViewModel.date.dateHourString
             fetchRecentSearchLocations() // fetch
         }
 
@@ -95,7 +95,7 @@ class SearchFragment : Fragment() {
             viewModel.onItemRemoved(it)
         }, onItemClicked = { position, weather ->
             onItemClicked(position, weather)
-        }, viewModel.showRecently, viewLifecycleOwner)
+        }, viewModel.showRecently, viewLifecycleOwner, fromRecord)
         list.addItemDecoration(LinearItemDecoration(20))
     }
 
