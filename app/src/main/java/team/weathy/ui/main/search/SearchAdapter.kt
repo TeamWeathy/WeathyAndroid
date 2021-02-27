@@ -7,6 +7,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -18,13 +19,15 @@ import team.weathy.util.LocationItemMenuSwiper
 import team.weathy.util.LocationItemMenuSwiper.Callback
 import team.weathy.util.koFormat
 import team.weathy.util.setOnDebounceClickListener
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class SearchAdapter(
     private val onItemRemoved: (idx: Int) -> Unit,
     private val onItemClicked: (idx: Int, item: OverviewWeather) -> Unit,
     private val isRecentShowing: LiveData<Boolean>,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val isPast: Boolean = false
 ) : Adapter<Holder>() {
     private val items = mutableListOf<OverviewWeather>()
     private val menuOpens = mutableListOf<Boolean>()
@@ -107,9 +110,16 @@ class SearchAdapter(
                 }
             }
 
-            binding.datetimeText = LocalDateTime.now().koFormat
+
+            if (isPast) {
+                binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat
+                binding.curTemp = ""
+            } else {
+                binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat + " · " + item.hourly.time
+                binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
+            }
+
             binding.locationText = item.region.name
-            binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
             binding.highTemp = "${item.daily.temperature.maxTemp}°"
             binding.lowTemp = "${item.daily.temperature.minTemp}°"
             binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
