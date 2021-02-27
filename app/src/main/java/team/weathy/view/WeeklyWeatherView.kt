@@ -11,6 +11,7 @@ import androidx.databinding.BindingAdapter
 import team.weathy.R
 import team.weathy.databinding.ItemWeeklyWeatherBinding
 import team.weathy.model.entity.DailyWeatherWithInDays
+import team.weathy.model.entity.Weather
 import team.weathy.util.OnChangeProp
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.getFont
@@ -43,7 +44,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     var weathers: List<DailyWeatherWithInDays> by OnChangeProp(listOf()) {
         it.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
-                icon.setImageResource(weather.climate.weather.smallIconId)
+                icon.setImageResource(Weather.values()[weather.climateIconId].smallIconId)
                 tempHigh.text = "${weather.temperature.maxTemp}°"
                 tempLow.text = "${weather.temperature.minTemp}°"
             }
