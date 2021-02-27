@@ -7,7 +7,7 @@ import team.weathy.model.entity.WeathyCloset
 
 
 data class ClothesRes(
-    val clothesNum: Int, val closet: WeathyCloset, val message: String
+    val closet: WeathyCloset, val message: String
 )
 
 data class CreateClothesReq(
