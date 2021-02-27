@@ -1,6 +1,5 @@
 package team.weathy.di
 
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,10 +11,6 @@ import team.weathy.api.ClothesAPI
 import team.weathy.api.UserAPI
 import team.weathy.api.WeatherAPI
 import team.weathy.api.WeathyAPI
-import team.weathy.api.mock.MockCalendarAPI
-import team.weathy.api.mock.MockUserAPI
-import team.weathy.api.mock.MockWeatherAPI
-import team.weathy.api.mock.MockWeathyAPI
 import team.weathy.util.UniqueIdentifier
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -24,10 +19,6 @@ import kotlin.annotation.AnnotationRetention.BINARY
 @Qualifier
 @Retention(BINARY)
 annotation class Api
-
-@Qualifier
-@Retention(BINARY)
-annotation class ApiMock
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -65,29 +56,5 @@ class ApiModule {
     @Singleton
     @Api
     fun provideWeahy(provider: ApiFactory) = provider.createApi(WeathyAPI::class)
-}
-
-@Module
-@InstallIn(ApplicationComponent::class)
-abstract class ApiModuleMock {
-    @Singleton
-    @Binds
-    @ApiMock
-    abstract fun bindUser(api: MockUserAPI): UserAPI
-
-    @Singleton
-    @Binds
-    @ApiMock
-    abstract fun bindCalendar(api: MockCalendarAPI): CalendarAPI
-
-    @Singleton
-    @Binds
-    @ApiMock
-    abstract fun bindWeather(api: MockWeatherAPI): WeatherAPI
-
-    @Singleton
-    @Binds
-    @ApiMock
-    abstract fun bindWeathy(api: MockWeathyAPI): WeathyAPI
 }
 

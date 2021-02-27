@@ -1,16 +1,13 @@
 package team.weathy.api
 
 import com.google.gson.annotations.SerializedName
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.HTTP
-import retrofit2.http.POST
+import retrofit2.http.*
 import team.weathy.model.entity.ClothCategory
 import team.weathy.model.entity.WeathyCloset
 
 
 data class ClothesRes(
-    val closet: WeathyCloset, val message: String
+    val clothesNum: Int, val closet: WeathyCloset, val message: String
 )
 
 data class CreateClothesReq(
@@ -18,7 +15,7 @@ data class CreateClothesReq(
 )
 
 data class CreateClothesRes(
-    @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
+    val clothesNum: Int, @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
 )
 
 data class DeleteClothesReq(
@@ -27,7 +24,9 @@ data class DeleteClothesReq(
 
 interface ClothesAPI {
     @GET("users/$USER_ID_PATH_SEGMENT/clothes")
-    suspend fun getClothes(): ClothesRes
+    suspend fun getClothes(
+        @Query("weathy_id") weathy_id: Int? = null
+    ): ClothesRes
 
     @POST("users/$USER_ID_PATH_SEGMENT/clothes")
     suspend fun createClothes(@Body req: CreateClothesReq): CreateClothesRes
