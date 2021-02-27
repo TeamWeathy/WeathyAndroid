@@ -106,10 +106,10 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         get() = listOf(binding.emptyImg, binding.emptyText1, binding.emptyText2)
 
     private val recordView
-        get() = listOf(binding.btnCheck, binding.delete, binding.tvSub, binding.tvDelete, binding.tvSub2)
+        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2)
 
     private val editView
-        get() = listOf(binding.edit, binding.editNext, binding.editSub)
+        get() = listOf(binding.edit, binding.editNext)
 
     private fun setOnTabClickListeners(list: List<View>) {
         list.forEachIndexed { index, constraintLayout ->
@@ -258,9 +258,12 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             configureModifyBehaviors()
             editView.forEach { it.isVisible = true }
             recordView.forEach { it.isVisible = false }
+            binding.tvSub.text = "수정하기에서는 태그를 삭제할 수 없어요."
+
         } else {
             editView.forEach { it.isVisible = false }
             recordView.forEach { it.isVisible = true }
+            binding.tvSub.text = "+를 눌러 삭제하고, "
         }
     }
 

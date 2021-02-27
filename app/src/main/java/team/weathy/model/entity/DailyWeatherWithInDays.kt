@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class DailyWeatherWithInDays(
-    val date: Date, val temperature: Temperature, val climateIconId: Climate
+    val date: Date, val temperature: Temperature, val climateIconId: Int
 ) {
     data class Date(
         val year: Int, val month: Int, val day: Int, val dayOfWeek: String

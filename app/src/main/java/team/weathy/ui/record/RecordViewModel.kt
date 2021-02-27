@@ -301,7 +301,7 @@ class RecordViewModel @ViewModelInject constructor(
 
                 weathyAPI.editWeathy(lastEditWeathy?.id ?: 0,
                     weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
-                    img = if(img.value != null) MultipartBody.Part.createFormData("img", null, img.value!!) else null
+                    img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null
                 )
             } else {
                 val createWeathyReq = CreateWeathyReq(userId, date, code, clothes, stampId, feedbackReq)
@@ -309,7 +309,7 @@ class RecordViewModel @ViewModelInject constructor(
 
                 weathyAPI.createWeathy(
                     weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
-                    img = if(img.value != null) MultipartBody.Part.createFormData("img", null, img.value!!) else null
+                    img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null
                 )
             }
         }, onSuccess = {

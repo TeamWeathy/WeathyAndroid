@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat.*
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -30,6 +31,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import okhttp3.MediaType
@@ -122,7 +127,15 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         }
 
         viewModel.isSubmitButtonEnabled.observe(viewLifecycleOwner) {
-            if (!viewModel.edit) binding.btnConfirm.enableWithAnim(it!!)
+            toggleSubmitButton()
+        }
+    }
+
+    private fun toggleSubmitButton() {
+        if ((viewModel.isSubmitButtonEnabled.value!! || binding.photo.drawable != null) && !viewModel.edit ) {
+            binding.btnConfirm.enableWithAnim(true)
+        } else {
+            binding.btnConfirm.enableWithAnim(false)
         }
     }
 
@@ -270,11 +283,24 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
                 bitmap = ImageDecoder.decodeBitmap(decode)
                 binding.photo.setImageBitmap(bitmap)
             }
+            toggleSubmitButton()
         }
 
         if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK) {
             fileUri = data?.data!!
-            Glide.with(this).load(fileUri).into(binding.photo)
+            Glide.with(this).load(fileUri)
+                .listener(object: RequestListener<Drawable> {
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        binding.photo.setImageDrawable(resource)
+                        toggleSubmitButton()
+                        return true
+                    }
+
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        TODO("Not yet implemented")
+                    }
+                })
+                .into(binding.photo)
 
             val options = BitmapFactory.Options()
             val inputStream: InputStream = requireActivity().contentResolver.openInputStream(fileUri!!)!!
@@ -298,6 +324,8 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
             binding.deleteImg.isEnabled = false
             binding.deleteImg.isVisible = false
             viewModel.isDelete.value = true
+
+            toggleSubmitButton()
         }
     }
 }
