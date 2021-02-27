@@ -53,6 +53,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureAddLogic()
         configureButton()
         setButtonActivation()
+        configureEmptyView()
     }
 
     private fun setNickname() {
@@ -99,6 +100,9 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private val count2
         get() = listOf(binding.tvTopCount2, binding.tvBottomCount2, binding.tvOuterCount2, binding.tvEtcCount2)
+
+    private val emptyView
+        get() = listOf(binding.emptyImg, binding.emptyText1, binding.emptyText2)
 
     private fun setOnTabClickListeners(list: List<View>) {
         list.forEachIndexed { index, constraintLayout ->
@@ -282,5 +286,11 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
 
     private fun submit(includeFeedback: Boolean) = lifecycleScope.launchWhenCreated {
         viewModel.submit(includeFeedback)
+    }
+
+    private fun configureEmptyView() {
+        if (viewModel.clothes.value!!.isEmpty()) {
+            emptyView.forEach { it.isVisible = true }
+        } else emptyView.forEach { it.isVisible = false }
     }
 }
