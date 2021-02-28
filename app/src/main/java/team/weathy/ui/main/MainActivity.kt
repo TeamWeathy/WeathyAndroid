@@ -89,10 +89,14 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeMenu(CALENDAR)
         }
         binding.fab setOnDebounceClickListener {
-            if (calendarViewModel.curWeathy.value == null) {
-                navigateRecordAtToday()
-            } else {
+            if (calendarViewModel.todayWeathy.value != null
+                    && LocalDate.of(calendarViewModel.todayWeathy.value!!.dailyWeather.date.year,
+                            calendarViewModel.todayWeathy.value!!.dailyWeather.date.month,
+                            calendarViewModel.todayWeathy.value!!.dailyWeather.date.day) == LocalDate.now()) {
                 showToast("웨디는 하루에 하나만 기록할 수 있어요.")
+            } else {
+                calendarViewModel.todayWeathy.value = null
+                navigateRecordAtToday()
             }
         }
     }
