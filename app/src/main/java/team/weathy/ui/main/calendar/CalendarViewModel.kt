@@ -1,5 +1,6 @@
 package team.weathy.ui.main.calendar
 
+import androidx.fragment.app.Fragment
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,10 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import team.weathy.api.CalendarAPI
 import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
@@ -97,7 +100,10 @@ class CalendarViewModel @ViewModelInject constructor(
         it?.closet?.etc?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyFeedback = curWeathy.map {
-        it?.feedback ?: ""
+        it?.feedback
+    }
+    val weathyImage = curWeathy.map{
+        it?.imgUrl
     }
 
     init {
@@ -161,7 +167,7 @@ class CalendarViewModel @ViewModelInject constructor(
             }
         }
     }
-
+//GetWeathy
     private fun fetchSelectedDateWeathy() {
         launchCatch({
             weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
@@ -213,4 +219,5 @@ class CalendarViewModel @ViewModelInject constructor(
             debugE(it)
         })
     }
+
 }
