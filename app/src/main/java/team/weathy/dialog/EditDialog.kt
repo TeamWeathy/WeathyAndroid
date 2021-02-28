@@ -49,14 +49,13 @@ class EditDialog : DialogFragment() {
 		showKeyboard()
 
 		binding.title.text = title
-		binding.tagCount.text = viewModel.clothes.value!!.size.toString()
+		viewModel.numClothes[viewModel.choicedClothesTabIndex.value!!].observe(viewLifecycleOwner) {
+			if (it <= 50) {
+				binding.tagCount.text = it.toString()
+			}
+		}
 		binding.btnAdd setOnDebounceClickListener {
 			binding.enter.text?.toString()?.let { it1 -> clickListener?.onClickYes(it1) }
-
-			viewModel.clothes.observe(viewLifecycleOwner) {
-				if (viewModel.clothes.value!!.size <= 50)
-					binding.tagCount.text = viewModel.clothes.value!!.size.toString()
-			}
 			binding.enter.setText("")
 		}
 		binding.btnCancel setOnDebounceClickListener {

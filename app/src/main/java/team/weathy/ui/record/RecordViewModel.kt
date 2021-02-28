@@ -1,5 +1,6 @@
 package team.weathy.ui.record
 
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -99,6 +100,8 @@ class RecordViewModel @ViewModelInject constructor(
     private val selectedCategory
         get() = ClothCategory.fromId(_choicedClothesTabIndex.value!! + 1)
 
+    var numClothes = mutableListOf<MutableLiveData<Int>>(MutableLiveData(0), MutableLiveData(0), MutableLiveData(0), MutableLiveData(0))
+
     val clothesTriple =
         listOf<Triple<MutableLiveData<List<WeathyCloth>>, MutableLiveData<Set<WeathyCloth>>, MutableLiveData<Set<WeathyCloth>>>>(
             Triple(MutableLiveData(listOf()), MutableLiveData(setOf()), MutableLiveData(setOf())),
@@ -161,6 +164,11 @@ class RecordViewModel @ViewModelInject constructor(
                 clothesTriple[2].second.value = lastEditWeathy?.closet?.outer?.clothes?.toSet()
                 clothesTriple[3].second.value = lastEditWeathy?.closet?.etc?.clothes?.toSet()
             }
+            numClothes[0].value = it.top.clothesNum
+            numClothes[1].value = it.bottom.clothesNum
+            numClothes[2].value = it.outer.clothesNum
+            numClothes[3].value = it.etc.clothesNum
+
             clothesTriple[0].first.value = it.top.clothes
             clothesTriple[1].first.value = it.bottom.clothes
             clothesTriple[2].first.value = it.outer.clothes
@@ -214,7 +222,8 @@ class RecordViewModel @ViewModelInject constructor(
         var isSuccess = false
 
         launchCatch({
-            clothesAPI.createClothes(CreateClothesReq(category, clothName))
+            if (edit) clothesAPI.createClothes(req = CreateClothesReq(category, clothName), weathy_id = lastEditWeathy?.id)
+            else clothesAPI.createClothes(CreateClothesReq(category, clothName))
         }, onSuccess = {
             clothes.value = when (category) {
                 TOP -> it.closet.top.clothes
@@ -222,6 +231,11 @@ class RecordViewModel @ViewModelInject constructor(
                 OUTER -> it.closet.outer.clothes
                 ETC -> it.closet.etc.clothes
             }
+            numClothes[0].value = it.closet.top.clothesNum
+            numClothes[1].value = it.closet.bottom.clothesNum
+            numClothes[2].value = it.closet.outer.clothesNum
+            numClothes[3].value = it.closet.etc.clothesNum
+
             isSuccess = true
         }, onFailure = {
             isSuccess = false
@@ -242,6 +256,11 @@ class RecordViewModel @ViewModelInject constructor(
             clothesTriple[1].first.value = it.bottom.clothes
             clothesTriple[2].first.value = it.outer.clothes
             clothesTriple[3].first.value = it.etc.clothes
+
+            numClothes[0].value = it.top.clothesNum
+            numClothes[1].value = it.bottom.clothesNum
+            numClothes[2].value = it.outer.clothesNum
+            numClothes[3].value = it.etc.clothesNum
 
             clothesTriple.forEach { (clothes, selected, _) ->
                 selected.updateSet {
