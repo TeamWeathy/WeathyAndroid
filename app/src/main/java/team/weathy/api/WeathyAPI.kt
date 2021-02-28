@@ -30,7 +30,7 @@ data class EditWeathyReq(
 )
 
 interface WeathyAPI {
-    @GET("users/$USER_ID_PATH_SEGMENT/weathy/rec    ommend")
+    @GET("users/$USER_ID_PATH_SEGMENT/weathy/recommend")
     suspend fun fetchRecommendedWeathy(
         @Query("code") code: Long, @Query("date") date: DateString
     ): Response<WeathyRes?>
