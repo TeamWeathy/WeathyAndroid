@@ -15,7 +15,7 @@ data class CreateClothesReq(
 )
 
 data class CreateClothesRes(
-    val clothesNum: Int, @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
+    @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
 )
 
 data class DeleteClothesReq(
