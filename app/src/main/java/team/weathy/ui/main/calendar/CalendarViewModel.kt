@@ -30,6 +30,7 @@ import team.weathy.util.isPast
 import team.weathy.util.koFormat
 import team.weathy.util.yearMonthFormat
 import java.time.LocalDate
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities
 
 typealias YearMonthFormat = String
 
@@ -54,6 +55,7 @@ class CalendarViewModel @ViewModelInject constructor(
 
     private val selectedWeathy = MutableLiveData<Weathy?>(null)
 
+    val todayWeathy = MutableLiveData<Weathy?>(null)
     val curWeathy: LiveData<Weathy?> = selectedWeathy
     val weathyDate = selectedDate.map {
         it.koFormat
@@ -165,6 +167,9 @@ class CalendarViewModel @ViewModelInject constructor(
             weathyAPI.fetchWeathyWithDate(selectedDate.value!!.dateString)
         }, onSuccess = {
             selectedWeathy.value = it.weathy
+            if (LocalDate.of(it.weathy!!.dailyWeather.date.year, it.weathy.dailyWeather.date.month, it.weathy.dailyWeather.date.day) == LocalDate.now()) {
+                todayWeathy.value = it.weathy
+            }
         }, onFailure = {
             selectedWeathy.value = null
         })
