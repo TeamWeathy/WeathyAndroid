@@ -7,7 +7,7 @@ import team.weathy.model.entity.WeathyCloset
 
 
 data class ClothesRes(
-    val clothesNum: Int, val closet: WeathyCloset, val message: String
+    val closet: WeathyCloset, val message: String
 )
 
 data class CreateClothesReq(
@@ -15,7 +15,7 @@ data class CreateClothesReq(
 )
 
 data class CreateClothesRes(
-    val clothesNum: Int, @SerializedName("clothesList") val closet: WeathyCloset, @SerializedName("message") val message: String
+    @SerializedName("closet") val closet: WeathyCloset, @SerializedName("message") val message: String
 )
 
 data class DeleteClothesReq(
@@ -29,7 +29,10 @@ interface ClothesAPI {
     ): ClothesRes
 
     @POST("users/$USER_ID_PATH_SEGMENT/clothes")
-    suspend fun createClothes(@Body req: CreateClothesReq): CreateClothesRes
+    suspend fun createClothes(
+        @Body req: CreateClothesReq,
+        @Query("weathy_id") weathy_id: Int? = null
+    ): CreateClothesRes
 
     @HTTP(method = "DELETE", path = "users/$USER_ID_PATH_SEGMENT/clothes", hasBody = true)
     suspend fun deleteClothes(@Body req: DeleteClothesReq): ClothesRes

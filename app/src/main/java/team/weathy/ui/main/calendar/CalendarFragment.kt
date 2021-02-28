@@ -8,6 +8,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
@@ -20,6 +22,7 @@ import team.weathy.ui.main.MainViewModel
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
+import team.weathy.util.debugE
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.showToast
 import team.weathy.util.isSameDay
@@ -45,7 +48,11 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) =
         FragmentCalendarBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,6 +65,8 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
         registerBackPressCallback()
 
         setOnRecordClickListener()
+
+        loadImageWithUrl()
 
         viewModel.onDeleteSuccess.observe(viewLifecycleOwner) {
             requireContext().showToast("웨디가 삭제되었어요.")
@@ -78,7 +87,8 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
     private fun configureCalendarView() {
         binding.calendarView.run {
             onClickYearMonthText = {
-                DateDialog.newInstance(binding.calendarView.curDate).show(childFragmentManager, null)
+                DateDialog.newInstance(binding.calendarView.curDate)
+                    .show(childFragmentManager, null)
             }
 
             onDateChangeListener = {
@@ -110,6 +120,12 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
 
         viewModel.calendarData.observe(viewLifecycleOwner) {
             binding.calendarView.data = it
+        }
+
+        viewModel.weathyImage.observe(viewLifecycleOwner) {
+            it?.let {
+                Glide.with(this).load(it).into(binding.image)
+            }
         }
     }
 
@@ -146,12 +162,18 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
             "삭제하기",
             "취소",
             getColor(R.color.pink),
-            true).show(childFragmentManager, null)
+            true
+        ).show(childFragmentManager, null)
     }
 
     override fun onClickYes() {
         lifecycleScope.launchWhenStarted {
             viewModel.delete()
         }
+    }
+
+    private fun loadImageWithUrl() {
+        Glide.with(this).load(viewModel.weathyImage.value).into(binding.image)
+        debugE("ImageUrl: ${viewModel.weathyFeedback.value}")
     }
 }

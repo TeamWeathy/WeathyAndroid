@@ -38,13 +38,3 @@ fun Context.showTopToast(message: String) {
         view = binding.root
     }.show()
 }
-
-fun Context.showColorToast(message: SpannedString) {
-    val binding = ToastCommonBinding.inflate(LayoutInflater.from(this))
-    binding.text.text = message
-
-    Toast(this).apply {
-        setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, (resources.displayMetrics.density * 96).roundToInt())
-        view = binding.root
-    }.show()
-}
