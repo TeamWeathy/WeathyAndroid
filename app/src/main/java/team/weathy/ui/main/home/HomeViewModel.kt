@@ -99,6 +99,12 @@ class HomeViewModel @ViewModelInject constructor(
     val weathyEtcClothes = recommendedWeathy.map {
         it?.closet?.etc?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
+    val weathyFeedback = recommendedWeathy.map {
+        it?.feedback
+    }
+    val weathyImage = recommendedWeathy.map{
+        it?.imgUrl
+    }
 
 
     val extraRainRepresentation = extraWeathers.map {
