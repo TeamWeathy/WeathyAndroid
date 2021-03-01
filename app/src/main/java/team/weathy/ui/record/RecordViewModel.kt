@@ -295,7 +295,9 @@ class RecordViewModel @ViewModelInject constructor(
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
         val stampId = selectedWeatherRating.value?.id ?: 0
 
-        val feedbackReq = if (includeFeedback) feedback.value!! else null
+        val feedbackReq = if (includeFeedback) {
+            if (feedback.value != null) feedback.value!! else null
+        } else null
 
         launchCatch({
             val gson = Gson()
