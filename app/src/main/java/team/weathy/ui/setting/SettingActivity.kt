@@ -3,6 +3,7 @@ package team.weathy.ui.setting
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import team.weathy.R
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
@@ -20,6 +21,7 @@ class SettingActivity : AppCompatActivity() {
 
         goNicknameChange()
         goDeveloperInfo()
+        goInquire()
         exitSetting()
     }
 
@@ -40,6 +42,16 @@ class SettingActivity : AppCompatActivity() {
     private fun exitSetting() {
         binding.exitSettingBtn.setOnDebounceClickListener {
             finish()
+        }
+    }
+
+    private fun goInquire() {
+        binding.inquireClick.setOnDebounceClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_receiver)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_title))
+            intent.type = "message/rfc822"
+            startActivity(intent)
         }
     }
 }
