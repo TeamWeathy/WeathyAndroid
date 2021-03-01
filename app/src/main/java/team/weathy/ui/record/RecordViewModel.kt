@@ -38,6 +38,7 @@ import java.time.LocalDateTime
 class RecordViewModel @ViewModelInject constructor(
     @Api private val clothesAPI: ClothesAPI,
     @Api private val weathyAPI: WeathyAPI,
+    @Api private val weatherAPI: WeatherAPI,
     private val uniqueId: UniqueIdentifier,
     locationUtil: LocationUtil,
     @Assisted private val savedStateHandle: SavedStateHandle,
@@ -68,13 +69,22 @@ class RecordViewModel @ViewModelInject constructor(
     }
 
     init {
+        fetchWeather()
         fetchClothes()
+    }
+
+    private fun fetchWeather() {
+        launchCatch({
+            weatherAPI.fetchWeatherByLocation(code = code, dateOrHourStr = date.dateString)
+        }, onSuccess = { res ->
+            this.weather.value = res.body()!!.weather!!
+        })
     }
 
     fun onLocationChanged(weather: OverviewWeather) {
         this.weather.value = weather
     }
-
+    
     // endregion
 
     // region CLOTHES SELECT/DELETE

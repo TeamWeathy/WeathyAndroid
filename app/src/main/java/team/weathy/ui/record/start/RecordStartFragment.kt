@@ -47,7 +47,6 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
         configureStartNavigation()
         configureDate()
         configureEditStart()
-        fetchWeatherFromRecord()
     }
 
     private fun configureStartNavigation() {
@@ -125,13 +124,5 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
         lifecycleScope.launchWhenStarted {
             requireActivity().finish()
         }
-    }
-
-    private fun fetchWeatherFromRecord() {
-        launchCatch({
-            weatherAPI.fetchWeatherByLocation(code = viewModel.code, dateOrHourStr = viewModel.date.dateString)
-        }, onSuccess = { res ->
-            viewModel.weather.value = res.body()!!.weather!!
-        })
     }
 }
