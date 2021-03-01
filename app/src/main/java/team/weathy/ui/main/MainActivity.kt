@@ -98,6 +98,8 @@ class MainActivity : AppCompatActivity() {
                 calendarViewModel.todayWeathy.value = null
                 navigateRecordAtToday()
             }
+            if (calendarViewModel.curWeathy.value != null)
+                showToast("웨디는 하루에 하나만 기록할 수 있어요.")
         }
     }
 
