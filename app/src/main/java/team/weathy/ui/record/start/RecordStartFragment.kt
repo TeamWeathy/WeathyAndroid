@@ -1,7 +1,7 @@
 package team.weathy.ui.record.start
 
-import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,21 +16,25 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.R
+import team.weathy.api.WeatherAPI
 import team.weathy.databinding.FragmentRecordStartBinding
+import team.weathy.di.Api
 import team.weathy.dialog.CommonDialog
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
-import team.weathy.util.AutoClearedValue
-import team.weathy.util.StatusBarUtil
+import team.weathy.util.*
 import team.weathy.util.extensions.font
 import team.weathy.util.extensions.getColor
+import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.showToast
-import team.weathy.util.monthDayFormat
-import team.weathy.util.setOnDebounceClickListener
+import javax.inject.Inject
 
 @AndroidEntryPoint
 @FlowPreview
 class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
+    @Inject
+    @Api
+    lateinit var weatherAPI: WeatherAPI
     private var binding by AutoClearedValue<FragmentRecordStartBinding>()
     private val viewModel by activityViewModels<RecordViewModel>()
 
@@ -43,6 +47,7 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
         configureStartNavigation()
         configureDate()
         configureEditStart()
+        fetchWeatherFromRecord()
     }
 
     private fun configureStartNavigation() {
@@ -78,6 +83,7 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
     }
 
     private fun configureEditStart() {
+        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
             binding.btnStart.isVisible = false
@@ -119,5 +125,13 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
         lifecycleScope.launchWhenStarted {
             requireActivity().finish()
         }
+    }
+
+    private fun fetchWeatherFromRecord() {
+        launchCatch({
+            weatherAPI.fetchWeatherByLocation(code = viewModel.code, dateOrHourStr = viewModel.date.dateString)
+        }, onSuccess = { res ->
+            viewModel.weather.value = res.body()!!.weather!!
+        })
     }
 }

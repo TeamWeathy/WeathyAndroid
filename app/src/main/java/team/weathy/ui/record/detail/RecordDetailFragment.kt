@@ -71,6 +71,12 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        if (viewModel.imgFromEdit != null) {
+            Glide.with(this).load(viewModel.imgFromEdit).into(binding.photo)
+            setDeleteImageButton()
+            viewModel.imgFromEdit = null
+        }
+
         configureTextField()
         configureSubmitBehaviors()
         configureButton()
@@ -132,10 +138,12 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
     }
 
     private fun toggleSubmitButton() {
-        if ((viewModel.isSubmitButtonEnabled.value!! || binding.photo.drawable != null) && !viewModel.edit ) {
-            binding.btnConfirm.enableWithAnim(true)
-        } else {
-            binding.btnConfirm.enableWithAnim(false)
+        if (!viewModel.edit) {
+            if ((viewModel.isSubmitButtonEnabled.value!! || binding.photo.drawable != null)) {
+                binding.btnConfirm.enableWithAnim(true)
+            } else {
+                binding.btnConfirm.enableWithAnim(false)
+            }
         }
     }
 
