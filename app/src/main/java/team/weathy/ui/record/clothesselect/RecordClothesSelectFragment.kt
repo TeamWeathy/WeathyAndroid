@@ -54,7 +54,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         configureAddLogic()
         configureButton()
         setButtonActivation()
-        configureEmptyView()
     }
 
     private fun setNickname() {
@@ -138,6 +137,8 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
             if (index == tab) textView.setTextColor(getColor(R.color.sub_grey_6))
             else textView.setTextColor(getColor(R.color.sub_grey_4))
         }
+
+        configureEmptyView(tab)
     }
 
     private fun configureChips() {
@@ -295,8 +296,8 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         viewModel.submit(includeFeedback)
     }
 
-    private fun configureEmptyView() {
-        viewModel.clothesTriple[0].first.observe(viewLifecycleOwner) { clothes ->
+    private fun configureEmptyView(tab: Int) {
+        viewModel.clothesTriple[tab].first.observe(viewLifecycleOwner) { clothes ->
             if (clothes.isEmpty()) emptyView.forEach { it.isVisible = true }
             else emptyView.forEach { it.isVisible = false }
         }
