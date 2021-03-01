@@ -124,16 +124,6 @@
                 app:layout_constraintTop_toBottomOf="@id/emoji"
                 tools:text="추웠어요" />
 
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/sub_grey_5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/emojiText" />
-
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier"
                 android:layout_width="wrap_content"
@@ -143,32 +133,36 @@
                 app:constraint_referenced_ids="label1" />
 
             <ImageView
-                android:id="@+id/camera_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:layout_constraintBottom_toBottomOf="@id/divider1"
-                app:layout_constraintEnd_toEndOf="@id/emojiText"
-                app:layout_constraintTop_toTopOf="@id/divider1" />
+                android:id="@+id/icon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                tools:src="@drawable/main_ic_image"
+                app:layout_constraintEnd_toStartOf="@id/icon2"
+                app:layout_constraintTop_toTopOf="@id/icon2"
+                app:layout_constraintBottom_toBottomOf="@id/icon2"
+
+             />
 
             <ImageView
-                android:id="@+id/text_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="@id/camera_icon"
-                app:layout_constraintEnd_toStartOf="@id/camera_icon"
-                app:layout_constraintTop_toTopOf="@id/camera_icon" />
+                android:id="@+id/icon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                tools:src="@drawable/main_ic_text"
+                app:layout_constraintEnd_toEndOf="@id/emojiText"
+                app:layout_constraintTop_toBottomOf="@id/max_temp" />
 
             <TextView
                 android:id="@+id/label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="40dp"
                 android:text="상의"
                 android:textColor="@color/sub_grey_6"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider1" />
+                app:layout_constraintTop_toBottomOf="@id/max_temp" />
 
             <TextView
                 android:layout_width="0dp"

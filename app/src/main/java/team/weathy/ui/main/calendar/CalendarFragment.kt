@@ -66,8 +66,6 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
 
         setOnRecordClickListener()
 
-        loadImageWithUrl()
-
         viewModel.onDeleteSuccess.observe(viewLifecycleOwner) {
             requireContext().showToast("웨디가 삭제되었어요.")
         }
@@ -124,7 +122,23 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
 
         viewModel.weathyImage.observe(viewLifecycleOwner) {
             it?.let {
-                Glide.with(this).load(it).into(binding.image)
+                debugE("img: ${viewModel.curWeathy.value?.imgUrl.isNullOrEmpty()}")
+                if (viewModel.curWeathy.value?.imgUrl.isNullOrEmpty()) {
+                    binding.image.visibility = View.GONE
+                } else {
+                    binding.image.visibility = View.VISIBLE
+                    Glide.with(this).load(it).into(binding.image)
+                }
+            }
+        }
+
+        viewModel.weathyFeedback.observe(viewLifecycleOwner){
+            it?.let {
+                if (viewModel.curWeathy.value?.feedback.isNullOrEmpty()) {
+                    binding.feedback.visibility = View.GONE
+                } else {
+                    binding.feedback.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -170,10 +184,5 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
         lifecycleScope.launchWhenStarted {
             viewModel.delete()
         }
-    }
-
-    private fun loadImageWithUrl() {
-        Glide.with(this).load(viewModel.weathyImage.value).into(binding.image)
-        debugE("ImageUrl: ${viewModel.weathyFeedback.value}")
     }
 }
