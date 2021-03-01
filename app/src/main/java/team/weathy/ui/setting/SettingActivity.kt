@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import team.weathy.R
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
+import team.weathy.ui.license.LicenseActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.util.setOnDebounceClickListener
 
@@ -48,7 +49,7 @@ class SettingActivity : AppCompatActivity() {
         }
 
         binding.infoClick.setOnDebounceClickListener {
-            var intent = Intent(
+            val intent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://www.notion.so/5a2f164b5afe46559c78d7efed6d3e8a")
             )
@@ -56,10 +57,15 @@ class SettingActivity : AppCompatActivity() {
         }
 
         binding.locationClick.setOnDebounceClickListener {
-            var intent = Intent(
+            val intent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://www.notion.so/69010f5bca1e443ca3b47cfd74bdb41f")
             )
+            startActivity(intent)
+        }
+
+        binding.licenseClick.setOnDebounceClickListener {
+            val intent = Intent(this, LicenseActivity::class.java)
             startActivity(intent)
         }
     }
