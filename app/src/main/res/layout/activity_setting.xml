@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.setting.SettingActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="26dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="26dp" />
+
     <ImageButton
         android:id="@+id/exit_setting_btn"
         style="@style/ImageButton.size48.icon20"
@@ -23,137 +37,49 @@
         android:text="설정"
         android:textColor="@color/main_grey"
         android:textSize="25sp"
-        android:layout_marginLeft="26dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_left"
         app:layout_constraintTop_toBottomOf="@id/exit_setting_btn" />
 
+    <View
+        android:id="@+id/nickname_change_click"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="22dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting" />
+
     <TextView
-        android:id="@+id/change_nickname_txt"
+        android:id="@+id/nickname_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="40dp"
         android:text="닉네임 변경"
         android:textColor="@color/main_grey"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/nickname_change_click"
         app:layout_constraintStart_toStartOf="@id/setting"
-        app:layout_constraintTop_toBottomOf="@id/setting" />
+        app:layout_constraintTop_toTopOf="@id/nickname_change_click" />
 
     <ImageView
         android:id="@+id/ic_arrow"
         style="@style/ImageButton.size32.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="19dp"
         android:src="@drawable/setting_frame_arrow"
-        app:layout_constraintBottom_toBottomOf="@id/divider"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/nickname_change"
+        app:layout_constraintEnd_toEndOf="@id/guide_right"
+        app:layout_constraintTop_toTopOf="@id/nickname_change" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="26dp"
         android:background="@color/sub_grey_5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/change_nickname_txt" />
-
-    <TextView
-        android:id="@+id/push_notif_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:text="위치 정보 제공 동의"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/change_nickname_txt"
-        app:layout_constraintTop_toBottomOf="@id/change_nickname_txt" />
-
-    <Switch
-        android:id="@+id/push_notif_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="34dp"
-        android:thumb="@drawable/switch_thumb"
-        android:track="@drawable/switch_track_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
-
-    <View
-        android:id="@+id/divider1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="26dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/push_notif_txt" />
-
-    <ImageView
-        android:id="@+id/ic_arrow1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/ImageButton.size32.icon20"
-        android:src="@drawable/setting_frame_arrow"
-        app:layout_constraintStart_toStartOf="@id/ic_arrow"
-        app:layout_constraintTop_toTopOf="@id/divider1" />
-
-    <TextView
-        android:id="@+id/inquire_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:text="문의하기"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/push_notif_txt"
-        app:layout_constraintTop_toBottomOf="@id/push_notif_txt" />
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="26dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inquire_txt" />
-
-    <TextView
-        android:id="@+id/developer_info_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:text="개발자 정보"
-        android:textColor="@color/main_grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/inquire_txt"
-        app:layout_constraintTop_toBottomOf="@id/inquire_txt" />
-
-    <View
-        android:id="@+id/change_nickname_click"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="22dp"
-        android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="@id/divider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/setting" />
-
-    <View
-        android:id="@+id/push_notif_click"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
+        app:layout_constraintBottom_toBottomOf="@id/nickname_change_click"
+        app:layout_constraintEnd_toEndOf="@id/guide_right"
+        app:layout_constraintStart_toStartOf="@id/guide_left" />
 
     <View
         android:id="@+id/inquire_click"
@@ -161,24 +87,189 @@
         android:layout_height="60dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <TextView
+        android:id="@+id/inquire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="피드백 및 문의하기"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/inquire_click"
+        app:layout_constraintStart_toStartOf="@id/nickname_change"
+        app:layout_constraintTop_toTopOf="@id/inquire_click" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/inquire_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_arrow1"
+        style="@style/ImageButton.size32.icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/inquire"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/inquire" />
+
+    <View
+        android:id="@+id/info_click"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개인정보 취급 방침"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/info_click"
+        app:layout_constraintStart_toStartOf="@id/nickname_change"
+        app:layout_constraintTop_toTopOf="@id/info_click" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/info_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/ic_arrow2"
+        style="@style/ImageButton.size32.icon20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton.size32.icon20"
         android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/info"
         app:layout_constraintStart_toStartOf="@id/ic_arrow"
-        app:layout_constraintTop_toTopOf="@id/divider2" />
+        app:layout_constraintTop_toTopOf="@id/info" />
 
     <View
-        android:id="@+id/developer_info_click"
+        android:id="@+id/location_click"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="위치 기반 서비스 이용 약관"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/location_click"
+        app:layout_constraintStart_toStartOf="@id/nickname_change"
+        app:layout_constraintTop_toTopOf="@id/location_click" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/location_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_arrow3"
+        style="@style/ImageButton.size32.icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/location"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/location" />
+
+    <View
+        android:id="@+id/developer_click"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+    <TextView
+        android:id="@+id/developer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개발자 정보"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/developer_click"
+        app:layout_constraintStart_toStartOf="@id/nickname_change"
+        app:layout_constraintTop_toTopOf="@id/developer_click" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/developer_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_arrow4"
+        style="@style/ImageButton.size32.icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/developer"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/developer" />
+
+    <View
+        android:id="@+id/license_click"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="@id/setting"
+        app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+    <TextView
+        android:id="@+id/license"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오픈소스 라이센스"
+        android:textColor="@color/main_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/license_click"
+        app:layout_constraintStart_toStartOf="@id/nickname_change"
+        app:layout_constraintTop_toTopOf="@id/license_click" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sub_grey_5"
+        app:layout_constraintBottom_toBottomOf="@id/license_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_arrow5"
+        style="@style/ImageButton.size32.icon20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/setting_frame_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/license"
+        app:layout_constraintStart_toStartOf="@id/ic_arrow"
+        app:layout_constraintTop_toTopOf="@id/license" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

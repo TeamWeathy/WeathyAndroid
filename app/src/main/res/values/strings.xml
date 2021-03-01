@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">웨디</string>
+
+    <!-- EmailIntent -->
+    <string name="email_title">Weathy 문의 및 건의하기</string>
+    <string name="email_receiver">weathycrew@gmail.com</string>
 </resources>
