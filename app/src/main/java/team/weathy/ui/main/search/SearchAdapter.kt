@@ -110,18 +110,26 @@ class SearchAdapter(
                 }
             }
 
-
             if (isPast) {
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat
                 binding.curTemp = ""
+                binding.highTemp = ""
+                binding.lowTemp = ""
+                binding.searchDivider = ""
+                binding.highTemp2 = "${item.daily.temperature.maxTemp}°"
+                binding.lowTemp2 = "${item.daily.temperature.minTemp}°"
+                binding.recordDivider = "/"
             } else {
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat + " · " + item.hourly.time
                 binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
+                binding.highTemp = "${item.daily.temperature.maxTemp}°"
+                binding.lowTemp = "${item.daily.temperature.minTemp}°"
+                binding.searchDivider = "/"
+                binding.highTemp2 = ""
+                binding.lowTemp2 = ""
+                binding.recordDivider = ""
             }
-
             binding.locationText = item.region.name
-            binding.highTemp = "${item.daily.temperature.maxTemp}°"
-            binding.lowTemp = "${item.daily.temperature.minTemp}°"
             binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
 
             binding.executePendingBindings()
