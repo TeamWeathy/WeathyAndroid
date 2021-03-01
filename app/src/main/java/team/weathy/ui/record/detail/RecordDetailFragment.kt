@@ -328,10 +328,11 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         binding.deleteImg.isVisible = true
         binding.deleteImg setOnDebounceClickListener {
             binding.photo.setImageDrawable(null)
+            viewModel.img.value = null
+            viewModel.isDelete.value = true
             binding.addImage.isClickable = true
             binding.deleteImg.isEnabled = false
             binding.deleteImg.isVisible = false
-            viewModel.isDelete.value = true
 
             toggleSubmitButton()
         }
