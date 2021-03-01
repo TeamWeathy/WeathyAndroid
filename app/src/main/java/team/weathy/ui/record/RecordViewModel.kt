@@ -14,12 +14,7 @@ import kotlinx.coroutines.FlowPreview
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import team.weathy.api.ClothesAPI
-import team.weathy.api.CreateClothesReq
-import team.weathy.api.CreateWeathyReq
-import team.weathy.api.DeleteClothesReq
-import team.weathy.api.EditWeathyReq
-import team.weathy.api.WeathyAPI
+import team.weathy.api.*
 import team.weathy.di.Api
 import team.weathy.model.entity.ClothCategory
 import team.weathy.model.entity.ClothCategory.BOTTOM
@@ -31,18 +26,12 @@ import team.weathy.model.entity.WeatherStamp
 import team.weathy.model.entity.Weathy
 import team.weathy.model.entity.WeathyCloth
 import team.weathy.ui.record.RecordActivity.Companion.EXTRA_EDIT
-import team.weathy.util.AppEvent
-import team.weathy.util.EventLiveData
-import team.weathy.util.SimpleEventLiveData
-import team.weathy.util.UniqueIdentifier
-import team.weathy.util.dateString
-import team.weathy.util.emit
+import team.weathy.util.*
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
 import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateSet
 import team.weathy.util.location.LocationUtil
-import team.weathy.util.monthDayFormat
 import java.time.LocalDateTime
 
 @FlowPreview
@@ -57,12 +46,8 @@ class RecordViewModel @ViewModelInject constructor(
     // region RECORD START
     val date = lastRecordNavigationTime
     val edit = savedStateHandle.get<Boolean>(EXTRA_EDIT) ?: false
-
-
-    val weather = MutableLiveData<OverviewWeather>(if (edit) lastEditWeathy?.let { weathy ->
-        OverviewWeather(weathy.region, weathy.dailyWeather, weathy.hourlyWeather)
-    }
-    else locationUtil.selectedWeatherLocation.value)
+    val code = if (edit) lastEditWeathy?.region?.code else locationUtil.selectedWeatherLocation.value!!.region.code
+    val weather = MutableLiveData<OverviewWeather?>(null)
 
     val weatherDate = date.toLocalDate().monthDayFormat
     val weatherRegion = weather.map {
@@ -73,7 +58,7 @@ class RecordViewModel @ViewModelInject constructor(
         it ?: return@map null
         it.hourly.climate.weather.mediumIconId
     }
-    var tempHigh = weather.map {
+    val tempHigh = weather.map {
         it ?: return@map ""
         "${it.daily.temperature.maxTemp}°"
     }
@@ -292,15 +277,16 @@ class RecordViewModel @ViewModelInject constructor(
     // endregion
 
     // region WEATHER DETAIL
-    val feedback = MutableLiveData(if (edit) lastEditWeathy?.feedback else "")
+    val feedback = MutableLiveData(if (edit) lastEditWeathy?.feedback else null)
     val img = MutableLiveData<RequestBody>(null)
+    var imgFromEdit = if (edit) lastEditWeathy?.imgUrl else null
     val isDelete = MutableLiveData(false)
     val onRecordSuccess = SimpleEventLiveData()
     val onRecordEdited = SimpleEventLiveData()
     val onRecordFailed = SimpleEventLiveData()
 
     val feedbackFocused = MutableLiveData(false)
-    val isSubmitButtonEnabled = feedback.map { it?.isNotBlank() }
+    val isSubmitButtonEnabled = feedback.map { it?.isNotBlank() ?: false }
 
     fun submit(includeFeedback: Boolean) {
         val userId = uniqueId.userId ?: 0
@@ -309,7 +295,9 @@ class RecordViewModel @ViewModelInject constructor(
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
         val stampId = selectedWeatherRating.value?.id ?: 0
 
-        val feedbackReq = if (includeFeedback) feedback.value!! else null
+        val feedbackReq = if (includeFeedback) {
+            if (feedback.value != null) feedback.value!! else null
+        } else null
 
         launchCatch({
             val gson = Gson()
@@ -317,7 +305,6 @@ class RecordViewModel @ViewModelInject constructor(
             if (edit) {
                 val editWeathyReq = EditWeathyReq(code, clothes, stampId, feedbackReq, isDelete.value!!)
                 val jsonString = gson.toJson(editWeathyReq)
-
                 weathyAPI.editWeathy(lastEditWeathy?.id ?: 0,
                     weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
                     img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null
@@ -325,7 +312,6 @@ class RecordViewModel @ViewModelInject constructor(
             } else {
                 val createWeathyReq = CreateWeathyReq(userId, date, code, clothes, stampId, feedbackReq)
                 val jsonString = gson.toJson(createWeathyReq)
-
                 weathyAPI.createWeathy(
                     weathy = RequestBody.create(MediaType.parse("text/plain"), jsonString),
                     img = if(img.value != null) MultipartBody.Part.createFormData("img", "tmp.jpg", img.value!!) else null

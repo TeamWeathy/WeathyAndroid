@@ -254,6 +254,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun configureButton() {
+        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
             editView.forEach { it.isVisible = true }

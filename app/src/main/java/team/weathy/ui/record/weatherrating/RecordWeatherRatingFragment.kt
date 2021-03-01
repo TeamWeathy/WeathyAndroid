@@ -103,6 +103,7 @@ class RecordWeatherRatingFragment : Fragment() {
     }
 
     private fun configureEditRating() {
+        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
             binding.btnCheck.isVisible = false
