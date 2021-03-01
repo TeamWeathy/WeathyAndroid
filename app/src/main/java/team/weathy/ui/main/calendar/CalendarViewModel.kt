@@ -212,6 +212,8 @@ class CalendarViewModel @ViewModelInject constructor(
         launchCatch({
             weathyAPI.deleteWeathy(weathy.id)
         }, onSuccess = {
+            if (weathy.id == todayWeathy.value?.id)
+                todayWeathy.value = null
             onDeleteSuccess.emit()
             AppEvent.onWeathyUpdated.emit()
         }, onFailure = {
