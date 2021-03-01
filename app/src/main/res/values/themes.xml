@@ -1,8 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Weathy" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/main_mint</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/statusbar_color</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:fontFamily">@font/notosans_regular</item>
         <item name="android:includeFontPadding">false</item>

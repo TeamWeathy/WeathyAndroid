@@ -100,10 +100,10 @@ class CalendarViewModel @ViewModelInject constructor(
         it?.closet?.etc?.clothes?.joinToString(" · ") { it.name } ?: ""
     }
     val weathyFeedback = curWeathy.map {
-        it?.feedback
+        it?.feedback?: ""
     }
     val weathyImage = curWeathy.map{
-        it?.imgUrl
+        it?.imgUrl?: ""
     }
 
     init {

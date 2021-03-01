@@ -1,13 +1,13 @@
 package team.weathy.ui.setting
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import team.weathy.R
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
-import team.weathy.ui.inquire.InquireActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
-import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 
 
@@ -20,45 +20,47 @@ class SettingActivity : AppCompatActivity() {
         binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        goNicknameChange()
-        goInquire()
-        goDeveloperInfo()
-        pushNotifSwitchAct()
-        exitSetting()
+        configureNavigation()
     }
 
-    private fun goNicknameChange() {
-        binding.changeNicknameClick.setOnDebounceClickListener {
+    private fun configureNavigation() {
+
+        binding.nicknameChangeClick.setOnDebounceClickListener {
             val intent = Intent(this, NicknameChangeActivity::class.java)
             startActivity(intent)
-        }
-    }
 
-    private fun goInquire() {
-        binding.inquireClick.setOnDebounceClickListener {
-            val intent = Intent(this, InquireActivity::class.java)
-            startActivity(intent)
         }
-    }
-
-    private fun goDeveloperInfo() {
-        binding.developerInfoClick.setOnDebounceClickListener {
+        binding.developerClick.setOnDebounceClickListener {
             val intent = Intent(this, DeveloperInfoActivity::class.java)
             startActivity(intent)
         }
-    }
 
-    private fun pushNotifSwitchAct() {
-        binding.pushNotifSwitch.setOnCheckedChangeListener { _, onSwitch ->
-            if (onSwitch) {
-                showToast(" 현재 위치에 따라 날씨를 알려드릴게요!")
-            }
-        }
-    }
-
-    private fun exitSetting() {
         binding.exitSettingBtn.setOnDebounceClickListener {
             finish()
+        }
+
+        binding.inquireClick.setOnDebounceClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_receiver)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_title))
+            intent.type = "message/rfc822"
+            startActivity(intent)
+        }
+
+        binding.infoClick.setOnDebounceClickListener {
+            var intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.notion.so/5a2f164b5afe46559c78d7efed6d3e8a")
+            )
+            startActivity(intent)
+        }
+
+        binding.locationClick.setOnDebounceClickListener {
+            var intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.notion.so/69010f5bca1e443ca3b47cfd74bdb41f")
+            )
+            startActivity(intent)
         }
     }
 }
