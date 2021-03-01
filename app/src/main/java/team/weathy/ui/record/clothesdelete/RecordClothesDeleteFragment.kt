@@ -52,7 +52,7 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             (activity as? RecordActivity)?.popClothesDelete()
-            changeStatusBarColor(getColor(R.color.main_mint))
+            changeStatusBarColor(getColor(R.color.statusbar_color))
         }
     }
 
@@ -62,11 +62,11 @@ class RecordClothesDeleteFragment : Fragment(), CommonDialog.ClickListener {
     private fun configureClothesDeleteNavigation() {
         binding.cancel setOnDebounceClickListener {
             (activity as? RecordActivity)?.popClothesDelete()
-            changeStatusBarColor(getColor(R.color.main_mint))
+            changeStatusBarColor(getColor(R.color.statusbar_color))
         }
         binding.delete setOnDebounceClickListener {
             (activity as? RecordActivity)?.popClothesDelete()
-            changeStatusBarColor(getColor(R.color.main_mint))
+            changeStatusBarColor(getColor(R.color.statusbar_color))
         }
     }
 
