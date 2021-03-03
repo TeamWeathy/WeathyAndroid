@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 android {
@@ -104,6 +105,8 @@ dependencies {
     implementation "com.thedeanda:lorem:2.1"
 
     implementation 'com.airbnb.android:lottie:3.5.0'
+
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 }
 
 dependencies {

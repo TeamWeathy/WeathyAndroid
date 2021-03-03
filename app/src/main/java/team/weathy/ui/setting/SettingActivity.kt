@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import team.weathy.R
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
@@ -65,8 +66,8 @@ class SettingActivity : AppCompatActivity() {
         }
 
         binding.licenseClick.setOnDebounceClickListener {
-            val intent = Intent(this, LicenseActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+            OssLicensesMenuActivity.setActivityTitle("Ossl Title")
         }
     }
 }
