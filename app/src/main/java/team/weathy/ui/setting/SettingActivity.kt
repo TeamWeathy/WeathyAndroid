@@ -8,7 +8,6 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import team.weathy.R
 import team.weathy.databinding.ActivitySettingBinding
 import team.weathy.ui.developerinfo.DeveloperInfoActivity
-import team.weathy.ui.license.LicenseActivity
 import team.weathy.ui.nicknamechange.NicknameChangeActivity
 import team.weathy.util.setOnDebounceClickListener
 
