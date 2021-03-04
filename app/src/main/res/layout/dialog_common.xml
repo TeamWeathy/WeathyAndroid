@@ -39,15 +39,34 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:layout_marginHorizontal="24dp"
+            android:text="detail"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textSize="13sp"
+            android:textColor="@color/sub_grey_6"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn"
+            app:layout_constraintTop_toBottomOf="@id/body" />
+
         <Button
             android:id="@+id/btn_cancel"
             style="@style/RoundButton.Cancel"
             android:layout_width="0dp"
             android:layout_height="47dp"
+            android:layout_marginBottom="26dp"
             android:layout_marginVertical="26dp"
             android:layout_marginLeft="30dp"
             android:text="취소"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/btn"
@@ -65,8 +84,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/btn_cancel"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/body" />
-
+            app:layout_constraintTop_toBottomOf="@id/detail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -116,6 +116,7 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
             "나가면 기록 중인 내용이 사라져요.",
             "나가기",
             "계속쓰기",
+            "",
             getColor(R.color.main_mint),
             true).show(childFragmentManager, null)
     }

@@ -16,11 +16,8 @@ import androidx.fragment.app.DialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import team.weathy.R
 import team.weathy.databinding.DialogCommonBinding
-import team.weathy.util.AutoClearedValue
-import team.weathy.util.PixelRatio
-import team.weathy.util.dp
+import team.weathy.util.*
 import team.weathy.util.extensions.getColor
-import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -39,14 +36,23 @@ class CommonDialog : DialogFragment() {
         get() = arguments?.getString("btnText") ?: ""
     private val btnCancelText: String
         get() = arguments?.getString("btnCancelText") ?: ""
+    private val detailText: String
+        get() = arguments?.getString("detailText") ?: ""
     private val color: Int
-        get() = arguments?.getInt("color", getColor(R.color.blue_temp)) ?: getColor(R.color.blue_temp)
+        get() = arguments?.getInt("color", getColor(R.color.blue_temp))
+            ?: getColor(R.color.blue_temp)
     private val showCancel: Boolean
         get() = arguments?.getBoolean("showCancel") ?: false
+    private val showDetail: Boolean
+        get() = arguments?.getBoolean("showDetail") ?: false
     private val clickListener: ClickListener?
         get() = if (parentFragment == null) (activity as? ClickListener) else (parentFragment as? ClickListener)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) =
         DialogCommonBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -74,6 +80,12 @@ class CommonDialog : DialogFragment() {
                 dismiss()
             }
         }
+
+        if (showDetail) {
+            binding.detail.isVisible = true
+            binding.detail.text = detailText
+            debugE("showDetail: $showDetail")
+        }
     }
 
     override fun onResume() {
@@ -98,11 +110,21 @@ class CommonDialog : DialogFragment() {
             body: String? = null,
             btnText: String? = null,
             btnCancelText: String? = null,
+            detailText : String? = null,
             color: Int? = null,
-            showCancel: Boolean = false
+            showCancel: Boolean = false,
+            showDetail: Boolean = false
+
         ) = CommonDialog().apply {
             arguments = bundleOf(
-                "title" to title, "body" to body, "btnText" to btnText, "btnCancelText" to btnCancelText,"color" to color, "showCancel" to showCancel
+                "title" to title,
+                "body" to body,
+                "btnText" to btnText,
+                "btnCancelText" to btnCancelText,
+                "detailText" to detailText,
+                "color" to color,
+                "showCancel" to showCancel,
+                "showDetail" to showDetail
             )
         }
     }

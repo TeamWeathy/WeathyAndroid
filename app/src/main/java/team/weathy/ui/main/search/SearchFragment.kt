@@ -76,7 +76,6 @@ class SearchFragment : Fragment() {
             fetchRecentSearchLocations() // fetch
         }
 
-
         if (!fromRecord) {
             lifecycleScope.launchWhenStarted {
                 locationUtil.selectedWeatherLocation.collect {
