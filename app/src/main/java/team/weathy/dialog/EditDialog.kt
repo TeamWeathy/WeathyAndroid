@@ -47,6 +47,7 @@ class EditDialog : DialogFragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		showKeyboard()
+		binding.enter.setBackgroundResource(R.drawable.edit_border_active)
 
 		binding.title.text = title
 		viewModel.numClothes[viewModel.choicedClothesTabIndex.value!!].observe(viewLifecycleOwner) {
@@ -77,13 +78,12 @@ class EditDialog : DialogFragment() {
 					setButtonEnabled(true)
 				binding.textCount.setTextColor(color)
 				binding.textCount.text = it.length.toString()
-				binding.enter.setBackgroundResource(R.drawable.edit_border_active)
+
 			} else {
 				if (binding.btnAdd.isEnabled)
 					setButtonDisabled(false)
 				binding.textCount.setTextColor(getColor(R.color.sub_grey_6))
 				binding.textCount.text = "0"
-				binding.enter.setBackgroundResource(R.drawable.edit_border)
 			}
 		}
 	}
