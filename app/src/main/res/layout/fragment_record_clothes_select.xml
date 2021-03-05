@@ -465,16 +465,16 @@
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:layoutAnimation="@anim/layout_animation_fade_in"
-                    android:minHeight="120dp"
+                    android:minHeight="127dp"
                     app:chipSpacingHorizontal="8dp"
                     app:chipSpacingVertical="1.5dp">
 
                     <ImageButton
                         android:id="@+id/add"
                         android:layout_width="39dp"
-                        android:layout_height="39dp"
+                        android:layout_height="43dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:paddingTop="7dp"
+                        android:paddingTop="4dp"
                         android:src="@drawable/record_btn_addtag" />
 
                 </com.google.android.material.chip.ChipGroup>
