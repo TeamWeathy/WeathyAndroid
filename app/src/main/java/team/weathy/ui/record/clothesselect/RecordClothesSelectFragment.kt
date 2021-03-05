@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -255,7 +254,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun configureButton() {
-        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
             editView.forEach { it.isVisible = true }

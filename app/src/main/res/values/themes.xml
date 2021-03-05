@@ -47,6 +47,11 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="RoundButton.Transparent">
+        <item name="backgroundTint">@color/transparent</item>
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
     <style name="RoundButton.Cancel">
         <item name="backgroundTint">@color/white</item>
         <item name="android:textColor">@color/sub_grey_6</item>
