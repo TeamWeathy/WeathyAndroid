@@ -1,7 +1,6 @@
 package team.weathy.ui.record.start
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.*
 import team.weathy.util.extensions.font
 import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.showToast
 import javax.inject.Inject
 
@@ -81,17 +79,21 @@ class RecordStartFragment : Fragment(), CommonDialog.ClickListener {
         }
     }
 
+    private val recordView
+        get() = listOf(binding.btnStart, binding.step1, binding.step2, binding.step3)
+
+
+    private val editView
+        get() = listOf(binding.edit, binding.editNext)
+
     private fun configureEditStart() {
-        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
-            binding.btnStart.isVisible = false
-            binding.edit.isVisible = true
-            binding.editNext.isVisible = true
+            recordView.forEach { it.isVisible = false }
+            editView.forEach { it.isVisible = true }
         } else {
-            binding.btnStart.isVisible = true
-            binding.edit.isVisible = false
-            binding.editNext.isVisible = false
+            recordView.forEach { it.isVisible = true }
+            editView.forEach { it.isVisible = false }
         }
     }
 

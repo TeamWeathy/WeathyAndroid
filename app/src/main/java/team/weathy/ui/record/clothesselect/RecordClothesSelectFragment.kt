@@ -1,7 +1,6 @@
 package team.weathy.ui.record.clothesselect
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -105,7 +104,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         get() = listOf(binding.emptyImg, binding.emptyText1, binding.emptyText2)
 
     private val recordView
-        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2)
+        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2, binding.step1, binding.step2, binding.step3)
 
     private val editView
         get() = listOf(binding.edit, binding.editNext)
@@ -255,7 +254,6 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
     }
 
     private fun configureButton() {
-        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
             editView.forEach { it.isVisible = true }
@@ -273,7 +271,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         lifecycleScope.launchWhenStarted {
             if (viewModel.clothes.value!!.size < 50) {
                 if (viewModel.addClothes(text))
-                    requireContext().showTopToast("태그가 추가되었습니다.")
+                    requireContext().showTopToast("태그가 추가되었어요!")
                 else
                     requireContext().showTopToast("이미 있는 옷은 또 등록할 수 없어요.")
             } else

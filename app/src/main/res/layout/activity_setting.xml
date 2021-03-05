@@ -252,15 +252,6 @@
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/license_click" />
 
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/sub_grey_5"
-        app:layout_constraintBottom_toBottomOf="@id/license_click"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ImageView
         android:id="@+id/ic_arrow5"
         style="@style/ImageButton.size32.icon20"

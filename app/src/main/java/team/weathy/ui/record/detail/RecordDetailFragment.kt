@@ -156,8 +156,10 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
             binding.btnConfirm.text = "수정완료"
             binding.btnConfirm.setBackgroundColor(getColor(R.color.main_mint))
             binding.btnConfirm.isEnabled = true
+            binding.skip.isVisible = false
         } else {
             binding.btnConfirm.text = "내용 추가하기"
+            binding.skip.isVisible = true
         }
     }
 
