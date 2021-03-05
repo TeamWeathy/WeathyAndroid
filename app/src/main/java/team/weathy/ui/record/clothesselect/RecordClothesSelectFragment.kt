@@ -104,7 +104,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         get() = listOf(binding.emptyImg, binding.emptyText1, binding.emptyText2)
 
     private val recordView
-        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2)
+        get() = listOf(binding.btnCheck, binding.delete, binding.tvDelete, binding.tvSub2, binding.step1, binding.step2, binding.step3)
 
     private val editView
         get() = listOf(binding.edit, binding.editNext)

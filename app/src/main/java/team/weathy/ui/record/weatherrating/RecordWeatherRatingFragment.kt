@@ -1,7 +1,6 @@
 package team.weathy.ui.record.weatherrating
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,17 +101,21 @@ class RecordWeatherRatingFragment : Fragment() {
         cvReview.strokeWidth = 1.dpFloat
     }
 
+    private val recordView
+        get() = listOf(binding.btnCheck, binding.step1, binding.step2, binding.step3)
+
+
+    private val editView
+        get() = listOf(binding.edit, binding.editNext)
+
     private fun configureEditRating() {
-        Log.d("TAG", "${viewModel.edit}")
         if (viewModel.edit) {
             configureModifyBehaviors()
-            binding.btnCheck.isVisible = false
-            binding.edit.isVisible = true
-            binding.editNext.isVisible = true
+            recordView.forEach { it.isVisible = false }
+            editView.forEach { it.isVisible = true }
         } else {
-            binding.btnCheck.isVisible = true
-            binding.edit.isVisible = false
-            binding.editNext.isVisible = false
+            recordView.forEach { it.isVisible = true }
+            editView.forEach { it.isVisible = false }
         }
     }
 
