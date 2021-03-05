@@ -50,7 +50,7 @@ class RecordViewModel @ViewModelInject constructor(
     val code = if (edit) lastEditWeathy?.region?.code else locationUtil.selectedWeatherLocation.value!!.region.code
     val weather = MutableLiveData<OverviewWeather?>(null)
 
-    val weatherDate = date.toLocalDate().monthDayFormat
+    val weatherDate = date.toLocalDate().koFormat
     val weatherRegion = weather.map {
         it ?: return@map ""
         it.region.name
