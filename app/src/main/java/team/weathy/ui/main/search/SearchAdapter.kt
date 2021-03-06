@@ -1,5 +1,6 @@
 package team.weathy.ui.main.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.doOnLayout
@@ -7,7 +8,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -20,7 +20,6 @@ import team.weathy.util.LocationItemMenuSwiper.Callback
 import team.weathy.util.koFormat
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class SearchAdapter(
     private val onItemRemoved: (idx: Int) -> Unit,
@@ -111,6 +110,7 @@ class SearchAdapter(
             }
 
             if (isPast) {
+                Log.d("테스트", "$item")
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat
                 binding.curTemp = ""
                 binding.highTemp = ""

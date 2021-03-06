@@ -63,6 +63,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.fromRecord.value = this.fromRecord
 
         configureBackButton()
         configureList()
@@ -72,7 +73,7 @@ class SearchFragment : Fragment() {
             registerBackPressCallback()
             handleMainMenuChange()
         } else {
-            viewModel.dateHourString.value = recordViewModel.date.dateHourString
+            viewModel.dateString.value = recordViewModel.date.dateString
             fetchRecentSearchLocations() // fetch
         }
 
