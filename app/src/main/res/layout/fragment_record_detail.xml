@@ -14,14 +14,25 @@
         android:id="@+id/layout_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="26dp"
         android:background="@color/white">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="12dp"
+            style="@style/ImageButton.size48.icon20"
+            android:src="@drawable/ic_back"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_title"
             style="@style/RecordTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="26dp"
             android:layout_marginTop="85dp"
             android:fontFamily="@font/notosans_medium"
             android:text="등록이 완료"
@@ -62,13 +73,14 @@
             android:layout_height="0dp"
             android:layout_marginTop="33dp"
             app:layout_constraintTop_toBottomOf="@id/tv_sub"
-            app:layout_constraintBottom_toTopOf="@id/skip"
+            app:layout_constraintBottom_toTopOf="@id/empty_div"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingHorizontal="26dp">
 
                 <TextView
                     android:id="@+id/tv_text"
@@ -237,7 +249,7 @@
             android:id="@+id/div"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginBottom="22dp"
+            android:layout_marginBottom="17dp"
             android:background="@color/sub_grey_2"
             app:layout_constraintLeft_toLeftOf="@id/skip"
             app:layout_constraintRight_toRightOf="@id/skip"
@@ -246,11 +258,20 @@
         <Button
             android:id="@+id/btn_confirm"
             style="@style/RoundButton.Grey"
+            android:layout_marginHorizontal="26dp"
             android:layout_width="match_parent"
             android:layout_marginBottom="16dp"
             android:enabled="false"
             android:text="내용 추가하기"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <View
+            android:id="@+id/empty_div"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="56dp"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toTopOf="@id/btn_confirm"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
