@@ -1,9 +1,13 @@
 package team.weathy.ui.nicknamechange
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -33,6 +37,7 @@ class NicknameChangeActivity : AppCompatActivity() {
         }
         setContentView(binding.root)
 
+        showKeyboard()
         configureInput()
         observeViewModel()
         exitActivity()
@@ -44,7 +49,7 @@ class NicknameChangeActivity : AppCompatActivity() {
             hideKeyboard()
         }
         binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
-            viewModel.focused.value = hasFocus
+            setCountVisibility(hasFocus)
         }
     }
 
@@ -73,6 +78,22 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun setNicknameHint() {
         binding.nicknameEdit.hint = uniqueId.userNickname.value
+    }
+
+    private fun setCountVisibility(hasFocus: Boolean) {
+        binding.count.isVisible = hasFocus
+        binding.maxLength.isVisible = hasFocus
+    }
+
+    private fun showKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        setKeyboardMode()
+    }
+
+    private fun setKeyboardMode() {
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 }
 

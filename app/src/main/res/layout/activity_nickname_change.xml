@@ -12,7 +12,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:clickable="true"
-        android:focusable="true"
         android:id="@+id/layout_nickname"
         dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
@@ -68,14 +67,13 @@
             android:layout_height="wrap_content"
             app:counterTextColor="@color/main_mint"
             app:layout_constraintTop_toBottomOf="@id/body">
-
+            <requestFocus/>
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nickname_edit"
                 style="@style/TextInputEditText"
                 android:hint="부메랑"
                 android:maxLength="6"
                 android:text="@={vm.nickname}" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -92,6 +90,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <TextView
+            android:id="@+id/count"
             android:visibility="@{vm.focused}"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
