@@ -8,7 +8,7 @@ import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivityNicknameChangeBinding
-import team.weathy.ui.main.MainActivity
+import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
@@ -20,6 +20,7 @@ import javax.inject.Inject
 class NicknameChangeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicknameChangeBinding
     private val viewModel by viewModels<NicknameChangeViewModel>()
+
     @Inject
     lateinit var uniqueId: UniqueIdentifier
 
@@ -52,13 +53,13 @@ class NicknameChangeActivity : AppCompatActivity() {
             hideKeyboard()
         }
         viewModel.onSuccess.observe(this) {
-            navigateMain()
+            showToast()
         }
     }
 
-    private fun navigateMain() {
+    private fun showToast() {
         showToast("닉네임이 변경되었어요!")
-        startActivity(Intent(this, MainActivity::class.java).apply {
+        startActivity(Intent(this, SettingActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         })
         finish()
