@@ -154,7 +154,7 @@
             app:layout_constraintTop_toTopOf="@id/list" />
 
         <ImageView
-            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintVertical_bias="0.27"
             android:visibility="@{vm.showEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

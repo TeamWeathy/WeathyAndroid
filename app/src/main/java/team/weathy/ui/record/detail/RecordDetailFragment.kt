@@ -119,6 +119,9 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
         binding.btnConfirm setOnDebounceClickListener {
             submit(true)
         }
+        binding.back setOnDebounceClickListener {
+            submit(false)
+        }
 
         viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
             requireContext().showToast("웨디에 내용이 추가되었어요!")
@@ -157,9 +160,13 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
             binding.btnConfirm.setBackgroundColor(getColor(R.color.main_mint))
             binding.btnConfirm.isEnabled = true
             binding.skip.isVisible = false
+            binding.div.isVisible = false
+            binding.back.isVisible = true
         } else {
             binding.btnConfirm.text = "내용 추가하기"
             binding.skip.isVisible = true
+            binding.div.isVisible = true
+            binding.back.isVisible = false
         }
     }
 
