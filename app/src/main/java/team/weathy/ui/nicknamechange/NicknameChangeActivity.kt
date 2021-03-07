@@ -3,6 +3,8 @@ package team.weathy.ui.nicknamechange
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -18,6 +20,7 @@ import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.setOnDebounceClickListener
 import javax.inject.Inject
+
 
 @FlowPreview
 @AndroidEntryPoint
@@ -51,7 +54,15 @@ class NicknameChangeActivity : AppCompatActivity() {
         binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
             setCountVisibility(hasFocus)
         }
+        binding.nicknameEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard()
+                return@OnKeyListener true
+            }
+            false
+        })
     }
+
 
     private fun observeViewModel() {
         viewModel.onHideKeyboard.observe(this) {

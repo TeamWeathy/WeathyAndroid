@@ -12,7 +12,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.VelocityTracker
-import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -37,38 +36,16 @@ import com.google.android.material.math.MathUtils
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import team.weathy.R
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.ui.main.calendar.YearMonthFormat
-import team.weathy.util.AnimUtil
-import team.weathy.util.OnChangeProp
-import team.weathy.util.SimpleEventLiveData
-import team.weathy.util.calculateRequiredRow
-import team.weathy.util.convertDateToMonthlyIndex
-import team.weathy.util.convertDateToWeeklyIndex
-import team.weathy.util.convertMonthlyIndexToDateToFirstDateOfMonthCalendar
-import team.weathy.util.convertWeeklyIndexToFirstDateOfWeekCalendar
-import team.weathy.util.dayOfWeekIndex
-import team.weathy.util.dp
-import team.weathy.util.emit
-import team.weathy.util.extensions.clamp
-import team.weathy.util.extensions.getColor
-import team.weathy.util.extensions.px
-import team.weathy.util.extensions.pxFloat
-import team.weathy.util.extensions.screenHeight
-import team.weathy.util.isFuture
-import team.weathy.util.setOnDebounceClickListener
-import team.weathy.util.weekOfMonth
+import team.weathy.util.*
+import team.weathy.util.extensions.*
 import java.time.LocalDate
-import java.util.*
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    ConstraintLayout(context, attrs) {
+        ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
     var onDateChangeListener: ((date: LocalDate) -> Unit)? = null
@@ -76,7 +53,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val curDateLiveData = MutableLiveData(LocalDate.now())
     var curDate: LocalDate by OnChangeProp(LocalDate.now()) {
-         onCurDateChanged()
+        onCurDateChanged()
     }
 
     private val selectedDateLiveData = MutableLiveData(LocalDate.now())
@@ -172,24 +149,14 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    private val topDivider = View(context).apply {
-        id = ViewCompat.generateViewId()
-        setBackgroundColor(getColor(R.color.sub_grey_5))
-
-        layoutParams = LayoutParams(MATCH_PARENT, px(1)).apply {
-            topToBottom = yearMonthText.id
-            topMargin = px(11)
-        }
-    }
-
     private val weekTextLayout = LinearLayout(context).apply {
         id = ViewCompat.generateViewId()
         orientation = LinearLayout.HORIZONTAL
         weightSum = 7f
 
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-            topToBottom = topDivider.id
-            topMargin = px(16)
+            topToBottom = yearMonthText.id
+            topMargin = px(28)
         }
     }
     private val weekTexts = (0..6).map {
@@ -245,12 +212,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = MonthlyAdapter(
-                animLiveData,
-                scrollEnabled,
-                onScrollToTop,
-                dataLiveData,
-                selectedDateLiveData,
-                fragmentViewLifecycleOwner,
+                    animLiveData,
+                    scrollEnabled,
+                    onScrollToTop,
+                    dataLiveData,
+                    selectedDateLiveData,
+                    fragmentViewLifecycleOwner,
             ) {
                 if (!it.isFuture()) selectedDate = it
             }
@@ -266,7 +233,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
-                        position
+                            position
                     )
                     if (isExpanded && curDate != firstDateOfMonth) {
                         curDate = firstDateOfMonth
@@ -347,8 +314,8 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         setPadding(paddingHorizontal, 0, paddingHorizontal, 0)
 
         background = MaterialShapeDrawable(
-            ShapeAppearanceModel().toBuilder().setBottomLeftCorner(CornerFamily.ROUNDED, px(35).toFloat())
-                .setBottomRightCorner(CornerFamily.ROUNDED, px(35).toFloat()).build()
+                ShapeAppearanceModel().toBuilder().setBottomLeftCorner(CornerFamily.ROUNDED, px(35).toFloat())
+                        .setBottomRightCorner(CornerFamily.ROUNDED, px(35).toFloat()).build()
         ).apply {
             fillColor = ColorStateList.valueOf(getColor(R.color.white))
         }
@@ -359,7 +326,6 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         addView(yearMonthText)
         addView(downArrow)
         addView(todayButton)
-        addView(topDivider)
         addWeekLayoutAndWeekTexts()
     }
 
@@ -391,13 +357,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         if (monthlyViewPager?.currentItem != nextMonthlyIndex) {
             monthlyViewPager?.setCurrentItem(
-                nextMonthlyIndex, false
+                    nextMonthlyIndex, false
             )
         }
 
         if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
             weeklyViewPager?.setCurrentItem(
-                nextWeeklyIndex, false
+                    nextWeeklyIndex, false
             )
         }
     }
@@ -418,13 +384,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     override fun onDraw(canvas: Canvas) {
         // bar
         canvas.drawRoundRect(
-            width / 2f - px(30),
-            height - pxFloat(16),
-            width / 2f + px(30),
-            height - pxFloat(11),
-            pxFloat(10),
-            pxFloat(10),
-            barPaint,
+                width / 2f - px(30),
+                height - pxFloat(16),
+                width / 2f + px(30),
+                height - pxFloat(11),
+                pxFloat(10),
+                pxFloat(10),
+                barPaint,
         )
 
         // capsule
@@ -441,25 +407,25 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
         if (isSelectedInCurrentWeek) {
             canvas.drawRoundRect(
-                greyCapsuleLeft,
-                capsuleTop,
-                greyCapsuleLeft + capsuleWidth,
-                capsuleTop + capsuleHeight,
-                capsuleWidthRadius,
-                capsuleWidthRadius,
-                greyCapsulePaint
+                    greyCapsuleLeft,
+                    capsuleTop,
+                    greyCapsuleLeft + capsuleWidth,
+                    capsuleTop + capsuleHeight,
+                    capsuleWidthRadius,
+                    capsuleWidthRadius,
+                    greyCapsulePaint
             )
         }
 
         if (isTodayInCurrentWeek) {
             canvas.drawRoundRect(
-                capsuleLeft,
-                capsuleTop,
-                capsuleLeft + capsuleWidth,
-                capsuleTop + capsuleHeight,
-                capsuleWidthRadius,
-                capsuleWidthRadius,
-                capsulePaint,
+                    capsuleLeft,
+                    capsuleTop,
+                    capsuleLeft + capsuleWidth,
+                    capsuleTop + capsuleHeight,
+                    capsuleWidthRadius,
+                    capsuleWidthRadius,
+                    capsulePaint,
             )
         }
     }
@@ -518,9 +484,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun changeWeekTextsColor() {
         weekTexts.forEachIndexed { idx, textView ->
             textView.setTextColor(
-                CalendarUtil.getWeekTextColor(
-                    context, idx, animValue, isTodayInCurrentWeek && today.dayOfWeekIndex == idx
-                )
+                    CalendarUtil.getWeekTextColor(
+                            context, idx, animValue, isTodayInCurrentWeek && today.dayOfWeekIndex == idx
+                    )
             )
         }
     }

@@ -49,11 +49,11 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) =
-        FragmentCalendarBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+            FragmentCalendarBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
@@ -86,7 +86,7 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
         binding.calendarView.run {
             onClickYearMonthText = {
                 DateDialog.newInstance(binding.calendarView.curDate)
-                    .show(childFragmentManager, null)
+                        .show(childFragmentManager, null)
             }
 
             onDateChangeListener = {
@@ -125,19 +125,31 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
                 debugE("img: ${viewModel.curWeathy.value?.imgUrl.isNullOrEmpty()}")
                 if (viewModel.curWeathy.value?.imgUrl.isNullOrEmpty()) {
                     binding.image.visibility = View.GONE
+                    if (viewModel.curWeathy.value?.feedback.isNullOrEmpty()) {
+                        binding.divider2.visibility = View.GONE
+                    } else {
+                        binding.divider2.visibility = View.VISIBLE
+                    }
                 } else {
                     binding.image.visibility = View.VISIBLE
+                    binding.divider2.visibility = View.VISIBLE
                     Glide.with(this).load(it).into(binding.image)
                 }
             }
         }
 
-        viewModel.weathyFeedback.observe(viewLifecycleOwner){
+        viewModel.weathyFeedback.observe(viewLifecycleOwner) {
             it?.let {
                 if (viewModel.curWeathy.value?.feedback.isNullOrEmpty()) {
                     binding.feedback.visibility = View.GONE
+                    if (viewModel.curWeathy.value?.imgUrl.isNullOrEmpty()) {
+                        binding.divider2.visibility = View.GONE
+                    } else {
+                        binding.divider2.visibility = View.VISIBLE
+                    }
                 } else {
                     binding.feedback.visibility = View.VISIBLE
+                    binding.divider2.visibility = View.VISIBLE
                 }
             }
         }
@@ -171,12 +183,12 @@ class CalendarFragment : Fragment(), OnClickListener, CommonDialog.ClickListener
 
     private fun showDeleteWeathyDialog() {
         CommonDialog.newInstance(
-            "이 날의 웨디를 삭제할까요?",
-            "삭제하면 되돌릴 수 없어요.",
-            "삭제하기",
-            "취소",
-            getColor(R.color.pink),
-            true
+                "이 날의 웨디를 삭제할까요?",
+                "삭제하면 되돌릴 수 없어요.",
+                "삭제하기",
+                "취소",
+                getColor(R.color.pink),
+                true
         ).show(childFragmentManager, null)
     }
 
