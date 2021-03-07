@@ -107,7 +107,7 @@
             android:id="@+id/recentLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="19dp"
             android:fontFamily="@font/"
             android:text="최근 검색한 위치"
             android:textColor="@color/main_grey"
@@ -139,11 +139,26 @@
             android:orientation="vertical"
             android:paddingHorizontal="32dp"
             android:paddingBottom="60dp"
-            android:paddingTop="20dp"
+            android:paddingTop="45dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintTop_toTopOf="@id/recentLabel"
             tools:listitem="@layout/item_location" />
+
+        <View
+            shadowOnScroll="@{true}"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:alpha="0"
+            android:background="@drawable/blur_white_top_down"
+            android:visibility="@{vm.fromRecord}"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/blur_white_bottom_up"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:visibility="@{vm.loading}"
