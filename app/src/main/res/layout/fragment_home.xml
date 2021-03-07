@@ -145,18 +145,20 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:src="@{!vm.isOtherPlaceSelected ? @drawable/ic_gps_shadow : @drawable/ic_otherplace_shadow}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:translationX="-12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_gps" />
 
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
                     android:fontFamily="@font/notosans_medium"
                     android:text="@{vm.regionText}"
                     android:textColor="@color/main_grey"
                     android:textSize="20sp"
+                    android:translationX="-10dp"
                     app:layout_constraintBottom_toBottomOf="@id/gps_image"
                     app:layout_constraintLeft_toRightOf="@id/gps_image"
                     app:layout_constraintTop_toTopOf="@id/gps_image"
@@ -166,15 +168,17 @@
                     android:id="@+id/current_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginRight="45dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="30dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.curTempText}"
                     android:textColor="@color/sub_grey_1"
                     android:textSize="50sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="@id/gps_image"
+                    app:layout_constraintStart_toEndOf="@id/weather_image"
+                    app:layout_constraintTop_toBottomOf="@id/location"
                     tools:text="-20°" />
 
                 <TextView
@@ -186,7 +190,7 @@
                     android:text="@{vm.maxTempText}"
                     android:textColor="@color/red_temp"
                     android:textSize="23sp"
-                    app:layout_constraintEnd_toStartOf="@id/slash_temp_today"
+                    app:layout_constraintStart_toStartOf="@id/current_temp"
                     app:layout_constraintTop_toBottomOf="@id/current_temp"
                     tools:text="-20°" />
 
@@ -194,25 +198,26 @@
                     android:id="@+id/slash_temp_today"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="5dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="/"
                     android:textColor="@color/temp_bar"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@id/max_temp_today"
-                    app:layout_constraintEnd_toStartOf="@id/min_temp_today"
+                    app:layout_constraintStart_toEndOf="@id/max_temp_today"
                     app:layout_constraintTop_toTopOf="@id/max_temp_today" />
 
                 <TextView
                     android:id="@+id/min_temp_today"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.minTempText}"
                     android:textColor="@color/blue_temp"
                     android:textSize="23sp"
                     app:layout_constraintBottom_toBottomOf="@id/slash_temp_today"
-                    app:layout_constraintEnd_toEndOf="@id/current_temp"
+                    app:layout_constraintStart_toEndOf="@id/slash_temp_today"
                     app:layout_constraintTop_toTopOf="@id/slash_temp_today"
                     tools:text="-20°" />
 
