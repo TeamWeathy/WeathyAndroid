@@ -1,14 +1,18 @@
 package team.weathy.ui.nicknamechange
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import team.weathy.databinding.ActivityNicknameChangeBinding
-import team.weathy.ui.main.MainActivity
+import team.weathy.ui.setting.SettingActivity
 import team.weathy.util.UniqueIdentifier
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
@@ -20,6 +24,7 @@ import javax.inject.Inject
 class NicknameChangeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNicknameChangeBinding
     private val viewModel by viewModels<NicknameChangeViewModel>()
+
     @Inject
     lateinit var uniqueId: UniqueIdentifier
 
@@ -32,6 +37,7 @@ class NicknameChangeActivity : AppCompatActivity() {
         }
         setContentView(binding.root)
 
+        showKeyboard()
         configureInput()
         observeViewModel()
         exitActivity()
@@ -43,7 +49,7 @@ class NicknameChangeActivity : AppCompatActivity() {
             hideKeyboard()
         }
         binding.nicknameEdit.setOnFocusChangeListener { _, hasFocus ->
-            viewModel.focused.value = hasFocus
+            setCountVisibility(hasFocus)
         }
     }
 
@@ -52,13 +58,13 @@ class NicknameChangeActivity : AppCompatActivity() {
             hideKeyboard()
         }
         viewModel.onSuccess.observe(this) {
-            navigateMain()
+            showToast()
         }
     }
 
-    private fun navigateMain() {
+    private fun showToast() {
         showToast("닉네임이 변경되었어요!")
-        startActivity(Intent(this, MainActivity::class.java).apply {
+        startActivity(Intent(this, SettingActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         })
         finish()
@@ -72,6 +78,22 @@ class NicknameChangeActivity : AppCompatActivity() {
 
     private fun setNicknameHint() {
         binding.nicknameEdit.hint = uniqueId.userNickname.value
+    }
+
+    private fun setCountVisibility(hasFocus: Boolean) {
+        binding.count.isVisible = hasFocus
+        binding.maxLength.isVisible = hasFocus
+    }
+
+    private fun showKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        setKeyboardMode()
+    }
+
+    private fun setKeyboardMode() {
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 }
 
