@@ -1,6 +1,5 @@
 package team.weathy.ui.main.search
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -75,7 +74,6 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     private fun search() {
-        Log.d("테스트", "${fromRecord.value!!}")
         launchCatch({
             if (fromRecord.value!!) weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateString.value!!)
             else weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateHourString.value!!)
@@ -111,7 +109,7 @@ class SearchViewModel @ViewModelInject constructor(
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.mapNotNull {
         if (fromRecord.value!!) {
             weatherAPI.fetchWeatherByLocation(
-                code = it.code, dateOrHourStr = dateHourString.value!!
+                code = it.code, dateOrHourStr = dateString.value!!
             ).body()?.weather
         } else {
             weatherAPI.fetchWeatherByLocation(
