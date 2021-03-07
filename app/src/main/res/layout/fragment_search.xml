@@ -151,6 +151,7 @@
             android:layout_height="52dp"
             android:alpha="0"
             android:background="@drawable/blur_white_top_down"
+            android:visibility="@{vm.fromRecord}"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <View
