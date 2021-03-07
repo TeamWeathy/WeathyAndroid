@@ -11,11 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:paddingHorizontal="24dp">
 
         <androidx.constraintlayout.widget.Guideline
@@ -48,59 +47,62 @@
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
-            android:id="@+id/textInputLayout"
+            android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
+            app:counterTextColor="@color/main_mint"
             app:endIconDrawable="@drawable/ic_textdelete"
             app:endIconMode="clear_text"
             app:endIconTint="@color/transparent"
             app:endIconTintMode="src_over"
-            android:layout_height="wrap_content"
-            app:counterTextColor="@color/main_mint"
             app:layout_constraintTop_toBottomOf="@id/body">
+
+            <requestFocus />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input"
-                android:maxLength="6"
-                android:text="@={vm.nickname}"
                 style="@style/TextInputEditText"
-                android:hint="닉네임을 6자 이내로 입력해주세요." />
+                android:hint="닉네임을 6자 이내로 입력해주세요."
+                android:maxLength="6"
+                android:text="@={vm.nickname}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:visibility="@{vm.focused}"
-            android:layout_marginTop="2dp"
             android:id="@+id/maxLength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text="/6"
             android:textColor="@color/sub_grey_6"
             android:textSize="13sp"
+            android:visibility="@{vm.focused}"
             app:layout_constraintRight_toRightOf="@id/textInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
         <TextView
-            android:visibility="@{vm.focused}"
-            android:layout_marginTop="2dp"
+            android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text='@{vm.nickname.length() + ""}'
             android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
             android:textSize="13sp"
-            tools:textColor="@color/sub_grey_6"
+            android:visibility="@{vm.focused}"
             app:layout_constraintRight_toLeftOf="@id/maxLength"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-            tools:text="0" />
+            tools:text="0"
+            tools:textColor="@color/sub_grey_6" />
 
         <Button
 
             android:id="@+id/submit"
-            android:clickable="@{!vm.loadingSubmit}"
-            android:enabled="@{vm.isSubmitEnabled}"
             style="@style/RoundButton.Mint"
             android:layout_width="match_parent"
             android:layout_marginBottom="25dp"
+            android:clickable="@{!vm.loadingSubmit}"
+            android:enabled="@{vm.isSubmitEnabled}"
             android:onDebounceClick="@{() -> vm.onSubmit()}"
             android:text='@{vm.loadingSubmit ? "" : "웨디 시작하기"}'
             app:layout_constraintBottom_toBottomOf="parent" />

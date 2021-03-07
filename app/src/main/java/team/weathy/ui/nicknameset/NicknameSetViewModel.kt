@@ -1,7 +1,6 @@
 package team.weathy.ui.nicknameset
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -15,7 +14,7 @@ import team.weathy.util.emit
 import team.weathy.util.extensions.launchCatch
 
 class NicknameSetViewModel @ViewModelInject constructor(
-    @Api private val userAPI: UserAPI, private val uniqueId: UniqueIdentifier
+        @Api private val userAPI: UserAPI, private val uniqueId: UniqueIdentifier
 ) : ViewModel() {
     val nickname = MutableLiveData("")
     val isSubmitEnabled = nickname.map {
@@ -24,7 +23,7 @@ class NicknameSetViewModel @ViewModelInject constructor(
 
     val loadingSubmit = MutableLiveData(false)
 
-    val focused = MutableLiveData(false)
+    val focused = MutableLiveData(true)
 
     val onHideKeyboard = SimpleEventLiveData()
     val onSuccess = SimpleEventLiveData()
