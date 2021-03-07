@@ -119,7 +119,6 @@ class SearchAdapter(
                 binding.highTemp2 = "${item.daily.temperature.maxTemp}°"
                 binding.lowTemp2 = "${item.daily.temperature.minTemp}°"
                 binding.recordDivider = "/"
-                binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             } else {
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat + " · " + item.hourly.time
                 binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
@@ -129,8 +128,8 @@ class SearchAdapter(
                 binding.highTemp2 = ""
                 binding.lowTemp2 = ""
                 binding.recordDivider = ""
-                binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             }
+            binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             binding.locationText = item.region.name
 
             binding.executePendingBindings()
