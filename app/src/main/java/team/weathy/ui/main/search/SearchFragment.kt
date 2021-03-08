@@ -82,7 +82,7 @@ class SearchFragment : Fragment() {
             lifecycleScope.launchWhenStarted {
                 locationUtil.selectedWeatherLocation.collect {
                     it ?: return@collect
-                    binding.background.setImageResource(it.hourly.climate.weather.HomeBackgroundId)
+                    binding.background.setImageResource(it.hourly.climate.weather.SearchBackgroundId)
                 }
             }
         }
