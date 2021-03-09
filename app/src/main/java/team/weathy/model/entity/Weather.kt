@@ -82,9 +82,10 @@ enum class Weather(
         R.drawable.ic_thunderstorm,
         R.drawable.main_img_thunderstorm_day,
         R.drawable.record_img_thunderstorm,
-        R.drawable.main_bg_cloudy,
+        R.drawable.main_bg_snowrain_day,
         R.drawable.mainscroll_box_topblur_snowrain,
         R.drawable.search_bg_snowrain,
+        BackgroundAnimation.RAIN,
     ),
 
     SNOW(
@@ -157,9 +158,10 @@ enum class Weather(
         R.drawable.ic_thunderstorm,
         R.drawable.main_img_thunderstorm_night,
         R.drawable.record_img_thunderstorm,
-        R.drawable.main_bg_night,
+        R.drawable.main_bg_snowrain_night,
         R.drawable.mainscroll_box_topblur_night,
         R.drawable.search_bg_night,
+        BackgroundAnimation.RAIN,
     ),
     RAIN_NIGHT(
         110,
