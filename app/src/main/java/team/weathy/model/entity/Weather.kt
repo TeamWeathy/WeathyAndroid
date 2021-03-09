@@ -59,7 +59,7 @@ enum class Weather(
     ),
     SHOWER_RAIN(
         9,
-        R.drawable.ic_showerrain,
+        R.drawable.ic_showerrain_day,
         R.drawable.main_img_showerrain_day,
         R.drawable.record_img_showerrain_day,
         R.drawable.main_bg_snowrain_day,
@@ -69,7 +69,7 @@ enum class Weather(
     ),
     RAIN(
         10,
-        R.drawable.ic_rain_day,
+        R.drawable.ic_rain,
         R.drawable.main_img_rain_day,
         R.drawable.record_img_rain,
         R.drawable.main_bg_snowrain_day,
@@ -144,7 +144,7 @@ enum class Weather(
     ),
     SHOWER_RAIN_NIGHT(
         109,
-        R.drawable.ic_showerrain,
+        R.drawable.ic_showerrain_night,
         R.drawable.main_img_showerrain_night,
         R.drawable.record_img_showerrain_night,
         R.drawable.main_bg_snowrain_night,
@@ -164,7 +164,7 @@ enum class Weather(
     ),
     RAIN_NIGHT(
         110,
-        R.drawable.ic_rain_night,
+        R.drawable.ic_rain,
         R.drawable.main_img_rain_night,
         R.drawable.record_img_rain,
         R.drawable.main_bg_snowrain_night,
