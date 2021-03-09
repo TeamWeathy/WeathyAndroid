@@ -77,6 +77,7 @@
                 android:drawablePadding="15dp"
                 android:paddingStart="22dp"
                 android:textCursorDrawable="@drawable/cursor"
+                android:imeOptions="actionDone"
                 tools:text="asd"
                 style="@style/TextInputEditText"
                 android:text="@={vm.query}" />
@@ -139,20 +140,19 @@
             android:orientation="vertical"
             android:paddingHorizontal="32dp"
             android:paddingBottom="60dp"
-            android:paddingTop="45dp"
+            android:layout_marginTop="30dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recentLabel"
+            app:layout_constraintTop_toBottomOf="@id/recentLabel"
             tools:listitem="@layout/item_location" />
 
         <View
             shadowOnScroll="@{true}"
             android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:alpha="0"
+            android:layout_height="41dp"
             android:background="@drawable/blur_white_top_down"
             android:visibility="@{vm.fromRecord}"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            app:layout_constraintTop_toTopOf="@+id/list" />
 
         <View
             android:layout_width="match_parent"
