@@ -1,11 +1,17 @@
 package team.weathy.ui.nicknameset
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -41,10 +47,10 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
         }
         setContentView(binding.root)
 
+        showKeyboard()
         configureTitle()
         observeViewModel()
         configureInput()
-//        showAccessDialog()
     }
 
     private fun configureInput() {
@@ -52,8 +58,15 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
             hideKeyboard()
         }
         binding.input.setOnFocusChangeListener { _, hasFocus ->
-            viewModel.focused.value = hasFocus
+            setCountVisibility(hasFocus)
         }
+        binding.input.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard()
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
     private fun configureTitle() {
@@ -116,5 +129,21 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
                 "선택 항목은 허용하지 않더라도 앱 이용이 가능해요.",
                 "확인",
                 getColor(R.color.mint_main)).show(supportFragmentManager, null)
+    }
+
+    private fun setCountVisibility(hasFocus: Boolean) {
+        binding.count.isVisible = hasFocus
+        binding.maxLength.isVisible = hasFocus
+    }
+
+    private fun showKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        setKeyboardMode()
+    }
+
+    private fun setKeyboardMode() {
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 }

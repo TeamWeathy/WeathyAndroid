@@ -59,34 +59,35 @@
 
         <TextView
             android:id="@+id/position_body"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="position_body"
+            android:text="position"
             android:textColor="@color/sub_grey_6"
             android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/position_title"
-            app:layout_constraintTop_toBottomOf="@id/position_title"/>
+            app:layout_constraintTop_toBottomOf="@id/position_title" />
 
         <ImageView
             android:id="@+id/ic_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/access_custom_ic_camera"
             app:layout_constraintStart_toStartOf="@id/ic_position"
-            app:layout_constraintTop_toBottomOf="@id/ic_position" />
+            app:layout_constraintTop_toTopOf="@id/camera_title" />
 
         <TextView
             android:id="@+id/camera_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="14dp"
             android:text="camera_title"
             android:textColor="@color/sub_grey_1"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="@id/position_body"
-            app:layout_constraintTop_toBottomOf="@id/ic_position" />
+            app:layout_constraintTop_toBottomOf="@id/position_body" />
 
         <ImageView
             android:id="@+id/camera_option"
@@ -100,14 +101,15 @@
 
         <TextView
             android:id="@+id/camera_body"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="camera_body"
             android:textColor="@color/sub_grey_6"
             android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/camera_title"
-            app:layout_constraintTop_toBottomOf="@id/camera_title"/>
+            app:layout_constraintTop_toBottomOf="@id/camera_title" />
 
         <TextView
             android:id="@+id/divider"

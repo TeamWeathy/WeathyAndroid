@@ -79,7 +79,7 @@ class HourlyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
         weathers.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
                 icon.setImageResource(weather.climate.weather.smallIconId)
-                pop.text = "${weather.pop}%°"
+                pop.text = "${weather.pop}%"
                 temp.text = "${weather.temperature}°"
 
                 hour.text = timeTexts[index]

@@ -84,11 +84,11 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) =
-        FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
+            FragmentHomeBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,25 +100,25 @@ class HomeFragment : Fragment() {
 
         if (!TestEnv.isInstrumentationTesting) {
             binding.downArrow.startAnimation(
-                AnimationUtils.loadAnimation(
-                    context,
-                    R.anim.alpha_repeat
-                )
+                    AnimationUtils.loadAnimation(
+                            context,
+                            R.anim.alpha_repeat
+                    )
             )
             binding.weatherImage.doOnLayout {
                 ObjectAnimator.ofFloat(
-                    binding.weatherImage,
-                    "translationY",
-                    -0.02f * it.height,
-                    0.02f * it.height
+                        binding.weatherImage,
+                        "translationY",
+                        -0.02f * it.height,
+                        0.02f * it.height
                 )
-                    .apply {
-                        duration = 1000L
-                        repeatMode = ObjectAnimator.REVERSE
-                        repeatCount = ObjectAnimator.INFINITE
-                        setAutoCancel(true)
-                        start()
-                    }
+                        .apply {
+                            duration = 1000L
+                            repeatMode = ObjectAnimator.REVERSE
+                            repeatCount = ObjectAnimator.INFINITE
+                            setAutoCancel(true)
+                            start()
+                        }
             }
         }
 
@@ -129,10 +129,10 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTransitionChange(
-                p0: MotionLayout?,
-                startId: Int,
-                endId: Int,
-                progress: Float
+                    p0: MotionLayout?,
+                    startId: Int,
+                    endId: Int,
+                    progress: Float
             ) {
 
             }
@@ -168,11 +168,11 @@ class HomeFragment : Fragment() {
                     val marginTop = 78.dp
                     val marginBottom = 96.dp
                     val cardHeights =
-                        binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
+                            binding.weeklyCard.height + binding.hourlyCard.height + binding.detailCard.height
                     val marginBetweenCards = 24.dp * 2
 
                     shouldDisableThirdScene =
-                        marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
+                            marginTop + marginBottom + cardHeights + marginBetweenCards < screenHeight
                 }
             }
         }
@@ -200,15 +200,15 @@ class HomeFragment : Fragment() {
 //                debugE("feedback: ${viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()}")
 //                debugE("imgUrl: ${viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()}")
                 if (!viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()
-                    && viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
+                        && viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
                 ) {
                     binding.recommended.icon2.setImageResource(R.drawable.main_ic_text)
                 } else if (viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()
-                    && !viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
+                        && !viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
                 ) {
                     binding.recommended.icon2.setImageResource(R.drawable.main_ic_image)
                 } else if (!viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()
-                    && !viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
+                        && !viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
                 ) {
                     binding.recommended.icon1.setImageResource(R.drawable.main_ic_image)
                     binding.recommended.icon2.setImageResource(R.drawable.main_ic_text)
@@ -227,12 +227,12 @@ class HomeFragment : Fragment() {
         var downY = 0f
         binding.recommended.root.setOnTouchListener { v, event ->
             val eventTransfer = MotionEvent.obtain(
-                event.downTime,
-                event.eventTime,
-                event.action,
-                event.x + 26.dpFloat,
-                event.y + v.y,
-                event.metaState
+                    event.downTime,
+                    event.eventTime,
+                    event.action,
+                    event.x + 26.dpFloat,
+                    event.y + v.y,
+                    event.metaState
             )
             binding.container.onTouchEvent(eventTransfer)
             eventTransfer.recycle()
@@ -258,9 +258,9 @@ class HomeFragment : Fragment() {
     private fun onClickRecommendedWeathy() {
         viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(
-                LocalDate.of(
-                    date.year, date.month, date.day
-                )
+                    LocalDate.of(
+                            date.year, date.month, date.day
+                    )
             )
         }
     }
@@ -296,6 +296,7 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 1f
         isHelpPopupShowing = true
+        binding.gpsImage.isEnabled = false
         binding.container.isInteractionEnabled = false
         binding.recommended.root.isEnabled = false
         (activity as MainActivity).stateButton(false)
@@ -307,6 +308,7 @@ class HomeFragment : Fragment() {
         TransitionManager.beginDelayedTransition(binding.container)
         binding.weathyExplanation.alpha = 0f
         isHelpPopupShowing = false
+        binding.gpsImage.isEnabled = true
         binding.container.isInteractionEnabled = true
         binding.recommended.root.isEnabled = true
         (activity as MainActivity).stateButton(true)

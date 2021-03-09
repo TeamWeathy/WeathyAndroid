@@ -87,7 +87,6 @@ enum class Weather(
         R.drawable.search_bg_snowrain,
         BackgroundAnimation.RAIN,
     ),
-
     SNOW(
         13,
         R.drawable.ic_snow,

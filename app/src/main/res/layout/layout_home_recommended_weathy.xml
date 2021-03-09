@@ -142,7 +142,7 @@
                 app:layout_constraintTop_toTopOf="@id/icon2"
                 app:layout_constraintBottom_toBottomOf="@id/icon2"
 
-             />
+                />
 
             <ImageView
                 android:id="@+id/icon2"
@@ -253,13 +253,15 @@
 
         <ImageView
             invisible="@{vm.recommendedWeathy != null}"
+            android:layout_marginHorizontal="13dp"
+            android:layout_marginVertical="13dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/round_corner_35dp"
             android:backgroundTint="@color/recommended_weathy_bg"
             android:scaleType="fitCenter"
             android:src="@drawable/main_img_empty"
-            tools:alpha="0.2" />
+            tools:alpha="1" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:visibility="visible"
