@@ -65,6 +65,15 @@
             android:clipToPadding="false"
             app:layoutDescription="@xml/home_motion">
 
+            <View
+                android:id="@+id/shadow_dim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:elevation="10dp"
+                android:background="@color/transparent_black" />
+
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_left"
                 android:layout_width="wrap_content"
@@ -298,6 +307,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     android:src="@drawable/main_help_box_help" />
 
                 <ImageButton
