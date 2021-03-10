@@ -80,6 +80,7 @@
                 android:imeOptions="actionDone"
                 tools:text="asd"
                 style="@style/TextInputEditText"
+                android:hint="날씨가 궁금한 곳을 검색해 보세요!"
                 android:text="@={vm.query}" />
 
 
@@ -93,7 +94,6 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:paddingBottom="2dp"
-            android:text="날씨가 궁금한 곳을 검색해 보세요!"
             android:textColor="@color/sub_grey_8"
             android:textSize="16sp"
             android:layout_marginHorizontal="48dp"
@@ -147,11 +147,10 @@
             tools:listitem="@layout/item_location" />
 
         <View
+            android:id="@+id/top_blur"
             shadowOnScroll="@{true}"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
-            android:background="@drawable/blur_white_top_down"
-            android:visibility="@{vm.fromRecord}"
+            android:layout_height="33dp"
             app:layout_constraintTop_toTopOf="@+id/list" />
 
         <View
