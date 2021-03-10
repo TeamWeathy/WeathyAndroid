@@ -100,7 +100,7 @@ fun LocalDate.isFuture(): Boolean {
 }
 
 fun LocalDate.isPast(): Boolean {
-    return isBefore(LocalDate.of(2020, 12, 13))
+    return isBefore(LocalDate.of(2020, 1, 12))
 }
 
 fun LocalDate.isAvailable(): Boolean {
