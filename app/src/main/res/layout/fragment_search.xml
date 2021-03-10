@@ -147,11 +147,10 @@
             tools:listitem="@layout/item_location" />
 
         <View
+            android:id="@+id/top_blur"
             shadowOnScroll="@{true}"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
-            android:background="@drawable/blur_white_top_down"
-            android:visibility="@{vm.fromRecord}"
+            android:layout_height="33dp"
             app:layout_constraintTop_toTopOf="@+id/list" />
 
         <View

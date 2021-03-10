@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
+import team.weathy.R
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.MainMenu.HOME
@@ -74,6 +75,7 @@ class SearchFragment : Fragment() {
             handleMainMenuChange()
         } else {
             viewModel.dateString.value = recordViewModel.date.dateString
+            binding.topBlur.setBackgroundResource(R.drawable.blur_white_top_down)
             fetchRecentSearchLocations() // fetch
         }
 
@@ -83,6 +85,7 @@ class SearchFragment : Fragment() {
                 locationUtil.selectedWeatherLocation.collect {
                     it ?: return@collect
                     binding.background.setImageResource(it.hourly.climate.weather.SearchBackgroundId)
+                    binding.topBlur.setBackgroundResource(it.hourly.climate.weather.SearchTopBlurId)
                 }
             }
         }

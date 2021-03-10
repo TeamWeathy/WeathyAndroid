@@ -110,7 +110,6 @@ class SearchAdapter(
             }
 
             if (isPast) {
-                Log.d("테스트", "$item")
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat
                 binding.curTemp = ""
                 binding.highTemp = ""
