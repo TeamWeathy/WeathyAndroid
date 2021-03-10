@@ -80,6 +80,7 @@
                 android:imeOptions="actionDone"
                 tools:text="asd"
                 style="@style/TextInputEditText"
+                android:hint="날씨가 궁금한 곳을 검색해 보세요!"
                 android:text="@={vm.query}" />
 
 
@@ -93,7 +94,6 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:paddingBottom="2dp"
-            android:text="날씨가 궁금한 곳을 검색해 보세요!"
             android:textColor="@color/sub_grey_8"
             android:textSize="16sp"
             android:layout_marginHorizontal="48dp"
