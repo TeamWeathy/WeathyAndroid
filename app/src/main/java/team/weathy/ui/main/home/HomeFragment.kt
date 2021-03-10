@@ -300,8 +300,9 @@ class HomeFragment : Fragment() {
         binding.container.isInteractionEnabled = false
         binding.recommended.root.isEnabled = false
         (activity as MainActivity).stateButton(false)
-        (activity as MainActivity).onDim()
         binding.weathyQuestion.isEnabled = false
+        binding.shadowDim.alpha = 1f
+        (activity as MainActivity).onDim()
     }
 
     private fun hideHelpPopup() {
@@ -312,7 +313,8 @@ class HomeFragment : Fragment() {
         binding.container.isInteractionEnabled = true
         binding.recommended.root.isEnabled = true
         (activity as MainActivity).stateButton(true)
-        (activity as MainActivity).offDim()
         binding.weathyQuestion.isEnabled = true
+        binding.shadowDim.alpha = 0f
+        (activity as MainActivity).offDim()
     }
 }
