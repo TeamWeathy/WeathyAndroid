@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        dismissKeyboardOnClick="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:focusableInTouchMode="true"
         android:paddingHorizontal="24dp">
 
         <androidx.constraintlayout.widget.Guideline
@@ -96,7 +96,6 @@
             tools:textColor="@color/sub_grey_6" />
 
         <Button
-
             android:id="@+id/submit"
             style="@style/RoundButton.Mint"
             android:layout_width="match_parent"
