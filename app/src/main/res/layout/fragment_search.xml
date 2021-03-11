@@ -77,8 +77,10 @@
                 android:drawablePadding="15dp"
                 android:paddingStart="22dp"
                 android:textCursorDrawable="@drawable/cursor"
+                android:imeOptions="actionDone"
                 tools:text="asd"
                 style="@style/TextInputEditText"
+                android:hint="날씨가 궁금한 곳을 검색해 보세요!"
                 android:text="@={vm.query}" />
 
 
@@ -92,7 +94,6 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:paddingBottom="2dp"
-            android:text="날씨가 궁금한 곳을 검색해 보세요!"
             android:textColor="@color/sub_grey_8"
             android:textSize="16sp"
             android:layout_marginHorizontal="48dp"
@@ -107,7 +108,7 @@
             android:id="@+id/recentLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="19dp"
             android:fontFamily="@font/"
             android:text="최근 검색한 위치"
             android:textColor="@color/main_grey"
@@ -139,11 +140,24 @@
             android:orientation="vertical"
             android:paddingHorizontal="32dp"
             android:paddingBottom="60dp"
-            android:paddingTop="20dp"
+            android:layout_marginTop="30dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintTop_toBottomOf="@id/recentLabel"
             tools:listitem="@layout/item_location" />
+
+        <View
+            android:id="@+id/top_blur"
+            shadowOnScroll="@{true}"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            app:layout_constraintTop_toTopOf="@+id/list" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/blur_white_bottom_up"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:visibility="@{vm.loading}"
@@ -154,7 +168,7 @@
             app:layout_constraintTop_toTopOf="@id/list" />
 
         <ImageView
-            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintVertical_bias="0.27"
             android:visibility="@{vm.showEmpty}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

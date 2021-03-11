@@ -18,6 +18,7 @@ import team.weathy.di.Api
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.RecentSearchCode
 import team.weathy.util.dateHourString
+import team.weathy.util.dateString
 import team.weathy.util.debugE
 import team.weathy.util.extensions.MediatorLiveData
 import team.weathy.util.extensions.addSources
@@ -31,9 +32,11 @@ class SearchViewModel @ViewModelInject constructor(
     private val recentSearchCodeDao: RecentSearchCodeDao,
 ) : ViewModel() {
     val dateHourString = MutableLiveData(LocalDateTime.now().dateHourString)
+    val dateString = MutableLiveData(LocalDateTime.now().dateString)
     val focused = MutableLiveData(false)
     val query = MutableLiveData("")
     val loading = MutableLiveData(false)
+    val fromRecord = MutableLiveData(false)
 
     val recentlySearchResult = MutableLiveData<List<OverviewWeather>>(listOf())
     val searchResult = MutableLiveData<List<OverviewWeather>>(listOf())
@@ -72,7 +75,8 @@ class SearchViewModel @ViewModelInject constructor(
 
     private fun search() {
         launchCatch({
-            weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateHourString.value!!)
+            if (fromRecord.value!!) weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateString.value!!)
+            else weatherAPI.searchWeather(keyword = query.value!!, dateOrHourStr = dateHourString.value!!)
         }, loading, onSuccess = { (list) ->
             searchResult.value = list ?: listOf()
         })
@@ -103,9 +107,15 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     private suspend fun fetchRecentSearchCodes(codes: List<RecentSearchCode>) = codes.mapNotNull {
-        weatherAPI.fetchWeatherByLocation(
-            code = it.code, dateOrHourStr = dateHourString.value!!
-        ).body()?.weather
+        if (fromRecord.value!!) {
+            weatherAPI.fetchWeatherByLocation(
+                code = it.code, dateOrHourStr = dateString.value!!
+            ).body()?.weather
+        } else {
+            weatherAPI.fetchWeatherByLocation(
+                code = it.code, dateOrHourStr = dateHourString.value!!
+            ).body()?.weather
+        }
     }
 
     fun onItemRemoved(position: Int) {

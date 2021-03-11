@@ -1,5 +1,6 @@
 package team.weathy.ui.main.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.doOnLayout
@@ -7,7 +8,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -20,7 +20,6 @@ import team.weathy.util.LocationItemMenuSwiper.Callback
 import team.weathy.util.koFormat
 import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class SearchAdapter(
     private val onItemRemoved: (idx: Int) -> Unit,
@@ -119,7 +118,6 @@ class SearchAdapter(
                 binding.highTemp2 = "${item.daily.temperature.maxTemp}°"
                 binding.lowTemp2 = "${item.daily.temperature.minTemp}°"
                 binding.recordDivider = "/"
-                binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             } else {
                 binding.datetimeText = LocalDate.of(item.daily.date.year, item.daily.date.month, item.daily.date.day).koFormat + " · " + item.hourly.time
                 binding.curTemp = item.hourly.temperature?.toString()?.plus("°") ?: ""
@@ -129,8 +127,8 @@ class SearchAdapter(
                 binding.highTemp2 = ""
                 binding.lowTemp2 = ""
                 binding.recordDivider = ""
-                binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             }
+            binding.weatherImage.setImageResource(item.hourly.climate.weather.mediumIconId)
             binding.locationText = item.region.name
 
             binding.executePendingBindings()

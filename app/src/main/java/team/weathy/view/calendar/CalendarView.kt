@@ -348,7 +348,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setYearMonthTextWithDate(date: LocalDate) {
-        yearMonthText.text = "${date.year} .${date.monthValue}"
+        yearMonthText.text = "${date.year} .${date.monthValue.padZero()}"
     }
 
     private fun selectPagerItemsWithDate(date: LocalDate) {

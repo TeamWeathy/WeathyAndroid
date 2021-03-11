@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
+import team.weathy.R
 import team.weathy.databinding.FragmentSearchBinding
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.ui.main.MainMenu.HOME
@@ -63,6 +64,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.fromRecord.value = this.fromRecord
 
         configureBackButton()
         configureList()
@@ -72,7 +74,8 @@ class SearchFragment : Fragment() {
             registerBackPressCallback()
             handleMainMenuChange()
         } else {
-            viewModel.dateHourString.value = recordViewModel.date.dateHourString
+            viewModel.dateString.value = recordViewModel.date.dateString
+            binding.topBlur.setBackgroundResource(R.drawable.blur_white_top_down)
             fetchRecentSearchLocations() // fetch
         }
 
@@ -81,7 +84,8 @@ class SearchFragment : Fragment() {
             lifecycleScope.launchWhenStarted {
                 locationUtil.selectedWeatherLocation.collect {
                     it ?: return@collect
-                    binding.background.setImageResource(it.hourly.climate.weather.HomeBackgroundId)
+                    binding.background.setImageResource(it.hourly.climate.weather.SearchBackgroundId)
+                    binding.topBlur.setBackgroundResource(it.hourly.climate.weather.SearchTopBlurId)
                 }
             }
         }
