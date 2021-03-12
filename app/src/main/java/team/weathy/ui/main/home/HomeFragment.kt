@@ -252,11 +252,6 @@ class HomeFragment : Fragment() {
         //        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.updateWeather()
-    }
-
     private fun onClickRecommendedWeathy() {
         viewModel.recommendedWeathy.value?.dailyWeather?.date?.let { date ->
             AppEvent.onNavigateCurWeathyInCalendar.tryEmit(

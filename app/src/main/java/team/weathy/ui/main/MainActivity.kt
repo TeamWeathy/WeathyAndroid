@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -12,7 +13,10 @@ import kotlinx.coroutines.flow.collect
 import team.weathy.R
 import team.weathy.databinding.ActivityMainBinding
 import team.weathy.ui.main.MainMenu.*
+import team.weathy.ui.main.calendar.CalendarFragment
 import team.weathy.ui.main.calendar.CalendarViewModel
+import team.weathy.ui.main.home.HomeFragment
+import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
@@ -42,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         checkLocationPermission()
 
-        configurePager()
+//        configurePager()
         configureToolbar()
         configureBottomNavigation()
         observeViewModel()
@@ -66,10 +70,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun configurePager() = binding.fragmentPager.let { pager ->
-        pager.adapter = MainFragmentAdapter(this)
-        pager.isUserInputEnabled = false
-    }
+//    private fun configurePager() = binding.fragmentPager.let { pager ->
+//        pager.adapter = MainFragmentAdapter(this)
+//        pager.isUserInputEnabled = false
+//    }
 
     private fun configureToolbar() {
         binding.search setOnDebounceClickListener {
@@ -173,15 +177,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateHome() {
-        binding.fragmentPager.setCurrentItem(0, false)
+        changeFragment(HomeFragment())
     }
 
     private fun navigateCalendar() {
-        binding.fragmentPager.setCurrentItem(1, false)
+        changeFragment(CalendarFragment())
     }
 
     private fun navigateSearch() {
-        binding.fragmentPager.setCurrentItem(2, false)
+        changeFragment(SearchFragment())
+    }
+
+    private fun changeFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
     private fun navigateRecordAtToday() {
