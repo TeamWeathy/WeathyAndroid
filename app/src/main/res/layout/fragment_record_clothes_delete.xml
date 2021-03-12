@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:text="상의"
                     android:textColor="@color/main_grey"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:text="하의"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:text="외투"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -190,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -228,7 +228,7 @@
                     android:layout_height="wrap_content"
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:inputType="text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -239,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/sub_grey_4"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

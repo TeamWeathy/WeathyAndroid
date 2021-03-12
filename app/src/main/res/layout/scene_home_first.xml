@@ -93,7 +93,7 @@
         android:fontFamily="@font/notosans_medium"
         android:text="서울 도봉구"
         android:textColor="@color/main_grey"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@id/gps_image"
         app:layout_constraintLeft_toRightOf="@id/gps_image"
         app:layout_constraintTop_toTopOf="@id/gps_image" />
