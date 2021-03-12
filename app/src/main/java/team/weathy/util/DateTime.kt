@@ -5,6 +5,7 @@ import team.weathy.view.calendar.WeeklyAdapter
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Month
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
@@ -100,7 +101,7 @@ fun LocalDate.isFuture(): Boolean {
 }
 
 fun LocalDate.isPast(): Boolean {
-    return isBefore(LocalDate.of(2020, 1, 12))
+    return isBefore(LocalDate.of(2021, 1, 12))
 }
 
 fun LocalDate.isAvailable(): Boolean {
