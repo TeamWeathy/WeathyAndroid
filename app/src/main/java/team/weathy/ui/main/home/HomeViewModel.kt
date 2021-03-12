@@ -1,5 +1,6 @@
 package team.weathy.ui.main.home
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.FlowPreview
@@ -16,6 +17,7 @@ import team.weathy.model.entity.HourlyWeather
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.Weathy
 import team.weathy.util.*
+import team.weathy.util.extensions.launchCatch
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -27,7 +29,7 @@ class HomeViewModel @ViewModelInject constructor(
         @Api private val weathyAPI: WeathyAPI,
         private val spUtil: SPUtil,
 ) : ViewModel() {
-    private val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
+    val lastFetchDateTime = MutableLiveData(LocalDateTime.now())
 
     val currentWeather = locationUtil.selectedWeatherLocation.asLiveData(viewModelScope.coroutineContext)
     val loadingWeather = MutableLiveData(true)
@@ -178,6 +180,18 @@ class HomeViewModel @ViewModelInject constructor(
                     }
                     loadingWeather.value = false
                 }
+    }
+
+    fun updateWeather() {
+        lastFetchDateTime.value = LocalDateTime.now()
+        Log.d("테스트", "${lastFetchDateTime.value}")
+        launchCatch({
+            weatherAPI.fetchWeatherByLocation(dateOrHourStr = lastFetchDateTime.value!!.dateHourString)
+        }, onSuccess = { res ->
+            val weather = res.body()?.weather ?: return@launchCatch
+            locationUtil.selectPlace(weather)
+            Log.d("테스트", "$weather")
+        })
     }
 
     private suspend fun fetchWeatherWithCode(code: Long): OverviewWeather? {

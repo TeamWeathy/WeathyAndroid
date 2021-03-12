@@ -27,6 +27,7 @@ import team.weathy.util.LinearItemDecoration
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.location.LocationUtil
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @FlowPreview
@@ -128,6 +129,11 @@ class SearchFragment : Fragment() {
         super.onResume()
         onBackPressedCallback.isEnabled = true
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        if (!fromRecord) {
+            viewModel.dateHourString.value = LocalDateTime.now().dateHourString
+            viewModel.dateString.value = LocalDateTime.now().dateString
+        }
     }
 
     override fun onPause() {
