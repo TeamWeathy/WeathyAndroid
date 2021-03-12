@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ import team.weathy.util.LinearItemDecoration
 import team.weathy.util.extensions.hideKeyboard
 import team.weathy.util.extensions.showToast
 import team.weathy.util.location.LocationUtil
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @FlowPreview
@@ -119,6 +121,15 @@ class SearchFragment : Fragment() {
         it.setOnFocusChangeListener { _, hasFocus ->
             viewModel.focused.value = hasFocus
         }
+        it.setOnEditorActionListener { view, actionId, _ ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                requireActivity().hideKeyboard()
+                view.clearFocus()
+                handled = true
+            }
+            handled
+        }
     }
 
     private fun registerBackPressCallback() =
@@ -128,6 +139,11 @@ class SearchFragment : Fragment() {
         super.onResume()
         onBackPressedCallback.isEnabled = true
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        if (!fromRecord) {
+            viewModel.dateHourString.value = LocalDateTime.now().dateHourString
+            viewModel.dateString.value = LocalDateTime.now().dateString
+        }
     }
 
     override fun onPause() {
