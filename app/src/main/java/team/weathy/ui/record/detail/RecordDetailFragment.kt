@@ -85,8 +85,10 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().onBackPressedDispatcher.addCallback {
-            submit(false)
+        if (!viewModel.edit) {
+            requireActivity().onBackPressedDispatcher.addCallback {
+                submit(false)
+            }
         }
     }
 

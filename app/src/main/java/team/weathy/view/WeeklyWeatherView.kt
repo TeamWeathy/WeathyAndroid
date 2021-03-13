@@ -44,7 +44,7 @@ class WeeklyWeatherView @JvmOverloads constructor(context: Context, attrs: Attri
     var weathers: List<DailyWeatherWithInDays> by OnChangeProp(listOf()) {
         it.forEachIndexed { index, weather ->
             weatherItems.getOrNull(index)?.run {
-                icon.setImageResource(Weather.values()[weather.climateIconId].smallIconId)
+                icon.setImageResource(weather.weather.smallIconId)
                 tempHigh.text = "${weather.temperature.maxTemp}°"
                 tempLow.text = "${weather.temperature.minTemp}°"
             }
