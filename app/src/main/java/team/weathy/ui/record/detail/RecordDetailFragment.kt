@@ -42,6 +42,7 @@ import okhttp3.RequestBody
 import team.weathy.R
 import team.weathy.databinding.FragmentRecordDetailBinding
 import team.weathy.dialog.ChoiceDialog
+import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.util.AutoClearedValue
 import team.weathy.util.extensions.enableWithAnim
@@ -85,10 +86,9 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.edit) {
-            requireActivity().onBackPressedDispatcher.addCallback {
-                submit(false)
-            }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            if (!viewModel.edit) submit(false)
+            else (activity as? RecordActivity)?.popDetail()
         }
     }
 
@@ -122,7 +122,7 @@ class RecordDetailFragment : Fragment(), ChoiceDialog.ClickListener {
             submit(true)
         }
         binding.back setOnDebounceClickListener {
-            submit(false)
+            (activity as? RecordActivity)?.popDetail()
         }
 
         viewModel.onRecordSuccess.observe(viewLifecycleOwner) {
