@@ -50,6 +50,8 @@ class RecordActivity : AppCompatActivity() {
 
     fun popWeatherRating() = popFragmentIfExist(RecordWeatherRatingFragment::class.java)
 
+    fun popDetail() = popFragmentIfExist(RecordDetailFragment::class.java)
+
     companion object {
         const val EXTRA_EDIT = "edit"
 
