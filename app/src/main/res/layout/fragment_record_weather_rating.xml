@@ -146,7 +146,7 @@
                             android:layout_marginStart="17dp"
                             android:fontFamily="@font/notosans_medium"
                             android:text="너무 더웠어요"
-                            android:textSize="17sp"
+                            android:textSize="17dp"
                             android:textColor="@color/pink"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji"/>
@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:text="훨씬 얇게 입을걸 그랬어요."
                             android:textColor="@color/sub_grey_6"
-                            android:textSize="16sp"
+                            android:textSize="16dp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review"
                             app:layout_constraintStart_toStartOf="@id/tv_review" />
 
@@ -202,7 +202,7 @@
                             android:layout_marginStart="17dp"
                             android:fontFamily="@font/notosans_medium"
                             android:text="더웠어요"
-                            android:textSize="17sp"
+                            android:textSize="17dp"
                             android:textColor="@color/imoji_hot_text"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji2"/>
@@ -213,7 +213,7 @@
                             android:layout_height="wrap_content"
                             android:text="좀 더 가볍게 입을걸 그랬어요."
                             android:textColor="@color/sub_grey_6"
-                            android:textSize="16sp"
+                            android:textSize="16dp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review2"
                             app:layout_constraintStart_toStartOf="@id/tv_review2" />
 
@@ -259,7 +259,7 @@
                             android:fontFamily="@font/notosans_medium"
                             android:text="적당했어요"
                             android:textColor="@color/imoji_good_text"
-                            android:textSize="17sp"
+                            android:textSize="17dp"
                             app:layout_constraintStart_toEndOf="@id/img_emoji3"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -269,7 +269,7 @@
                             android:layout_height="wrap_content"
                             android:text="딱 적당하게 입었어요."
                             android:textColor="@color/sub_grey_6"
-                            android:textSize="16sp"
+                            android:textSize="16dp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review3"
                             app:layout_constraintStart_toStartOf="@id/tv_review3" />
 
@@ -314,7 +314,7 @@
                             android:layout_marginStart="17dp"
                             android:fontFamily="@font/notosans_medium"
                             android:text="추웠어요"
-                            android:textSize="17sp"
+                            android:textSize="17dp"
                             android:textColor="@color/imoji_cold_text"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji4"/>
@@ -325,7 +325,7 @@
                             android:layout_height="wrap_content"
                             android:text="좀 더 따뜻하게 입을걸 그랬어요."
                             android:textColor="@color/sub_grey_6"
-                            android:textSize="16sp"
+                            android:textSize="16dp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review4"
                             app:layout_constraintStart_toStartOf="@id/tv_review4" />
 
@@ -372,7 +372,7 @@
                             android:layout_marginStart="17dp"
                             android:fontFamily="@font/notosans_medium"
                             android:text="너무 추웠어요"
-                            android:textSize="17sp"
+                            android:textSize="17dp"
                             android:textColor="@color/imoji_verycold_text"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/img_emoji5"/>
@@ -383,7 +383,7 @@
                             android:layout_height="wrap_content"
                             android:text="훨씬 두껍게 입을걸 그랬어요."
                             android:textColor="@color/sub_grey_6"
-                            android:textSize="16sp"
+                            android:textSize="16dp"
                             app:layout_constraintTop_toBottomOf="@id/tv_review5"
                             app:layout_constraintStart_toStartOf="@id/tv_review5" />
 
@@ -429,7 +429,7 @@
             android:layout_marginLeft="9dp"
             android:layout_marginRight="26dp"
             android:text="다음"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:textColor="@color/sub_grey_6"
             style="?android:attr/borderlessButtonStyle"
             app:layout_constraintBottom_toBottomOf="parent"

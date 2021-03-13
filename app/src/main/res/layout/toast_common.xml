@@ -17,9 +17,7 @@
             android:gravity="center"
             android:text="toast"
             android:textColor="@color/main_grey"
-            android:textSize="16sp"
-
-            />
+            android:textSize="16dp" />
     </FrameLayout>
 
 

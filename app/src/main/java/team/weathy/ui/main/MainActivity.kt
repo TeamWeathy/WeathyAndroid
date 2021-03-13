@@ -20,12 +20,8 @@ import team.weathy.ui.main.search.SearchFragment
 import team.weathy.ui.record.RecordActivity
 import team.weathy.ui.record.RecordViewModel
 import team.weathy.ui.setting.SettingActivity
-import team.weathy.util.AnimUtil
-import team.weathy.util.AppEvent
-import team.weathy.util.PermissionUtil
-import team.weathy.util.dpFloat
+import team.weathy.util.*
 import team.weathy.util.extensions.showToast
-import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -63,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkLocationPermission() {
         PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
             override fun onAnyPermissionsPermanentlyDeined(
-                deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
+                    deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
             ) {
                 showToast("위치 권한이 영구적으로 거부되었습니다")
             }
@@ -197,7 +193,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(RecordActivity.newIntent(this))
     }
 
-    fun stateButton(state : Boolean){
+    fun stateButton(state: Boolean) {
         binding.search.isEnabled = state
         binding.setting.isEnabled = state
         binding.home.isEnabled = state
@@ -206,13 +202,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDim(){
-        binding.shadowDim.elevation = 8.0f
-        binding.shadowDim.alpha = 1f
+        binding.bottomNav.setBackgroundResource(R.color.transparent)
     }
 
     fun offDim(){
-        binding.shadowDim.elevation = 0.0f
-        binding.shadowDim.alpha = 0f
+        binding.bottomNav.setBackgroundResource(R.drawable.main_box_bottomblur)
     }
-
 }

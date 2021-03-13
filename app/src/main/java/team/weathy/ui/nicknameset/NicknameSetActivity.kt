@@ -13,6 +13,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -49,8 +50,8 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
 
         showKeyboard()
         configureTitle()
-        observeViewModel()
         configureInput()
+        observeViewModel()
     }
 
     private fun configureInput() {

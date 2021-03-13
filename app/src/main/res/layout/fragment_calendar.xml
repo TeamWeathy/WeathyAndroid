@@ -53,7 +53,7 @@
                     android:singleLine="true"
                     android:text="@{vm.weathyDate}"
                     android:textColor="@color/sub_grey_1"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="12월 21일 월요일" />
@@ -181,7 +181,7 @@
                     android:fontFamily="@font/notosans_medium"
                     android:text="@{vm.weathyClimateDescription}"
                     android:textColor="@color/main_grey"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/weather_icon"
                     app:layout_constraintLeft_toRightOf="@id/weather_icon"
                     app:layout_constraintTop_toTopOf="@id/weather_icon"
@@ -197,7 +197,7 @@
                     android:singleLine="true"
                     android:text="@{vm.weathyLocation}"
                     android:textColor="@color/main_grey"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintBottom_toBottomOf="@id/date"
                     app:layout_constraintLeft_toRightOf="@id/date"
                     app:layout_constraintRight_toLeftOf="@id/more"
@@ -213,7 +213,7 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.weathyTempHigh}"
                     android:textColor="@color/red_temp"
-                    android:textSize="35sp"
+                    android:textSize="35dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/climate_description"
                     tools:text="-4°" />
@@ -226,7 +226,7 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="/"
                     android:textColor="@color/temp_bar"
-                    android:textSize="22sp"
+                    android:textSize="22dp"
                     app:layout_constraintBottom_toBottomOf="@id/temp1"
                     app:layout_constraintLeft_toRightOf="@id/temp1"
                     app:layout_constraintTop_toTopOf="@id/temp1" />
@@ -239,7 +239,7 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@{vm.weathyTempLow}"
                     android:textColor="@color/blue_temp"
-                    android:textSize="35sp"
+                    android:textSize="35dp"
                     app:layout_constraintBottom_toBottomOf="@id/temp2"
                     app:layout_constraintLeft_toRightOf="@id/temp2"
                     app:layout_constraintTop_toTopOf="@id/temp2"
@@ -264,7 +264,7 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/notosans_medium"
                     android:text="@{vm.weathyStampRepresentation}"
-                    android:textSize="23sp"
+                    android:textSize="23dp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/emoji"
                     tools:text="너무 추웠어요" />
@@ -292,24 +292,22 @@
                     android:layout_marginTop="22dp"
                     android:text="상의"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
+                    android:id="@+id/label1_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
 
                     android:selected="@{true}"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:text="@{vm.weathyTopClothes}"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/label1"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/label1"
@@ -322,24 +320,22 @@
                     android:layout_marginTop="12dp"
                     android:text="하의"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/label1" />
+                    app:layout_constraintTop_toBottomOf="@id/label1_text" />
 
                 <TextView
+                    android:id="@+id/label2_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
 
                     android:selected="@{true}"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:text="@{vm.weathyBottomClothes}"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/label2"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/label2"
@@ -352,24 +348,22 @@
                     android:layout_marginTop="12dp"
                     android:text="외투"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/label2" />
+                    app:layout_constraintTop_toBottomOf="@id/label2_text" />
 
                 <TextView
+                    android:id="@+id/label3_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
 
                     android:selected="@{true}"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:text="@{vm.weathyOuterClothes}"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/label3"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/label3"
@@ -383,24 +377,22 @@
 
                     android:text="기타"
                     android:textColor="@color/sub_grey_6"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/label3" />
+                    app:layout_constraintTop_toBottomOf="@id/label3_text" />
 
                 <TextView
+                    android:id="@+id/label4_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
 
                     android:selected="@{true}"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:text="@{vm.weathyEtcClothes}"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/label4"
+                    android:textSize="13dp"
                     app:layout_constraintLeft_toRightOf="@id/barrier"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/label4"
@@ -413,7 +405,7 @@
                     android:layout_marginTop="24dp"
                     android:background="@color/sub_grey_7"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/label4"
+                    app:layout_constraintTop_toBottomOf="@id/label4_text"
                     tools:visibility="visible" />
 
                 <ImageView
@@ -432,10 +424,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:lineSpacingExtra="3sp"
+                    android:lineSpacingExtra="3dp"
                     android:text="@{vm.weathyFeedback}"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     app:layout_constraintTop_toBottomOf="@id/image"
                     tools:text="기모랑 히트텍 입고 하나 더 입었어야 했다...\n진짜 바람이 살을 파고드는 것처럼 추운 날이었어" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -471,7 +463,7 @@
                 android:insetBottom="0dp"
                 android:text="기록하기"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:visibility="@{!vm.isPastThanAvailable}"
                 app:cornerRadius="20dp" />
         </LinearLayout>
