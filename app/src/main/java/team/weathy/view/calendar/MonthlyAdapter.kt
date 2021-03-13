@@ -5,6 +5,7 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.ui.main.calendar.YearMonthFormat
