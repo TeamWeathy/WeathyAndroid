@@ -45,7 +45,7 @@ import team.weathy.util.extensions.*
 import java.time.LocalDate
 
 class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        ConstraintLayout(context, attrs) {
+    ConstraintLayout(context, attrs) {
     private val today = LocalDate.now()
 
     var onDateChangeListener: ((date: LocalDate) -> Unit)? = null
@@ -62,10 +62,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         onSelectedDateChangeListener?.invoke(it)
         curDate = it
         invalidate()
+        collapse()
     }
     private var rowCount = 4
 
-    private val dataLiveData = MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
+    private val dataLiveData =
+        MutableLiveData<Map<YearMonthFormat, List<CalendarPreview?>>>(mapOf())
     var data: Map<YearMonthFormat, List<CalendarPreview?>> by OnChangeProp(mapOf()) {
         dataLiveData.value = it
     }
@@ -102,7 +104,10 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (!isInEditMode) typeface = ResourcesCompat.getFont(context, R.font.roboto_medium)
         setTextColor(getColor(R.color.main_grey))
         gravity = Gravity.CENTER
-        stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.pressed_alpha_state_list_anim)
+        stateListAnimator = AnimatorInflater.loadStateListAnimator(
+            context,
+            R.animator.pressed_alpha_state_list_anim
+        )
 
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToTop = parentId
@@ -212,12 +217,12 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
 
             adapter = MonthlyAdapter(
-                    animLiveData,
-                    scrollEnabled,
-                    onScrollToTop,
-                    dataLiveData,
-                    selectedDateLiveData,
-                    fragmentViewLifecycleOwner,
+                animLiveData,
+                scrollEnabled,
+                onScrollToTop,
+                dataLiveData,
+                selectedDateLiveData,
+                fragmentViewLifecycleOwner,
             ) {
                 if (!it.isFuture()) selectedDate = it
             }
@@ -233,7 +238,7 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
             registerOnPageChangeCallback(object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     val (_, firstDateOfMonth) = convertMonthlyIndexToDateToFirstDateOfMonthCalendar(
-                            position
+                        position
                     )
                     if (isExpanded && curDate != firstDateOfMonth) {
                         curDate = firstDateOfMonth
@@ -314,8 +319,9 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         setPadding(paddingHorizontal, 0, paddingHorizontal, 0)
 
         background = MaterialShapeDrawable(
-                ShapeAppearanceModel().toBuilder().setBottomLeftCorner(CornerFamily.ROUNDED, px(35).toFloat())
-                        .setBottomRightCorner(CornerFamily.ROUNDED, px(35).toFloat()).build()
+            ShapeAppearanceModel().toBuilder()
+                .setBottomLeftCorner(CornerFamily.ROUNDED, px(35).toFloat())
+                .setBottomRightCorner(CornerFamily.ROUNDED, px(35).toFloat()).build()
         ).apply {
             fillColor = ColorStateList.valueOf(getColor(R.color.white))
         }
@@ -357,13 +363,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         if (monthlyViewPager?.currentItem != nextMonthlyIndex) {
             monthlyViewPager?.setCurrentItem(
-                    nextMonthlyIndex, false
+                nextMonthlyIndex, false
             )
         }
 
         if (weeklyViewPager?.currentItem != nextWeeklyIndex) {
             weeklyViewPager?.setCurrentItem(
-                    nextWeeklyIndex, false
+                nextWeeklyIndex, false
             )
         }
     }
@@ -384,13 +390,13 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     override fun onDraw(canvas: Canvas) {
         // bar
         canvas.drawRoundRect(
-                width / 2f - px(30),
-                height - pxFloat(16),
-                width / 2f + px(30),
-                height - pxFloat(11),
-                pxFloat(10),
-                pxFloat(10),
-                barPaint,
+            width / 2f - px(30),
+            height - pxFloat(16),
+            width / 2f + px(30),
+            height - pxFloat(11),
+            pxFloat(10),
+            pxFloat(10),
+            barPaint,
         )
 
         // capsule
@@ -404,28 +410,29 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val capsuleWidthRadius = capsuleWidth / 2f
         val capsuleTop = pxFloat(72)
 
-        val greyCapsuleLeft = paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
+        val greyCapsuleLeft =
+            paddingHorizontal + capsuleLeftPadding + selectedDate.dayOfWeekIndex * rawWidth
         if (isSelectedInCurrentWeek) {
             canvas.drawRoundRect(
-                    greyCapsuleLeft,
-                    capsuleTop,
-                    greyCapsuleLeft + capsuleWidth,
-                    capsuleTop + capsuleHeight,
-                    capsuleWidthRadius,
-                    capsuleWidthRadius,
-                    greyCapsulePaint
+                greyCapsuleLeft,
+                capsuleTop,
+                greyCapsuleLeft + capsuleWidth,
+                capsuleTop + capsuleHeight,
+                capsuleWidthRadius,
+                capsuleWidthRadius,
+                greyCapsulePaint
             )
         }
 
         if (isTodayInCurrentWeek) {
             canvas.drawRoundRect(
-                    capsuleLeft,
-                    capsuleTop,
-                    capsuleLeft + capsuleWidth,
-                    capsuleTop + capsuleHeight,
-                    capsuleWidthRadius,
-                    capsuleWidthRadius,
-                    capsulePaint,
+                capsuleLeft,
+                capsuleTop,
+                capsuleLeft + capsuleWidth,
+                capsuleTop + capsuleHeight,
+                capsuleWidthRadius,
+                capsuleWidthRadius,
+                capsulePaint,
             )
         }
     }
@@ -454,7 +461,11 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
                         computeCurrentVelocity(1000)
                     }
 
-                    animValue = ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(0f, 1.2f)
+                    animValue =
+                        ((event.y - collapsedHeight) / (expandedHeight - collapsedHeight)).clamp(
+                            0f,
+                            1.2f
+                        )
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     if (tracker!!.yVelocity > 0) expand()
@@ -478,15 +489,16 @@ class CalendarView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun animateHeight() = updateLayoutParams<ViewGroup.LayoutParams> {
-        height = MathUtils.lerp(collapsedHeight.toFloat(), expandedHeight.toFloat(), animValue).toInt()
+        height =
+            MathUtils.lerp(collapsedHeight.toFloat(), expandedHeight.toFloat(), animValue).toInt()
     }
 
     private fun changeWeekTextsColor() {
         weekTexts.forEachIndexed { idx, textView ->
             textView.setTextColor(
-                    CalendarUtil.getWeekTextColor(
-                            context, idx, animValue, isTodayInCurrentWeek && today.dayOfWeekIndex == idx
-                    )
+                CalendarUtil.getWeekTextColor(
+                    context, idx, animValue, isTodayInCurrentWeek && today.dayOfWeekIndex == idx
+                )
             )
         }
     }

@@ -11,21 +11,15 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.annotation.IntRange
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import team.weathy.R
 import team.weathy.databinding.ViewCalendarItemBinding
 import team.weathy.model.entity.CalendarPreview
-import team.weathy.util.OnChangeProp
-import team.weathy.util.calculateRequiredRow
+import team.weathy.util.*
 import team.weathy.util.extensions.getColor
 import team.weathy.util.extensions.px
-import team.weathy.util.isAvailable
-import team.weathy.util.isSameDay
-import team.weathy.util.margin
-import team.weathy.util.setOnDebounceClickListener
 import java.time.LocalDate
 
 class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -137,7 +131,8 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
             todayIndexInViews += dates.count { it.monthValue == firstDateInCalendar.monthValue }
         }
         // set todayIndexInViews to -1 if today is not in this month
-        if (today.year != firstDateInMonth.year || today.month != firstDateInMonth.month) todayIndexInViews = -1
+        if (today.year != firstDateInMonth.year || today.month != firstDateInMonth.month) todayIndexInViews =
+            -1
 
         innerLinearLayouts.forEach {
             it.removeAllViews()
@@ -207,7 +202,7 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun updateUIWithData() {
         calendarItems.forEachIndexed { index, binding ->
             data?.getOrNull(index)?.let {
-                binding.icWeather.isVisible  = true
+                binding.icWeather.isVisible = true
                 binding.tempHigh.isVisible = true
                 binding.tempLow.isVisible = true
 
@@ -222,7 +217,10 @@ class MonthlyView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-    private fun getDayTextColor(@IntRange(from = 0L, to = 6L) week: Int, isToday: Boolean = false): Int {
+    private fun getDayTextColor(
+        @IntRange(from = 0L, to = 6L) week: Int,
+        isToday: Boolean = false
+    ): Int {
         if (isToday) return Color.WHITE
 
         return getColorFromWeek(week)
