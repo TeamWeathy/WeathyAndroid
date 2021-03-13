@@ -17,7 +17,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.transition.TransitionManager
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -197,8 +196,6 @@ class HomeFragment : Fragment() {
 
         viewModel.recommendedWeathy.observe(viewLifecycleOwner) {
             it?.let {
-//                debugE("feedback: ${viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()}")
-//                debugE("imgUrl: ${viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()}")
                 if (!viewModel.recommendedWeathy.value?.feedback.isNullOrEmpty()
                         && viewModel.recommendedWeathy.value?.imgUrl.isNullOrEmpty()
                 ) {

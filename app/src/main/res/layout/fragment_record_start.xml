@@ -118,7 +118,7 @@
                         android:layout_marginTop="2dp"
                         tools:text="서울 서초구"
                         android:textColor="@color/main_grey"
-                        android:textSize="17sp"
+                        android:textSize="17dp"
                         android:fontFamily="@font/notosans_medium"
                         app:layout_constraintStart_toStartOf="@id/tv_date"
                         app:layout_constraintTop_toBottomOf="@id/tv_date" />
@@ -132,7 +132,7 @@
                         android:layout_marginStart="25dp"
                         tools:text="1월 1일 금요일"
                         android:textColor="@color/sub_grey_1"
-                        android:textSize="15sp"
+                        android:textSize="15dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -146,7 +146,7 @@
                         tools:text="20°"
                         android:text="@{vm.tempHigh}"
                         android:textColor="@color/red_temp"
-                        android:textSize="40sp"
+                        android:textSize="40dp"
                         app:layout_constraintEnd_toStartOf="@id/temp"
                         app:layout_constraintTop_toTopOf="@id/low_temp" />
 
@@ -158,7 +158,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:text="/"
                         android:textColor="@color/temp_bar"
-                        android:textSize="25sp"
+                        android:textSize="25dp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@id/low_temp"
                         app:layout_constraintEnd_toStartOf="@id/low_temp"
@@ -174,7 +174,7 @@
                         android:fontFamily="@font/roboto_light"
                         tools:text="-20°"
                         android:textColor="@color/blue_temp"
-                        android:textSize="40sp"
+                        android:textSize="40dp"
                         android:letterSpacing="-0.05"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"

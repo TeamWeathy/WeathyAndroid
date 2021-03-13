@@ -1,5 +1,6 @@
 package team.weathy.ui.main.home
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.FlowPreview
@@ -16,6 +17,7 @@ import team.weathy.model.entity.HourlyWeather
 import team.weathy.model.entity.OverviewWeather
 import team.weathy.model.entity.Weathy
 import team.weathy.util.*
+import team.weathy.util.extensions.launchCatch
 import team.weathy.util.location.LocationUtil
 import java.time.LocalDate
 import java.time.LocalDateTime

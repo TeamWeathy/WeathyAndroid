@@ -36,7 +36,7 @@
         android:layout_marginTop="32dp"
         android:text="설정"
         android:textColor="@color/main_grey"
-        android:textSize="25sp"
+        android:textSize="25dp"
         app:layout_constraintStart_toStartOf="@id/guide_left"
         app:layout_constraintTop_toBottomOf="@id/exit_setting_btn" />
 
@@ -57,7 +57,7 @@
         android:layout_marginStart="7dp"
         android:text="닉네임 변경"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/nickname_change_click"
         app:layout_constraintStart_toStartOf="@id/setting"
         app:layout_constraintTop_toTopOf="@id/nickname_change_click" />
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:text="문의 및 건의하기"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/inquire_click"
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/inquire_click" />
@@ -133,7 +133,7 @@
         android:layout_height="wrap_content"
         android:text="개인정보 취급방침"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/info_click"
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/info_click" />
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:text="위치기반서비스 이용약관"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/location_click"
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/location_click" />
@@ -209,7 +209,7 @@
         android:layout_height="wrap_content"
         android:text="개발자 정보"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/developer_click"
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/developer_click" />
@@ -247,7 +247,7 @@
         android:layout_height="wrap_content"
         android:text="오픈소스 라이센스"
         android:textColor="@color/main_grey"
-        android:textSize="16sp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/license_click"
         app:layout_constraintStart_toStartOf="@id/nickname_change"
         app:layout_constraintTop_toTopOf="@id/license_click" />

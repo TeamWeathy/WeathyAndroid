@@ -27,7 +27,7 @@
                 android:fontFamily="@font/notosans_bold"
                 android:text="title"
                 android:textColor="@color/main_mint"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -38,7 +38,7 @@
                 android:fontFamily="@font/notosans_bold"
                 android:text=" ("
                 android:textColor="@color/main_mint"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintTop_toTopOf="@id/title"
                 app:layout_constraintStart_toEndOf="@id/title"/>
 
@@ -49,7 +49,7 @@
                 android:fontFamily="@font/notosans_bold"
                 android:text="n"
                 android:textColor="@color/main_mint"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintTop_toTopOf="@id/title2"
                 app:layout_constraintStart_toEndOf="@id/title2"/>
 
@@ -60,7 +60,7 @@
                 android:fontFamily="@font/notosans_bold"
                 android:text="/50)"
                 android:textColor="@color/main_mint"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 app:layout_constraintTop_toTopOf="@id/tag_count"
                 app:layout_constraintStart_toEndOf="@id/tag_count"/>
 
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="나만 알아볼 수 있는 말로\n옷을 등록해 보세요!"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/sub_grey_6"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title" />
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@id/text_count2"
                 app:layout_constraintEnd_toStartOf="@id/text_count2"
@@ -129,7 +129,7 @@
                 android:layout_marginTop="5dp"
                 android:text="/10"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/enter" />

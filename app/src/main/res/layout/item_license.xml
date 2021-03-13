@@ -13,7 +13,7 @@
         android:includeFontPadding="false"
         android:text="TextView"
         android:textColor="@color/main_grey"
-        android:textSize="17sp"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

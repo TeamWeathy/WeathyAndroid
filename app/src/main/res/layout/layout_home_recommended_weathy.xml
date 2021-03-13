@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{vm.weathyDate}"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="2020년 12월 1일" />
@@ -55,7 +55,7 @@
                 android:layout_marginStart="6dp"
                 android:text="@{vm.weathyClimateDescription}"
                 android:textColor="@color/sub_grey_1"
-                android:textSize="15sp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="@id/ic_weather"
                 app:layout_constraintStart_toEndOf="@id/ic_weather"
                 app:layout_constraintTop_toTopOf="@id/ic_weather"
@@ -69,7 +69,7 @@
                 android:fontFamily="@font/roboto_light"
                 android:text="@{vm.weathyTempHigh}"
                 android:textColor="@color/red_temp"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 app:layout_constraintStart_toStartOf="@id/ic_weather"
                 app:layout_constraintTop_toBottomOf="@id/ic_weather"
                 tools:text="-20°" />
@@ -82,7 +82,7 @@
                 android:fontFamily="@font/roboto_light"
                 android:text="/"
                 android:textColor="@color/temp_bar"
-                android:textSize="22sp"
+                android:textSize="22dp"
                 app:layout_constraintBottom_toBottomOf="@id/max_temp"
                 app:layout_constraintStart_toEndOf="@id/max_temp"
                 app:layout_constraintTop_toTopOf="@id/max_temp" />
@@ -95,7 +95,7 @@
                 android:fontFamily="@font/roboto_light"
                 android:text="@{vm.weathyTempLow}"
                 android:textColor="@color/blue_temp"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 app:layout_constraintBottom_toBottomOf="@id/max_temp"
                 app:layout_constraintStart_toEndOf="@id/slash"
                 app:layout_constraintTop_toTopOf="@id/max_temp"
@@ -119,7 +119,7 @@
                 android:fontFamily="@font/notosans_medium"
                 android:text="@{vm.weathyStampRepresentation}"
                 textColorRes="@{vm.weathyStampColor}"
-                android:textSize="23sp"
+                android:textSize="23dp"
                 app:layout_constraintEnd_toEndOf="@id/emoji"
                 app:layout_constraintTop_toBottomOf="@id/emoji"
                 tools:text="추웠어요" />
@@ -160,7 +160,7 @@
                 android:layout_marginTop="40dp"
                 android:text="상의"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/max_temp" />
 
@@ -170,7 +170,7 @@
                 android:singleLine="true"
                 android:text="@{vm.weathyTopClothes}"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@id/label1"
                 app:layout_constraintLeft_toRightOf="@id/barrier"
                 app:layout_constraintRight_toRightOf="parent"
@@ -184,7 +184,7 @@
                 android:layout_marginTop="8dp"
                 android:text="하의"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toStartOf="@id/label1"
                 app:layout_constraintTop_toBottomOf="@id/label1" />
 
@@ -194,7 +194,7 @@
                 android:singleLine="true"
                 android:text="@{vm.weathyBottomClothes}"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@id/label2"
                 app:layout_constraintLeft_toRightOf="@id/barrier"
                 app:layout_constraintRight_toRightOf="parent"
@@ -208,7 +208,7 @@
                 android:layout_marginTop="8dp"
                 android:text="외투"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toStartOf="@id/label1"
                 app:layout_constraintTop_toBottomOf="@id/label2" />
 
@@ -218,7 +218,7 @@
                 android:singleLine="true"
                 android:text="@{vm.weathyOuterClothes}"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@id/label3"
                 app:layout_constraintLeft_toRightOf="@id/barrier"
                 app:layout_constraintRight_toRightOf="parent"
@@ -232,7 +232,7 @@
                 android:layout_marginTop="8dp"
                 android:text="기타"
                 android:textColor="@color/sub_grey_6"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toStartOf="@id/label1"
                 app:layout_constraintTop_toBottomOf="@id/label3" />
 
@@ -242,7 +242,7 @@
                 android:singleLine="true"
                 android:text="@{vm.weathyEtcClothes}"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@id/label4"
                 app:layout_constraintLeft_toRightOf="@id/barrier"
                 app:layout_constraintRight_toRightOf="parent"

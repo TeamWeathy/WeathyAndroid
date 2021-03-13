@@ -33,7 +33,7 @@
             android:maxLines="4"
             android:text="웨디에서 사용할\n닉네임을 입력해주세요."
             android:textColor="@color/main_grey"
-            android:textSize="25sp"
+            android:textSize="25dp"
             app:layout_constraintTop_toBottomOf="@id/guide1" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_marginTop="10dp"
             android:text="닉네임은 설정에서 다시 변경할 수 있어요."
             android:textColor="@color/sub_grey_6"
-            android:textSize="16sp"
+            android:textSize="16dp"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -76,7 +76,7 @@
             android:layout_marginTop="2dp"
             android:text="/6"
             android:textColor="@color/sub_grey_6"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:visibility="@{vm.focused}"
             app:layout_constraintRight_toRightOf="@id/textInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
@@ -88,7 +88,7 @@
             android:layout_marginTop="2dp"
             android:text='@{vm.nickname.length() + ""}'
             android:textColor="@{vm.nickname.length() == 0 ? @color/sub_grey_6 : @color/mint_icon}"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:visibility="@{vm.focused}"
             app:layout_constraintRight_toLeftOf="@id/maxLength"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout"

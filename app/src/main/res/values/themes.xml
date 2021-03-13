@@ -8,6 +8,7 @@
         <item name="android:includeFontPadding">false</item>
         <item name="android:letterSpacing">-0.08</item>
         <item name="android:textColor">@color/main_grey</item>
+        <item name="android:textSize">16dp</item>
 
         <item name="android:windowBackground">@drawable/background_window</item>
 
@@ -28,7 +29,7 @@
         <item name="android:layout_height">55dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
 
@@ -71,17 +72,17 @@
         <item name="android:layout_height">35dp</item>
         <item name="backgroundTint">@color/sub_grey_5</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">13dp</item>
     </style>
 
     <style name="RecordTitleText">
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">25dp</item>
         <item name="android:letterSpacing">-0.08</item>
         <item name="android:textColor">@color/main_grey</item>
     </style>
 
     <style name="RecordSubText">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:letterSpacing">-0.08</item>
         <item name="android:textColor">@color/sub_grey_6</item>
     </style>
@@ -141,7 +142,7 @@
         <item name="chipMinHeight">39dp</item>
         <item name="textStartPadding">11dp</item>
         <item name="textEndPadding">9dp</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">15dp</item>
     </style>
 
     <style name="CustomChipStyle.Delete">
@@ -167,7 +168,7 @@
     <style name="TextInputEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">@color/sub_grey_8</item>
     </style>
@@ -211,19 +212,19 @@
     </style>
 
     <style name="WeekendText">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">13dp</item>
         <item name="android:textColor">@color/sub_grey_6</item>
     </style>
 
     <style name="MinTempText">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/blue_temp</item>
     </style>
 
     <style name="MaxTempText">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/red_temp</item>
     </style>
 </resources>
