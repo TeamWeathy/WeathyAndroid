@@ -104,7 +104,7 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
             }
 
             override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {
-                // TODO
+                navigateMainFromDenied()
             }
 
             override fun onAnyPermissionsPermanentlyDeined(
@@ -117,6 +117,12 @@ class NicknameSetActivity : AppCompatActivity(), AccessDialog.ClickListener {
 
     private fun navigateMain() {
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun navigateMainFromDenied() {
+        startActivity(Intent(this, MainActivity::class.java)
+            .putExtra("isDenied", true))
         finish()
     }
 
