@@ -40,7 +40,9 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         setContentView(binding.root)
 
-        checkLocationPermission()
+        if (intent.getBooleanExtra("isDenied", false)) {
+            viewModel.changeMenu(SEARCH)
+        } else checkLocationPermission()
 
 //        configurePager()
         configureToolbar()
@@ -58,6 +60,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkLocationPermission() {
         PermissionUtil.requestLocationPermissions(this, object : PermissionUtil.PermissionListener {
+            override fun onPermissionShouldBeGranted(deniedPermissions: List<String>) {
+                viewModel.changeMenu(SEARCH)
+            }
             override fun onAnyPermissionsPermanentlyDeined(
                     deniedPermissions: List<String>, permanentDeniedPermissions: List<String>
             ) {
