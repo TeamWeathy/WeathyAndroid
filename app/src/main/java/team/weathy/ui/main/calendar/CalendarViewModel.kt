@@ -1,6 +1,5 @@
 package team.weathy.ui.main.calendar
 
-import androidx.fragment.app.Fragment
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,32 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import team.weathy.api.CalendarAPI
 import team.weathy.api.WeathyAPI
 import team.weathy.di.Api
 import team.weathy.model.entity.CalendarPreview
 import team.weathy.model.entity.Weathy
-import team.weathy.util.AppEvent
-import team.weathy.util.SimpleEventLiveData
-import team.weathy.util.dateString
-import team.weathy.util.debugE
-import team.weathy.util.emit
+import team.weathy.util.*
 import team.weathy.util.extensions.launchCatch
 import team.weathy.util.extensions.updateMap
-import team.weathy.util.getEndDateStringInCalendar
-import team.weathy.util.getStartDateStringInCalendar
-import team.weathy.util.isFuture
-import team.weathy.util.isPast
-import team.weathy.util.koFormat
-import team.weathy.util.yearMonthFormat
 import java.time.LocalDate
-import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities
 
 typealias YearMonthFormat = String
 
@@ -163,6 +149,7 @@ class CalendarViewModel @ViewModelInject constructor(
             AppEvent.onWeathyUpdated.collect {
                 debugE("weathyUpdated")
                 launch { fetchCurrentMonthData() }
+                launch { fetchLastMonthData() }
                 launch { fetchSelectedDateWeathy() }
             }
         }
@@ -185,6 +172,7 @@ class CalendarViewModel @ViewModelInject constructor(
         val date = curDate.value!!
         if (!calendarData.value!!.containsKey(date.yearMonthFormat)) {
             fetchCurrentMonthData()
+            fetchLastMonthData()
         }
     }
 
@@ -197,6 +185,19 @@ class CalendarViewModel @ViewModelInject constructor(
         }, onSuccess = { (list) ->
             _calendarData.updateMap {
                 this[date.yearMonthFormat] = list
+            }
+        })
+    }
+
+    private fun fetchLastMonthData() {
+        val date = curDate.value!!
+        launchCatch({
+            val s = getStartDateStringInCalendar(date.year, date.monthValue-1)
+            val e = getEndDateStringInCalendar(date.year, date.monthValue-1)
+            calendarAPI.fetchCalendarPreview(s, e)
+        }, onSuccess = { (list) ->
+            _calendarData.updateMap {
+                this[date.lastYearMonthFormat] = list
             }
         })
     }

@@ -62,6 +62,12 @@ val LocalDate.yearMonthFormat: String
     get() = "${year}-${monthValue.padZero()}"
 
 /**
+ * 1997-03
+ */
+val LocalDate.lastYearMonthFormat: String
+    get() = "${year}-${(monthValue-1).padZero()}"
+
+/**
  * 0 ~ 6
  */
 val LocalDate.weekOfMonth: Int
