@@ -1,6 +1,5 @@
 package team.weathy.ui.record
 
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -303,6 +302,7 @@ class RecordViewModel @ViewModelInject constructor(
         val date = this.date.toLocalDate().dateString
         val code = weather.value?.region?.code ?: 0L
         val clothes = clothesTriple.map { it.second.value!! }.flatten().map { it.id }
+        // [2,18]
         val stampId = selectedWeatherRating.value?.id ?: 0
 
         val feedbackReq = if (includeFeedback) {
