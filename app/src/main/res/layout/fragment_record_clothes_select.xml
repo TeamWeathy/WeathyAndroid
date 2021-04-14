@@ -159,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="+를 눌러 삭제하고, "
+                android:text="+를 눌러 추가하고, "
                 app:layout_constraintStart_toStartOf="@id/tv_title2"
                 app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 

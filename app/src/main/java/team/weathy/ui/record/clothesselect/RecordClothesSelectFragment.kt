@@ -263,7 +263,7 @@ class RecordClothesSelectFragment : Fragment(), EditDialog.ClickListener {
         } else {
             editView.forEach { it.isVisible = false }
             recordView.forEach { it.isVisible = true }
-            binding.tvSub.text = "+를 눌러 삭제하고, "
+            binding.tvSub.text = "+를 눌러 추가하고, "
         }
     }
 
